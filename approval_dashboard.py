@@ -1,65 +1,24 @@
-from flask import Flask, request, redirect
-import pandas as pd
+import smtplib
+from email.mime.text import MIMEText
+import os
 
-app = Flask(__name__)
+def send_email(to_email, subject, body):
+    sender = os.getenv("SENDER_EMAIL")
+    password = os.getenv("SENDER_APP_PASSWORD")
 
-CSV_FILE = "outreach_queue.csv"
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = sender
+    msg['To'] = to_email
 
-def load_data():
-    return pd.read_csv(CSV_FILE)
+    # TRY TLS FIRST
+    try:
+        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
+        server.starttls()
+        server.login(sender, password)
+        server.send_message(msg)
+        server.quit()
+        return "sent"
 
-def save_data(df):
-    df.to_csv(CSV_FILE, index=False)
-
-@app.route('/')
-def dashboard():
-    df = load_data()
-
-    rows = ""
-    for i, row in df.iterrows():
-        if row.get("status", "") != "pending":
-            continue
-
-        rows += f"""
-        <div style="border:1px solid #ccc;padding:15px;margin:10px;">
-            <h3>{row.get('name','')}</h3>
-            <p><b>Email:</b> {row.get('email','')}</p>
-            <p>{row.get('message','')}</p>
-
-            <a href="/send/{i}">
-                <button style="background:green;color:white;padding:10px;">
-                    ✅ Send
-                </button>
-            </a>
-
-            <a href="/skip/{i}">
-                <button style="background:red;color:white;padding:10px;">
-                    ❌ Skip
-                </button>
-            </a>
-        </div>
-        """
-
-    return f"<h1>Outreach Approval Dashboard</h1>{rows}"
-
-@app.route('/send/<int:index>')
-def send(index):
-    df = load_data()
-
-    # TEMP: mark as sent (email sending comes next step)
-    df.at[index, "status"] = "sent"
-    save_data(df)
-
-    return redirect('/')
-
-@app.route('/skip/<int:index>')
-def skip(index):
-    df = load_data()
-
-    df.at[index, "status"] = "skipped"
-    save_data(df)
-
-    return redirect('/')
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    except Exception as e:
+        raise Exception(f"SMTP FAILED: {str(e)}")
