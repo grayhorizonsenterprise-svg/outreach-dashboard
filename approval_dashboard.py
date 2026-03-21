@@ -1,34 +1,25 @@
 from flask import Flask
-from outreach_sender import send_email
+import urllib.parse
 
 app = Flask(__name__)
 
-# ===== HOME ROUTE =====
 @app.route('/')
 def home():
-    return """
-    <h1>HOA Outreach Dashboard</h1>
-    <p>System is running.</p>
+    email = "yourtarget@email.com"  # change per lead
+    subject = urllib.parse.quote("Quick question")
+    body = urllib.parse.quote("Hi, I wanted to reach out about HOA compliance automation.")
 
-    <a href="/test-email">
-        <button style="padding:10px;font-size:18px;">Send Test Email</button>
+    mailto_link = f"mailto:{email}?subject={subject}&body={body}"
+
+    return f"""
+    <h1>HOA Outreach Dashboard</h1>
+
+    <a href="{mailto_link}">
+        <button style="padding:20px;font-size:22px;">
+            📧 Send Email
+        </button>
     </a>
     """
 
-# ===== EMAIL TEST ROUTE =====
-@app.route('/test-email')
-def test_email():
-    try:
-        send_email(
-            "yournamegrayhorizonsenterprise@gmail.com",  # 🔴 CHANGE THIS TO YOUR EMAIL
-            "Test Email",
-            "Your HOA outreach system is working."
-        )
-        return "✅ Email sent successfully!"
-    except Exception as e:
-        return f"❌ Error sending email: {str(e)}"
-
-
-# ===== RUN APP =====
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
