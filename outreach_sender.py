@@ -7,7 +7,7 @@ def send_email(to_email, subject, body):
     password = os.getenv("SENDER_APP_PASSWORD")
 
     if not sender or not password:
-        raise Exception("Missing email credentials (SENDER_EMAIL or SENDER_APP_PASSWORD)")
+        raise Exception("Missing email credentials")
 
     msg = MIMEText(body)
     msg['Subject'] = subject
@@ -15,10 +15,14 @@ def send_email(to_email, subject, body):
     msg['To'] = to_email
 
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(sender, password)
-            server.send_message(msg)
-        print(f"Email sent to {to_email}")
+        # USE TLS (587) — NOT 465
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(sender, password)
+        server.send_message(msg)
+        server.quit()
+
+        return "sent"
+
     except Exception as e:
-        print(f"Email failed: {e}")
-        raise
+        return str(e)
