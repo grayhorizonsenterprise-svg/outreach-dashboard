@@ -2,13 +2,15 @@ from flask import Flask, redirect
 import pandas as pd
 import os
 import requests
+from datetime import datetime
 
 app = Flask(__name__)
 
 CSV_FILE = "outreach_queue.csv"
+LOG_FILE = "sent_log.csv"
 
 # =========================
-# LOAD DATA (SMART FIX)
+# LOAD DATA (SAFE)
 # =========================
 def load_data():
     if not os.path.exists(CSV_FILE):
@@ -16,32 +18,43 @@ def load_data():
 
     df = pd.read_csv(CSV_FILE)
 
-    # 🔥 AUTO-FIX COMMON COLUMN ISSUES
-    column_map = {
+    # Fix column names automatically
+    df = df.rename(columns={
         "Company": "company",
-        "company_name": "company",
-        "Name": "name",
         "Email": "email",
-        "Message": "message"
-    }
+        "Message": "message",
+        "Name": "name"
+    })
 
-    df = df.rename(columns=column_map)
-
-    # Ensure required columns exist
+    # Ensure all required columns exist
     for col in ["company","name","email","message","status"]:
         if col not in df.columns:
             df[col] = ""
 
-    df = df.fillna("")
-
-    return df
+    return df.fillna("")
 
 
 def save_data(df):
     df.to_csv(CSV_FILE, index=False)
 
 # =========================
-# SEND EMAIL
+# LOG SENT EMAILS
+# =========================
+def log_sent(row):
+    log_entry = pd.DataFrame([{
+        "company": row.get("company",""),
+        "email": row.get("email",""),
+        "time": datetime.now().isoformat()
+    }])
+
+    if os.path.exists(LOG_FILE):
+        existing = pd.read_csv(LOG_FILE)
+        log_entry = pd.concat([existing, log_entry])
+
+    log_entry.to_csv(LOG_FILE, index=False)
+
+# =========================
+# SEND EMAIL (SENDGRID)
 # =========================
 def send_email(to_email, name, company, message):
     api_key = os.getenv("SENDGRID_API_KEY")
@@ -51,15 +64,10 @@ def send_email(to_email, name, company, message):
     subject = f"{company} — quick question"
 
     html = f"""
-    <div style="font-family:Arial;line-height:1.6;">
+    <div style="font-family:Arial;">
         <p>Hi {name or "there"},</p>
-
         <p>{message}</p>
-
-        <p>
-        — {sender_name}<br>
-        Gray Horizons Enterprise
-        </p>
+        <p>— {sender_name}<br>Gray Horizons Enterprise</p>
     </div>
     """
 
@@ -71,18 +79,21 @@ def send_email(to_email, name, company, message):
     }
 
     headers = {
-        "Authorization": f"Bearer {api_key},
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
 
-    requests.post(
+    response = requests.post(
         "https://api.sendgrid.com/v3/mail/send",
         json=data,
         headers=headers
     )
 
+    if response.status_code != 202:
+        print("EMAIL ERROR:", response.text)
+
 # =========================
-# DASHBOARD (MODERN UI)
+# DASHBOARD UI
 # =========================
 @app.route('/')
 def dashboard():
@@ -90,29 +101,37 @@ def dashboard():
 
     html = """
     <style>
-        body { font-family: Arial; background:#f5f7fa; }
+        body { font-family:Arial; background:#f4f6f8; margin:0; }
+        .header {
+            background:#111;
+            color:white;
+            padding:15px;
+            text-align:center;
+            font-size:20px;
+        }
         .card {
             background:white;
             padding:20px;
             margin:20px auto;
+            width:90%;
+            max-width:700px;
             border-radius:10px;
-            width:80%;
             box-shadow:0 2px 8px rgba(0,0,0,0.1);
         }
-        .title { font-size:22px; font-weight:bold; }
+        .company { font-size:20px; font-weight:bold; }
         .email { color:#555; margin-bottom:10px; }
         .btn {
-            padding:10px 16px;
+            padding:12px;
             border:none;
             border-radius:6px;
-            cursor:pointer;
             font-size:14px;
+            cursor:pointer;
         }
         .send { background:#28a745; color:white; }
         .skip { background:#dc3545; color:white; margin-left:10px; }
     </style>
 
-    <h1 style="text-align:center;">Gray Horizons Outreach Dashboard</h1>
+    <div class="header">Gray Horizons Outreach Dashboard</div>
     """
 
     for i, row in df.iterrows():
@@ -121,17 +140,17 @@ def dashboard():
 
         html += f"""
         <div class="card">
-            <div class="title">{row.get("company","No Company")}</div>
+            <div class="company">{row.get("company","No Company")}</div>
             <div class="email">{row.get("email","No Email")}</div>
 
             <p>{row.get("message","")}</p>
 
             <a href="/send/{i}">
-                <button class="btn send">Send</button>
+                <button class="btn send">Approve & Send</button>
             </a>
 
             <a href="/skip/{i}">
-                <button class="btn skip">Skip</button>
+                <button class="btn skip">Reject</button>
             </a>
         </div>
         """
@@ -139,11 +158,14 @@ def dashboard():
     return html
 
 # =========================
-# SEND
+# SEND ACTION
 # =========================
 @app.route('/send/<int:index>')
 def send(index):
     df = load_data()
+
+    if index >= len(df):
+        return redirect('/')
 
     row = df.loc[index]
 
@@ -156,17 +178,21 @@ def send(index):
 
     df.at[index, "status"] = "sent"
     save_data(df)
+    log_sent(row)
 
     return redirect('/')
 
 # =========================
-# SKIP
+# SKIP ACTION
 # =========================
 @app.route('/skip/<int:index>')
 def skip(index):
     df = load_data()
-    df.at[index, "status"] = "skipped"
-    save_data(df)
+
+    if index < len(df):
+        df.at[index, "status"] = "skipped"
+        save_data(df)
+
     return redirect('/')
 
 # =========================
