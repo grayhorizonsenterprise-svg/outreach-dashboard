@@ -2,43 +2,37 @@ from flask import Flask, redirect
 import pandas as pd
 import os
 import requests
-import re
 
 app = Flask(__name__)
 
 CSV_FILE = "outreach_queue.csv"
 
 # =========================
-# EMAIL FINDER
+# REAL EMAIL FINDER (HUNTER)
 # =========================
 def find_email(company):
+    api_key = os.getenv("066f1a238c1325bf0c7aad6f5015149f50c58037")
+
+    if not api_key or not company:
+        return ""
+
     try:
-        res = requests.post("https://duckduckgo.com/html/", data={"q": f"{company} email"})
-        emails = re.findall(r"[\\w\\.-]+@[\\w\\.-]+", res.text)
-        return emails[0] if emails else ""
+        url = f"https://api.hunter.io/v2/domain-search?domain={company.replace(' ', '').lower()}.com&api_key={api_key}"
+        r = requests.get(url).json()
+
+        emails = r.get("data", {}).get("emails", [])
+        if emails:
+            return emails[0]["value"]
+
     except:
-        return ""
+        pass
 
-# =========================
-# FIX MESSAGE FORMATTING
-# =========================
-def format_message(msg):
-    if not msg:
-        return ""
-
-    # Replace periods with line breaks for readability
-    msg = msg.replace(". ", ".\n\n")
-
-    # Preserve line breaks in HTML
-    return msg.replace("\n", "<br>")
+    return ""
 
 # =========================
 # LOAD DATA
 # =========================
 def load_data():
-    if not os.path.exists(CSV_FILE):
-        return pd.DataFrame(columns=["company","name","email","message","status"])
-
     df = pd.read_csv(CSV_FILE)
 
     df = df.rename(columns={
@@ -55,10 +49,12 @@ def load_data():
     df = df.fillna("")
     df.loc[df["status"] == "", "status"] = "pending"
 
-    # AUTO EMAIL FIND
+    # 🔥 REAL EMAIL ENRICHMENT
     for i, row in df.iterrows():
         if not row["email"] and row["company"]:
-            df.at[i, "email"] = find_email(row["company"])
+            email = find_email(row["company"])
+            if email:
+                df.at[i, "email"] = email
 
     return df
 
@@ -69,27 +65,15 @@ def save_data(df):
 # =========================
 # SEND EMAIL
 # =========================
-def send_email(to_email, name, company, message):
+def send_email(to_email, message):
     api_key = os.getenv("SENDGRID_API_KEY")
     sender = os.getenv("SENDER_EMAIL")
-    sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
-
-    if not to_email:
-        return
-
-    html = f"""
-    <div style="font-family:Arial;line-height:1.6;">
-        <p>Hi {name or 'there'},</p>
-        <p>{format_message(message)}</p>
-        <p>— {sender_name}<br>Gray Horizons Enterprise</p>
-    </div>
-    """
 
     data = {
         "personalizations": [{"to": [{"email": to_email}]}],
-        "from": {"email": sender, "name": sender_name},
-        "subject": f"{company} — quick question",
-        "content": [{"type": "text/html", "value": html}]
+        "from": {"email": sender},
+        "subject": "Quick question",
+        "content": [{"type": "text/plain", "value": message}]
     }
 
     headers = {
@@ -107,40 +91,24 @@ def dashboard():
     df = load_data()
     save_data(df)
 
-    html = """
-    <style>
-        body { background:#0f172a; color:white; font-family:Arial; }
-        .card { background:#1e293b; padding:20px; margin:20px; border-radius:10px; }
-        .title { font-size:20px; color:#38bdf8; }
-        .company { color:#e2e8f0; }
-        .email { color:#94a3b8; margin-bottom:10px; }
-        .message { margin-top:10px; line-height:1.6; }
-        .btn { padding:10px; border:none; border-radius:6px; cursor:pointer; }
-        .send { background:#22c55e; }
-        .skip { background:#ef4444; margin-left:10px; }
-    </style>
-
-    <h1 style="text-align:center;">Outreach Dashboard</h1>
-    """
+    html = "<h1>Outreach Dashboard</h1>"
 
     for i, row in df.iterrows():
         if row["status"] != "pending":
             continue
 
         html += f"""
-        <div class="card">
-            <div class="title">{row['name'] or "Contact"}</div>
-            <div class="company">{row['company']}</div>
-            <div class="email">{row['email'] or "No email found"}</div>
-
-            <div class="message">{format_message(row['message'])}</div>
+        <div style="border:1px solid #ccc;padding:20px;margin:20px;">
+            <h3>{row['company']}</h3>
+            <p>{row['email'] or "Still searching..."}</p>
+            <p>{row['message']}</p>
 
             <a href="/send/{i}">
-                <button class="btn send">Send</button>
+                <button>Send</button>
             </a>
 
             <a href="/skip/{i}">
-                <button class="btn skip">Skip</button>
+                <button>Skip</button>
             </a>
         </div>
         """
@@ -155,16 +123,11 @@ def send(index):
     df = load_data()
     row = df.loc[index]
 
-    send_email(
-        row["email"],
-        row["name"],
-        row["company"],
-        row["message"]
-    )
+    if row["email"]:
+        send_email(row["email"], row["message"])
+        df.at[index, "status"] = "sent"
 
-    df.at[index, "status"] = "sent"
     save_data(df)
-
     return redirect('/')
 
 # =========================
