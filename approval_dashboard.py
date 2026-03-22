@@ -10,28 +10,44 @@ CSV_FILE = "outreach_queue.csv"
 LOG_FILE = "sent_log.csv"
 
 # =========================
-# LOAD DATA (SAFE)
+# LOAD + AUTO FIX DATA
 # =========================
 def load_data():
     if not os.path.exists(CSV_FILE):
         return pd.DataFrame(columns=["company","name","email","message","status"])
 
-    df = pd.read_csv(CSV_FILE)
+    try:
+        df = pd.read_csv(CSV_FILE)
+    except:
+        return pd.DataFrame(columns=["company","name","email","message","status"])
 
-    # Fix column names automatically
-    df = df.rename(columns={
-        "Company": "company",
-        "Email": "email",
-        "Message": "message",
-        "Name": "name"
-    })
+    # normalize column names
+    mapping = {}
+    for col in df.columns:
+        c = col.lower()
+        if "company" in c:
+            mapping[col] = "company"
+        elif "name" in c:
+            mapping[col] = "name"
+        elif "email" in c:
+            mapping[col] = "email"
+        elif "message" in c or "body" in c:
+            mapping[col] = "message"
+        elif "status" in c:
+            mapping[col] = "status"
 
-    # Ensure all required columns exist
+    df = df.rename(columns=mapping)
+
     for col in ["company","name","email","message","status"]:
         if col not in df.columns:
             df[col] = ""
 
-    return df.fillna("")
+    df = df.fillna("")
+
+    df.loc[df["status"] == "", "status"] = "pending"
+    df["name"] = df["name"].replace("", "Outreach Contact")
+
+    return df
 
 
 def save_data(df):
@@ -41,7 +57,7 @@ def save_data(df):
 # LOG SENT EMAILS
 # =========================
 def log_sent(row):
-    log_entry = pd.DataFrame([{
+    entry = pd.DataFrame([{
         "company": row.get("company",""),
         "email": row.get("email",""),
         "time": datetime.now().isoformat()
@@ -49,48 +65,59 @@ def log_sent(row):
 
     if os.path.exists(LOG_FILE):
         existing = pd.read_csv(LOG_FILE)
-        log_entry = pd.concat([existing, log_entry])
+        entry = pd.concat([existing, entry])
 
-    log_entry.to_csv(LOG_FILE, index=False)
+    entry.to_csv(LOG_FILE, index=False)
 
 # =========================
 # SEND EMAIL (SENDGRID)
 # =========================
 def send_email(to_email, name, company, message):
-    api_key = os.getenv("SENDGRID_API_KEY")
-    sender = os.getenv("SENDER_EMAIL")
-    sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
+    try:
+        api_key = os.getenv("SENDGRID_API_KEY")
+        sender = os.getenv("SENDER_EMAIL")
+        sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
 
-    subject = f"{company} — quick question"
+        if not api_key or not sender:
+            print("Missing SendGrid config")
+            return
 
-    html = f"""
-    <div style="font-family:Arial;">
-        <p>Hi {name or "there"},</p>
-        <p>{message}</p>
-        <p>— {sender_name}<br>Gray Horizons Enterprise</p>
-    </div>
-    """
+        if not to_email:
+            print("Missing recipient email")
+            return
 
-    data = {
-        "personalizations": [{"to": [{"email": to_email}]}],
-        "from": {"email": sender, "name": sender_name},
-        "subject": subject,
-        "content": [{"type": "text/html", "value": html}]
-    }
+        subject = f"{company or 'Quick question'}"
 
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
+        html = f"""
+        <div style="font-family:Arial;">
+            <p>Hi {name},</p>
+            <p>{message}</p>
+            <p>— {sender_name}<br>Gray Horizons Enterprise</p>
+        </div>
+        """
 
-    response = requests.post(
-        "https://api.sendgrid.com/v3/mail/send",
-        json=data,
-        headers=headers
-    )
+        data = {
+            "personalizations": [{"to": [{"email": to_email}]}],
+            "from": {"email": sender, "name": sender_name},
+            "subject": subject,
+            "content": [{"type": "text/html", "value": html}]
+        }
 
-    if response.status_code != 202:
-        print("EMAIL ERROR:", response.text)
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+
+        response = requests.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            json=data,
+            headers=headers
+        )
+
+        print("SEND STATUS:", response.status_code)
+
+    except Exception as e:
+        print("SEND ERROR:", str(e))
 
 # =========================
 # DASHBOARD UI
@@ -101,49 +128,92 @@ def dashboard():
 
     html = """
     <style>
-        body { font-family:Arial; background:#f4f6f8; margin:0; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: white;
+            margin: 0;
+        }
+
         .header {
-            background:#111;
-            color:white;
-            padding:15px;
-            text-align:center;
-            font-size:20px;
+            background: #020617;
+            padding: 20px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            border-bottom: 1px solid #1e293b;
         }
+
         .card {
-            background:white;
-            padding:20px;
-            margin:20px auto;
-            width:90%;
-            max-width:700px;
-            border-radius:10px;
-            box-shadow:0 2px 8px rgba(0,0,0,0.1);
+            background: #1e293b;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 10px;
         }
-        .company { font-size:20px; font-weight:bold; }
-        .email { color:#555; margin-bottom:10px; }
+
+        .title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .company {
+            font-size: 16px;
+            color: #e2e8f0;
+        }
+
+        .email {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+        }
+
         .btn {
-            padding:12px;
-            border:none;
-            border-radius:6px;
-            font-size:14px;
-            cursor:pointer;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
         }
-        .send { background:#28a745; color:white; }
-        .skip { background:#dc3545; color:white; margin-left:10px; }
+
+        .send {
+            background: #22c55e;
+            color: white;
+        }
+
+        .skip {
+            background: #ef4444;
+            color: white;
+            margin-left: 10px;
+        }
     </style>
 
     <div class="header">Gray Horizons Outreach Dashboard</div>
     """
 
     for i, row in df.iterrows():
-        if str(row["status"]).lower() != "pending":
+        if row["status"] != "pending":
             continue
+
+        title = row["name"]
+        company = row["company"] or "Unknown Company"
+        email = row["email"] or "⚠ Missing Email"
+        message = row["message"]
 
         html += f"""
         <div class="card">
-            <div class="company">{row.get("company","No Company")}</div>
-            <div class="email">{row.get("email","No Email")}</div>
 
-            <p>{row.get("message","")}</p>
+            <div class="title">{title}</div>
+            <div class="company">{company}</div>
+            <div class="email">{email}</div>
+
+            <div class="message">{message}</div>
 
             <a href="/send/{i}">
                 <button class="btn send">Approve & Send</button>
@@ -152,6 +222,7 @@ def dashboard():
             <a href="/skip/{i}">
                 <button class="btn skip">Reject</button>
             </a>
+
         </div>
         """
 
@@ -170,10 +241,10 @@ def send(index):
     row = df.loc[index]
 
     send_email(
-        row.get("email",""),
-        row.get("name",""),
-        row.get("company",""),
-        row.get("message","")
+        row["email"],
+        row["name"],
+        row["company"],
+        row["message"]
     )
 
     df.at[index, "status"] = "sent"
@@ -194,6 +265,13 @@ def skip(index):
         save_data(df)
 
     return redirect('/')
+
+# =========================
+# HEALTH CHECK
+# =========================
+@app.route('/health')
+def health():
+    return "OK"
 
 # =========================
 # RUN
