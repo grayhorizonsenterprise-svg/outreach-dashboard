@@ -1,51 +1,44 @@
 import pandas as pd
 import requests
-import os
-
-HUNTER_API_KEY = os.getenv("066f1a238c1325bf0c7aad6f5015149f50c58037")
+import re
+from bs4 import BeautifulSoup
 
 INPUT_FILE = "outreach_queue.csv"
 
 # =========================
-# CLEAN DOMAIN (BETTER GUESS)
+# FIND WEBSITE (FROM GOOGLE SEARCH)
 # =========================
-def get_domain(company):
-    if not company:
-        return ""
-
-    clean = company.lower()
-    clean = clean.replace(",", "")
-    clean = clean.replace(".", "")
-    clean = clean.replace(" ", "")
-
-    return f"{clean}.com"
-
-# =========================
-# FIND EMAIL (HUNTER API)
-# =========================
-def find_email(company):
-    if not HUNTER_API_KEY:
-        print("❌ Missing HUNTER_API_KEY")
-        return ""
-
-    domain = get_domain(company)
-
+def find_website(company):
     try:
-        url = f"https://api.hunter.io/v2/domain-search?domain={domain}&api_key={HUNTER_API_KEY}"
-        res = requests.get(url).json()
+        url = "https://duckduckgo.com/html/"
+        res = requests.post(url, data={"q": company})
+        soup = BeautifulSoup(res.text, "html.parser")
 
-        emails = res.get("data", {}).get("emails", [])
-
-        if emails:
-            return emails[0]["value"]
-
-    except Exception as e:
-        print("ERROR:", e)
-
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            if "http" in href and "duckduckgo" not in href:
+                return href
+    except:
+        pass
     return ""
 
 # =========================
-# MAIN LOOP (THIS IS WHAT YOU ASKED)
+# EXTRACT EMAIL FROM PAGE
+# =========================
+def extract_email(url):
+    try:
+        res = requests.get(url, timeout=5)
+        emails = re.findall(r"[\w\.-]+@[\w\.-]+", res.text)
+
+        for email in emails:
+            if not any(x in email for x in ["example", "test", "png", "jpg"]):
+                return email
+    except:
+        pass
+    return ""
+
+# =========================
+# MAIN ENRICH
 # =========================
 def run():
     df = pd.read_csv(INPUT_FILE)
@@ -54,21 +47,25 @@ def run():
         df["email"] = ""
 
     for i, row in df.iterrows():
+        if not row["email"] and row.get("company"):
 
-        # 🔥 THIS IS THE LOOP YOU ASKED ABOUT
-        if not row.get("email") and row.get("company"):
+            print(f"Searching: {row['company']}")
 
-            email = find_email(row["company"])
+            site = find_website(row["company"])
 
-            if email:
-                print(f"FOUND: {email}")
-                df.at[i, "email"] = email
+            if site:
+                email = extract_email(site)
+
+                if email:
+                    print(f"FOUND: {email}")
+                    df.at[i, "email"] = email
+                else:
+                    print("No email on site")
             else:
-                print(f"NO EMAIL: {row['company']}")
+                print("No website found")
 
     df.to_csv(INPUT_FILE, index=False)
-    print("✅ EMAIL ENRICHMENT COMPLETE")
-
+    print("DONE")
 
 if __name__ == "__main__":
     run()

@@ -4,4 +4,4 @@ requests
 beautifulsoup4
 pandas
 ddgs
-python-dotenv
+python==3.11.9
