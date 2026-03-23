@@ -1,54 +1,73 @@
 import pandas as pd
+import requests
+import os
 
-INPUT_FILE = "prospects_raw.csv"
-OUTPUT_FILE = "prospects_enriched.csv"
+HUNTER_API_KEY = os.getenv("066f1a238c1325bf0c7aad6f5015149f50c58037")
 
+INPUT_FILE = "outreach_queue.csv"
 
-def clean(val):
-    if pd.isna(val):
+# =========================
+# CLEAN DOMAIN (BETTER GUESS)
+# =========================
+def get_domain(company):
+    if not company:
         return ""
-    return str(val).strip()
 
+    clean = company.lower()
+    clean = clean.replace(",", "")
+    clean = clean.replace(".", "")
+    clean = clean.replace(" ", "")
 
-def run():
+    return f"{clean}.com"
+
+# =========================
+# FIND EMAIL (HUNTER API)
+# =========================
+def find_email(company):
+    if not HUNTER_API_KEY:
+        print("❌ Missing HUNTER_API_KEY")
+        return ""
+
+    domain = get_domain(company)
 
     try:
-        df = pd.read_csv(INPUT_FILE)
+        url = f"https://api.hunter.io/v2/domain-search?domain={domain}&api_key={HUNTER_API_KEY}"
+        res = requests.get(url).json()
+
+        emails = res.get("data", {}).get("emails", [])
+
+        if emails:
+            return emails[0]["value"]
+
     except Exception as e:
-        print(f"ERROR loading {INPUT_FILE}: {e}")
-        return
+        print("ERROR:", e)
 
-    if df.empty:
-        print("No raw prospects found.")
-        return
+    return ""
 
-    rows = []
+# =========================
+# MAIN LOOP (THIS IS WHAT YOU ASKED)
+# =========================
+def run():
+    df = pd.read_csv(INPUT_FILE)
 
-    for _, r in df.iterrows():
+    if "email" not in df.columns:
+        df["email"] = ""
 
-        company = clean(r.get("company_name"))
-        website = clean(r.get("website"))
+    for i, row in df.iterrows():
 
-        if not company:
-            continue
+        # 🔥 THIS IS THE LOOP YOU ASKED ABOUT
+        if not row.get("email") and row.get("company"):
 
-        rows.append({
-            "company_name": company,
-            "website": website,
-            "contact_email": "",
-            "contact_page_url": website,
-            "location": clean(r.get("location")),
-            "keyword_hits": clean(r.get("keyword_hits")),
-            "hoa_size_estimate": ""
-        })
+            email = find_email(row["company"])
 
-    if not rows:
-        print("No valid rows after cleaning.")
-        return
+            if email:
+                print(f"FOUND: {email}")
+                df.at[i, "email"] = email
+            else:
+                print(f"NO EMAIL: {row['company']}")
 
-    pd.DataFrame(rows).to_csv(OUTPUT_FILE, index=False)
-
-    print(f"[DONE] Enriched {len(rows)} prospects → {OUTPUT_FILE}")
+    df.to_csv(INPUT_FILE, index=False)
+    print("✅ EMAIL ENRICHMENT COMPLETE")
 
 
 if __name__ == "__main__":

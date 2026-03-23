@@ -8,31 +8,12 @@ app = Flask(__name__)
 CSV_FILE = "outreach_queue.csv"
 
 # =========================
-# REAL EMAIL FINDER (HUNTER)
-# =========================
-def find_email(company):
-    api_key = os.getenv("066f1a238c1325bf0c7aad6f5015149f50c58037")
-
-    if not api_key or not company:
-        return ""
-
-    try:
-        url = f"https://api.hunter.io/v2/domain-search?domain={company.replace(' ', '').lower()}.com&api_key={api_key}"
-        r = requests.get(url).json()
-
-        emails = r.get("data", {}).get("emails", [])
-        if emails:
-            return emails[0]["value"]
-
-    except:
-        pass
-
-    return ""
-
-# =========================
 # LOAD DATA
 # =========================
 def load_data():
+    if not os.path.exists(CSV_FILE):
+        return pd.DataFrame(columns=["company","name","email","message","status"])
+
     df = pd.read_csv(CSV_FILE)
 
     df = df.rename(columns={
@@ -49,13 +30,6 @@ def load_data():
     df = df.fillna("")
     df.loc[df["status"] == "", "status"] = "pending"
 
-    # 🔥 REAL EMAIL ENRICHMENT
-    for i, row in df.iterrows():
-        if not row["email"] and row["company"]:
-            email = find_email(row["company"])
-            if email:
-                df.at[i, "email"] = email
-
     return df
 
 
@@ -63,17 +37,38 @@ def save_data(df):
     df.to_csv(CSV_FILE, index=False)
 
 # =========================
-# SEND EMAIL
+# FORMAT MESSAGE (FIX PARAGRAPHS)
 # =========================
-def send_email(to_email, message):
+def format_message(msg):
+    if not msg:
+        return ""
+    return msg.replace("\n", "<br>").replace(". ", ".<br><br>")
+
+# =========================
+# SEND EMAIL (SENDGRID)
+# =========================
+def send_email(to_email, name, company, message):
     api_key = os.getenv("SENDGRID_API_KEY")
     sender = os.getenv("SENDER_EMAIL")
+    sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
+
+    if not api_key or not sender or not to_email:
+        print("Missing email config or recipient")
+        return
+
+    html = f"""
+    <div style="font-family:Arial;line-height:1.6;">
+        <p>Hi {name or 'there'},</p>
+        <p>{format_message(message)}</p>
+        <p>— {sender_name}<br>Gray Horizons Enterprise</p>
+    </div>
+    """
 
     data = {
         "personalizations": [{"to": [{"email": to_email}]}],
-        "from": {"email": sender},
-        "subject": "Quick question",
-        "content": [{"type": "text/plain", "value": message}]
+        "from": {"email": sender, "name": sender_name},
+        "subject": f"{company} — quick question",
+        "content": [{"type": "text/html", "value": html}]
     }
 
     headers = {
@@ -81,64 +76,175 @@ def send_email(to_email, message):
         "Content-Type": "application/json"
     }
 
-    requests.post("https://api.sendgrid.com/v3/mail/send", json=data, headers=headers)
+    try:
+        requests.post("https://api.sendgrid.com/v3/mail/send", json=data, headers=headers)
+    except Exception as e:
+        print("Send error:", e)
 
 # =========================
-# DASHBOARD
+# DASHBOARD UI (FINAL CLEAN VERSION)
 # =========================
 @app.route('/')
 def dashboard():
     df = load_data()
-    save_data(df)
 
-    html = "<h1>Outreach Dashboard</h1>"
+    html = """
+    <style>
+        body {
+            background:#0f172a;
+            color:white;
+            font-family:Arial;
+            margin:0;
+        }
+
+        .header {
+            text-align:center;
+            padding:20px;
+            font-size:24px;
+            font-weight:bold;
+            background:#020617;
+        }
+
+        .card {
+            background:#1e293b;
+            padding:20px;
+            margin:20px auto;
+            width:90%;
+            max-width:700px;
+            border-radius:10px;
+        }
+
+        .title {
+            font-size:20px;
+            color:#38bdf8;
+            font-weight:bold;
+        }
+
+        .company {
+            color:#e2e8f0;
+        }
+
+        .email {
+            color:#94a3b8;
+            margin-bottom:10px;
+        }
+
+        .message {
+            margin-top:10px;
+            line-height:1.6;
+        }
+
+        .btn {
+            padding:10px 14px;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+        }
+
+        .send {
+            background:#22c55e;
+            color:white;
+        }
+
+        .skip {
+            background:#ef4444;
+            color:white;
+            margin-left:10px;
+        }
+
+        .disabled {
+            background:#555;
+        }
+    </style>
+
+    <div class="header">Gray Horizons Outreach Dashboard</div>
+    """
 
     for i, row in df.iterrows():
         if row["status"] != "pending":
             continue
 
+        name = row["name"] or "Contact"
+        company = row["company"] or "Unknown Company"
+        email = row["email"]
+
         html += f"""
-        <div style="border:1px solid #ccc;padding:20px;margin:20px;">
-            <h3>{row['company']}</h3>
-            <p>{row['email'] or "Still searching..."}</p>
-            <p>{row['message']}</p>
+        <div class="card">
 
+            <div class="title">{name}</div>
+            <div class="company">{company}</div>
+            <div class="email">{email if email else "❌ No Email"}</div>
+
+            <div class="message">{format_message(row["message"])}</div>
+        """
+
+        if email:
+            html += f"""
             <a href="/send/{i}">
-                <button>Send</button>
+                <button class="btn send">Send</button>
+            </a>
+            """
+        else:
+            html += """
+            <button class="btn disabled">No Email</button>
+            """
+
+        html += f"""
+            <a href="/skip/{i}">
+                <button class="btn skip">Skip</button>
             </a>
 
-            <a href="/skip/{i}">
-                <button>Skip</button>
-            </a>
         </div>
         """
 
     return html
 
 # =========================
-# SEND
+# SEND ACTION
 # =========================
 @app.route('/send/<int:index>')
 def send(index):
     df = load_data()
+
+    if index >= len(df):
+        return redirect('/')
+
     row = df.loc[index]
 
-    if row["email"]:
-        send_email(row["email"], row["message"])
-        df.at[index, "status"] = "sent"
+    send_email(
+        row["email"],
+        row["name"],
+        row["company"],
+        row["message"]
+    )
 
+    df.at[index, "status"] = "sent"
     save_data(df)
+
     return redirect('/')
 
 # =========================
-# SKIP
+# SKIP ACTION
 # =========================
 @app.route('/skip/<int:index>')
 def skip(index):
     df = load_data()
-    df.at[index, "status"] = "skipped"
-    save_data(df)
+
+    if index < len(df):
+        df.at[index, "status"] = "skipped"
+        save_data(df)
+
     return redirect('/')
 
+# =========================
+# HEALTH CHECK
+# =========================
+@app.route('/health')
+def health():
+    return "OK"
+
+# =========================
+# RUN
+# =========================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
