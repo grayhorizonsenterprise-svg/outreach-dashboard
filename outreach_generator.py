@@ -1,3 +1,8 @@
+import pandas as pd
+
+INPUT_FILE = "prospects_enriched.csv"
+OUTPUT_FILE = "outreach_queue.csv"
+
 def generate_message(company):
     return f"""Hi there,
 
@@ -12,6 +17,31 @@ Out of curiosity, how are you currently handling that process?
 If it makes sense, I can walk you through how it works.
 
 Alex
+Lead Operations Specialist
 Gray Horizons Enterprise
 https://grayhorizonsenterprise.com
 """
+
+def run():
+    df = pd.read_csv(INPUT_FILE)
+
+    rows = []
+
+    for _, row in df.iterrows():
+        company = row.get("company") or row.get("name") or ""
+
+        rows.append({
+            "company": company,
+            "name": "",
+            "email": row.get("email", ""),
+            "message": generate_message(company),
+            "status": "pending"
+        })
+
+    out = pd.DataFrame(rows)
+    out.to_csv(OUTPUT_FILE, index=False)
+
+    print("✅ Outreach queue built")
+
+if __name__ == "__main__":
+    run()
