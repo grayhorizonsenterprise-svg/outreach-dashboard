@@ -2,16 +2,21 @@ import pandas as pd
 import requests
 import re
 from bs4 import BeautifulSoup
+import time
 
 INPUT_FILE = "outreach_queue.csv"
 
 # =========================
-# FIND WEBSITE (FROM GOOGLE SEARCH)
+# FIND WEBSITE
 # =========================
 def find_website(company):
     try:
-        url = "https://duckduckgo.com/html/"
-        res = requests.post(url, data={"q": company})
+        res = requests.post(
+            "https://duckduckgo.com/html/",
+            data={"q": company},
+            timeout=5
+        )
+
         soup = BeautifulSoup(res.text, "html.parser")
 
         for a in soup.find_all("a", href=True):
@@ -20,25 +25,29 @@ def find_website(company):
                 return href
     except:
         pass
+
     return ""
 
 # =========================
-# EXTRACT EMAIL FROM PAGE
+# EXTRACT EMAILS FROM PAGE
 # =========================
-def extract_email(url):
+def extract_emails_from_url(url):
+    emails = []
+
     try:
         res = requests.get(url, timeout=5)
-        emails = re.findall(r"[\w\.-]+@[\w\.-]+", res.text)
+        found = re.findall(r"[\\w\\.-]+@[\\w\\.-]+", res.text)
 
-        for email in emails:
-            if not any(x in email for x in ["example", "test", "png", "jpg"]):
-                return email
+        for e in found:
+            if not any(x in e for x in ["example", "png", "jpg", "test"]):
+                emails.append(e)
     except:
         pass
-    return ""
+
+    return emails
 
 # =========================
-# MAIN ENRICH
+# MAIN ENRICHMENT
 # =========================
 def run():
     df = pd.read_csv(INPUT_FILE)
@@ -46,26 +55,46 @@ def run():
     if "email" not in df.columns:
         df["email"] = ""
 
+    if "company" not in df.columns:
+        df["company"] = ""
+
     for i, row in df.iterrows():
-        if not row["email"] and row.get("company"):
 
-            print(f"Searching: {row['company']}")
+        if row["email"] or not row["company"]:
+            continue
 
-            site = find_website(row["company"])
+        company = row["company"]
 
-            if site:
-                email = extract_email(site)
+        print(f"\n🔍 Searching: {company}")
 
-                if email:
-                    print(f"FOUND: {email}")
-                    df.at[i, "email"] = email
-                else:
-                    print("No email on site")
-            else:
-                print("No website found")
+        website = find_website(company)
+
+        if not website:
+            print("❌ No website")
+            continue
+
+        print("🌐 Website:", website)
+
+        emails = []
+
+        # homepage
+        emails += extract_emails_from_url(website)
+
+        # contact page
+        emails += extract_emails_from_url(website.rstrip("/") + "/contact")
+
+        if emails:
+            email = emails[0]
+            print("✅ FOUND:", email)
+            df.at[i, "email"] = email
+        else:
+            print("❌ No email found")
+
+        time.sleep(1)
 
     df.to_csv(INPUT_FILE, index=False)
-    print("DONE")
+    print("\n🚀 ENRICHMENT COMPLETE")
+
 
 if __name__ == "__main__":
     run()
