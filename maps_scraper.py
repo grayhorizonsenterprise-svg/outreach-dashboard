@@ -1,96 +1,79 @@
-import os
-import csv
 import requests
+import pandas as pd
 import time
-from dotenv import load_dotenv
 
-load_dotenv()
+# =========================
+# 🔑 PASTE YOUR GOOGLE API KEY HERE
+# =========================
+GOOGLE_API_KEY = "AIzaSyBcyVrmGiYFMQv7LrT4uqoP5P-q7Kkr1q4"
 
-API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
-
-SEARCH_TERMS = [
-    "hoa management",
-    "property management",
-    "community association management",
-    "condo management",
-]
-
-CITIES = [
-    "San Bernardino CA",
-    "Los Angeles CA",
-    "Phoenix AZ",
-    "Las Vegas NV"
-]
-
+# =========================
+# CONFIG
+# =========================
+QUERY = "HOA property management companies California"
 OUTPUT_FILE = "prospects_raw.csv"
 
-BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json"
+# =========================
+# FETCH PLACES
+# =========================
+def fetch_places():
+    url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 
-
-def search_places(query):
     params = {
-        "query": query,
-        "key": API_KEY
+        "query": QUERY,
+        "key": GOOGLE_API_KEY
     }
-    return requests.get(BASE_URL, params=params).json().get("results", [])
 
+    all_results = []
 
-def get_details(place_id):
-    params = {
-        "place_id": place_id,
-        "fields": "name,website",
-        "key": API_KEY
-    }
-    return requests.get(DETAILS_URL, params=params).json().get("result", {})
+    while True:
+        res = requests.get(url, params=params).json()
+        results = res.get("results", [])
 
+        for place in results:
+            all_results.append({
+                "company": place.get("name", ""),
+                "address": place.get("formatted_address", ""),
+                "rating": place.get("rating", ""),
+                "place_id": place.get("place_id", "")
+            })
 
+        next_token = res.get("next_page_token")
+
+        if not next_token:
+            break
+
+        # Google requires delay before using next_page_token
+        time.sleep(2)
+
+        params = {
+            "pagetoken": next_token,
+            "key": GOOGLE_API_KEY
+        }
+
+    return all_results
+
+# =========================
+# MAIN RUN
+# =========================
 def run():
+    if GOOGLE_API_KEY == "PASTE_YOUR_KEY_HERE":
+        print("❌ ERROR: You did NOT paste your API key")
+        return
 
-    seen = {}
-    rows = []
+    print("🔍 Fetching leads from Google Maps...")
 
-    for city in CITIES:
-        for term in SEARCH_TERMS:
+    leads = fetch_places()
 
-            query = f"{term} in {city}"
-            print(f"Searching: {query}")
+    if not leads:
+        print("❌ No results returned — check API key / API enabled")
+        return
 
-            results = search_places(query)
+    df = pd.DataFrame(leads)
 
-            for place in results:
+    df.to_csv(OUTPUT_FILE, index=False)
 
-                pid = place.get("place_id")
-
-                if pid in seen:
-                    continue
-
-                details = get_details(pid)
-
-                name = details.get("name") or ""
-                website = details.get("website") or ""
-
-                seen[pid] = True
-
-                rows.append({
-                    "company_name": name.strip(),
-                    "website": website.strip(),
-                    "contact_email": "",
-                    "contact_page_url": website.strip(),
-                    "location": city,
-                    "keyword_hits": term,
-                    "hoa_size_estimate": ""
-                })
-
-                time.sleep(0.2)
-
-    with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=rows[0].keys())
-        writer.writeheader()
-        writer.writerows(rows)
-
-    print(f"\nSaved {len(rows)} prospects → {OUTPUT_FILE}")
-
+    print(f"✅ Saved {len(df)} leads to {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     run()

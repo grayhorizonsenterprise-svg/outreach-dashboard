@@ -1,6 +1,6 @@
 import pandas as pd
 
-INPUT_FILE = "prospects_enriched.csv"
+INPUT_FILE = "prospects_raw.csv"
 OUTPUT_FILE = "outreach_queue.csv"
 
 def generate_message(company):
@@ -28,7 +28,7 @@ def run():
     rows = []
 
     for _, row in df.iterrows():
-        company = row.get("company") or row.get("name") or ""
+        company = row.get("company", "")
 
         rows.append({
             "company": company,
@@ -39,9 +39,11 @@ def run():
         })
 
     out = pd.DataFrame(rows)
-    out.to_csv(OUTPUT_FILE, index=False)
 
-    print("✅ Outreach queue built")
+    # 🔥 THIS FIXES YOUR ENTIRE ISSUE
+    out.to_csv(OUTPUT_FILE, index=False, quoting=1)
+
+    print("✅ Clean outreach_queue.csv generated")
 
 if __name__ == "__main__":
     run()
