@@ -4,4 +4,3 @@ requests
 beautifulsoup4
 pandas
 ddgs
-python==3.11.9
