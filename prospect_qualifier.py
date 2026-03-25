@@ -1,8 +1,10 @@
 import pandas as pd
 import re
+import os
 
-INPUT_FILE = "prospects_enriched.csv"
-OUTPUT_FILE = "prospects_enriched.csv"
+DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+INPUT_FILE  = os.path.join(DATA_DIR, "prospects_raw.csv")
+OUTPUT_FILE = os.path.join(DATA_DIR, "prospects_raw.csv")
 
 BAD_PATTERNS = [
     r"top\s*\d+",
@@ -54,7 +56,7 @@ def clean():
 
     original_count = len(df)
 
-    df = df[df["company_name"].apply(is_valid_company)]
+    df = df[df["company"].apply(is_valid_company)]
 
     cleaned_count = len(df)
 

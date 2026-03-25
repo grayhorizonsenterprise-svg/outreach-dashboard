@@ -1,7 +1,9 @@
 import csv
 import subprocess
+import os
 
-QUEUE_FILE = "outreach_queue.csv"
+DATA_DIR   = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+QUEUE_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
 
 def run_queue():
 
@@ -18,24 +20,23 @@ def run_queue():
 
     for row in rows:
 
-        if row["approved_to_send"].strip().upper() != "NO":
+        if row.get("status", "pending").strip().lower() != "pending":
             updated_rows.append(row)
             continue
 
         print("\n------------------------------------")
-        print("Company:", row["company_name"])
-        print("Website:", row["website"])
-        print("Email:", row["email"])
+        print("Company:", row.get("company", ""))
+        print("Email:", row.get("email", ""))
         print("\nMessage Preview:\n")
-        print(row["message"][:300] + "...\n")
+        print(row.get("message", "")[:300] + "...\n")
 
         choice = input("Send outreach? (y/n): ").strip().lower()
 
         if choice == "y":
-            row["approved_to_send"] = "YES"
+            row["status"] = "approved"
             print("✔ Approved\n")
         else:
-            row["approved_to_send"] = "SKIP"
+            row["status"] = "skipped"
             print("✖ Skipped\n")
 
         updated_rows.append(row)

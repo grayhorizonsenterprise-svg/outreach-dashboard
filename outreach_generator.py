@@ -1,7 +1,20 @@
 import pandas as pd
+import random
+import os
 
-INPUT_FILE = "prospects_raw.csv"
-OUTPUT_FILE = "outreach_queue.csv"
+DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+INPUT_FILE  = os.path.join(DATA_DIR, "prospects_raw.csv")
+OUTPUT_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
+
+SUBJECTS = [
+    "Quick HOA question",
+    "Question about violation notices",
+    "Quick question about compliance",
+    "HOA compliance question",
+]
+
+def generate_subject():
+    return random.choice(SUBJECTS)
 
 def generate_message(company):
     return f"""Hi there,
@@ -26,24 +39,32 @@ def run():
     df = pd.read_csv(INPUT_FILE)
 
     rows = []
+    skipped = 0
 
     for _, row in df.iterrows():
-        company = row.get("company", "")
+        email = str(row.get("email", "")).strip()
+
+        # Only include leads where we have a confirmed email
+        if email in ("", "nan", "None"):
+            skipped += 1
+            continue
+
+        company = str(row.get("company", "")).strip()
 
         rows.append({
             "company": company,
             "name": "",
-            "email": row.get("email", ""),
+            "email": email,
+            "website": row.get("website", ""),
+            "subject": generate_subject(),
             "message": generate_message(company),
             "status": "pending"
         })
 
     out = pd.DataFrame(rows)
-
-    # 🔥 THIS FIXES YOUR ENTIRE ISSUE
     out.to_csv(OUTPUT_FILE, index=False, quoting=1)
 
-    print("✅ Clean outreach_queue.csv generated")
+    print(f"[DONE] outreach_queue.csv: {len(rows)} ready leads ({skipped} skipped — no email)")
 
 if __name__ == "__main__":
     run()

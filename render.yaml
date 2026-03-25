@@ -1,0 +1,41 @@
+services:
+  # ─────────────────────────────────────────────
+  # 1. APPROVAL DASHBOARD  (Web Service)
+  # Access at: https://ghe-dashboard.onrender.com
+  # ─────────────────────────────────────────────
+  - type: web
+    name: ghe-dashboard
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn approval_dashboard:app --bind 0.0.0.0:$PORT --workers 1 --timeout 60
+    envVars:
+      - key: DATA_DIR
+        value: /data
+      - key: SENDGRID_API_KEY
+        sync: false          # set this in Render dashboard
+      - key: SENDER_EMAIL
+        sync: false
+      - key: SENDER_NAME
+        value: Alex
+    disk:
+      name: ghe-data
+      mountPath: /data
+      sizeGB: 1
+
+  # ─────────────────────────────────────────────
+  # 2. OUTREACH ENGINE  (Background Worker)
+  # Runs prospect_finder → enricher → qualifier → generator
+  # Every 6 hours, non-stop
+  # ─────────────────────────────────────────────
+  - type: worker
+    name: ghe-engine
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run_engine.py
+    envVars:
+      - key: DATA_DIR
+        value: /data
+    disk:
+      name: ghe-data       # same disk — shares CSV files with dashboard
+      mountPath: /data
+      sizeGB: 1

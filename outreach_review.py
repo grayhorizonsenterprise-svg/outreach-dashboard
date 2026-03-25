@@ -20,7 +20,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-QUEUE_FILE = "outreach_queue.csv"
+DATA_DIR   = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+QUEUE_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
 
 # --- Load credentials from .env ---
 SMTP_HOST     = os.getenv("SMTP_HOST", "smtp.gmail.com")
@@ -51,10 +52,10 @@ def build_digest(df: pd.DataFrame) -> tuple[str, str]:
     for i, (_, row) in enumerate(df.iterrows(), 1):
         plain_lines += [
             f"--- DRAFT {i} of {count} ---",
-            f"Company : {row['company_name']}",
-            f"Website : {row['website']}",
+            f"Company : {row['company']}",
+            f"Website : {row.get('website', '')}",
             f"Email   : {row['email'] if row['email'] else '(not found — use contact page)'}",
-            f"Subject : {row['subject']}",
+            f"Subject : {row.get('subject', 'HOA outreach')}",
             f"",
             row['message'],
             f"",
@@ -68,18 +69,20 @@ def build_digest(df: pd.DataFrame) -> tuple[str, str]:
     for i, (_, row) in enumerate(df.iterrows(), 1):
         email_display = row['email'] if row['email'] else "<em>(not found — use contact page)</em>"
         msg_html = row['message'].replace('\n', '<br>')
+        website = row.get('website', '')
+        subject = row.get('subject', 'HOA outreach')
         html_rows += f"""
         <div style="border:1px solid #ddd; border-radius:6px; padding:18px; margin-bottom:24px;">
           <h3 style="margin-top:0; color:#1a1a2e;">Draft {i} of {count}</h3>
           <table style="font-size:14px; border-collapse:collapse; width:100%;">
             <tr><td style="padding:4px 8px; font-weight:bold; width:90px;">Company</td>
-                <td style="padding:4px 8px;">{row['company_name']}</td></tr>
+                <td style="padding:4px 8px;">{row['company']}</td></tr>
             <tr><td style="padding:4px 8px; font-weight:bold;">Website</td>
-                <td style="padding:4px 8px;"><a href="{row['website']}">{row['website']}</a></td></tr>
+                <td style="padding:4px 8px;"><a href="{website}">{website}</a></td></tr>
             <tr><td style="padding:4px 8px; font-weight:bold;">Email</td>
                 <td style="padding:4px 8px;">{email_display}</td></tr>
             <tr><td style="padding:4px 8px; font-weight:bold;">Subject</td>
-                <td style="padding:4px 8px;">{row['subject']}</td></tr>
+                <td style="padding:4px 8px;">{subject}</td></tr>
           </table>
           <div style="margin-top:12px; background:#f7f7f7; padding:14px; border-radius:4px;
                       font-size:14px; white-space:pre-wrap; line-height:1.6;">{row['message']}</div>
@@ -141,7 +144,7 @@ def run():
         print(f"[ERROR] {QUEUE_FILE} not found. Run outreach_generator.py first.")
         return
 
-    pending = df[df["approved_to_send"] == "NO"].copy()
+    pending = df[df["status"] == "pending"].copy()
 
     if pending.empty:
         print("[INFO] No pending drafts found in outreach_queue.csv.")

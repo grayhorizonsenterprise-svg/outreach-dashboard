@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python prospect_finder.py)"
+      "Bash(python prospect_finder.py)",
+      "Read(//c/vs code + claude code Gpt Drop in read me file/**)"
     ]
   }
 }

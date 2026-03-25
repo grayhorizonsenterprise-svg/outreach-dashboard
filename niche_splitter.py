@@ -42,7 +42,7 @@ def split():
 
         for row in reader:
 
-            niche=detect(row["company_name"])
+            niche=detect(row["company"])
 
             if niche:
                 buckets[niche].append(row)
@@ -56,7 +56,7 @@ def split():
 
             writer=csv.DictWriter(
                 f,
-                fieldnames=["company_name","website","email"]
+                fieldnames=["company","website","email"]
             )
 
             writer.writeheader()

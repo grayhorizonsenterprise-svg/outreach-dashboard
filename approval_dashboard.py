@@ -5,7 +5,8 @@ import requests
 
 app = Flask(__name__)
 
-CSV_FILE = "outreach_queue.csv"
+DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+CSV_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
 
 # =========================
 # LOAD DATA
@@ -247,4 +248,5 @@ def health():
 # RUN
 # =========================
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    port = int(os.getenv("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
