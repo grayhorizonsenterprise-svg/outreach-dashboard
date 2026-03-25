@@ -111,14 +111,42 @@ def format_message(msg):
 # =========================
 # SEND EMAIL (SENDGRID)
 # =========================
+SENT_LOG = os.path.join(DATA_DIR, "sent_log.csv")
+
+def log_sent(to_email, name, company, subject, success, error=""):
+    import csv
+    from datetime import datetime
+    row = {
+        "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "company": company,
+        "name": name,
+        "email": to_email,
+        "subject": subject,
+        "success": success,
+        "error": error,
+    }
+    file_exists = os.path.exists(SENT_LOG)
+    with open(SENT_LOG, "a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=row.keys())
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(row)
+
 def send_email(to_email, name, company, message):
     api_key = os.getenv("SENDGRID_API_KEY")
     sender = os.getenv("SENDER_EMAIL")
     sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
+    subject = f"{company} — quick question"
 
-    if not api_key or not sender or not to_email:
-        print("Missing email config or recipient")
-        return
+    if not api_key or not sender:
+        print("[SEND] ERROR: Missing SENDGRID_API_KEY or SENDER_EMAIL env vars")
+        log_sent(to_email, name, company, subject, False, "missing env vars")
+        return False
+
+    if not to_email:
+        print("[SEND] ERROR: No recipient email")
+        log_sent(to_email, name, company, subject, False, "no recipient")
+        return False
 
     html = f"""
     <div style="font-family:Arial;line-height:1.6;">
@@ -131,7 +159,7 @@ def send_email(to_email, name, company, message):
     data = {
         "personalizations": [{"to": [{"email": to_email}]}],
         "from": {"email": sender, "name": sender_name},
-        "subject": f"{company} — quick question",
+        "subject": subject,
         "content": [{"type": "text/html", "value": html}]
     }
 
@@ -141,9 +169,23 @@ def send_email(to_email, name, company, message):
     }
 
     try:
-        requests.post("https://api.sendgrid.com/v3/mail/send", json=data, headers=headers)
+        resp = requests.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            json=data, headers=headers, timeout=15
+        )
+        if resp.status_code in (200, 202):
+            print(f"[SEND] OK -> {to_email} ({company})")
+            log_sent(to_email, name, company, subject, True)
+            return True
+        else:
+            error_msg = f"HTTP {resp.status_code}: {resp.text[:200]}"
+            print(f"[SEND] FAILED -> {to_email} | {error_msg}")
+            log_sent(to_email, name, company, subject, False, error_msg)
+            return False
     except Exception as e:
-        print("Send error:", e)
+        print(f"[SEND] EXCEPTION -> {to_email} | {e}")
+        log_sent(to_email, name, company, subject, False, str(e))
+        return False
 
 # =========================
 # DASHBOARD UI (FINAL CLEAN VERSION)
@@ -293,7 +335,10 @@ def dashboard():
             <span>Sent: <span class="stat-val">{sent_count}</span></span>
             <span>Skipped: <span class="stat-val">{skipped_count}</span></span>
         </div>
-        <a href="/refresh" class="refresh-btn">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
+        <div style="display:flex;gap:10px;">
+            <a href="/sent" class="refresh-btn" style="background:#7c3aed;">View Sent</a>
+            <a href="/refresh" class="refresh-btn">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
+        </div>
     </div>
     <div class="refresh-note">Page auto-refreshes every 5 min &nbsp;|&nbsp; {len(df)} total leads</div>
     """
@@ -373,6 +418,45 @@ def skip(index):
         save_data(df)
 
     return redirect('/')
+
+# =========================
+# SENT LOG VIEW
+# =========================
+@app.route('/sent')
+def sent_log_view():
+    rows = []
+    if os.path.exists(SENT_LOG):
+        try:
+            log_df = pd.read_csv(SENT_LOG).fillna("")
+            rows = log_df.to_dict("records")
+        except Exception:
+            pass
+
+    html = """
+    <style>
+        body { background:#0f172a; color:white; font-family:Arial; margin:0; }
+        .header { text-align:center; padding:20px; font-size:22px; font-weight:bold; background:#020617; }
+        table { width:90%; margin:20px auto; border-collapse:collapse; font-size:13px; }
+        th { background:#1e293b; padding:10px; text-align:left; color:#38bdf8; }
+        td { padding:9px 10px; border-bottom:1px solid #1e293b; }
+        .ok { color:#22c55e; font-weight:bold; }
+        .fail { color:#ef4444; font-weight:bold; }
+        a.back { display:block; text-align:center; margin:16px; color:#38bdf8; }
+    </style>
+    <div class="header">Sent Log</div>
+    <a class="back" href="/">← Back to Dashboard</a>
+    """
+
+    if not rows:
+        html += '<p style="text-align:center;color:#64748b;">No emails sent yet.</p>'
+    else:
+        html += "<table><tr><th>Time</th><th>Company</th><th>Name</th><th>Email</th><th>Subject</th><th>Status</th><th>Error</th></tr>"
+        for r in reversed(rows):
+            status_cell = '<span class="ok">SENT</span>' if str(r.get("success","")).lower() in ("true","1") else '<span class="fail">FAILED</span>'
+            html += f"<tr><td>{r.get('timestamp','')}</td><td>{r.get('company','')}</td><td>{r.get('name','')}</td><td>{r.get('email','')}</td><td>{r.get('subject','')}</td><td>{status_cell}</td><td>{r.get('error','')}</td></tr>"
+        html += "</table>"
+
+    return html
 
 # =========================
 # MANUAL REFRESH TRIGGER
