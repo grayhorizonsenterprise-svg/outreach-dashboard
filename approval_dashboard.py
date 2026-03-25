@@ -18,22 +18,35 @@ PIPELINE_SCRIPTS = ["prospect_finder.py", "prospect_enricher.py",
 # Runs the full pipeline every 6 hours inside the same process
 # so one Render web service handles everything
 # =========================
-def run_pipeline_loop():
-    time.sleep(15)  # let server start first
+pipeline_running = False
+last_run_time = None
+
+def run_pipeline_once():
+    global pipeline_running, last_run_time
+    if pipeline_running:
+        return
+    pipeline_running = True
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    print("[ENGINE] Starting pipeline cycle...", flush=True)
+    for script in PIPELINE_SCRIPTS:
+        try:
+            print(f"[ENGINE] Running {script}", flush=True)
+            subprocess.run(
+                [sys.executable, "-u", os.path.join(script_dir, script)],
+                env={**os.environ, "PYTHONUNBUFFERED": "1"},
+                timeout=1800
+            )
+        except Exception as e:
+            print(f"[ENGINE] Error in {script}: {e}", flush=True)
+    last_run_time = time.time()
+    pipeline_running = False
+    print("[ENGINE] Cycle done.", flush=True)
+
+def run_pipeline_loop():
+    time.sleep(5)  # let server start first
     while True:
-        print("[ENGINE] Starting pipeline cycle...", flush=True)
-        for script in PIPELINE_SCRIPTS:
-            try:
-                print(f"[ENGINE] Running {script}", flush=True)
-                subprocess.run(
-                    [sys.executable, "-u", os.path.join(script_dir, script)],
-                    env={**os.environ, "PYTHONUNBUFFERED": "1"},
-                    timeout=1800
-                )
-            except Exception as e:
-                print(f"[ENGINE] Error in {script}: {e}", flush=True)
-        print("[ENGINE] Cycle done. Sleeping 6 hours.", flush=True)
+        run_pipeline_once()
+        print("[ENGINE] Sleeping 6 hours until next cycle.", flush=True)
         time.sleep(21600)
 
 threading.Thread(target=run_pipeline_loop, daemon=True).start()
@@ -182,6 +195,36 @@ def dashboard():
             padding-bottom:8px;
         }
 
+        .top-bar {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:10px 30px;
+            background:#020617;
+            border-bottom:1px solid #1e293b;
+        }
+
+        .refresh-btn {
+            background:#3b82f6;
+            color:white;
+            border:none;
+            padding:8px 18px;
+            border-radius:6px;
+            cursor:pointer;
+            font-size:13px;
+            text-decoration:none;
+            display:inline-block;
+        }
+
+        .refresh-btn:hover { background:#2563eb; }
+
+        .pipeline-status {
+            font-size:12px;
+            color:#64748b;
+        }
+
+        .pipeline-active { color:#22c55e; }
+
         .card {
             background:#1e293b;
             padding:20px;
@@ -237,14 +280,21 @@ def dashboard():
     <div class="header">Gray Horizons Outreach Dashboard</div>
     """
 
+    status_text = '<span class="pipeline-active">Scraping new leads now...</span>' if pipeline_running else (
+        f"Last run: {time.strftime('%I:%M %p', time.localtime(last_run_time))}" if last_run_time else "Starting soon..."
+    )
+
     html += f"""
-    <div class="stats">
-        <span>Pending: <span class="stat-val">{pending_count}</span></span>
-        <span>Sent: <span class="stat-val">{sent_count}</span></span>
-        <span>Skipped: <span class="stat-val">{skipped_count}</span></span>
-        <span>Total: <span class="stat-val">{len(df)}</span></span>
+    <div class="top-bar">
+        <div class="pipeline-status">{status_text}</div>
+        <div class="stats" style="margin:0;padding:0;">
+            <span>Pending: <span class="stat-val">{pending_count}</span></span>
+            <span>Sent: <span class="stat-val">{sent_count}</span></span>
+            <span>Skipped: <span class="stat-val">{skipped_count}</span></span>
+        </div>
+        <a href="/refresh" class="refresh-btn">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
     </div>
-    <div class="refresh-note">Auto-refreshes every 5 minutes</div>
+    <div class="refresh-note">Page auto-refreshes every 5 min &nbsp;|&nbsp; {len(df)} total leads</div>
     """
 
     for i, row in df.iterrows():
@@ -324,11 +374,26 @@ def skip(index):
     return redirect('/')
 
 # =========================
+# MANUAL REFRESH TRIGGER
+# =========================
+@app.route('/refresh')
+def refresh():
+    if not pipeline_running:
+        threading.Thread(target=run_pipeline_once, daemon=True).start()
+    return redirect('/')
+
+# =========================
 # HEALTH CHECK
 # =========================
 @app.route('/health')
 def health():
-    return "OK"
+    status = "running" if pipeline_running else "idle"
+    leads = 0
+    try:
+        leads = len(pd.read_csv(CSV_FILE))
+    except Exception:
+        pass
+    return f"OK | pipeline={status} | leads={leads}"
 
 # =========================
 # RUN
