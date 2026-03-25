@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Elite Lighting Co — Automated System</title>
+<style>
+body { margin:0; font-family:Arial; background:#0b0f1a; color:white; }
+
+.header { padding:20px; font-size:22px; background:#111827; }
+
+.container { display:flex; gap:20px; padding:20px; }
+
+.column {
+  flex:1;
+  background:#1f2937;
+  padding:15px;
+  border-radius:10px;
+}
+
+.card {
+  background:#374151;
+  padding:10px;
+  margin:10px 0;
+  border-radius:8px;
+}
+
+.panel {
+  margin:20px;
+  padding:20px;
+  background:#111827;
+  border-radius:10px;
+}
+
+button {
+  padding:10px;
+  margin:5px;
+  background:#10b981;
+  border:none;
+  color:white;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.log { margin-top:10px; color:#9ca3af; }
+
+/* Chat */
+.chat { background:#1f2937; padding:10px; border-radius:10px; }
+.msg { margin:5px 0; padding:8px; border-radius:6px; }
+.user { background:#2563eb; text-align:right; }
+.bot { background:#374151; }
+
+</style>
+</head>
+
+<body>
+
+<div class="header">Elite Lighting Co — Lead & Booking System</div>
+
+<div class="container">
+
+  <div class="column">
+    <h3>Incoming Leads</h3>
+    <div id="leads"></div>
+  </div>
+
+  <div class="column">
+    <h3>Booked Jobs</h3>
+    <div id="booked"></div>
+  </div>
+
+</div>
+
+<div class="panel">
+  <button onclick="instagram()">Instagram Lead</button>
+  <button onclick="uploadPhoto()">Send Yard Photo</button>
+  <button onclick="bookCall()">Auto Book Call</button>
+
+  <div class="log" id="log">System Ready...</div>
+</div>
+
+<!-- CHAT -->
+<div class="panel">
+  <h3>Website Chatbot</h3>
+
+  <div class="chat" id="chat">
+    <div class="msg bot">Hi — what type of lighting are you looking for?</div>
+  </div>
+
+  <button onclick="chatFlow()">Simulate Conversation</button>
+</div>
+
+<!-- JOB REVIEW -->
+<div class="panel">
+  <h3>Quick Job Review</h3>
+
+  <div class="card" id="reviewCard">
+    Backyard string lighting — patio install (40ft)
+  </div>
+
+  <button onclick="accept()">Accept</button>
+  <button onclick="pass()">Pass</button>
+</div>
+
+<script>
+
+let jobs = [
+  "Backyard café lighting — patio perimeter (40ft)",
+  "Wedding lighting install — weekend event setup",
+  "Front yard accent lighting — residential home",
+  "Restaurant patio lighting — commercial install",
+  "Pergola lighting — backyard upgrade",
+  "Outdoor dining lighting — café install"
+];
+
+function randomJob(){
+  return jobs[Math.floor(Math.random()*jobs.length)];
+}
+
+function createLead(){
+  let card = document.createElement("div");
+  card.className = "card";
+  card.innerText = randomJob();
+  document.getElementById("leads").appendChild(card);
+}
+
+function instagram(){
+  createLead();
+  log("Instagram DM → Auto reply sent → Lead captured instantly");
+}
+
+function uploadPhoto(){
+  createLead();
+  log("Customer sent yard photo → Job pre-qualified before visit");
+}
+
+function bookCall(){
+  let job = randomJob();
+
+  let card = document.createElement("div");
+  card.className = "card";
+  card.innerText = job + " (Booked — Tomorrow 3:30PM)";
+
+  document.getElementById("booked").appendChild(card);
+
+  log("Call scheduled automatically → Customer confirmed");
+}
+
+function chatFlow(){
+  let chat = document.getElementById("chat");
+
+  let user = document.createElement("div");
+  user.className = "msg user";
+  user.innerText = "I need backyard lights";
+  chat.appendChild(user);
+
+  let bot = document.createElement("div");
+  bot.className = "msg bot";
+  bot.innerText = "Got it — I can help. Want to schedule a quick estimate?";
+  chat.appendChild(bot);
+
+  log("Website chat → Lead captured and routed");
+}
+
+function accept(){
+  log("Job accepted → Booking opened → Moving forward");
+  document.getElementById("reviewCard").innerText = randomJob();
+}
+
+function pass(){
+  log("Job skipped → System continues sourcing leads");
+  document.getElementById("reviewCard").innerText = randomJob();
+}
+
+function log(text){
+  document.getElementById("log").innerText = text;
+}
+
+</script>
+
+</body>
+</html>

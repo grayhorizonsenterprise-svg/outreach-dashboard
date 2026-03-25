@@ -4,28 +4,57 @@ import os
 import requests
 import threading
 import time
+import subprocess
+import sys
 
 app = Flask(__name__)
 
+DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+PIPELINE_SCRIPTS = ["prospect_finder.py", "prospect_enricher.py",
+                    "prospect_qualifier.py", "outreach_generator.py"]
+
+# =========================
+# BACKGROUND PIPELINE ENGINE
+# Runs the full pipeline every 6 hours inside the same process
+# so one Render web service handles everything
+# =========================
+def run_pipeline_loop():
+    time.sleep(15)  # let server start first
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    while True:
+        print("[ENGINE] Starting pipeline cycle...", flush=True)
+        for script in PIPELINE_SCRIPTS:
+            try:
+                print(f"[ENGINE] Running {script}", flush=True)
+                subprocess.run(
+                    [sys.executable, "-u", os.path.join(script_dir, script)],
+                    env={**os.environ, "PYTHONUNBUFFERED": "1"},
+                    timeout=1800
+                )
+            except Exception as e:
+                print(f"[ENGINE] Error in {script}: {e}", flush=True)
+        print("[ENGINE] Cycle done. Sleeping 6 hours.", flush=True)
+        time.sleep(21600)
+
+threading.Thread(target=run_pipeline_loop, daemon=True).start()
+
 # =========================
 # KEEP-ALIVE (prevents Render free tier from sleeping)
-# Pings /health every 10 minutes
 # =========================
 def keep_alive():
-    time.sleep(30)  # wait for server to start
+    time.sleep(60)
     render_url = os.getenv("RENDER_EXTERNAL_URL", "")
-    local_url  = f"http://127.0.0.1:{os.getenv('PORT', 8080)}"
-    target = render_url or local_url
+    port = os.getenv("PORT", "8080")
+    target = render_url if render_url else f"http://127.0.0.1:{port}"
     while True:
         try:
             requests.get(f"{target}/health", timeout=10)
         except Exception:
             pass
-        time.sleep(600)  # every 10 minutes
+        time.sleep(600)
 
 threading.Thread(target=keep_alive, daemon=True).start()
 
-DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 CSV_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
 
 # =========================
