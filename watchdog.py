@@ -13,6 +13,7 @@ import os
 import sys
 import logging
 import socket
+import platform
 
 # ─────────────────────────────────────────
 # CONFIG
@@ -45,6 +46,9 @@ log = logging.getLogger("watchdog")
 # So the watchdog itself starts on every login
 # ─────────────────────────────────────────
 def register_startup():
+    # Only register Windows startup when actually on Windows (not Render/Linux)
+    if platform.system() != "Windows" or os.getenv("RENDER"):
+        return
     try:
         startup = os.path.join(
             os.environ.get("APPDATA", ""),
@@ -86,11 +90,15 @@ def is_alive() -> bool:
 def kill_dashboard():
     """Kill all Python processes (dashboard + pipeline threads)."""
     try:
-        subprocess.run(
-            ["powershell.exe", "-Command",
-             "Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force"],
-            capture_output=True, timeout=15
-        )
+        if platform.system() == "Windows":
+            subprocess.run(
+                ["powershell.exe", "-Command",
+                 "Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force"],
+                capture_output=True, timeout=15
+            )
+        else:
+            subprocess.run(["pkill", "-f", "approval_dashboard.py"],
+                           capture_output=True, timeout=15)
         log.info("Killed existing Python processes")
     except Exception as e:
         log.warning(f"Kill failed (non-critical): {e}")

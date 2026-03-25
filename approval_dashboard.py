@@ -10,6 +10,7 @@ import sys
 app = Flask(__name__)
 
 DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+os.makedirs(DATA_DIR, exist_ok=True)
 PIPELINE_SCRIPTS = ["prospect_finder.py", "prospect_enricher.py",
                     "prospect_qualifier.py", "outreach_generator.py"]
 

@@ -3,13 +3,16 @@ services:
     name: ghe-dashboard
     runtime: python
     pythonVersion: "3.11"
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn approval_dashboard:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120 --keep-alive 5
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: gunicorn approval_dashboard:app --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120 --keep-alive 10 --log-level info
+    healthCheckPath: /health
     envVars:
       - key: DATA_DIR
         value: /data
       - key: PYTHONUNBUFFERED
         value: "1"
+      - key: RENDER
+        value: "true"
       - key: SENDGRID_API_KEY
         sync: false
       - key: SENDER_EMAIL
