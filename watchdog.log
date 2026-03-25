@@ -1,0 +1,6 @@
+2026-03-24 22:25:34,921  INFO  ==================================================
+2026-03-24 22:25:34,922  INFO  GHE Watchdog started
+2026-03-24 22:25:34,922  INFO  Monitoring: http://127.0.0.1:8080/health
+2026-03-24 22:25:34,922  INFO  Check interval: 60s  |  Fail threshold: 3
+2026-03-24 22:25:34,923  INFO  ==================================================
+2026-03-24 22:25:34,924  INFO  Startup entry written to C:\Users\curti\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\GHEWatchdog.vbs

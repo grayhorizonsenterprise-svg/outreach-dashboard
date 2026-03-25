@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Lighting System Dashboard</title>
+<title>Lighting Dashboard</title>
 <style>
-body { font-family:Arial; background:#0b0f1a; color:white; }
+body {
+  font-family:Arial;
+  background:#0b0f1a;
+  color:white;
+}
 
-.container { display:flex; gap:20px; padding:20px; }
+.header {
+  padding:20px;
+  font-size:22px;
+}
+
+.container {
+  display:flex;
+  gap:20px;
+  padding:20px;
+}
 
 .column {
   flex:1;
   background:#1f2937;
   padding:15px;
-  border-radius:10px;
+  border-radius:12px;
 }
 
 .card {
@@ -22,32 +35,93 @@ body { font-family:Arial; background:#0b0f1a; color:white; }
 }
 
 .win { background:#10b981; }
+
+button {
+  padding:8px 12px;
+  margin:5px;
+  border:none;
+  border-radius:6px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+}
+
+.control {
+  text-align:center;
+  margin-top:10px;
+}
 </style>
 </head>
 
 <body>
 
-<h2 style="padding:20px;">Elite Lighting Co — System Dashboard</h2>
+<div class="header">Elite Lighting Co — System Dashboard</div>
 
 <div class="container">
 
 <div class="column">
   <h3>Incoming Leads</h3>
-  <div class="card">Backyard patio lighting — photo received</div>
-  <div class="card">Wedding setup — Instagram inquiry</div>
+  <div id="leads"></div>
 </div>
 
 <div class="column">
   <h3>In Progress</h3>
-  <div class="card">Customer chatting — estimate pending</div>
+  <div id="progress"></div>
 </div>
 
 <div class="column">
   <h3>Booked Jobs</h3>
-  <div class="card win">Pergola lighting — booked (Tomorrow 3PM)</div>
+  <div id="booked"></div>
 </div>
 
 </div>
+
+<div class="control">
+  <button onclick="next()">Next Lead</button>
+  <button onclick="move()">Move Forward</button>
+  <button onclick="book()">Book Job</button>
+</div>
+
+<script>
+
+let jobs = [
+  "Backyard patio lighting — photo received",
+  "Wedding install — Instagram inquiry",
+  "Restaurant patio lighting — commercial",
+  "Pergola lighting — backyard upgrade"
+];
+
+let index = 0;
+let current = null;
+
+function next(){
+  let card = document.createElement("div");
+  card.className = "card";
+  card.innerText = jobs[index % jobs.length];
+
+  document.getElementById("leads").appendChild(card);
+  current = card;
+
+  index++;
+}
+
+function move(){
+  if(!current) return;
+  document.getElementById("progress").appendChild(current);
+}
+
+function book(){
+  if(!current) return;
+
+  let clone = current.cloneNode(true);
+  clone.classList.add("win");
+
+  document.getElementById("booked").appendChild(clone);
+  current.remove();
+  current = null;
+}
+
+</script>
 
 </body>
 </html>

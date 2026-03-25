@@ -3,15 +3,28 @@
 <head>
 <title>Elite Lighting Co</title>
 <style>
-body { font-family:Arial; background:#0b0f1a; color:white; text-align:center; }
+body {
+  font-family:Arial;
+  background:#0b0f1a;
+  color:white;
+  text-align:center;
+}
 
-.container { max-width:400px; margin:auto; padding:20px; }
+.container {
+  max-width:420px;
+  margin:auto;
+  padding:20px;
+}
+
+h2 { margin-bottom:5px; }
+.sub { color:#9ca3af; font-size:14px; }
 
 .section {
   background:#1f2937;
   padding:15px;
   margin-top:15px;
-  border-radius:10px;
+  border-radius:12px;
+  box-shadow:0 0 10px rgba(0,0,0,0.3);
 }
 
 button {
@@ -21,15 +34,37 @@ button {
   background:#10b981;
   border:none;
   color:white;
-  border-radius:6px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+/* GALLERY */
+.gallery {
+  margin-top:10px;
 }
 
 .image {
-  background:#374151;
-  height:70px;
-  margin:5px 0;
-  border-radius:6px;
+  height:90px;
+  border-radius:8px;
+  margin:6px 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  background:linear-gradient(135deg,#374151,#1f2937);
 }
+
+/* CHAT */
+.chat {
+  margin-top:10px;
+  text-align:left;
+}
+
+.msg { padding:8px; margin:5px 0; border-radius:6px; }
+.bot { background:#374151; }
+.user { background:#2563eb; text-align:right; }
+
 </style>
 </head>
 
@@ -38,24 +73,35 @@ button {
 <div class="container">
 
 <h2>Elite Lighting Co</h2>
+<div class="sub">Outdoor Lighting Made Simple</div>
 
 <div class="section">
-  <button>View Backyard Lighting Examples</button>
-  <div class="image"></div>
-  <div class="image"></div>
-  <div class="image"></div>
+  <strong>Lighting Examples</strong>
+  <div class="gallery">
+    <div class="image">Backyard Patio Lighting</div>
+    <div class="image">Pergola String Lights</div>
+    <div class="image">Wedding Setup</div>
+  </div>
+  <button>View More Projects</button>
 </div>
 
 <div class="section">
-  <button>Send Your Backyard Photo</button>
+  <strong>Send Your Backyard Photo</strong>
+  <button>Upload Photo</button>
 </div>
 
 <div class="section">
-  <button>Chat About Your Project</button>
+  <strong>Chat With Us</strong>
+  <div class="chat">
+    <div class="msg bot">Hi — what type of lighting are you looking for?</div>
+    <div class="msg user">Backyard string lights</div>
+    <div class="msg bot">Perfect — we can help with that.</div>
+  </div>
 </div>
 
 <div class="section">
-  <button>Book Estimate</button>
+  <strong>Book Estimate</strong>
+  <button>Pick a Time</button>
 </div>
 
 </div>
