@@ -2,8 +2,28 @@ from flask import Flask, redirect
 import pandas as pd
 import os
 import requests
+import threading
+import time
 
 app = Flask(__name__)
+
+# =========================
+# KEEP-ALIVE (prevents Render free tier from sleeping)
+# Pings /health every 10 minutes
+# =========================
+def keep_alive():
+    time.sleep(30)  # wait for server to start
+    render_url = os.getenv("RENDER_EXTERNAL_URL", "")
+    local_url  = f"http://127.0.0.1:{os.getenv('PORT', 8080)}"
+    target = render_url or local_url
+    while True:
+        try:
+            requests.get(f"{target}/health", timeout=10)
+        except Exception:
+            pass
+        time.sleep(600)  # every 10 minutes
+
+threading.Thread(target=keep_alive, daemon=True).start()
 
 DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 CSV_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
@@ -89,7 +109,12 @@ def send_email(to_email, name, company, message):
 def dashboard():
     df = load_data()
 
+    pending_count = len(df[df["status"] == "pending"])
+    sent_count    = len(df[df["status"] == "sent"])
+    skipped_count = len(df[df["status"] == "skipped"])
+
     html = """
+    <meta http-equiv="refresh" content="300">
     <style>
         body {
             background:#0f172a;
@@ -104,6 +129,28 @@ def dashboard():
             font-size:24px;
             font-weight:bold;
             background:#020617;
+        }
+
+        .stats {
+            display:flex;
+            justify-content:center;
+            gap:30px;
+            padding:12px;
+            background:#0f172a;
+            font-size:14px;
+            color:#94a3b8;
+        }
+
+        .stat-val {
+            font-weight:bold;
+            color:#38bdf8;
+        }
+
+        .refresh-note {
+            text-align:center;
+            font-size:11px;
+            color:#475569;
+            padding-bottom:8px;
         }
 
         .card {
@@ -159,6 +206,16 @@ def dashboard():
     </style>
 
     <div class="header">Gray Horizons Outreach Dashboard</div>
+    """
+
+    html += f"""
+    <div class="stats">
+        <span>Pending: <span class="stat-val">{pending_count}</span></span>
+        <span>Sent: <span class="stat-val">{sent_count}</span></span>
+        <span>Skipped: <span class="stat-val">{skipped_count}</span></span>
+        <span>Total: <span class="stat-val">{len(df)}</span></span>
+    </div>
+    <div class="refresh-note">Auto-refreshes every 5 minutes</div>
     """
 
     for i, row in df.iterrows():

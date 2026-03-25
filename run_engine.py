@@ -1,9 +1,10 @@
 import subprocess
+import sys
 import time
 
 def run(script):
-    print(f"\nRunning {script}...\n")
-    subprocess.run(["python", script])
+    print(f"\nRunning {script}...\n", flush=True)
+    subprocess.run([sys.executable, script])
 
 while True:
 

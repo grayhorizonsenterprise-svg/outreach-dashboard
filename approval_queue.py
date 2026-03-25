@@ -1,5 +1,6 @@
 import csv
 import subprocess
+import sys
 import os
 
 DATA_DIR   = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
@@ -51,7 +52,7 @@ def run_queue():
     run_send = input("\nSend approved emails now? (y/n): ").strip().lower()
 
     if run_send == "y":
-        subprocess.run(["python", "outreach_sender.py"])
+        subprocess.run([sys.executable, "outreach_sender.py"])
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import pandas as pd
 import random
+import re
 import os
 
 DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
@@ -7,33 +8,132 @@ INPUT_FILE  = os.path.join(DATA_DIR, "prospects_raw.csv")
 OUTPUT_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
 
 SUBJECTS = [
-    "Quick HOA question",
-    "Question about violation notices",
-    "Quick question about compliance",
-    "HOA compliance question",
+    "how do you handle violation tracking?",
+    "quick question about your workflow",
+    "how does your team handle this?",
+    "had a question about {company}",
+    "saw your firm — quick question",
 ]
 
-def generate_subject():
-    return random.choice(SUBJECTS)
+def generate_subject(company):
+    subject = random.choice(SUBJECTS)
+    return subject.replace("{company}", company)
 
-def generate_message(company):
-    return f"""Hi there,
+MESSAGES = [
+    """\
+Hey,
 
-I came across {company} while reviewing HOA management firms in your area.
+Came across {company} and wanted to reach out directly.
 
-One thing we consistently see is that many teams are still handling violation notices across email threads and spreadsheets, which makes tracking and compliance harder than it should be.
+I'm curious — when a homeowner submits a violation or complaint, how does your team keep track of it from that first report all the way to resolution? Still email threads, or do you have something built out?
 
-We built a workflow that centralizes notices, documentation, and tracking so nothing slips through and your team is not stuck managing it manually.
+Reason I'm asking is we work with a few HOA firms and that handoff tends to be where things fall through. We put together something pretty simple that keeps it all in one place, and I wanted to see if it's even a problem you're running into.
 
-Out of curiosity, how are you currently handling that process?
-
-If it makes sense, I can walk you through how it works.
+Either way, happy to chat if it's relevant.
 
 Alex
-Lead Operations Specialist
 Gray Horizons Enterprise
-https://grayhorizonsenterprise.com
-"""
+grayhorizonsenterprise.com\
+""",
+    """\
+Hi there,
+
+I noticed {company} while doing some research on HOA management firms and wanted to shoot you a quick note.
+
+How are you guys currently handling violation notices and compliance documentation across your communities? I ask because it's one of those things that sounds simple but gets messy fast once you're managing more than a handful of associations.
+
+We've been helping firms like yours get that process a lot tighter — nothing complicated, just a cleaner way to track things end to end.
+
+Worth a 15-minute call if that's something you're actively dealing with. No pressure either way.
+
+Alex
+Gray Horizons Enterprise
+grayhorizonsenterprise.com\
+""",
+    """\
+Hey,
+
+Found {company} while looking into firms managing communities on the West Coast — reached out because I had a genuine question.
+
+How does your team currently deal with violation management across multiple HOAs? Specifically the documentation side — keeping records, following up, making sure nothing gets dropped.
+
+We built something that a few management firms have been using to clean that up. Some were doing it in spreadsheets, some in email, some in a mix of both. Not here to pitch hard — just wanted to see if it's a headache you're familiar with.
+
+Let me know if it's worth talking.
+
+Alex
+Gray Horizons Enterprise
+grayhorizonsenterprise.com\
+""",
+    """\
+Hi,
+
+Quick one — how does {company} handle it when a community board flags a violation? Is there a system in place or is it mostly managed through email and manual follow-up?
+
+I work with HOA management firms to tighten up that process, specifically around tracking and documentation so things don't fall through the cracks between the board and the management team.
+
+If that's something you're still piecing together, I'd love to show you what we've built. Takes about 10 minutes to see if it's even relevant to how you operate.
+
+Alex
+Gray Horizons Enterprise
+grayhorizonsenterprise.com\
+""",
+    """\
+Hey,
+
+Reached out because I came across {company} and it looked like you guys are running a real operation — wanted to ask a direct question.
+
+When your team gets a violation report or a compliance issue from one of your HOAs, where does it live? Email inbox, shared doc, some software? Or is it still kind of scattered depending on who's handling it?
+
+We work with management firms that were dealing with exactly that and helped them get it centralized. Not trying to sell you anything today — just genuinely wanted to know if it's on your radar.
+
+Happy to show you what it looks like if you're curious.
+
+Alex
+Gray Horizons Enterprise
+grayhorizonsenterprise.com\
+""",
+]
+
+def is_clean_name(name: str) -> bool:
+    """Returns True if the name is human-readable enough to use in an email."""
+    if not name or len(name) < 3:
+        return False
+    # Domain slugs: all lowercase with no spaces
+    if name == name.lower() and " " not in name:
+        return False
+    # CamelCase stuck together
+    if re.search(r"[a-z][A-Z]", name):
+        return False
+    # Contains URL-like patterns
+    if re.search(r"https?://|\.[a-z]{2,4}(/|$)", name, re.IGNORECASE):
+        return False
+    # Has a year or looks like a sentence
+    if re.search(r"\b20\d{2}\b|^\d", name):
+        return False
+    # Too long — still a page title fragment
+    if len(name.split()) > 5:
+        return False
+    return True
+
+
+def generate_subject(company):
+    subject = random.choice(SUBJECTS)
+    display = company if is_clean_name(company) else "your firm"
+    return subject.replace("{company}", display)
+
+
+def generate_message(company):
+    template = random.choice(MESSAGES)
+    if is_clean_name(company):
+        return template.replace("{company}", company)
+    else:
+        # Use generic but still natural phrasing
+        return (template
+                .replace("{company}", "your firm")
+                .replace("Hi {company}", "Hi there")
+                .replace("Hi your firm team,", "Hi there,")
+                .replace("Hi your firm,", "Hi there,"))
 
 def run():
     df = pd.read_csv(INPUT_FILE)
@@ -56,7 +156,7 @@ def run():
             "name": "",
             "email": email,
             "website": row.get("website", ""),
-            "subject": generate_subject(),
+            "subject": generate_subject(company),
             "message": generate_message(company),
             "status": "pending"
         })

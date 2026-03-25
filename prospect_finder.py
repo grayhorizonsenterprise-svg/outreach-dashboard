@@ -143,6 +143,43 @@ def is_junk_email(email: str) -> bool:
     return any(p in e for p in JUNK_EMAIL_PATTERNS)
 
 
+def extract_company_name(soup: BeautifulSoup, url: str, fallback_title: str) -> str:
+    """Try to get the real company name from the page, not the SEO title."""
+
+    # 1. og:site_name is almost always the clean company name
+    og_site = soup.find("meta", property="og:site_name")
+    if og_site and og_site.get("content", "").strip():
+        return og_site["content"].strip()
+
+    # 2. Twitter site name
+    tw_site = soup.find("meta", attrs={"name": "twitter:site"})
+    if tw_site and tw_site.get("content", "").strip():
+        name = tw_site["content"].strip().lstrip("@")
+        if len(name) > 2:
+            return name
+
+    # 3. First <h1> on the page — usually the company or page heading
+    h1 = soup.find("h1")
+    if h1:
+        h1_text = h1.get_text(" ", strip=True)
+        # Only use if short and looks like a name, not a headline
+        if 2 < len(h1_text.split()) <= 6 and not re.search(r"\d{4}|how\s+to|\?", h1_text, re.IGNORECASE):
+            return h1_text
+
+    # 4. <title> tag — split on | or - and take the shortest part
+    title_tag = soup.find("title")
+    if title_tag:
+        raw = title_tag.get_text(strip=True)
+        for sep in [" | ", " – ", " — ", " - ", ": "]:
+            if sep in raw:
+                parts = [p.strip() for p in raw.split(sep) if len(p.strip()) > 2]
+                if parts:
+                    return min(parts, key=len)
+        return raw
+
+    return fallback_title
+
+
 def scrape_prospect(url: str, title: str, snippet: str) -> dict:
     prospect = {
         "company": title,
@@ -155,6 +192,9 @@ def scrape_prospect(url: str, title: str, snippet: str) -> dict:
         resp = requests.get(url, headers=get_headers(), timeout=10)
         resp.raise_for_status()
         soup = BeautifulSoup(resp.text, "html.parser")
+
+        # Get real company name from the page itself
+        prospect["company"] = extract_company_name(soup, url, title)
 
         page_text = soup.get_text(" ", strip=True)
         emails = EMAIL_REGEX.findall(page_text)
