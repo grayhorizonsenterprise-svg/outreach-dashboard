@@ -461,6 +461,30 @@ def sent_log_view():
     return html
 
 # =========================
+# TEST EMAIL
+# =========================
+@app.route('/test-email')
+def test_email():
+    result = send_email(
+        to_email="grayhorizonsenterprise@gmail.com",
+        name="Alex",
+        company="Gray Horizons Enterprise",
+        message="This is a test message confirming the outreach system is live and sending correctly through SendGrid. If you received this, everything is working."
+    )
+    status = "SUCCESS — email delivered to grayhorizonsenterprise@gmail.com" if result else "FAILED — check /sent for the error details"
+    color  = "#22c55e" if result else "#ef4444"
+    return f"""
+    <div style="background:#0f172a;color:white;font-family:Arial;min-height:100vh;display:flex;align-items:center;justify-content:center;">
+        <div style="text-align:center;">
+            <div style="font-size:22px;font-weight:bold;color:{color};margin-bottom:16px;">{status}</div>
+            <a href="/" style="color:#38bdf8;">← Back to Dashboard</a>
+            &nbsp;|&nbsp;
+            <a href="/sent" style="color:#38bdf8;">View Sent Log</a>
+        </div>
+    </div>
+    """
+
+# =========================
 # MANUAL REFRESH TRIGGER
 # =========================
 @app.route('/refresh')
