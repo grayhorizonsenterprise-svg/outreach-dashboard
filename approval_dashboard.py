@@ -133,15 +133,17 @@ def log_sent(to_email, name, company, subject, success, error=""):
         writer.writerow(row)
 
 def send_email(to_email, name, company, message):
-    api_key = os.getenv("SENDGRID_API_KEY")
-    sender = os.getenv("SENDER_EMAIL")
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+
+    gmail_user = os.getenv("GMAIL_ADDRESS")
+    gmail_pass = os.getenv("GMAIL_APP_PASSWORD")
     sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
-    # REPLY_TO_EMAIL: where prospect replies land (defaults to sender if not set)
-    reply_to = os.getenv("REPLY_TO_EMAIL", sender)
     subject = f"{company} — quick question"
 
-    if not api_key or not sender:
-        print("[SEND] ERROR: Missing SENDGRID_API_KEY or SENDER_EMAIL env vars")
+    if not gmail_user or not gmail_pass:
+        print("[SEND] ERROR: Missing GMAIL_ADDRESS or GMAIL_APP_PASSWORD env vars")
         log_sent(to_email, name, company, subject, False, "missing env vars")
         return False
 
@@ -150,7 +152,7 @@ def send_email(to_email, name, company, message):
         log_sent(to_email, name, company, subject, False, "no recipient")
         return False
 
-    html = f"""
+    html_body = f"""
     <div style="font-family:Arial;line-height:1.6;">
         <p>Hi {name or 'there'},</p>
         <p>{format_message(message)}</p>
@@ -158,40 +160,23 @@ def send_email(to_email, name, company, message):
     </div>
     """
 
-    # BCC sender so every outgoing email lands in your own inbox
-    personalizations = [{"to": [{"email": to_email}]}]
-    if reply_to and reply_to != to_email:
-        personalizations[0]["bcc"] = [{"email": reply_to}]
-
-    data = {
-        "personalizations": personalizations,
-        "from": {"email": sender, "name": sender_name},
-        "reply_to": {"email": reply_to, "name": sender_name},
-        "subject": subject,
-        "content": [{"type": "text/html", "value": html}]
-    }
-
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = f"{sender_name} <{gmail_user}>"
+    msg["To"] = to_email
+    msg.attach(MIMEText(html_body, "html"))
 
     try:
-        resp = requests.post(
-            "https://api.sendgrid.com/v3/mail/send",
-            json=data, headers=headers, timeout=15
-        )
-        if resp.status_code in (200, 202):
-            print(f"[SEND] OK -> {to_email} ({company})")
-            log_sent(to_email, name, company, subject, True)
-            return True
-        else:
-            error_msg = f"HTTP {resp.status_code}: {resp.text[:200]}"
-            print(f"[SEND] FAILED -> {to_email} | {error_msg}")
-            log_sent(to_email, name, company, subject, False, error_msg)
-            return False
+        with smtplib.SMTP("smtp.gmail.com", 587, timeout=20) as server:
+            server.ehlo()
+            server.starttls()
+            server.login(gmail_user, gmail_pass)
+            server.sendmail(gmail_user, to_email, msg.as_string())
+        print(f"[SEND] OK -> {to_email} ({company})")
+        log_sent(to_email, name, company, subject, True)
+        return True
     except Exception as e:
-        print(f"[SEND] EXCEPTION -> {to_email} | {e}")
+        print(f"[SEND] FAILED -> {to_email} | {e}")
         log_sent(to_email, name, company, subject, False, str(e))
         return False
 

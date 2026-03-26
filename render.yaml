@@ -13,14 +13,12 @@ services:
         value: "1"
       - key: RENDER
         value: "true"
-      - key: SENDGRID_API_KEY
+      - key: GMAIL_ADDRESS
         sync: false
-      - key: SENDER_EMAIL
+      - key: GMAIL_APP_PASSWORD
         sync: false
       - key: SENDER_NAME
         value: Alex
-      - key: REPLY_TO_EMAIL
-        sync: false
     disk:
       name: ghe-data
       mountPath: /data
