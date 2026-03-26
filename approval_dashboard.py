@@ -494,6 +494,33 @@ def refresh():
     return redirect('/')
 
 # =========================
+# DEBUG CONFIG (no secrets shown)
+# =========================
+@app.route('/debug')
+def debug():
+    sg_key    = os.getenv("SENDGRID_API_KEY", "")
+    sender    = os.getenv("SENDER_EMAIL", "")
+    sg_set    = "SET" if sg_key else "MISSING"
+    sender_set = sender if sender else "MISSING"
+    color_key  = "#22c55e" if sg_key else "#ef4444"
+    color_sndr = "#22c55e" if sender else "#ef4444"
+    return f"""
+    <div style="background:#0f172a;color:white;font-family:Arial;padding:40px;">
+        <h2 style="color:#38bdf8;">Config Check</h2>
+        <p>SENDGRID_API_KEY: <strong style="color:{color_key};">{sg_set}</strong></p>
+        <p>SENDER_EMAIL: <strong style="color:{color_sndr};">{sender_set}</strong></p>
+        <p>DATA_DIR: {DATA_DIR}</p>
+        <p>Pipeline running: {pipeline_running}</p>
+        <br>
+        <a href="/test-email" style="color:#38bdf8;">Run Test Email</a>
+        &nbsp;|&nbsp;
+        <a href="/sent" style="color:#38bdf8;">View Sent Log</a>
+        &nbsp;|&nbsp;
+        <a href="/" style="color:#38bdf8;">Dashboard</a>
+    </div>
+    """
+
+# =========================
 # HEALTH CHECK
 # =========================
 @app.route('/health')
