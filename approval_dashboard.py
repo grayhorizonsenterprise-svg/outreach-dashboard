@@ -133,22 +133,13 @@ def log_sent(to_email, name, company, subject, success, error=""):
         writer.writerow(row)
 
 def send_email(to_email, name, company, message):
-    import smtplib
-    from email.mime.multipart import MIMEMultipart
-    from email.mime.text import MIMEText
-
-    # GMAIL_ADDRESS    — your Gmail used for SMTP auth
-    # GMAIL_APP_PASSWORD — 16-char Gmail app password
-    # SENDER_EMAIL     — your Cloudflare domain address shown as From (e.g. alex@yourdomain.com)
-    #                    if not set, falls back to GMAIL_ADDRESS
-    gmail_user  = os.getenv("GMAIL_ADDRESS")
-    gmail_pass  = os.getenv("GMAIL_APP_PASSWORD")
-    sender_addr = os.getenv("SENDER_EMAIL", gmail_user)
+    api_key     = os.getenv("SENDGRID_API_KEY")
+    sender_addr = os.getenv("SENDER_EMAIL")
     sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
     subject     = f"{company} — quick question"
 
-    if not gmail_user or not gmail_pass:
-        print("[SEND] ERROR: Missing GMAIL_ADDRESS or GMAIL_APP_PASSWORD env vars")
+    if not api_key or not sender_addr:
+        print("[SEND] ERROR: Missing SENDGRID_API_KEY or SENDER_EMAIL env vars")
         log_sent(to_email, name, company, subject, False, "missing env vars")
         return False
 
@@ -165,25 +156,35 @@ def send_email(to_email, name, company, message):
     </div>
     """
 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"]    = f"{sender_name} <{sender_addr}>"
-    msg["To"]      = to_email
-    msg["Reply-To"] = f"{sender_name} <{sender_addr}>"
-    msg.attach(MIMEText(html_body, "html"))
+    payload = {
+        "personalizations": [{"to": [{"email": to_email}]}],
+        "from": {"email": sender_addr, "name": sender_name},
+        "reply_to": {"email": sender_addr, "name": sender_name},
+        "subject": subject,
+        "content": [{"type": "text/html", "value": html_body}]
+    }
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
 
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587, timeout=20) as server:
-            server.ehlo()
-            server.starttls()
-            server.login(gmail_user, gmail_pass)
-            # send from domain address, auth'd through Gmail
-            server.sendmail(sender_addr, to_email, msg.as_string())
-        print(f"[SEND] OK -> {to_email} ({company}) from {sender_addr}")
-        log_sent(to_email, name, company, subject, True)
-        return True
+        resp = requests.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            json=payload, headers=headers, timeout=15
+        )
+        if resp.status_code in (200, 202):
+            print(f"[SEND] OK -> {to_email} ({company})")
+            log_sent(to_email, name, company, subject, True)
+            return True
+        else:
+            error_msg = f"HTTP {resp.status_code}: {resp.text[:300]}"
+            print(f"[SEND] FAILED -> {to_email} | {error_msg}")
+            log_sent(to_email, name, company, subject, False, error_msg)
+            return False
     except Exception as e:
-        print(f"[SEND] FAILED -> {to_email} | {e}")
+        print(f"[SEND] EXCEPTION -> {to_email} | {e}")
         log_sent(to_email, name, company, subject, False, str(e))
         return False
 
