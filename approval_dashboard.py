@@ -174,7 +174,7 @@ def send_email(to_email, name, company, message):
             "https://api.sendgrid.com/v3/mail/send",
             json=payload, headers=headers, timeout=15
         )
-        if resp.status_code in (200, 202):
+        if resp.status_code == 202:
             print(f"[SEND] OK -> {to_email} ({company})")
             log_sent(to_email, name, company, subject, True)
             return True
@@ -453,7 +453,8 @@ def sent_log_view():
     else:
         html += "<table><tr><th>Time</th><th>Company</th><th>Name</th><th>Email</th><th>Subject</th><th>Status</th><th>Error</th></tr>"
         for r in reversed(rows):
-            status_cell = '<span class="ok">SENT</span>' if str(r.get("success","")).lower() in ("true","1") else '<span class="fail">FAILED</span>'
+            success_val = str(r.get("success", "")).strip().lower()
+            status_cell = '<span class="ok">SENT</span>' if success_val in ("true", "1", "yes") else '<span class="fail">FAILED</span>'
             html += f"<tr><td>{r.get('timestamp','')}</td><td>{r.get('company','')}</td><td>{r.get('name','')}</td><td>{r.get('email','')}</td><td>{r.get('subject','')}</td><td>{status_cell}</td><td>{r.get('error','')}</td></tr>"
         html += "</table>"
 
