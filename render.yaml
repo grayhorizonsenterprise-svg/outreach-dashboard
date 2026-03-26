@@ -19,6 +19,8 @@ services:
         sync: false
       - key: SENDER_NAME
         value: Alex
+      - key: REPLY_TO_EMAIL
+        sync: false
     disk:
       name: ghe-data
       mountPath: /data

@@ -136,6 +136,8 @@ def send_email(to_email, name, company, message):
     api_key = os.getenv("SENDGRID_API_KEY")
     sender = os.getenv("SENDER_EMAIL")
     sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
+    # REPLY_TO_EMAIL: where prospect replies land (defaults to sender if not set)
+    reply_to = os.getenv("REPLY_TO_EMAIL", sender)
     subject = f"{company} — quick question"
 
     if not api_key or not sender:
@@ -156,9 +158,15 @@ def send_email(to_email, name, company, message):
     </div>
     """
 
+    # BCC sender so every outgoing email lands in your own inbox
+    personalizations = [{"to": [{"email": to_email}]}]
+    if reply_to and reply_to != to_email:
+        personalizations[0]["bcc"] = [{"email": reply_to}]
+
     data = {
-        "personalizations": [{"to": [{"email": to_email}]}],
+        "personalizations": personalizations,
         "from": {"email": sender, "name": sender_name},
+        "reply_to": {"email": reply_to, "name": sender_name},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}]
     }
