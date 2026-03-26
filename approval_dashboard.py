@@ -137,10 +137,15 @@ def send_email(to_email, name, company, message):
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
 
-    gmail_user = os.getenv("GMAIL_ADDRESS")
-    gmail_pass = os.getenv("GMAIL_APP_PASSWORD")
+    # GMAIL_ADDRESS    — your Gmail used for SMTP auth
+    # GMAIL_APP_PASSWORD — 16-char Gmail app password
+    # SENDER_EMAIL     — your Cloudflare domain address shown as From (e.g. alex@yourdomain.com)
+    #                    if not set, falls back to GMAIL_ADDRESS
+    gmail_user  = os.getenv("GMAIL_ADDRESS")
+    gmail_pass  = os.getenv("GMAIL_APP_PASSWORD")
+    sender_addr = os.getenv("SENDER_EMAIL", gmail_user)
     sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
-    subject = f"{company} — quick question"
+    subject     = f"{company} — quick question"
 
     if not gmail_user or not gmail_pass:
         print("[SEND] ERROR: Missing GMAIL_ADDRESS or GMAIL_APP_PASSWORD env vars")
@@ -162,8 +167,9 @@ def send_email(to_email, name, company, message):
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
-    msg["From"] = f"{sender_name} <{gmail_user}>"
-    msg["To"] = to_email
+    msg["From"]    = f"{sender_name} <{sender_addr}>"
+    msg["To"]      = to_email
+    msg["Reply-To"] = f"{sender_name} <{sender_addr}>"
     msg.attach(MIMEText(html_body, "html"))
 
     try:
@@ -171,8 +177,9 @@ def send_email(to_email, name, company, message):
             server.ehlo()
             server.starttls()
             server.login(gmail_user, gmail_pass)
-            server.sendmail(gmail_user, to_email, msg.as_string())
-        print(f"[SEND] OK -> {to_email} ({company})")
+            # send from domain address, auth'd through Gmail
+            server.sendmail(sender_addr, to_email, msg.as_string())
+        print(f"[SEND] OK -> {to_email} ({company}) from {sender_addr}")
         log_sent(to_email, name, company, subject, True)
         return True
     except Exception as e:
