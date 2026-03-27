@@ -6,16 +6,20 @@ import threading
 import time
 import subprocess
 import sys
-from datetime import datetime
-from zoneinfo import ZoneInfo
-
-PACIFIC = ZoneInfo("America/Los_Angeles")
-
-def now_pacific():
-    return datetime.now(PACIFIC)
-
-def fmt_pacific(ts):
-    return datetime.fromtimestamp(ts, PACIFIC).strftime("%I:%M %p PT")
+from datetime import datetime, timezone, timedelta
+try:
+    from zoneinfo import ZoneInfo
+    PACIFIC = ZoneInfo("America/Los_Angeles")
+    def now_pacific():
+        return datetime.now(PACIFIC)
+    def fmt_pacific(ts):
+        return datetime.fromtimestamp(ts, PACIFIC).strftime("%I:%M %p PT")
+except Exception:
+    _PT = timezone(timedelta(hours=-7))
+    def now_pacific():
+        return datetime.now(_PT)
+    def fmt_pacific(ts):
+        return datetime.fromtimestamp(ts, _PT).strftime("%I:%M %p PT")
 
 app = Flask(__name__)
 

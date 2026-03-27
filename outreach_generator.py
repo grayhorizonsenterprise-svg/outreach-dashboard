@@ -136,6 +136,9 @@ def generate_message(company):
                 .replace("Hi your firm,", "Hi there,"))
 
 def run():
+    if not os.path.exists(INPUT_FILE):
+        print(f"[SKIP] {INPUT_FILE} not found yet — skipping outreach generation.")
+        return
     df = pd.read_csv(INPUT_FILE)
 
     rows = []

@@ -227,6 +227,9 @@ def run():
     import urllib3
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+    if not os.path.exists(INPUT_FILE):
+        print(f"[SKIP] {INPUT_FILE} not found yet — skipping enrichment.")
+        return
     df = pd.read_csv(INPUT_FILE)
 
     for col in ["email", "website", "lead_type", "contact_page_url"]:

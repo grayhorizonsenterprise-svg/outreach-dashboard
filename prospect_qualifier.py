@@ -175,6 +175,9 @@ def is_valid_clean(name: str) -> bool:
 
 
 def clean():
+    if not os.path.exists(INPUT_FILE):
+        print(f"[SKIP] {INPUT_FILE} not found yet — skipping qualification.")
+        return
     df = pd.read_csv(INPUT_FILE)
     original_count = len(df)
 
