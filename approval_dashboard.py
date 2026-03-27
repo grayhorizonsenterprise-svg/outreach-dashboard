@@ -6,6 +6,16 @@ import threading
 import time
 import subprocess
 import sys
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+PACIFIC = ZoneInfo("America/Los_Angeles")
+
+def now_pacific():
+    return datetime.now(PACIFIC)
+
+def fmt_pacific(ts):
+    return datetime.fromtimestamp(ts, PACIFIC).strftime("%I:%M %p PT")
 
 app = Flask(__name__)
 
@@ -47,8 +57,8 @@ def run_pipeline_loop():
     time.sleep(5)  # let server start first
     while True:
         run_pipeline_once()
-        print("[ENGINE] Sleeping 6 hours until next cycle.", flush=True)
-        time.sleep(21600)
+        print("[ENGINE] Sleeping 4 hours until next cycle.", flush=True)
+        time.sleep(14400)
 
 threading.Thread(target=run_pipeline_loop, daemon=True).start()
 
@@ -117,7 +127,7 @@ def log_sent(to_email, name, company, subject, success, error=""):
     import csv
     from datetime import datetime
     row = {
-        "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "timestamp": now_pacific().strftime("%Y-%m-%d %I:%M %p PT"),
         "company": company,
         "name": name,
         "email": to_email,
@@ -321,11 +331,17 @@ def dashboard():
         }
     </style>
 
-    <div class="header">Gray Horizons Outreach Dashboard</div>
+    <div class="header">Gray Horizons — HOA Dashboard</div>
+    <div style="display:flex;justify-content:center;gap:0;background:#020617;border-bottom:1px solid #1e293b;">
+        <a href="https://ghe-hoa.onrender.com" style="padding:10px 24px;color:#38bdf8;font-weight:bold;font-size:13px;text-decoration:none;border-bottom:2px solid #38bdf8;">HOA</a>
+        <a href="https://ghe-dental.onrender.com" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">Dental</a>
+        <a href="https://ghe-hvac.onrender.com" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">HVAC</a>
+        <a href="https://ghe-hub.onrender.com" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">All Niches</a>
+    </div>
     """
 
     status_text = '<span class="pipeline-active">Scraping new leads now...</span>' if pipeline_running else (
-        f"Last run: {time.strftime('%I:%M %p', time.localtime(last_run_time))}" if last_run_time else "Starting soon..."
+        f"Last run: {fmt_pacific(last_run_time)}" if last_run_time else "Starting soon..."
     )
 
     html += f"""
