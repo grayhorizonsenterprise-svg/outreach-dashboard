@@ -218,7 +218,7 @@ def dashboard():
     sent_count    = len(df[df["status"] == "sent"])
     skipped_count = len(df[df["status"] == "skipped"])
 
-    html = """
+    html = f"""
     <meta http-equiv="refresh" content="300">
     <style>
         body {
