@@ -25,6 +25,11 @@ app = Flask(__name__)
 
 DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 os.makedirs(DATA_DIR, exist_ok=True)
+
+URL_HOA    = os.getenv("HOA_URL", "#")
+URL_DENTAL = os.getenv("DENTAL_URL", "#")
+URL_HVAC   = os.getenv("HVAC_URL", "#")
+URL_HUB    = os.getenv("HUB_URL", "#")
 PIPELINE_SCRIPTS = ["prospect_finder.py", "prospect_enricher.py",
                     "prospect_qualifier.py", "outreach_generator.py"]
 
@@ -337,10 +342,10 @@ def dashboard():
 
     <div class="header">Gray Horizons — HOA Dashboard</div>
     <div style="display:flex;justify-content:center;gap:0;background:#020617;border-bottom:1px solid #1e293b;">
-        <a href="https://ghe-hoa.onrender.com" style="padding:10px 24px;color:#38bdf8;font-weight:bold;font-size:13px;text-decoration:none;border-bottom:2px solid #38bdf8;">HOA</a>
-        <a href="https://ghe-dental.onrender.com" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">Dental</a>
-        <a href="https://ghe-hvac.onrender.com" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">HVAC</a>
-        <a href="https://ghe-hub.onrender.com" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">All Niches</a>
+        <a href="{URL_HOA}" style="padding:10px 24px;color:#38bdf8;font-weight:bold;font-size:13px;text-decoration:none;border-bottom:2px solid #38bdf8;">HOA</a>
+        <a href="{URL_DENTAL}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">Dental</a>
+        <a href="{URL_HVAC}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">HVAC</a>
+        <a href="{URL_HUB}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">All Niches</a>
     </div>
     """
 
