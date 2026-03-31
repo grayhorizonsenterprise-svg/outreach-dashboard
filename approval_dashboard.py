@@ -218,7 +218,7 @@ def dashboard():
     sent_count    = len(df[df["status"] == "sent"])
     skipped_count = len(df[df["status"] == "skipped"])
 
-    html = f"""
+    html = """
     <meta http-equiv="refresh" content="300">
     <style>
         body {
@@ -341,13 +341,13 @@ def dashboard():
     </style>
 
     <div class="header">Gray Horizons — HOA Dashboard</div>
-    <div style="display:flex;justify-content:center;gap:0;background:#020617;border-bottom:1px solid #1e293b;">
+    """
+    html += f"""<div style="display:flex;justify-content:center;gap:0;background:#020617;border-bottom:1px solid #1e293b;">
         <a href="{URL_HOA}" style="padding:10px 24px;color:#38bdf8;font-weight:bold;font-size:13px;text-decoration:none;border-bottom:2px solid #38bdf8;">HOA</a>
         <a href="{URL_DENTAL}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">Dental</a>
         <a href="{URL_HVAC}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">HVAC</a>
         <a href="{URL_HUB}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">All Niches</a>
-    </div>
-    """
+    </div>"""
 
     status_text = '<span class="pipeline-active">Scraping new leads now...</span>' if pipeline_running else (
         f"Last run: {fmt_pacific(last_run_time)}" if last_run_time else "Starting soon..."
