@@ -141,8 +141,24 @@ def run():
         return
     df = pd.read_csv(INPUT_FILE)
 
+    # Load existing queue to preserve sent/skipped status
+    done_emails = set()
+    existing_rows = []
+    if os.path.exists(OUTPUT_FILE):
+        try:
+            existing = pd.read_csv(OUTPUT_FILE).fillna("")
+            for _, r in existing.iterrows():
+                status = str(r.get("status", "")).strip()
+                email  = str(r.get("email", "")).strip().lower()
+                if status in ("sent", "skipped") and email:
+                    done_emails.add(email)
+                    existing_rows.append(r.to_dict())
+        except Exception:
+            pass
+
     rows = []
     skipped = 0
+    seen_emails = set(done_emails)
 
     for _, row in df.iterrows():
         email = str(row.get("email", "")).strip()
@@ -151,6 +167,12 @@ def run():
         if email in ("", "nan", "None"):
             skipped += 1
             continue
+
+        # Skip duplicates and already-processed emails
+        if email.lower() in seen_emails:
+            skipped += 1
+            continue
+        seen_emails.add(email.lower())
 
         company = str(row.get("company", "")).strip()
 
@@ -164,10 +186,10 @@ def run():
             "status": "pending"
         })
 
-    out = pd.DataFrame(rows)
+    out = pd.DataFrame(existing_rows + rows)
     out.to_csv(OUTPUT_FILE, index=False, quoting=1)
 
-    print(f"[DONE] outreach_queue.csv: {len(rows)} ready leads ({skipped} skipped — no email)")
+    print(f"[DONE] outreach_queue.csv: {len(rows)} new leads added, {len(done_emails)} preserved, {skipped} skipped")
 
 if __name__ == "__main__":
     run()
