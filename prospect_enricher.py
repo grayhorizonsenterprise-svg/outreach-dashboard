@@ -54,9 +54,11 @@ JUNK_PATTERNS = [
     "sentry", "wixpress", "pinterest", "youtube", "twitter",
     "linkedin", "facebook", "instagram", "craigslist",
     "first.last", "name@email", "user@email", "user@domain",
-    "your@email", "email@email", "info@example", "rocketreach",
+    "your@email", "email@email", "@email.com", "info@example", "rocketreach",
     "360training", "@2x", ".png", ".jpg", ".webp", ".svg", ".gif",
     "domain.com", "yourname", "company.com", "address@",
+    "placeholder", "sample@", "demo@", "fake@", "null@", "none@",
+    "@test.", "@example.", "@mailinator.", "@tempmail.", "@guerrilla",
 ]
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")

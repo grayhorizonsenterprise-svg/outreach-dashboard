@@ -172,6 +172,16 @@ def run():
         if email.lower() in seen_emails:
             skipped += 1
             continue
+
+        # Block obvious placeholder/junk emails
+        e = email.lower()
+        junk = ["email@email", "@email.com", "example", "test@", "noreply",
+                "placeholder", "demo@", "fake@", "domain.com", "company.com",
+                "yourname", "sample@", "null@", "none@", "@mailinator", "@tempmail"]
+        if any(p in e for p in junk):
+            skipped += 1
+            continue
+
         seen_emails.add(email.lower())
 
         company = str(row.get("company", "")).strip()
