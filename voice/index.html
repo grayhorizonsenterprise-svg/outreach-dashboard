@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Voice Demo</title>
+</head>
+<body>
+
+<h2>📞 AI Voice Agent Demo</h2>
+
+<select id="niche">
+  <option value="hoa">HOA</option>
+  <option value="hvac">HVAC</option>
+  <option value="dental">Dental</option>
+  <option value="plumbing">Plumbing</option>
+  <option value="contractor">Contractor</option>
+</select>
+
+<div id="chat"></div>
+
+<button onclick="startListening()">🎤 Start Talking</button>
+
+<script>
+let sessionId = Date.now();
+
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = "en-US";
+
+recognition.onresult = async (event) => {
+  const text = event.results[0][0].transcript;
+
+  addMessage("You", text);
+
+  const res = await fetch("/voice", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      message: text,
+      sessionId,
+      niche: document.getElementById("niche").value
+    })
+  });
+
+  const data = await res.json();
+
+  speak(data.reply);
+  addMessage("AI", data.reply);
+};
+
+function startListening() {
+  recognition.start();
+}
+
+function speak(text) {
+  const utter = new SpeechSynthesisUtterance(text);
+  speechSynthesis.speak(utter);
+}
+
+function addMessage(sender, text) {
+  document.getElementById("chat").innerHTML +=
+    "<p><b>" + sender + ":</b> " + text + "</p>";
+}
+</script>
+
+</body>
+</html>

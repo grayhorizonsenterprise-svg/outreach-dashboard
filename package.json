@@ -1,0 +1,25 @@
+{
+  "name": "first-agentic-workflows",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grayhorizonsenterprise-svg/outreach-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/grayhorizonsenterprise-svg/outreach-dashboard/issues"
+  },
+  "homepage": "https://github.com/grayhorizonsenterprise-svg/outreach-dashboard#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "node-fetch": "^3.3.2"
+  }
+}

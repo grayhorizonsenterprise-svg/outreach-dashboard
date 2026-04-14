@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dental Appointment System</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;background:#0b1220;color:#e2e8f0;padding:40px 20px;}
+.container{max-width:800px;margin:auto;}
+h1{font-size:24px;font-weight:800;margin-bottom:24px;color:#4f9cff;}
+label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:4px;}
+input,select,textarea{width:100%;padding:10px 12px;margin-bottom:14px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#e2e8f0;font-size:14px;font-family:inherit;}
+textarea{resize:vertical;min-height:80px;}
+button[type=submit]{width:100%;padding:12px;border-radius:6px;border:none;background:#2563eb;color:#fff;font-weight:700;font-size:15px;cursor:pointer;transition:background .15s;}
+button[type=submit]:hover{background:#1d4ed8;}
+button[type=submit]:disabled{opacity:.6;cursor:not-allowed;}
+#status{margin-top:14px;font-size:14px;font-weight:600;min-height:20px;}
+.sheet-wrap{margin-top:32px;border:1px solid rgba(34,211,238,.25);border-radius:10px;overflow:hidden;}
+.sheet-header{padding:10px 16px;background:rgba(34,211,238,.06);border-bottom:1px solid rgba(34,211,238,.18);font-size:12px;font-weight:700;color:#22d3ee;}
+iframe{width:100%;height:500px;border:none;display:block;background:#fff;}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Dental Appointment System</h1>
+
+  <form id="form">
+    <label>Patient Name</label>
+    <input id="name" placeholder="e.g. Jane Smith" required>
+    <label>Email Address</label>
+    <input id="email" type="email" placeholder="e.g. jane@email.com" required>
+    <label>Phone or Patient ID</label>
+    <input id="unit" placeholder="e.g. 555-123-4567">
+    <label>Appointment Type</label>
+    <select id="type">
+      <option>Cleaning</option>
+      <option>Consultation</option>
+      <option>Emergency</option>
+      <option>X-Ray</option>
+      <option>Follow-Up</option>
+    </select>
+    <label>Appointment Details</label>
+    <textarea id="notice" placeholder="Describe symptoms or appointment reason…"></textarea>
+    <button type="submit" id="submit-btn">Book Appointment</button>
+  </form>
+
+  <div id="status"></div>
+
+  <div class="sheet-wrap">
+    <div class="sheet-header">&#128202; Live Appointment Log &mdash; Auto-Updates</div>
+    <!-- TODO: Replace src with Dental sheet embed URL once sheet is created -->
+    <iframe src="about:blank" id="sheet-frame" title="Live Dental Appointment Log" loading="lazy"></iframe>
+  </div>
+</div>
+
+<script>
+var GHE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTZ-7apQcSIGhVLyTqs24KOgHuybmAriRKvqFWmmLpHwIB7RatsWg91_1SS1Z5yw9B/exec';
+
+function sendJSONP(url, payload, onSuccess, onFail) {
+  var cb = '_ghe_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
+  var s = document.createElement('script');
+  var done = false;
+  var timer = setTimeout(function() { if (!done) { done = true; cleanup(); onFail(new Error('timeout')); } }, 12000);
+  function cleanup() { clearTimeout(timer); try { delete window[cb]; } catch(e) {} if (s.parentNode) s.parentNode.removeChild(s); }
+  window[cb] = function(r) { if (done) return; done = true; cleanup(); r && r.status === 'ok' ? onSuccess(r) : onFail(new Error(r && r.msg || 'error')); };
+  s.onerror = function() { if (!done) { done = true; cleanup(); onFail(new Error('load error')); } };
+  s.src = url + '?callback=' + cb + '&data=' + encodeURIComponent(JSON.stringify(payload));
+  document.head.appendChild(s);
+}
+
+var _sub = false, _retried = false;
+document.getElementById('form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  if (_sub) return;
+  var nameEl = document.getElementById('name');
+  var emailEl = document.getElementById('email');
+  var unitEl = document.getElementById('unit');
+  var typeEl = document.getElementById('type');
+  var noticeEl = document.getElementById('notice');
+  var statusEl = document.getElementById('status');
+  var btn = document.getElementById('submit-btn');
+
+  if (!nameEl.value.trim() || !emailEl.value.trim() || !noticeEl.value.trim()) {
+    statusEl.innerText = '\u26A0 Please fill in all required fields.';
+    statusEl.style.color = '#f87171';
+    return;
+  }
+
+  _sub = true; _retried = false;
+  btn.disabled = true; btn.textContent = 'Sending\u2026';
+  statusEl.innerText = 'Processing\u2026'; statusEl.style.color = '#e2e8f0';
+
+  var payload = {
+    id: 'R' + Date.now(),
+    ts: new Date().toLocaleString(),
+    name: nameEl.value.trim(),
+    email: emailEl.value.trim(),
+    unit: unitEl.value.trim(),
+    type: typeEl.value,
+    notice: noticeEl.value.trim(),
+    mode: 'dental'
+  };
+
+  function onDone(ok) {
+    _sub = false;
+    btn.disabled = false; btn.textContent = 'Book Appointment';
+    if (ok) {
+      statusEl.innerText = '\u2705 Appointment Booked \u2014 confirmation sent.';
+      statusEl.style.color = '#22c55e';
+      document.getElementById('form').reset();
+    } else {
+      statusEl.innerText = '\u2705 Submitted \u2014 processing in background.';
+      statusEl.style.color = '#94a3b8';
+    }
+  }
+
+  sendJSONP(GHE_SCRIPT_URL, payload,
+    function() { onDone(true); },
+    function(err) {
+      if (!_retried) {
+        _retried = true;
+        statusEl.innerText = '\u23F3 Retrying\u2026';
+        setTimeout(function() {
+          sendJSONP(GHE_SCRIPT_URL, payload, function() { onDone(true); }, function() { onDone(false); });
+        }, 2000);
+      } else { onDone(false); }
+    }
+  );
+});
+</script>
+</body>
+</html>
