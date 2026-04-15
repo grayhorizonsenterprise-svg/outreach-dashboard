@@ -31,7 +31,7 @@ URL_DENTAL    = os.getenv("DENTAL_URL", "#")
 URL_HVAC      = os.getenv("HVAC_URL", "#")
 URL_HUB       = os.getenv("HUB_URL", "#")
 URL_PLUMBING  = os.getenv("PLUMBING_URL", "#")
-URL_GRANTS    = os.getenv("GRANT_AGENT_URL", "https://ghe-grant-agent-production.up.railway.app")
+URL_GRANTS    = "https://ghe-grant-agent-production.up.railway.app"
 PIPELINE_SCRIPTS = ["prospect_finder.py", "prospect_enricher.py",
                     "prospect_qualifier.py", "outreach_generator.py"]
 
