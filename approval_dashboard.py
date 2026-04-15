@@ -218,224 +218,221 @@ def send_email(to_email, name, company, message):
         return False
 
 # =========================
-# DASHBOARD UI (FINAL CLEAN VERSION)
+# FETCH GRANTS FROM GRANT AGENT API
+# =========================
+def fetch_grants(limit=20):
+    try:
+        resp = requests.get(f"{URL_GRANTS}/api/grants?limit={limit}", timeout=8)
+        if resp.status_code == 200:
+            return resp.json().get("grants", [])
+    except Exception as e:
+        print(f"[Grants] Could not fetch: {e}")
+    return []
+
+
+# =========================
+# DASHBOARD UI — UNIFIED
 # =========================
 @app.route('/')
 def dashboard():
     df = load_data()
+    grants = fetch_grants(limit=25)
 
     pending_count = len(df[df["status"] == "pending"])
     sent_count    = len(df[df["status"] == "sent"])
     skipped_count = len(df[df["status"] == "skipped"])
 
-    html = """
-    <meta http-equiv="refresh" content="300">
-    <style>
-        body {
-            background:#0f172a;
-            color:white;
-            font-family:Arial;
-            margin:0;
-        }
-
-        .header {
-            text-align:center;
-            padding:20px;
-            font-size:24px;
-            font-weight:bold;
-            background:#020617;
-        }
-
-        .stats {
-            display:flex;
-            justify-content:center;
-            gap:30px;
-            padding:12px;
-            background:#0f172a;
-            font-size:14px;
-            color:#94a3b8;
-        }
-
-        .stat-val {
-            font-weight:bold;
-            color:#38bdf8;
-        }
-
-        .refresh-note {
-            text-align:center;
-            font-size:11px;
-            color:#475569;
-            padding-bottom:8px;
-        }
-
-        .top-bar {
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:10px 30px;
-            background:#020617;
-            border-bottom:1px solid #1e293b;
-        }
-
-        .refresh-btn {
-            background:#3b82f6;
-            color:white;
-            border:none;
-            padding:8px 18px;
-            border-radius:6px;
-            cursor:pointer;
-            font-size:13px;
-            text-decoration:none;
-            display:inline-block;
-        }
-
-        .refresh-btn:hover { background:#2563eb; }
-
-        .pipeline-status {
-            font-size:12px;
-            color:#64748b;
-        }
-
-        .pipeline-active { color:#22c55e; }
-
-        .card {
-            background:#1e293b;
-            padding:20px;
-            margin:20px auto;
-            width:90%;
-            max-width:700px;
-            border-radius:10px;
-        }
-
-        .title {
-            font-size:20px;
-            color:#38bdf8;
-            font-weight:bold;
-        }
-
-        .company {
-            color:#e2e8f0;
-        }
-
-        .email {
-            color:#94a3b8;
-            margin-bottom:10px;
-        }
-
-        .message {
-            margin-top:10px;
-            line-height:1.6;
-        }
-
-        .btn {
-            padding:10px 14px;
-            border:none;
-            border-radius:6px;
-            cursor:pointer;
-        }
-
-        .send {
-            background:#22c55e;
-            color:white;
-        }
-
-        .skip {
-            background:#ef4444;
-            color:white;
-            margin-left:10px;
-        }
-
-        .disabled {
-            background:#555;
-        }
-    </style>
-
-    <div class="header">Gray Horizons — HOA Dashboard</div>
-    """
-    html += f"""<div style="display:flex;justify-content:center;gap:0;background:#020617;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
-        <a href="{URL_HOA}" style="padding:10px 24px;color:#38bdf8;font-weight:bold;font-size:13px;text-decoration:none;border-bottom:2px solid #38bdf8;">HOA</a>
-        <a href="{URL_DENTAL}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">Dental</a>
-        <a href="{URL_HVAC}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">HVAC</a>
-        <a href="{URL_PLUMBING}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">Plumbing</a>
-        <a href="{URL_HUB}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">All Niches</a>
-        <a onclick="toggleGrants()" style="padding:10px 24px;color:#a78bfa;font-size:13px;font-weight:bold;text-decoration:none;cursor:pointer;">💰 Grants</a>
-    </div>
-    <div id="grants-tab" style="display:none;width:100%;height:90vh;border:none;">
-        <iframe src="{URL_GRANTS}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>
-    </div>
-    <script>
-    function toggleGrants() {{
-        var tab = document.getElementById('grants-tab');
-        var outreach = document.getElementById('outreach-content');
-        if (tab.style.display === 'none') {{
-            tab.style.display = 'block';
-            if (outreach) outreach.style.display = 'none';
-        }} else {{
-            tab.style.display = 'none';
-            if (outreach) outreach.style.display = 'block';
-        }}
-    }}
-    </script>
-    <div id="outreach-content">"""
-
-    status_text = '<span class="pipeline-active">Scraping new leads now...</span>' if pipeline_running else (
+    status_text = '<span style="color:#22c55e">Scraping leads now...</span>' if pipeline_running else (
         f"Last run: {fmt_pacific(last_run_time)}" if last_run_time else "Starting soon..."
     )
 
-    html += f"""
-    <div class="top-bar">
-        <div class="pipeline-status">{status_text}</div>
-        <div class="stats" style="margin:0;padding:0;">
-            <span>Pending: <span class="stat-val">{pending_count}</span></span>
-            <span>Sent: <span class="stat-val">{sent_count}</span></span>
-            <span>Skipped: <span class="stat-val">{skipped_count}</span></span>
-        </div>
-        <div style="display:flex;gap:10px;">
-            <a href="/sent" class="refresh-btn" style="background:#7c3aed;">View Sent</a>
-            <a href="/refresh" class="refresh-btn">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
-        </div>
-    </div>
-    <div class="refresh-note">Page auto-refreshes every 5 min &nbsp;|&nbsp; {len(df)} total leads</div>
-    """
+    html = f"""<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="refresh" content="300">
+<title>Gray Horizons — Command Center</title>
+<style>
+  *{{box-sizing:border-box;margin:0;padding:0}}
+  body{{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;}}
+  .header{{background:#020617;padding:16px;text-align:center;font-size:22px;font-weight:bold;border-bottom:1px solid #1e293b;}}
+  .nav{{display:flex;background:#020617;border-bottom:2px solid #1e293b;flex-wrap:wrap;}}
+  .nav a{{padding:10px 22px;color:#64748b;font-size:13px;text-decoration:none;cursor:pointer;border-bottom:3px solid transparent;}}
+  .nav a.active{{color:#38bdf8;border-bottom:3px solid #38bdf8;font-weight:bold;}}
+  .nav a.grants-tab{{color:#a78bfa;}}
+  .nav a.grants-tab.active{{color:#a78bfa;border-bottom:3px solid #a78bfa;}}
+  .topbar{{display:flex;justify-content:space-between;align-items:center;padding:10px 24px;background:#020617;border-bottom:1px solid #1e293b;flex-wrap:wrap;gap:8px;}}
+  .stats{{display:flex;gap:20px;font-size:13px;color:#94a3b8;}}
+  .stat-val{{color:#38bdf8;font-weight:bold;}}
+  .btn-link{{background:#3b82f6;color:white;border:none;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:12px;text-decoration:none;display:inline-block;}}
+  .btn-link:hover{{background:#2563eb;}}
+  .tab-content{{display:none;}}
+  .tab-content.active{{display:block;}}
 
+  /* Outreach cards */
+  .card{{background:#1e293b;padding:18px;margin:16px auto;width:92%;max-width:720px;border-radius:10px;}}
+  .card-title{{font-size:18px;color:#38bdf8;font-weight:bold;}}
+  .card-sub{{color:#94a3b8;font-size:13px;margin:4px 0 10px;}}
+  .card-msg{{line-height:1.6;font-size:14px;}}
+  .btn-send{{background:#22c55e;color:white;border:none;padding:9px 16px;border-radius:6px;cursor:pointer;font-size:13px;text-decoration:none;display:inline-block;margin-top:10px;}}
+  .btn-skip{{background:#ef4444;color:white;border:none;padding:9px 16px;border-radius:6px;cursor:pointer;font-size:13px;text-decoration:none;display:inline-block;margin-top:10px;margin-left:8px;}}
+  .btn-disabled{{background:#475569;color:#94a3b8;border:none;padding:9px 16px;border-radius:6px;font-size:13px;margin-top:10px;}}
+  .note{{text-align:center;font-size:11px;color:#475569;padding:6px;}}
+
+  /* Grants table */
+  .grants-wrap{{padding:16px 20px;}}
+  .grants-topbar{{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}}
+  .grants-topbar h2{{font-size:16px;color:#a78bfa;}}
+  table{{width:100%;border-collapse:collapse;font-size:13px;}}
+  th{{background:#1e293b;padding:10px 12px;text-align:left;color:#94a3b8;font-weight:normal;border-bottom:1px solid #334155;}}
+  td{{padding:10px 12px;border-bottom:1px solid #1e293b;vertical-align:top;}}
+  tr:hover td{{background:#1e293b55;}}
+  .badge{{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:bold;}}
+  .badge-high{{background:#14532d;color:#4ade80;}}
+  .badge-med{{background:#1e3a5f;color:#60a5fa;}}
+  .badge-low{{background:#2d1b69;color:#a78bfa;}}
+  .grant-name{{color:#e2e8f0;font-weight:bold;max-width:260px;}}
+  .grant-agency{{color:#64748b;font-size:11px;}}
+  .no-grants{{text-align:center;color:#475569;padding:40px;font-size:14px;}}
+  .scan-btn{{background:#7c3aed;color:white;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;text-decoration:none;display:inline-block;}}
+  .scan-btn:hover{{background:#6d28d9;}}
+</style>
+</head>
+<body>
+<div class="header">Gray Horizons Enterprise — Command Center</div>
+
+<div class="nav">
+  <a href="{URL_HOA}">HOA</a>
+  <a href="{URL_DENTAL}">Dental</a>
+  <a href="{URL_HVAC}">HVAC</a>
+  <a href="{URL_PLUMBING}">Plumbing</a>
+  <a href="{URL_HUB}">All Niches</a>
+  <a onclick="showTab('outreach')" id="tab-outreach" class="active">Outreach ({pending_count} pending)</a>
+  <a onclick="showTab('grants')" id="tab-grants" class="grants-tab">💰 Grants ({len(grants)} found)</a>
+</div>
+
+<!-- OUTREACH TAB -->
+<div id="content-outreach" class="tab-content active">
+  <div class="topbar">
+    <div style="font-size:12px;color:#64748b;">{status_text}</div>
+    <div class="stats">
+      <span>Pending: <span class="stat-val">{pending_count}</span></span>
+      <span>Sent: <span class="stat-val">{sent_count}</span></span>
+      <span>Skipped: <span class="stat-val">{skipped_count}</span></span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <a href="/sent" class="btn-link" style="background:#7c3aed;">View Sent</a>
+      <a href="/refresh" class="btn-link">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
+    </div>
+  </div>
+  <div class="note">{len(df)} total leads · auto-refreshes every 5 min</div>
+"""
+
+    # Outreach lead cards
     for i, row in df.iterrows():
         if row["status"] != "pending":
             continue
-
-        name = row["name"] or "Contact"
+        name    = row["name"] or "Contact"
         company = row["company"] or "Unknown Company"
-        email = row["email"]
-
+        email   = row["email"]
         html += f"""
-        <div class="card">
-
-            <div class="title">{name}</div>
-            <div class="company">{company}</div>
-            <div class="email">{email if email else "❌ No Email"}</div>
-
-            <div class="message">{format_message(row["message"])}</div>
-        """
-
+  <div class="card">
+    <div class="card-title">{name}</div>
+    <div class="card-sub">{company} &nbsp;·&nbsp; {email if email else '❌ No Email'}</div>
+    <div class="card-msg">{format_message(row["message"])}</div>
+    <div>"""
         if email:
-            html += f"""
-            <a href="/send/{i}">
-                <button class="btn send">Send</button>
-            </a>
-            """
+            html += f'<a href="/send/{i}" class="btn-send">Send</a>'
         else:
-            html += """
-            <button class="btn disabled">No Email</button>
-            """
+            html += '<button class="btn-disabled">No Email</button>'
+        html += f'<a href="/skip/{i}" class="btn-skip">Skip</a></div></div>'
 
-        html += f"""
-            <a href="/skip/{i}">
-                <button class="btn skip">Skip</button>
-            </a>
+    html += "</div><!-- end outreach tab -->\n"
 
-        </div>
-        """
+    # GRANTS TAB
+    html += f"""
+<!-- GRANTS TAB -->
+<div id="content-grants" class="tab-content">
+  <div class="grants-wrap">
+    <div class="grants-topbar">
+      <h2>💰 Live Grant Opportunities</h2>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span style="font-size:12px;color:#64748b;">{len(grants)} grants loaded</span>
+        <a href="/scan-grants" class="scan-btn">Scan Now</a>
+        <a href="{URL_GRANTS}" target="_blank" class="btn-link" style="background:#374151;">Open Full Dashboard ↗</a>
+      </div>
+    </div>"""
 
-    html += "</div>"  # close outreach-content
+    if not grants:
+        html += '<div class="no-grants">No grants loaded yet. Click <strong>Scan Now</strong> to pull from Grants.gov.</div>'
+    else:
+        html += """
+    <table>
+      <thead>
+        <tr>
+          <th>Grant Name</th>
+          <th>Agency</th>
+          <th>Amount</th>
+          <th>Deadline</th>
+          <th>Match</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>"""
+        for g in grants:
+            score = g.get("match_score", 0) or 0
+            if score >= 70:
+                badge = f'<span class="badge badge-high">{score}%</span>'
+            elif score >= 40:
+                badge = f'<span class="badge badge-med">{score}%</span>'
+            else:
+                badge = f'<span class="badge badge-low">{score}%</span>'
+
+            amt_min = g.get("amount_min") or 0
+            amt_max = g.get("amount_max") or 0
+            if amt_max:
+                amt = f"${amt_max:,.0f}"
+            elif amt_min:
+                amt = f"${amt_min:,.0f}"
+            else:
+                amt = "—"
+
+            deadline = g.get("deadline") or "—"
+            if deadline and deadline != "—":
+                deadline = deadline[:10]
+
+            name    = (g.get("name") or "Unnamed Grant")[:60]
+            agency  = (g.get("agency") or "")[:40]
+            gid     = g.get("id", "")
+            apply_url = f"{URL_GRANTS}/api/grants/{gid}/apply" if gid else "#"
+
+            html += f"""
+        <tr>
+          <td><div class="grant-name">{name}</div><div class="grant-agency">{agency}</div></td>
+          <td style="color:#64748b;font-size:12px;">{agency}</td>
+          <td style="color:#4ade80;">{amt}</td>
+          <td style="color:#94a3b8;">{deadline}</td>
+          <td>{badge}</td>
+          <td><a href="{URL_GRANTS}" target="_blank" class="scan-btn" style="font-size:11px;">Apply ↗</a></td>
+        </tr>"""
+        html += "</tbody></table>"
+
+    html += """
+  </div>
+</div><!-- end grants tab -->
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
+  document.querySelectorAll('.nav a').forEach(function(el){ el.classList.remove('active'); });
+  document.getElementById('content-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+</script>
+</body>
+</html>"""
+
     return html
 
 # =========================
@@ -547,6 +544,17 @@ def refresh():
     if not pipeline_running:
         threading.Thread(target=run_pipeline_once, daemon=True).start()
     return redirect('/')
+
+# =========================
+# TRIGGER GRANT SCAN
+# =========================
+@app.route('/scan-grants')
+def scan_grants():
+    try:
+        requests.post(f"{URL_GRANTS}/api/scan", timeout=5)
+    except Exception:
+        pass
+    return redirect('/#grants')
 
 # =========================
 # DEBUG CONFIG (no secrets shown)
