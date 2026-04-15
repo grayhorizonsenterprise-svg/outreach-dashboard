@@ -103,6 +103,16 @@ async def on_startup():
     # Start background scheduler
     start_scheduler()
 
+    # Run an immediate scan on startup so dashboard is populated from day 1
+    def _initial_scan():
+        import time
+        time.sleep(5)  # let DB fully init
+        from scheduler.jobs import run_daily_scan
+        print("[Startup] Running initial grant scan...")
+        run_daily_scan()
+
+    threading.Thread(target=_initial_scan, daemon=True).start()
+
     print(f"\n  API:       http://localhost:{settings.port}/api")
     print(f"  Dashboard: http://localhost:{settings.port}/")
     print(f"  Docs:      http://localhost:{settings.port}/docs")
