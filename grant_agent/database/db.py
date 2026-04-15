@@ -23,6 +23,7 @@ def init_db():
             source TEXT NOT NULL,
             external_id TEXT,
             name TEXT NOT NULL,
+            agency TEXT,
             amount_min INTEGER DEFAULT 0,
             amount_max INTEGER DEFAULT 0,
             deadline TEXT,
@@ -41,6 +42,11 @@ def init_db():
             UNIQUE(source, external_id)
         )
     """)
+    # Safely add agency column to existing DBs
+    try:
+        c.execute("ALTER TABLE grants ADD COLUMN agency TEXT")
+    except Exception:
+        pass
 
     c.execute("""
         CREATE TABLE IF NOT EXISTS applications (
@@ -120,12 +126,12 @@ def upsert_grant(grant: dict) -> tuple[int, bool]:
     if row:
         c.execute("""
             UPDATE grants SET
-                name=?, amount_min=?, amount_max=?, deadline=?,
+                name=?, agency=?, amount_min=?, amount_max=?, deadline=?,
                 eligibility=?, description=?, url=?, category=?,
                 tags=?, posted_date=?
             WHERE id=?
         """, (
-            grant.get("name"), grant.get("amount_min", 0), grant.get("amount_max", 0),
+            grant.get("name"), grant.get("agency"), grant.get("amount_min", 0), grant.get("amount_max", 0),
             grant.get("deadline"), grant.get("eligibility"), grant.get("description"),
             grant.get("url"), grant.get("category"), tags,
             grant.get("posted_date"), row["id"]
@@ -136,12 +142,13 @@ def upsert_grant(grant: dict) -> tuple[int, bool]:
     else:
         c.execute("""
             INSERT INTO grants
-                (source, external_id, name, amount_min, amount_max, deadline,
+                (source, external_id, name, agency, amount_min, amount_max, deadline,
                  eligibility, description, url, category, tags, posted_date)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
         """, (
             grant.get("source"), grant.get("external_id"),
-            grant.get("name"), grant.get("amount_min", 0), grant.get("amount_max", 0),
+            grant.get("name"), grant.get("agency"),
+            grant.get("amount_min", 0), grant.get("amount_max", 0),
             grant.get("deadline"), grant.get("eligibility"), grant.get("description"),
             grant.get("url"), grant.get("category"), tags, grant.get("posted_date")
         ))

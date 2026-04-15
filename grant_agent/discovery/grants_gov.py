@@ -14,7 +14,6 @@ DEFAULT_PARAMS = {
     "oppStatuses": ["posted"],
     "rows": 25,
     "startRecordNum": 0,
-    "sortBy": "openDate|desc",
 }
 
 # Funding activity keywords relevant to small/minority businesses
@@ -44,16 +43,22 @@ def search(keyword: str = "", rows: int = 25, offset: int = 0) -> list[dict]:
         resp = requests.post(
             GRANTS_GOV_SEARCH,
             json=params,
-            timeout=15,
+            timeout=20,
             headers={"Content-Type": "application/json"}
         )
         resp.raise_for_status()
         data = resp.json()
+        print(f"[Grants.gov] Raw keys: {list(data.keys())}")
     except Exception as e:
         print(f"[Grants.gov] Error: {e}")
         return []
 
-    opportunities = data.get("oppHits", []) or data.get("data", {}).get("oppHits", [])
+    # API returns either data.oppHits or data.data.oppHits depending on version
+    opportunities = (
+        data.get("oppHits") or
+        data.get("data", {}).get("oppHits") or
+        []
+    )
     results = []
     for opp in opportunities:
         grant = normalize(opp, source="grants.gov")

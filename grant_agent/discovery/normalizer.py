@@ -75,6 +75,7 @@ def normalize(raw: dict, source: str) -> dict:
     """
     name = (raw.get("title") or raw.get("name") or raw.get("opportunityTitle") or "").strip()
     url = raw.get("url") or raw.get("link") or raw.get("opportunityUrl") or ""
+    agency = (raw.get("agencyName") or raw.get("agency") or raw.get("agencyCode") or "").strip()
 
     # Amount parsing
     amount_str = (
@@ -157,6 +158,7 @@ def normalize(raw: dict, source: str) -> dict:
         "source": source,
         "external_id": str(external_id),
         "name": name,
+        "agency": agency,
         "amount_min": amount_min,
         "amount_max": amount_max,
         "deadline": deadline,
