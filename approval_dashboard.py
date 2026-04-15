@@ -252,7 +252,6 @@ def dashboard():
     active_tab = flask_request.args.get('tab', 'outreach')
 
     df = load_data()
-    grants = fetch_grants(limit=25)
 
     pending_count = len(df[df["status"] == "pending"])
     sent_count    = len(df[df["status"] == "sent"])
@@ -325,7 +324,7 @@ def dashboard():
   <a href="{URL_PLUMBING}" target="_blank">Plumbing</a>
   <a href="{URL_HUB}" target="_blank">All Niches</a>
   <a onclick="showTab('outreach')" id="tab-outreach" class="{'active' if active_tab=='outreach' else ''}">Outreach ({pending_count} pending)</a>
-  <a onclick="showTab('grants')" id="tab-grants" class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grants ({len(grants)} found)</a>
+  <a onclick="showTab('grants')" id="tab-grants" class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grant Agent</a>
 </div>
 
 <!-- OUTREACH TAB -->
@@ -366,76 +365,17 @@ def dashboard():
 
     html += "</div><!-- end outreach tab -->\n"
 
-    # GRANTS TAB
+    # GRANTS TAB — full grant agent embedded as iframe
     html += f"""
 <!-- GRANTS TAB -->
-<div id="content-grants" class="tab-content {'active' if active_tab=='grants' else ''}">
-  <div class="grants-wrap">
-    <div class="grants-topbar">
-      <h2>💰 Live Grant Opportunities</h2>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <span style="font-size:12px;color:#64748b;">{len(grants)} grants loaded</span>
-        <form method="POST" action="/scan-grants" style="display:inline"><button type="submit" class="scan-btn">Scan Now</button></form>
-        <a href="{URL_GRANTS}" target="_blank" class="btn-link" style="background:#374151;">Open Full Dashboard ↗</a>
-      </div>
-    </div>"""
-
-    if not grants:
-        html += '<div class="no-grants">No grants loaded yet. Click <strong>Scan Now</strong> to pull from Grants.gov.</div>'
-    else:
-        html += """
-    <table>
-      <thead>
-        <tr>
-          <th>Grant Name</th>
-          <th>Agency</th>
-          <th>Amount</th>
-          <th>Deadline</th>
-          <th>Match</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>"""
-        for g in grants:
-            score = g.get("match_score", 0) or 0
-            if score >= 70:
-                badge = f'<span class="badge badge-high">{score}%</span>'
-            elif score >= 40:
-                badge = f'<span class="badge badge-med">{score}%</span>'
-            else:
-                badge = f'<span class="badge badge-low">{score}%</span>'
-
-            amt_min = g.get("amount_min") or 0
-            amt_max = g.get("amount_max") or 0
-            if amt_max:
-                amt = f"${amt_max:,.0f}"
-            elif amt_min:
-                amt = f"${amt_min:,.0f}"
-            else:
-                amt = "—"
-
-            deadline = g.get("deadline") or "—"
-            if deadline and deadline != "—":
-                deadline = deadline[:10]
-
-            name    = (g.get("name") or "Unnamed Grant")[:60]
-            agency  = (g.get("agency") or "")[:40]
-            gid     = g.get("id", "")
-            apply_url = f"{URL_GRANTS}/api/grants/{gid}/apply" if gid else "#"
-
-            html += f"""
-        <tr>
-          <td><div class="grant-name">{name}</div><div class="grant-agency">{agency}</div></td>
-          <td style="color:#64748b;font-size:12px;">{agency}</td>
-          <td style="color:#4ade80;">{amt}</td>
-          <td style="color:#94a3b8;">{deadline}</td>
-          <td>{badge}</td>
-          <td><a href="{URL_GRANTS}" target="_blank" class="scan-btn" style="font-size:11px;">Apply ↗</a></td>
-        </tr>"""
-        html += "</tbody></table>"
-
-    html += """
-  </div>
+<div id="content-grants" class="tab-content {'active' if active_tab=='grants' else ''}" style="height:calc(100vh - 90px);overflow:hidden;">
+  <iframe
+    id="grants-iframe"
+    src="{URL_GRANTS}"
+    style="width:100%;height:100%;border:none;display:block;"
+    title="Grant Agent System"
+    loading="lazy"
+  ></iframe>
 </div><!-- end grants tab -->
 
 <script>
@@ -450,18 +390,6 @@ function showTab(name) {
 </html>"""
 
     return html
-
-# =========================
-# SCAN GRANTS ACTION
-# =========================
-@app.route('/scan-grants', methods=['POST'])
-def scan_grants():
-    try:
-        resp = requests.post(f"{URL_GRANTS}/api/scan", timeout=10)
-        print(f"[ScanGrants] Triggered: {resp.status_code}", flush=True)
-    except Exception as e:
-        print(f"[ScanGrants] Error: {e}", flush=True)
-    return redirect('/?tab=grants')
 
 # =========================
 # SEND ACTION
