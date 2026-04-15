@@ -2,32 +2,35 @@
  * Gray Horizons Enterprise — AI Voice Receptionist Server
  * Multi-niche: HOA | HVAC | Dental | Plumbing | Contractor
  * Node 18+ | Native fetch | CommonJS
+ *
+ * SAFE BUILD — Claude failures never crash the server.
+ * Flow: retryClaude (2 attempts) → callClaudeSafe → fallback reply
  */
-const express = require('express');
-const cors    = require('cors');
+const express      = require('express');
+const cors         = require('cors');
+const { searchGrants } = require('./grantSearch');
 
 const app = express();
 
-// Allow requests from any origin (grayhorizonsenterprise.com, Railway, local dev)
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '')
   .split(',').map(s => s.trim()).filter(Boolean);
 
 app.use(cors({
   origin: function(origin, cb) {
-    // Allow no-origin (curl, Postman, same-origin) + configured domains
     if (!origin) return cb(null, true);
-    if (ALLOWED_ORIGINS.length === 0) return cb(null, true); // dev: open
+    if (ALLOWED_ORIGINS.length === 0) return cb(null, true);
     if (ALLOWED_ORIGINS.some(o => origin.startsWith(o))) return cb(null, true);
     cb(new Error('CORS: origin not allowed — ' + origin));
   },
-  methods: ['GET','POST','OPTIONS'],
+  methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
 }));
 
 app.use(express.json({ limit: '16kb' }));
 
 const API_KEY = process.env.ANTHROPIC_API_KEY;
-const MODEL   = 'claude-haiku-4-5-20251001';
+// ✅ FIXED: use stable model — haiku-4-5 was causing 500s
+const MODEL   = 'claude-3-haiku-20240307';
 const PORT    = process.env.PORT || 3000;
 
 // ── Niche system prompts ──────────────────────────────────────────────────────
@@ -36,7 +39,7 @@ const PROMPTS = {
   hoa: `You are a live HOA receptionist for Gray Horizons Enterprise in Rialto, CA.
 Handle: violation notices, disputes, parking complaints, board inquiries, maintenance requests.
 Collect: resident name, unit number, issue description.
-Rules: 1–2 sentences max. Ask ONE question at a time. Stay calm and professional. Never escalate emotionally.
+Rules: 1–2 sentences max. Ask ONE question at a time. Stay calm and professional.
 If they need to file a violation, say you'll log it immediately and they'll get a confirmation.`,
 
   hvac: `You are a live HVAC receptionist for Gray Horizons Enterprise.
@@ -64,12 +67,19 @@ Rules: 1–2 sentences max. Ask ONE question at a time. Be professional and enth
 For estimates say the team will follow up within 24 hours with a full quote.`,
 };
 
-function getPrompt(niche) {
-  return PROMPTS[niche] || PROMPTS.hoa;
-}
+// Scripted fallbacks — used when Claude is unavailable so callers always get a response
+const FALLBACKS = {
+  hoa:        "Thanks for reaching out to Gray Horizons HOA. Please share your name, unit number, and issue and we'll follow up right away.",
+  hvac:       "Thanks for calling Gray Horizons HVAC. Can you give me your name and address so I can get a tech scheduled for you?",
+  dental:     "Thanks for calling Gray Horizons Dental. Can I get your name and the reason for your visit so we can get you booked?",
+  plumbing:   "Thanks for calling Gray Horizons Plumbing. Please give me your name and address and we'll get someone out ASAP.",
+  contractor: "Thanks for reaching out to Gray Horizons General Contracting. Can you tell me your name and what type of project you need?",
+};
+
+function getPrompt(niche)    { return PROMPTS[niche]   || PROMPTS.hoa;   }
+function getFallback(niche)  { return FALLBACKS[niche] || FALLBACKS.hoa; }
 
 // ── Session store ─────────────────────────────────────────────────────────────
-// Key: sessionId  Value: { messages: [], lastActive: timestamp }
 
 const sessions = new Map();
 
@@ -86,82 +96,181 @@ setInterval(() => {
   sessions.forEach((s, id) => { if (s.lastActive < cutoff) sessions.delete(id); });
 }, 5 * 60 * 1000);
 
-// ── Health check ──────────────────────────────────────────────────────────────
+// ── STEP 1: retryClaude — 2 attempts before giving up ────────────────────────
+
+async function retryClaude(body, retries = 2) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'x-api-key':         API_KEY,
+          'anthropic-version': '2023-06-01',
+          'content-type':      'application/json',
+        },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(15000),
+      });
+
+      if (!response.ok) {
+        const txt = await response.text();
+        console.error(`[Claude] Attempt ${i + 1} HTTP ${response.status}:`, txt);
+        // Don't retry on auth errors — they won't self-heal
+        if (response.status === 401 || response.status === 403) return null;
+        continue;
+      }
+
+      const data = await response.json();
+      console.log(`[Claude] OK on attempt ${i + 1}`);
+      return data;
+
+    } catch (err) {
+      console.error(`[Claude] Attempt ${i + 1} error:`, err.message);
+      if (i < retries - 1) {
+        console.log('[Claude] Retrying...');
+        await new Promise(r => setTimeout(r, 800)); // brief pause before retry
+      }
+    }
+  }
+  return null; // all attempts failed
+}
+
+// ── STEP 2: callClaudeSafe — wraps retry, never throws ───────────────────────
+
+async function callClaudeSafe(body) {
+  try {
+    const result = await retryClaude(body);
+    if (!result) {
+      console.log('[Claude] All retries failed — returning null for fallback');
+      return null;
+    }
+    return result;
+  } catch (err) {
+    console.error('[Claude] callClaudeSafe crash (should not happen):', err.message);
+    return null;
+  }
+}
+
+// ── Health — ALWAYS works regardless of Claude state ─────────────────────────
+
 app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', model: MODEL, port: PORT, niches: Object.keys(PROMPTS) });
+  res.json({
+    status:  'ok',
+    model:   MODEL,
+    port:    PORT,
+    apiKey:  API_KEY ? 'SET ✓' : 'NOT SET ✗',
+    niches:  Object.keys(PROMPTS),
+  });
+});
+
+// ── GET /test-claude — quick smoke test ──────────────────────────────────────
+
+app.get('/test-claude', async (_req, res) => {
+  if (!API_KEY) {
+    return res.json({ success: false, error: 'ANTHROPIC_API_KEY not set' });
+  }
+
+  const data = await callClaudeSafe({
+    model:      MODEL,
+    max_tokens: 50,
+    messages:   [{ role: 'user', content: 'Say hello in one sentence.' }],
+  });
+
+  if (!data) {
+    return res.json({ success: false, error: 'Claude did not respond after retries' });
+  }
+
+  res.json({
+    success: true,
+    reply:   data.content?.[0]?.text?.trim() || '(empty)',
+    model:   MODEL,
+  });
 });
 
 // ── POST /voice ───────────────────────────────────────────────────────────────
+
 app.post('/voice', async (req, res) => {
   const { message, sessionId = 'default', niche = 'hoa' } = req.body;
 
   if (!message || typeof message !== 'string' || !message.trim()) {
     return res.status(400).json({ error: 'message is required' });
   }
-  if (!API_KEY) {
-    return res.status(500).json({ error: 'ANTHROPIC_API_KEY not set on server' });
-  }
 
   const session = getSession(sessionId);
   session.messages.push({ role: 'user', content: message.trim().slice(0, 1000) });
 
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key':         API_KEY,
-        'anthropic-version': '2023-06-01',
-        'content-type':      'application/json',
-      },
-      body: JSON.stringify({
-        model:      MODEL,
-        max_tokens: 200,
-        system:     getPrompt(niche),
-        messages:   session.messages,
-      }),
-      signal: AbortSignal.timeout(15000),
+  // ── STEP 3: updated flow — Claude optional, fallback guaranteed ──
+  let reply;
+
+  if (!API_KEY) {
+    console.log('[Voice] No API key — using scripted fallback');
+    reply = getFallback(niche);
+  } else {
+    const data = await callClaudeSafe({
+      model:      MODEL,
+      max_tokens: 200,
+      system:     getPrompt(niche),
+      messages:   session.messages,
     });
 
-    if (!response.ok) {
-      const txt = await response.text();
-      console.error('[Voice] Anthropic error:', response.status, txt);
-      return res.status(502).json({ error: 'AI API error', status: response.status });
+    if (!data) {
+      // Claude unavailable — use scripted fallback, server still responds 200
+      console.log('[Voice] Claude unavailable — using scripted fallback');
+      reply = getFallback(niche);
+    } else {
+      reply = data.content?.[0]?.text?.trim() || getFallback(niche);
     }
+  }
 
-    const data  = await response.json();
-    const reply = data.content?.[0]?.text?.trim() || "Sorry, could you repeat that?";
+  session.messages.push({ role: 'assistant', content: reply });
 
-    session.messages.push({ role: 'assistant', content: reply });
+  // Cap at 40 turns (80 message objects)
+  if (session.messages.length > 80) sessions.delete(sessionId);
 
-    // Cap at 40 turns
-    if (session.messages.length > 80) sessions.delete(sessionId);
+  res.json({ reply, turns: Math.floor(session.messages.length / 2), niche });
+});
 
-    res.json({ reply, turns: Math.floor(session.messages.length / 2), niche });
+// ── GET /api/grants ───────────────────────────────────────────────────────────
 
+app.get('/api/grants', async (_req, res) => {
+  try {
+    const grants = await searchGrants({ claudeKey: API_KEY, limit: 20 });
+    res.json({ success: true, count: grants.length, grants });
   } catch (err) {
-    console.error('[Voice] Error:', err.message);
-    res.status(500).json({ error: 'Server error — try again' });
+    console.error('[/api/grants] Error:', err.message);
+    res.status(500).json({ success: false, error: 'Grant fetch failed', grants: [] });
   }
 });
 
 // ── POST /reset ───────────────────────────────────────────────────────────────
+
 app.post('/reset', (req, res) => {
   const { sessionId = 'default' } = req.body;
   sessions.delete(sessionId);
   res.json({ status: 'reset', sessionId });
 });
 
-// ── Static files (serves index.html, etc.) ────────────────────────────────────
+// ── Static + root ─────────────────────────────────────────────────────────────
+
 app.use(express.static(__dirname));
 
-// ── Root ──────────────────────────────────────────────────────────────────────
-app.get("/", (_req, res) => {
-  res.send("AI Voice Server is running 🚀");
+app.get('/', (_req, res) => {
+  res.send('Gray Horizons AI Voice Server — running ✓');
+});
+
+// ── Global error guard — catches any unhandled synchronous throws ─────────────
+
+app.use((err, _req, res, _next) => {
+  console.error('[Server] Unhandled error:', err.message);
+  res.status(500).json({ error: 'Server error — please try again' });
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
+
 app.listen(PORT, () => {
   console.log(`\n[Voice Server] http://localhost:${PORT}`);
-  console.log(`[Voice Server] API key: ${API_KEY ? 'SET ✓' : 'NOT SET ✗'}`);
-  console.log(`[Voice Server] Niches: ${Object.keys(PROMPTS).join(', ')}\n`);
+  console.log(`[Voice Server] Model:   ${MODEL}`);
+  console.log(`[Voice Server] API key: ${API_KEY ? 'SET ✓' : 'NOT SET ✗ (fallback mode active)'}`);
+  console.log(`[Voice Server] Niches:  ${Object.keys(PROMPTS).join(', ')}`);
+  console.log(`[Voice Server] Test:    http://localhost:${PORT}/test-claude\n`);
 });

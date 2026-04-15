@@ -100,15 +100,36 @@ async def on_startup():
     # Initialize database
     init_db()
 
+    # Seed curated grants immediately so dashboard is never empty
+    try:
+        import json
+        from discovery.grants_gov import CURATED_GRANTS
+        from database.db import upsert_grant, update_scores
+        from scoring.scorer import score_grant
+        import json as _json
+        from pathlib import Path as _Path
+        _pfile = _Path(__file__).parent / "user_profile.json"
+        profile = _json.loads(_pfile.read_text()) if _pfile.exists() else {}
+        seeded = 0
+        for grant in CURATED_GRANTS:
+            grant_id, is_new = upsert_grant(grant)
+            scores = score_grant(grant, profile)
+            update_scores(grant_id, scores)
+            if is_new:
+                seeded += 1
+        print(f"[Startup] Seeded {seeded} new curated grants ({len(CURATED_GRANTS)} total in library)")
+    except Exception as e:
+        print(f"[Startup] Curated grant seeding error (non-fatal): {e}")
+
     # Start background scheduler
     start_scheduler()
 
-    # Run an immediate scan on startup so dashboard is populated from day 1
+    # Run a full scan in background to pick up live Grants.gov results
     def _initial_scan():
         import time
-        time.sleep(5)  # let DB fully init
+        time.sleep(3)
         from scheduler.jobs import run_daily_scan
-        print("[Startup] Running initial grant scan...")
+        print("[Startup] Running initial live grant scan...")
         run_daily_scan()
 
     threading.Thread(target=_initial_scan, daemon=True).start()

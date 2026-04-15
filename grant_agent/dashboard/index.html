@@ -266,8 +266,8 @@
       <input type="text" id="searchInput" placeholder="Search grants by keyword, industry, type…"/>
       <select id="minScore">
         <option value="0">All scores</option>
-        <option value="50">50+ match</option>
-        <option value="70" selected>70+ match</option>
+        <option value="50" selected>50+ match</option>
+        <option value="70">70+ match</option>
         <option value="85">85+ match</option>
       </select>
       <button class="btn-blue" onclick="liveSearch()">🌐 Search Grants.gov Live</button>
@@ -520,8 +520,11 @@ async function loadStats() {
 
     const scans = d.recent_scans || [];
     if (scans.length) {
-      document.getElementById('s-scan').textContent = new Date(scans[0].scanned_at)
-        .toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      // SQLite stores UTC — display in Pacific time
+      const rawTs = scans[0].scanned_at;
+      const tsUTC = rawTs.includes('T') || rawTs.includes('Z') ? rawTs : rawTs.replace(' ','T') + 'Z';
+      document.getElementById('s-scan').textContent = new Date(tsUTC)
+        .toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'America/Los_Angeles'}) + ' PT';
     }
 
     // Update pipeline strip counts

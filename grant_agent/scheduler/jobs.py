@@ -50,35 +50,34 @@ def _send_digest_if_configured(new_count: int, total_new: int):
         print(f"[Scheduler] Email digest error: {e}")
 
 
+def _save_grants(grants: list, source_name: str, profile: dict) -> tuple[int, int]:
+    """Upsert + score a list of grants. Returns (found, new_count)."""
+    found = len(grants)
+    new_count = 0
+    for grant in grants:
+        grant_id, is_new = upsert_grant(grant)
+        # Score new grants AND existing grants that haven't been scored yet
+        if is_new:
+            new_count += 1
+        # Always score (handles rescoring after profile/keyword changes)
+        scores = score_grant(grant, profile)
+        update_scores(grant_id, scores)
+    log_scan(source_name, found, new_count)
+    print(f"[Scheduler] {source_name}: {found} found, {new_count} new")
+    return found, new_count
+
+
 def run_daily_scan():
     """Pull from Grants.gov + RSS feeds, score, save to DB, then email digest."""
     print(f"\n[Scheduler] Daily scan started at {datetime.now()}")
     profile = _load_profile()
-
-    sources = {
-        "grants.gov": grants_gov_scan,
-        "rss": rss_scan,
-    }
-
     total_new = 0
 
-    for source_name, fetch_fn in sources.items():
+    for source_name, fetch_fn in [("grants.gov", grants_gov_scan), ("rss", rss_scan)]:
         try:
             grants = fetch_fn()
-            found = len(grants)
-            new_count = 0
-
-            for grant in grants:
-                grant_id, is_new = upsert_grant(grant)
-                if is_new:
-                    new_count += 1
-                    total_new += 1
-                    scores = score_grant(grant, profile)
-                    update_scores(grant_id, scores)
-
-            log_scan(source_name, found, new_count)
-            print(f"[Scheduler] {source_name}: {found} found, {new_count} new")
-
+            _, new_count = _save_grants(grants, source_name, profile)
+            total_new += new_count
         except Exception as e:
             log_scan(source_name, 0, 0, str(e))
             print(f"[Scheduler] Error in {source_name}: {e}")
@@ -89,30 +88,34 @@ def run_daily_scan():
 
 
 def run_deep_scan():
-    """Full scan including Playwright for dynamic sites."""
-    print(f"\n[Scheduler] Deep scan (Playwright) started at {datetime.now()}")
+    """Full scan: Grants.gov + RSS + Playwright (Playwright optional)."""
+    print(f"\n[Scheduler] Deep scan started at {datetime.now()}")
     profile = _load_profile()
     total_new = 0
 
+    # 1. Always run Grants.gov + RSS (reliable)
+    for source_name, fetch_fn in [("grants.gov", grants_gov_scan), ("rss", rss_scan)]:
+        try:
+            grants = fetch_fn()
+            _, new_count = _save_grants(grants, source_name, profile)
+            total_new += new_count
+        except Exception as e:
+            log_scan(source_name, 0, 0, str(e))
+            print(f"[Scheduler] Error in {source_name}: {e}")
+
+    # 2. Playwright — optional, skip silently if unavailable
     try:
         grants = playwright_scan()
-        found = len(grants)
-        new_count = 0
-
-        for grant in grants:
-            grant_id, is_new = upsert_grant(grant)
-            if is_new:
-                new_count += 1
-                total_new += 1
-                scores = score_grant(grant, profile)
-                update_scores(grant_id, scores)
-
-        log_scan("playwright", found, new_count)
-        print(f"[Scheduler] Deep scan: {found} found, {new_count} new")
+        if grants:
+            _, new_count = _save_grants(grants, "playwright", profile)
+            total_new += new_count
+        else:
+            print("[Scheduler] Playwright returned 0 results (likely not installed) — skipping")
     except Exception as e:
         log_scan("playwright", 0, 0, str(e))
-        print(f"[Scheduler] Deep scan error: {e}")
+        print(f"[Scheduler] Playwright error (non-fatal): {e}")
 
+    print(f"[Scheduler] Deep scan complete at {datetime.now()}")
     _send_digest_if_configured(total_new, total_new)
 
 

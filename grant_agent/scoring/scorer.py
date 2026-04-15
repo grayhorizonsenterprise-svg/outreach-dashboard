@@ -33,7 +33,22 @@ MINORITY_KEYWORDS = [
 ]
 
 INDUSTRY_KEYWORDS = {
-    "technology": ["tech", "technology", "digital", "software", "innovation", "stem", "it ", "information technology"],
+    "technology": [
+        "tech", "technology", "digital", "software", "innovation", "stem", "it ", "information technology",
+        "ai", "artificial intelligence", "automation", "saas", "machine learning", "data science",
+        "cloud", "sbir", "sttr", "r&d", "research and development", "emerging technology",
+    ],
+    "ai": [
+        "ai", "artificial intelligence", "machine learning", "automation", "saas", "deep learning",
+        "neural", "nlp", "data science", "algorithm", "predictive",
+    ],
+    "automation": [
+        "automation", "automate", "automated", "robotic", "rpa", "workflow automation",
+        "smart home", "iot", "internet of things",
+    ],
+    "saas": ["saas", "software as a service", "cloud software", "subscription software", "platform"],
+    "innovation": ["innovation", "innovative", "emerging", "cutting-edge", "breakthrough", "novel"],
+    "entrepreneurship": ["entrepreneur", "entrepreneurship", "startup", "founder", "new venture", "business owner"],
     "construction": ["construction", "contractor", "infrastructure", "renovation", "building", "facilities"],
     "community development": ["community", "neighborhood", "revitalization", "nonprofit", "social impact"],
     "workforce development": ["workforce", "training", "employment", "jobs", "apprenticeship", "career"],

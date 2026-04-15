@@ -32,9 +32,15 @@
     "technology",
     "construction",
     "community development",
-    "workforce development"
+    "workforce development",
+    "economic development",
+    "ai",
+    "automation",
+    "saas",
+    "innovation",
+    "entrepreneurship"
   ],
-  "max_effort_days": 7,
-  "min_grant_amount": 5000,
+  "max_effort_days": 14,
+  "min_grant_amount": 500,
   "notify_email": ""
 }

@@ -31,7 +31,8 @@ URL_DENTAL    = os.getenv("DENTAL_URL", "#")
 URL_HVAC      = os.getenv("HVAC_URL", "#")
 URL_HUB       = os.getenv("HUB_URL", "#")
 URL_PLUMBING  = os.getenv("PLUMBING_URL", "#")
-URL_GRANTS    = "https://ghe-grant-agent-production.up.railway.app"
+URL_GRANTS       = "https://ghe-grant-agent-production.up.railway.app"
+URL_VOICE_SERVER = os.getenv("VOICE_SERVER_URL", "https://ghe-voice-production.up.railway.app")
 PIPELINE_SCRIPTS = ["prospect_finder.py", "prospect_enricher.py",
                     "prospect_qualifier.py", "outreach_generator.py"]
 
@@ -221,12 +222,24 @@ def send_email(to_email, name, company, message):
 # FETCH GRANTS FROM GRANT AGENT API
 # =========================
 def fetch_grants(limit=20):
+    # Try grant agent (Python FastAPI) first — has scored DB grants
     try:
-        resp = requests.get(f"{URL_GRANTS}/api/grants?limit={limit}", timeout=8)
+        resp = requests.get(f"{URL_GRANTS}/api/grants?min_score=0&limit={limit}", timeout=8)
+        if resp.status_code == 200:
+            grants = resp.json().get("grants", [])
+            if grants:
+                return grants
+    except Exception as e:
+        print(f"[Grants] Grant agent fetch failed: {e}")
+
+    # Fallback: voice server always returns curated grants even if DB is empty
+    try:
+        resp = requests.get(f"{URL_VOICE_SERVER}/api/grants?limit={limit}", timeout=10)
         if resp.status_code == 200:
             return resp.json().get("grants", [])
     except Exception as e:
-        print(f"[Grants] Could not fetch: {e}")
+        print(f"[Grants] Voice server fallback failed: {e}")
+
     return []
 
 
@@ -235,6 +248,9 @@ def fetch_grants(limit=20):
 # =========================
 @app.route('/')
 def dashboard():
+    from flask import request as flask_request
+    active_tab = flask_request.args.get('tab', 'outreach')
+
     df = load_data()
     grants = fetch_grants(limit=25)
 
@@ -251,7 +267,7 @@ def dashboard():
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="300">
+<meta http-equiv="refresh" content="300;url=/?tab={active_tab}">
 <title>Gray Horizons — Command Center</title>
 <style>
   *{{box-sizing:border-box;margin:0;padding:0}}
@@ -303,17 +319,17 @@ def dashboard():
 <div class="header">Gray Horizons Enterprise — Command Center</div>
 
 <div class="nav">
-  <a href="{URL_HOA}">HOA</a>
-  <a href="{URL_DENTAL}">Dental</a>
-  <a href="{URL_HVAC}">HVAC</a>
-  <a href="{URL_PLUMBING}">Plumbing</a>
-  <a href="{URL_HUB}">All Niches</a>
-  <a onclick="showTab('outreach')" id="tab-outreach" class="active">Outreach ({pending_count} pending)</a>
-  <a onclick="showTab('grants')" id="tab-grants" class="grants-tab">💰 Grants ({len(grants)} found)</a>
+  <a href="{URL_HOA}" target="_blank">HOA</a>
+  <a href="{URL_DENTAL}" target="_blank">Dental</a>
+  <a href="{URL_HVAC}" target="_blank">HVAC</a>
+  <a href="{URL_PLUMBING}" target="_blank">Plumbing</a>
+  <a href="{URL_HUB}" target="_blank">All Niches</a>
+  <a onclick="showTab('outreach')" id="tab-outreach" class="{'active' if active_tab=='outreach' else ''}">Outreach ({pending_count} pending)</a>
+  <a onclick="showTab('grants')" id="tab-grants" class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grants ({len(grants)} found)</a>
 </div>
 
 <!-- OUTREACH TAB -->
-<div id="content-outreach" class="tab-content active">
+<div id="content-outreach" class="tab-content {'active' if active_tab=='outreach' else ''}">
   <div class="topbar">
     <div style="font-size:12px;color:#64748b;">{status_text}</div>
     <div class="stats">
@@ -353,13 +369,13 @@ def dashboard():
     # GRANTS TAB
     html += f"""
 <!-- GRANTS TAB -->
-<div id="content-grants" class="tab-content">
+<div id="content-grants" class="tab-content {'active' if active_tab=='grants' else ''}">
   <div class="grants-wrap">
     <div class="grants-topbar">
       <h2>💰 Live Grant Opportunities</h2>
       <div style="display:flex;gap:8px;align-items:center;">
         <span style="font-size:12px;color:#64748b;">{len(grants)} grants loaded</span>
-        <a href="/scan-grants" class="scan-btn">Scan Now</a>
+        <form method="POST" action="/scan-grants" style="display:inline"><button type="submit" class="scan-btn">Scan Now</button></form>
         <a href="{URL_GRANTS}" target="_blank" class="btn-link" style="background:#374151;">Open Full Dashboard ↗</a>
       </div>
     </div>"""
@@ -425,7 +441,7 @@ def dashboard():
 <script>
 function showTab(name) {
   document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
-  document.querySelectorAll('.nav a').forEach(function(el){ el.classList.remove('active'); });
+  document.querySelectorAll('.nav a[id^="tab-"]').forEach(function(el){ el.classList.remove('active'); });
   document.getElementById('content-' + name).classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
 }
@@ -434,6 +450,18 @@ function showTab(name) {
 </html>"""
 
     return html
+
+# =========================
+# SCAN GRANTS ACTION
+# =========================
+@app.route('/scan-grants', methods=['POST'])
+def scan_grants():
+    try:
+        resp = requests.post(f"{URL_GRANTS}/api/scan", timeout=10)
+        print(f"[ScanGrants] Triggered: {resp.status_code}", flush=True)
+    except Exception as e:
+        print(f"[ScanGrants] Error: {e}", flush=True)
+    return redirect('/?tab=grants')
 
 # =========================
 # SEND ACTION
@@ -544,17 +572,6 @@ def refresh():
     if not pipeline_running:
         threading.Thread(target=run_pipeline_once, daemon=True).start()
     return redirect('/')
-
-# =========================
-# TRIGGER GRANT SCAN
-# =========================
-@app.route('/scan-grants')
-def scan_grants():
-    try:
-        requests.post(f"{URL_GRANTS}/api/scan", timeout=5)
-    except Exception:
-        pass
-    return redirect('/#grants')
 
 # =========================
 # DEBUG CONFIG (no secrets shown)
