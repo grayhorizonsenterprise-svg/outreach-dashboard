@@ -93,24 +93,26 @@ threading.Thread(target=_keep_alive, daemon=True).start()
 
 @app.on_event("startup")
 async def on_startup():
-    print("\n" + "=" * 50)
-    print("  GRANT AGENT SYSTEM — Starting Up")
-    print("=" * 50)
-
-    # Initialize database synchronously — fast, just DDL
-    init_db()
-
-    # Start scheduler — lightweight, just registers cron jobs
-    start_scheduler()
-
-    # All heavy work runs in a background thread so /health responds immediately
-    # Railway healthcheck passes before any I/O happens
+    # Launch background thread immediately — /health answers before ANY I/O
+    # This prevents Railway healthcheck timeout when SQLite volume is locked
+    # by a still-running previous container during rolling deploy.
     def _background_init():
         import time, json as _json
         from pathlib import Path as _Path
-        time.sleep(2)  # let uvicorn fully bind the port first
 
-        # 1. Seed curated grants
+        # Step 1: DB init (may briefly wait for SQLite lock on volume)
+        try:
+            init_db()
+        except Exception as e:
+            print(f"[Startup] init_db error: {e}")
+
+        # Step 2: Start cron scheduler
+        try:
+            start_scheduler()
+        except Exception as e:
+            print(f"[Startup] Scheduler error: {e}")
+
+        # Step 3: Seed curated grants so DB is never empty
         try:
             from discovery.grants_gov import CURATED_GRANTS
             from database.db import upsert_grant, update_scores
@@ -119,16 +121,15 @@ async def on_startup():
             profile = _json.loads(_pfile.read_text()) if _pfile.exists() else {}
             seeded = 0
             for grant in CURATED_GRANTS:
-                grant_id, is_new = upsert_grant(grant)
-                scores = score_grant(grant, profile)
-                update_scores(grant_id, scores)
+                gid, is_new = upsert_grant(grant)
+                update_scores(gid, score_grant(grant, profile))
                 if is_new:
                     seeded += 1
             print(f"[Startup] Seeded {seeded} new curated grants ({len(CURATED_GRANTS)} total)")
         except Exception as e:
             print(f"[Startup] Seed error (non-fatal): {e}")
 
-        # 2. Run live Grants.gov scan on top of curated baseline
+        # Step 4: Live scan to top up from Grants.gov
         try:
             from scheduler.jobs import run_daily_scan
             print("[Startup] Running initial live grant scan...")
@@ -137,6 +138,7 @@ async def on_startup():
             print(f"[Startup] Initial scan error (non-fatal): {e}")
 
     threading.Thread(target=_background_init, daemon=True).start()
+    print("[Startup] Server ready — background init running")
 
     print(f"\n  API:       http://localhost:{settings.port}/api")
     print(f"  Dashboard: http://localhost:{settings.port}/")

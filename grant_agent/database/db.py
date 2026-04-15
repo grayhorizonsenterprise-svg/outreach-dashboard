@@ -8,8 +8,9 @@ DB_PATH = Path(os.environ.get("DB_PATH", str(Path(__file__).parent.parent / "gra
 
 
 def get_conn():
-    conn = sqlite3.connect(str(DB_PATH))
+    conn = sqlite3.connect(str(DB_PATH), timeout=10)  # 10s max wait for lock
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")  # allow concurrent reads during writes
     return conn
 
 
