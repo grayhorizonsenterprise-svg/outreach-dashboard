@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grant Agent — Gray Horizons</title>
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --s1:      #161b22;
+      --s2:      #21262d;
+      --s3:      #2d333b;
+      --border:  #30363d;
+      --text:    #e6edf3;
+      --muted:   #8b949e;
+      --green:   #3fb950;
+      --blue:    #58a6ff;
+      --orange:  #f0883e;
+      --purple:  #bc8cff;
+      --red:     #f85149;
+      --yellow:  #d29922;
+      --cyan:    #39d0d8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button { cursor: pointer; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; font-family: inherit; padding: 8px 16px; transition: opacity .15s, transform .12s; }
+    button:hover { opacity: .85; }
+    button:active { opacity: .7; transform: translateY(1px); }
+    button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; }
+
+    /* ── Header ── */
+    header { background: var(--s1); border-bottom: 1px solid var(--border); padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .logo { font-size: 15px; font-weight: 700; letter-spacing: -.3px; }
+    .logo span { color: var(--green); }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .header-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: rgba(63,185,80,.12); border: 1px solid rgba(63,185,80,.25); color: var(--green); display: flex; align-items: center; gap: 5px; }
+    .header-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); box-shadow: 0 0 5px var(--green); animation: blink 1.8s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    /* ── Buttons ── */
+    .btn-primary   { background: var(--green);  color: #000; font-weight: 600; }
+    .btn-secondary { background: var(--s2); color: var(--text); border: 1px solid var(--border); }
+    .btn-blue      { background: var(--blue);   color: #000; font-weight: 600; }
+    .btn-purple    { background: var(--purple); color: #000; font-weight: 600; }
+    .btn-orange    { background: var(--orange); color: #000; font-weight: 600; }
+    .btn-red       { background: rgba(248,81,73,.15); color: var(--red); border: 1px solid rgba(248,81,73,.3); }
+    .btn-sm        { padding: 5px 12px; font-size: 12px; }
+    .btn-xs        { padding: 3px 9px; font-size: 11px; font-weight: 600; border-radius: 5px; }
+    .btn-icon      { width: 30px; height: 30px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 14px; }
+
+    /* ── Main layout ── */
+    .main { max-width: 1400px; margin: 0 auto; padding: 24px 28px; }
+
+    /* ── Stats row ── */
+    .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+    .stat-card { background: var(--s1); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+    .stat-card .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; font-weight: 600; }
+    .stat-card .val { font-size: 28px; font-weight: 800; margin-top: 6px; letter-spacing: -.02em; }
+    .stat-card .sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .stat-card.green .val { color: var(--green); }
+    .stat-card.blue  .val { color: var(--blue); }
+    .stat-card.orange .val { color: var(--orange); }
+    .stat-card.purple .val { color: var(--purple); }
+    .stat-card.cyan  .val { color: var(--cyan); }
+
+    /* ── Tabs ── */
+    .tab-bar { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 22px; }
+    .tab-btn { padding: 10px 18px; font-size: 13px; font-weight: 500; font-family: inherit; background: none; border: none; border-bottom: 2px solid transparent; border-radius: 0; color: var(--muted); margin-bottom: -1px; transition: color .15s, border-color .15s; }
+    .tab-btn:hover { color: var(--text); opacity: 1; }
+    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Search bar ── */
+    .search-bar { background: var(--s1); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; display: flex; gap: 10px; margin-bottom: 18px; align-items: center; flex-wrap: wrap; }
+    .search-bar input, .search-bar select { background: var(--s2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; padding: 8px 12px; outline: none; font-family: inherit; }
+    .search-bar input { flex: 1; min-width: 200px; }
+    .search-bar input:focus, .search-bar select:focus { border-color: var(--blue); }
+
+    /* ── Table ── */
+    .data-table-wrap { background: var(--s1); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th { background: var(--s2); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .data-table td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: rgba(255,255,255,.025); }
+
+    /* ── Score badge ── */
+    .score-badge { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; font-weight: 700; font-size: 12px; }
+    .score-high { background: rgba(63,185,80,.15);  color: var(--green);  border: 1px solid rgba(63,185,80,.3); }
+    .score-mid  { background: rgba(210,153,34,.15); color: var(--yellow); border: 1px solid rgba(210,153,34,.3); }
+    .score-low  { background: rgba(248,81,73,.15);  color: var(--red);    border: 1px solid rgba(248,81,73,.3); }
+
+    /* ── Status badges ── */
+    .status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+    .s-draft        { background: rgba(139,148,158,.12); color: var(--muted);  border: 1px solid rgba(139,148,158,.25); }
+    .s-submitted    { background: rgba(88,166,255,.12);  color: var(--blue);   border: 1px solid rgba(88,166,255,.3); }
+    .s-under_review { background: rgba(240,136,62,.12);  color: var(--orange); border: 1px solid rgba(240,136,62,.3); }
+    .s-awarded      { background: rgba(63,185,80,.15);   color: var(--green);  border: 1px solid rgba(63,185,80,.3); }
+    .s-rejected     { background: rgba(248,81,73,.12);   color: var(--red);    border: 1px solid rgba(248,81,73,.3); }
+
+    /* ── Effort pill ── */
+    .effort-pill { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .effort-low    { background: rgba(63,185,80,.12);  color: var(--green); }
+    .effort-medium { background: rgba(240,136,62,.12); color: var(--orange); }
+    .effort-high   { background: rgba(248,81,73,.12);  color: var(--red); }
+
+    /* ── AI mode badge ── */
+    .ai-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .ai-claude { background: rgba(188,140,255,.12); color: var(--purple); border: 1px solid rgba(188,140,255,.3); }
+    .ai-dual   { background: rgba(57,208,216,.1); color: var(--cyan); border: 1px solid rgba(57,208,216,.3); }
+
+    /* ── Application status pipeline (filter strip) ── */
+    .pipeline-strip { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .pipe-btn { padding: 7px 16px; font-size: 12px; font-weight: 600; font-family: inherit; border-radius: 7px; background: var(--s2); border: 1px solid var(--border); color: var(--muted); cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 7px; }
+    .pipe-btn:hover { color: var(--text); border-color: rgba(255,255,255,.2); opacity: 1; }
+    .pipe-btn.active { color: var(--text); border-color: var(--blue); background: rgba(88,166,255,.1); }
+    .pipe-btn .cnt { font-size: 11px; padding: 1px 7px; border-radius: 10px; background: rgba(255,255,255,.08); font-weight: 700; }
+
+    /* ── Empty state ── */
+    .empty { text-align: center; padding: 60px 24px; color: var(--muted); }
+    .empty h3 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .empty p { font-size: 13px; line-height: 1.6; }
+
+    /* ── Loading ── */
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid transparent; border-top-color: currentColor; border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; margin-right: 5px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-row td { text-align: center; padding: 48px; color: var(--muted); }
+
+    /* ── Section header ── */
+    .sec-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .sec-title { font-size: 14px; font-weight: 600; }
+    .sec-count { font-size: 12px; color: var(--muted); }
+
+    /* ── Toast ── */
+    .toast { position: fixed; bottom: 22px; right: 22px; background: var(--s1); border: 1px solid var(--border); border-radius: 9px; padding: 12px 18px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.5); transform: translateY(80px); opacity: 0; transition: all .3s; z-index: 9999; max-width: 360px; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: var(--green); }
+    .toast.error   { border-color: var(--red); }
+    .toast.info    { border-color: var(--blue); }
+
+    /* ── Modal overlay ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 1000; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 16px; }
+    .modal-overlay.open { display: flex; }
+
+    /* ── Application modal ── */
+    .app-modal { background: var(--s1); border: 1px solid var(--border); border-radius: 14px; width: 860px; max-width: 100%; margin: auto; }
+    .modal-head { display: flex; align-items: flex-start; justify-content: space-between; padding: 22px 24px 16px; border-bottom: 1px solid var(--border); gap: 16px; }
+    .modal-head-left { flex: 1; min-width: 0; }
+    .modal-grant-name { font-size: 17px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+    .modal-meta { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+    .modal-meta strong { color: var(--text); }
+    .close-btn { width: 30px; height: 30px; background: var(--s2); border: 1px solid var(--border); border-radius: 6px; color: var(--muted); font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 0; }
+    .close-btn:hover { color: var(--text); opacity: 1; }
+
+    /* ── Status bar inside modal ── */
+    .modal-status-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: var(--s2); border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
+    .status-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+    .status-action-btn { padding: 5px 14px; font-size: 12px; font-weight: 700; font-family: inherit; border-radius: 6px; cursor: pointer; transition: all .15s; }
+    .sa-draft        { background: rgba(139,148,158,.1); color: var(--muted); border: 1px solid rgba(139,148,158,.25); }
+    .sa-submitted    { background: rgba(88,166,255,.12); color: var(--blue); border: 1px solid rgba(88,166,255,.3); }
+    .sa-under_review { background: rgba(240,136,62,.12); color: var(--orange); border: 1px solid rgba(240,136,62,.3); }
+    .sa-awarded      { background: rgba(63,185,80,.15);  color: var(--green); border: 1px solid rgba(63,185,80,.3); }
+    .sa-rejected     { background: rgba(248,81,73,.12);  color: var(--red);   border: 1px solid rgba(248,81,73,.3); }
+    .status-action-btn:hover { opacity: 1; filter: brightness(1.15); transform: translateY(-1px); }
+
+    /* ── AI comparison tabs inside modal ── */
+    .ai-tab-bar { display: flex; gap: 0; border-bottom: 1px solid var(--border); padding: 0 24px; background: var(--s1); }
+    .ai-tab-btn { padding: 10px 16px; font-size: 13px; font-weight: 600; font-family: inherit; background: none; border: none; border-bottom: 2px solid transparent; border-radius: 0; color: var(--muted); margin-bottom: -1px; cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 6px; }
+    .ai-tab-btn:hover { color: var(--text); opacity: 1; }
+    .ai-tab-btn.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+    .ai-tab-btn .ai-chip { font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 4px; letter-spacing: .04em; text-transform: uppercase; }
+    .chip-synth  { background: rgba(57,208,216,.15);  color: var(--cyan); }
+    .chip-claude { background: rgba(188,140,255,.15); color: var(--purple); }
+    .chip-gpt    { background: rgba(63,185,80,.12);   color: var(--green); }
+    .chip-disabled { background: rgba(139,148,158,.1); color: var(--muted); }
+
+    .ai-tab-content { display: none; padding: 22px 24px; }
+    .ai-tab-content.active { display: block; }
+
+    /* ── App sections ── */
+    .app-section { margin-bottom: 20px; }
+    .app-section h4 { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+    .app-content { background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-size: 14px; line-height: 1.7; color: var(--text); white-space: pre-wrap; }
+
+    .modal-footer { display: flex; gap: 10px; padding: 16px 24px; border-top: 1px solid var(--border); justify-content: flex-end; flex-wrap: wrap; align-items: center; }
+    .modal-footer-left { flex: 1; font-size: 12px; color: var(--muted); }
+
+    /* ── Profile tab ── */
+    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .profile-card { background: var(--s1); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .profile-card h3 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; }
+    .profile-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .profile-field label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+    .profile-field input, .profile-field textarea, .profile-field select { background: var(--s2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; padding: 8px 12px; outline: none; font-family: inherit; transition: border-color .15s; }
+    .profile-field input:focus, .profile-field textarea:focus { border-color: var(--blue); }
+    .profile-field textarea { resize: vertical; min-height: 80px; }
+    .profile-save-btn { background: var(--green); color: #000; font-weight: 700; padding: 10px 24px; border-radius: 7px; font-size: 13px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .profile-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .main { padding: 14px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      header { padding: 0 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Grant Agent <span>System</span></div>
+  <div class="header-right">
+    <div class="header-badge"><div class="header-dot"></div><span id="hdr-status">Loading…</span></div>
+    <button class="btn-secondary btn-sm" onclick="triggerScan(false)" id="scanBtn">⟳ Scan</button>
+    <button class="btn-primary btn-sm" onclick="triggerScan(true)" id="deepScanBtn">⚡ Deep Scan</button>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card green">
+      <div class="lbl">Total Grants</div>
+      <div class="val" id="s-total">—</div>
+      <div class="sub">in database</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="lbl">High Match (70+)</div>
+      <div class="val" id="s-high">—</div>
+      <div class="sub">strong fits</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="lbl">In Pipeline</div>
+      <div class="val" id="s-pipeline">—</div>
+      <div class="sub" id="s-pipeline-val">submitted / review</div>
+    </div>
+    <div class="stat-card cyan">
+      <div class="lbl">Awarded 🏆</div>
+      <div class="val" id="s-awarded">—</div>
+      <div class="sub" id="s-awarded-val">total won</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="lbl">Last Scan</div>
+      <div class="val" id="s-scan" style="font-size:14px;margin-top:10px">—</div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('grants')">🔍 Grants</button>
+    <button class="tab-btn" onclick="switchTab('applications')">📋 Applications</button>
+    <button class="tab-btn" onclick="switchTab('profile')">⚙️ Profile</button>
+  </div>
+
+  <!-- ── GRANTS TAB ── -->
+  <div class="tab-panel active" id="tab-grants">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search grants by keyword, industry, type…"/>
+      <select id="minScore">
+        <option value="0">All scores</option>
+        <option value="50">50+ match</option>
+        <option value="70" selected>70+ match</option>
+        <option value="85">85+ match</option>
+      </select>
+      <button class="btn-blue" onclick="liveSearch()">🌐 Search Grants.gov Live</button>
+      <button class="btn-secondary" onclick="loadGrants()">💾 From DB</button>
+    </div>
+    <div class="sec-hdr">
+      <div class="sec-title" id="grantsTitle">Top Grants</div>
+      <div class="sec-count" id="grantsCount"></div>
+    </div>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Score</th>
+            <th>Grant Name</th>
+            <th>Amount</th>
+            <th>Deadline</th>
+            <th>Effort</th>
+            <th>Win %</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="grantsBody">
+          <tr class="loading-row"><td colspan="7"><span class="spinner"></span>Loading grants…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── APPLICATIONS TAB ── -->
+  <div class="tab-panel" id="tab-applications">
+    <div class="pipeline-strip" id="pipelineStrip">
+      <button class="pipe-btn active" onclick="filterApps('all',this)">All <span class="cnt" id="cnt-all">0</span></button>
+      <button class="pipe-btn" onclick="filterApps('draft',this)">📝 Draft <span class="cnt" id="cnt-draft">0</span></button>
+      <button class="pipe-btn" onclick="filterApps('submitted',this)">📤 Submitted <span class="cnt" id="cnt-submitted">0</span></button>
+      <button class="pipe-btn" onclick="filterApps('under_review',this)">🔍 Under Review <span class="cnt" id="cnt-under_review">0</span></button>
+      <button class="pipe-btn" onclick="filterApps('awarded',this)">🏆 Awarded <span class="cnt" id="cnt-awarded">0</span></button>
+      <button class="pipe-btn" onclick="filterApps('rejected',this)">❌ Rejected <span class="cnt" id="cnt-rejected">0</span></button>
+    </div>
+    <div class="sec-hdr">
+      <div class="sec-title">Applications</div>
+      <div class="sec-count" id="appsCount"></div>
+    </div>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Grant Name</th>
+            <th>Amount</th>
+            <th>AI Mode</th>
+            <th>Status</th>
+            <th>Generated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="appsBody">
+          <tr class="loading-row"><td colspan="7"><span class="spinner"></span>Loading applications…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── PROFILE TAB ── -->
+  <div class="tab-panel" id="tab-profile">
+    <div class="profile-grid" id="profileGrid">
+      <div class="loading-row" style="padding:48px;text-align:center;color:var(--muted);grid-column:span 2"><span class="spinner"></span>Loading profile…</div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- ── Application Detail Modal ── -->
+<div class="modal-overlay" id="appModal">
+  <div class="app-modal">
+
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <div class="modal-grant-name" id="modalGrantName">Grant Name</div>
+        <div class="modal-meta" id="modalMeta"></div>
+      </div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+
+    <!-- Status bar -->
+    <div class="modal-status-bar">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:12px;font-weight:600;color:var(--muted)">Status:</span>
+        <span id="modal-status-badge" class="status-pill s-draft">Draft</span>
+      </div>
+      <div class="status-actions">
+        <button class="status-action-btn sa-draft"        onclick="setStatus('draft')">📝 Draft</button>
+        <button class="status-action-btn sa-submitted"    onclick="setStatus('submitted')">📤 Mark Submitted</button>
+        <button class="status-action-btn sa-under_review" onclick="setStatus('under_review')">🔍 Under Review</button>
+        <button class="status-action-btn sa-awarded"      onclick="setStatus('awarded')">🏆 Awarded!</button>
+        <button class="status-action-btn sa-rejected"     onclick="setStatus('rejected')">❌ Rejected</button>
+      </div>
+    </div>
+
+    <!-- AI comparison tabs -->
+    <div class="ai-tab-bar" id="aiTabBar">
+      <button class="ai-tab-btn active" onclick="switchAiTab('synth')">
+        <span class="ai-chip chip-synth">✦ Best</span> Synthesized
+      </button>
+      <button class="ai-tab-btn" onclick="switchAiTab('claude')">
+        <span class="ai-chip chip-claude">Claude</span>
+      </button>
+      <button class="ai-tab-btn" id="gpt-tab-btn" onclick="switchAiTab('gpt')">
+        <span class="ai-chip chip-gpt">GPT-4o</span>
+      </button>
+    </div>
+
+    <!-- Synthesized content -->
+    <div class="ai-tab-content active" id="tab-synth">
+      <div id="content-synth">
+        <div style="text-align:center;padding:48px;color:var(--muted)"><span class="spinner" style="color:var(--cyan)"></span> Generating…</div>
+      </div>
+    </div>
+
+    <!-- Claude content -->
+    <div class="ai-tab-content" id="tab-claude">
+      <div id="content-claude">
+        <div style="text-align:center;padding:48px;color:var(--muted)">Claude output will appear here.</div>
+      </div>
+    </div>
+
+    <!-- GPT-4o content -->
+    <div class="ai-tab-content" id="tab-gpt">
+      <div id="content-gpt">
+        <div style="text-align:center;padding:48px;color:var(--muted)">Use "Apply with Both AI" to unlock GPT-4o comparison.</div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="modal-footer-left" id="modal-app-id-label"></div>
+      <button class="btn-secondary btn-sm" onclick="copySection('full_narrative')">📋 Copy Narrative</button>
+      <button class="btn-secondary btn-sm" onclick="copyAll()">📋 Copy All Sections</button>
+      <a id="grantLink" href="#" target="_blank">
+        <button class="btn-primary btn-sm">Open Grant Page ↗</button>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   Grant Agent Dashboard — Full Client Logic
+   ══════════════════════════════════════════════════════ */
+
+const API = '/api';
+let _currentApp = null;      // Full application object in modal
+let _currentAppId = null;    // DB application id
+let _liveGrantsMap = {};     // name→grant for live search results
+let _allApps = [];           // cached app list
+let _activeAppFilter = 'all';
+
+// ── Utilities ──────────────────────────────────────────
+
+function esc(s, forAttr = false) {
+  if (!s) return '';
+  const r = String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return forAttr ? r.replace(/'/g,'&#39;') : r;
+}
+
+function fmtMoney(min, max) {
+  if (!max && !min) return '—';
+  const f = n => n >= 1e6 ? `$${(n/1e6).toFixed(1)}M` : n >= 1e3 ? `$${(n/1e3).toFixed(0)}K` : `$${n}`;
+  if (max && min && min !== max) return `${f(min)}–${f(max)}`;
+  return f(max || min);
+}
+
+function fmtMoneyShort(v) {
+  if (!v) return '$0';
+  if (v >= 1e6) return `$${(v/1e6).toFixed(1)}M`;
+  if (v >= 1e3) return `$${(v/1e3).toFixed(0)}K`;
+  return `$${v}`;
+}
+
+function fmtDeadline(d) {
+  if (!d) return { text: '—', soon: false };
+  const dl = new Date(d);
+  const days = Math.ceil((dl - new Date()) / 86400000);
+  const label = dl.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return { text: label, days, soon: days <= 30 && days > 0 };
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' });
+}
+
+function scoreBadge(score) {
+  const cls = score >= 70 ? 'score-high' : score >= 50 ? 'score-mid' : 'score-low';
+  return `<span class="score-badge ${cls}">${score}</span>`;
+}
+
+function effortPill(l) {
+  return `<span class="effort-pill effort-${l||'medium'}">${l||'medium'}</span>`;
+}
+
+function statusPill(s) {
+  const labels = { draft:'📝 Draft', submitted:'📤 Submitted', under_review:'🔍 Under Review', awarded:'🏆 Awarded', rejected:'❌ Rejected' };
+  return `<span class="status-pill s-${s||'draft'}">${labels[s]||s||'Draft'}</span>`;
+}
+
+function aiBadge(mode) {
+  if (mode === 'dual') return `<span class="ai-badge ai-dual">✦ Claude + GPT-4o</span>`;
+  return `<span class="ai-badge ai-claude">Claude</span>`;
+}
+
+let _toastTimer;
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.className = 'toast', 4000);
+}
+
+// ── Tab navigation ──────────────────────────────────────
+
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    const ids = ['grants','applications','profile'];
+    b.classList.toggle('active', ids[i] === id);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if (id === 'applications') loadApplications();
+  if (id === 'profile') loadProfile();
+}
+
+// ── Stats ───────────────────────────────────────────────
+
+async function loadStats() {
+  try {
+    const d = await fetch(`${API}/stats`).then(r=>r.json());
+    document.getElementById('s-total').textContent    = d.total_grants ?? 0;
+    document.getElementById('s-high').textContent     = d.high_match_grants ?? 0;
+    document.getElementById('s-pipeline').textContent = d.in_pipeline ?? 0;
+    document.getElementById('s-pipeline-val').textContent = `$${fmtMoneyShort(d.pipeline_value||0)} at stake`;
+    document.getElementById('s-awarded').textContent  = d.awarded_count ?? 0;
+    document.getElementById('s-awarded-val').textContent = fmtMoneyShort(d.awarded_value||0) + ' won';
+
+    const scans = d.recent_scans || [];
+    if (scans.length) {
+      document.getElementById('s-scan').textContent = new Date(scans[0].scanned_at)
+        .toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    }
+
+    // Update pipeline strip counts
+    const bs = d.app_by_status || {};
+    const total = Object.values(bs).reduce((a,b)=>a+b,0);
+    document.getElementById('cnt-all').textContent          = total;
+    document.getElementById('cnt-draft').textContent        = bs.draft || 0;
+    document.getElementById('cnt-submitted').textContent    = bs.submitted || 0;
+    document.getElementById('cnt-under_review').textContent = bs.under_review || 0;
+    document.getElementById('cnt-awarded').textContent      = bs.awarded || 0;
+    document.getElementById('cnt-rejected').textContent     = bs.rejected || 0;
+
+    document.getElementById('hdr-status').textContent =
+      `${d.total_grants || 0} grants · ${d.applications_generated || 0} apps`;
+  } catch(e) {
+    document.getElementById('hdr-status').textContent = 'Server offline';
+  }
+}
+
+// ── Grants tab ──────────────────────────────────────────
+
+async function loadGrants() {
+  const minScore = document.getElementById('minScore').value;
+  const search   = document.getElementById('searchInput').value.trim();
+  document.getElementById('grantsTitle').textContent = 'Saved Grants';
+  renderGrantsLoading();
+  try {
+    let url = `${API}/grants?min_score=${minScore}&limit=50`;
+    if (search) url += `&search=${encodeURIComponent(search)}`;
+    const d = await fetch(url).then(r=>r.json());
+    renderGrants(d.grants || []);
+  } catch(e) { renderGrantsError(); }
+}
+
+async function liveSearch() {
+  const keyword  = document.getElementById('searchInput').value.trim();
+  const minScore = parseInt(document.getElementById('minScore').value || '0');
+  document.getElementById('grantsTitle').textContent = `Live: "${keyword || 'all'}"`;
+  renderGrantsLoading();
+  try {
+    const d = await fetch(`${API}/search`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({keyword, min_score: minScore, limit: 25})
+    }).then(r=>r.json());
+    renderGrants(d.grants || []);
+    showToast(`${d.count} grants found on Grants.gov`, 'info');
+  } catch(e) { renderGrantsError(); }
+}
+
+async function triggerScan(deep = false) {
+  const id = deep ? 'deepScanBtn' : 'scanBtn';
+  const btn = document.getElementById(id);
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner"></span>${deep?'Scanning…':'Scanning…'}`;
+  try {
+    const d = await fetch(`${API}/scan?deep=${deep}`,{method:'POST'}).then(r=>r.json());
+    showToast(d.message, 'success');
+    setTimeout(() => { loadStats(); loadGrants(); }, 3000);
+  } catch(e) {
+    showToast('Scan failed: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = deep ? '⚡ Deep Scan' : '⟳ Scan';
+  }
+}
+
+function renderGrantsLoading() {
+  document.getElementById('grantsBody').innerHTML =
+    `<tr class="loading-row"><td colspan="7"><span class="spinner"></span>Loading…</td></tr>`;
+  document.getElementById('grantsCount').textContent = '';
+}
+function renderGrantsError() {
+  document.getElementById('grantsBody').innerHTML =
+    `<tr class="loading-row"><td colspan="7" style="color:var(--red)">Error loading grants. Is the server running?</td></tr>`;
+}
+
+function renderGrants(grants) {
+  const tbody = document.getElementById('grantsBody');
+  document.getElementById('grantsCount').textContent = `${grants.length} results`;
+  grants.forEach(g => { if (g.name) _liveGrantsMap[g.name] = g; });
+
+  if (!grants.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><h3>No grants found</h3><p>Try scanning or adjusting your filters.</p></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = grants.map(g => {
+    const dl = fmtDeadline(g.deadline);
+    const dlHtml = g.deadline
+      ? `<span style="color:${dl.soon?'var(--orange)':'inherit'};font-weight:${dl.soon?700:400}">${dl.text}${dl.soon?` <small>(${dl.days}d)</small>`:''}</span>`
+      : `<span style="color:var(--muted)">Rolling</span>`;
+    return `
+      <tr>
+        <td>${scoreBadge(g.match_score||0)}</td>
+        <td>
+          <div style="font-weight:600;max-width:280px">${esc(g.name||'—')}</div>
+          <div style="font-size:11px;color:var(--muted)">${esc(g.source||'')}</div>
+        </td>
+        <td style="color:var(--green);font-weight:600">${fmtMoney(g.amount_min,g.amount_max)}</td>
+        <td>${dlHtml}</td>
+        <td>${effortPill(g.effort_level)}</td>
+        <td style="color:var(--muted)">${g.win_probability||0}%</td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn-blue btn-sm" onclick="openApply(${g.id||0},'${esc(g.name||'',true)}','${esc(g.url||'',true)}',${g.amount_max||0},'${g.deadline||''}',false)">
+              Apply ✦
+            </button>
+            <button class="btn-purple btn-sm" onclick="openApply(${g.id||0},'${esc(g.name||'',true)}','${esc(g.url||'',true)}',${g.amount_max||0},'${g.deadline||''}',true)"
+              title="Claude + GPT-4o synthesis">
+              Both AI ⚡
+            </button>
+            ${g.url?`<a href="${esc(g.url)}" target="_blank"><button class="btn-secondary btn-sm">↗</button></a>`:''}
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+// ── Application modal — open from Grants tab ───────────
+
+async function openApply(grantId, grantName, grantUrl, amount, deadline, dual = false) {
+  _currentApp = null;
+  _currentAppId = null;
+  openModal();
+  document.getElementById('modalGrantName').textContent = grantName;
+  document.getElementById('grantLink').href = grantUrl || '#';
+
+  const dl = deadline ? fmtDeadline(deadline) : null;
+  document.getElementById('modalMeta').innerHTML = `
+    <span><strong>Amount:</strong> ${fmtMoney(0, amount)}</span>
+    ${dl ? `<span><strong>Deadline:</strong> ${dl.text}</span>` : ''}
+    <span>${aiBadge(dual ? 'dual' : 'claude')}</span>
+  `;
+
+  setModalStatus('draft');
+  resetAiTabs(dual);
+  showGenerating();
+
+  let resolvedId = grantId;
+  if (!grantId && _liveGrantsMap[grantName]) {
+    // Try to persist live grant first
+    try {
+      await fetch(`${API}/scan`, {method:'POST'});
+      await new Promise(r => setTimeout(r, 2000));
+      const db = await fetch(`${API}/grants?search=${encodeURIComponent(grantName)}&limit=1`).then(r=>r.json());
+      if (db.grants?.length) resolvedId = db.grants[0].id;
+    } catch(_) {}
+  }
+
+  if (!resolvedId) {
+    showModalError('Grant not yet in database. Click "⟳ Scan" first, then load from DB and try again.');
+    return;
+  }
+
+  try {
+    const endpoint = dual ? 'dual-apply' : 'apply';
+    const r = await fetch(`${API}/grants/${resolvedId}/${endpoint}`, {method:'POST'});
+    if (!r.ok) throw new Error(await r.text());
+    const app = await r.json();
+    _currentApp = app;
+    _currentAppId = app.application_id;
+    document.getElementById('modal-app-id-label').textContent = `Application #${_currentAppId} · ${dual?'Claude + GPT-4o':'Claude'}`;
+    renderAppContent(app, dual);
+    await loadStats(); // refresh pipeline counts
+  } catch(e) {
+    showModalError(e.message);
+  }
+}
+
+// ── Application modal — open existing app from Applications tab ──
+
+async function openExistingApp(appId) {
+  _currentApp = null;
+  _currentAppId = appId;
+  openModal();
+  document.getElementById('modalGrantName').textContent = 'Loading…';
+  document.getElementById('grantLink').href = '#';
+  document.getElementById('modalMeta').innerHTML = '';
+  showGenerating();
+
+  try {
+    const app = await fetch(`${API}/applications/${appId}`).then(r=>r.json());
+    _currentApp = app;
+    _currentAppId = appId;
+
+    document.getElementById('modalGrantName').textContent = app.grant_name || `Application #${appId}`;
+    document.getElementById('grantLink').href = app.grant_url || '#';
+    const dl = app.deadline ? fmtDeadline(app.deadline) : null;
+    document.getElementById('modalMeta').innerHTML = `
+      <span><strong>Amount:</strong> ${fmtMoneyShort(app.amount_max||0)}</span>
+      ${dl ? `<span><strong>Deadline:</strong> ${dl.text}</span>` : ''}
+      <span>${aiBadge(app.ai_mode)}</span>
+    `;
+    document.getElementById('modal-app-id-label').textContent = `Application #${appId} · ${app.ai_mode==='dual'?'Claude + GPT-4o':'Claude'}`;
+    setModalStatus(app.status || 'draft');
+    const isDual = app.ai_mode === 'dual';
+    resetAiTabs(isDual);
+    renderAppContent(app, isDual);
+  } catch(e) {
+    showModalError(e.message);
+  }
+}
+
+function openModal() {
+  document.getElementById('appModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('appModal').classList.remove('open');
+  document.body.style.overflow = '';
+  _currentApp = null;
+  _currentAppId = null;
+}
+document.getElementById('appModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function showGenerating() {
+  document.getElementById('content-synth').innerHTML =
+    `<div style="text-align:center;padding:60px;color:var(--muted)"><span class="spinner" style="color:var(--cyan)"></span> Generating with AI — this takes 15–45 seconds…</div>`;
+  document.getElementById('content-claude').innerHTML = '';
+  document.getElementById('content-gpt').innerHTML = '';
+}
+
+function showModalError(msg) {
+  document.getElementById('content-synth').innerHTML =
+    `<div style="background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.3);border-radius:8px;padding:16px;color:var(--red);font-size:13px;margin:20px 0">
+      <strong>Error:</strong> ${esc(msg)}
+    </div>`;
+}
+
+function resetAiTabs(isDual) {
+  // Active Claude tab by default, enable/disable GPT tab
+  document.querySelectorAll('.ai-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.ai-tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-synth').classList.add('active');
+  document.querySelector('.ai-tab-btn').classList.add('active');
+
+  const gptTab = document.getElementById('gpt-tab-btn');
+  if (isDual) {
+    gptTab.disabled = false;
+    gptTab.style.opacity = '';
+    gptTab.querySelector('.ai-chip').className = 'ai-chip chip-gpt';
+  } else {
+    gptTab.disabled = true;
+    gptTab.style.opacity = '.4';
+    gptTab.querySelector('.ai-chip').className = 'ai-chip chip-disabled';
+    document.getElementById('content-gpt').innerHTML =
+      `<div class="empty"><h3>GPT-4o not used</h3><p>Click "Both AI ⚡" on a grant to generate with Claude + GPT-4o and see the comparison here.</p></div>`;
+  }
+}
+
+function switchAiTab(id) {
+  document.querySelectorAll('.ai-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.ai-tab-content').forEach(c => c.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+function renderSections(containerEl, app, useKeys) {
+  const SECTIONS = [
+    { key:'business_description', label:'Business Description' },
+    { key:'mission_statement',    label:'Mission Statement' },
+    { key:'use_of_funds',         label:'Use of Funds' },
+    { key:'impact_statement',     label:'Impact Statement' },
+    { key:'full_narrative',       label:'Full Narrative' },
+  ];
+  containerEl.innerHTML = SECTIONS.map(s => {
+    const text = app[useKeys ? useKeys[s.key] : s.key] || app[s.key] || '';
+    if (!text) return '';
+    return `
+      <div class="app-section">
+        <h4>${s.label}</h4>
+        <div class="app-content">${esc(text)}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderAppContent(app, isDual) {
+  // ── Synthesized tab: use main sections (already the synth version for dual, or claude for single)
+  const synthEl = document.getElementById('content-synth');
+  const synthSections = { ...app };
+  if (isDual && app.synthesized_text) {
+    synthSections.full_narrative = app.synthesized_text;
+  }
+  renderSections(synthEl, synthSections, null);
+
+  // ── Claude tab
+  const claudeEl = document.getElementById('content-claude');
+  if (isDual && app.claude_sections) {
+    renderSections(claudeEl, app.claude_sections, null);
+  } else {
+    // Claude-only: same content
+    renderSections(claudeEl, app, null);
+    const note = document.createElement('div');
+    note.style.cssText = 'font-size:12px;color:var(--muted);text-align:center;padding:12px 0';
+    note.textContent = 'Showing Claude-only application (same as Synthesized)';
+    claudeEl.prepend(note);
+  }
+
+  // ── GPT-4o tab
+  if (isDual && app.openai_sections) {
+    const gptEl = document.getElementById('content-gpt');
+    renderSections(gptEl, app.openai_sections, null);
+  }
+}
+
+// ── Status management ───────────────────────────────────
+
+function setModalStatus(status) {
+  const badge = document.getElementById('modal-status-badge');
+  const labels = { draft:'📝 Draft', submitted:'📤 Submitted', under_review:'🔍 Under Review', awarded:'🏆 Awarded!', rejected:'❌ Rejected' };
+  badge.className = `status-pill s-${status}`;
+  badge.textContent = labels[status] || status;
+}
+
+async function setStatus(newStatus) {
+  if (!_currentAppId) { showToast('No application loaded yet.', 'error'); return; }
+  try {
+    const r = await fetch(`${API}/applications/${_currentAppId}/status`, {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({status: newStatus, notes: ''})
+    });
+    if (!r.ok) throw new Error(await r.text());
+    setModalStatus(newStatus);
+    showToast(`Status updated → ${newStatus}`, 'success');
+    await loadStats();
+    if (document.getElementById('tab-applications').classList.contains('active')) {
+      loadApplications(_activeAppFilter === 'all' ? null : _activeAppFilter);
+    }
+  } catch(e) {
+    showToast('Status update failed: ' + e.message, 'error');
+  }
+}
+
+// ── Copy helpers ────────────────────────────────────────
+
+function copySection(key) {
+  const text = _currentApp?.[key] || '';
+  if (!text) { showToast('Nothing to copy.', 'error'); return; }
+  navigator.clipboard.writeText(text).then(() => showToast('Copied!'));
+}
+
+function copyAll() {
+  if (!_currentApp) { showToast('No application loaded.', 'error'); return; }
+  const parts = [
+    `GRANT: ${_currentApp.grant_name || ''}`,
+    '\n=== BUSINESS DESCRIPTION ===\n' + (_currentApp.business_description || ''),
+    '\n=== MISSION STATEMENT ===\n' + (_currentApp.mission_statement || ''),
+    '\n=== USE OF FUNDS ===\n' + (_currentApp.use_of_funds || ''),
+    '\n=== IMPACT STATEMENT ===\n' + (_currentApp.impact_statement || ''),
+    '\n=== FULL NARRATIVE ===\n' + (_currentApp.full_narrative || ''),
+  ];
+  navigator.clipboard.writeText(parts.join('\n')).then(() => showToast('All sections copied!'));
+}
+
+// ── Applications tab ────────────────────────────────────
+
+async function loadApplications(status = null) {
+  renderAppsLoading();
+  try {
+    let url = `${API}/applications?limit=100`;
+    if (status) url += `&status=${status}`;
+    const d = await fetch(url).then(r=>r.json());
+    _allApps = d.applications || [];
+    renderApplications(_allApps);
+  } catch(e) {
+    renderAppsError();
+  }
+}
+
+function filterApps(status, btn) {
+  _activeAppFilter = status;
+  document.querySelectorAll('.pipe-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = status === 'all' ? _allApps : _allApps.filter(a => a.status === status);
+  renderApplications(filtered);
+}
+
+function renderAppsLoading() {
+  document.getElementById('appsBody').innerHTML =
+    `<tr class="loading-row"><td colspan="7"><span class="spinner"></span>Loading…</td></tr>`;
+  document.getElementById('appsCount').textContent = '';
+}
+function renderAppsError() {
+  document.getElementById('appsBody').innerHTML =
+    `<tr class="loading-row"><td colspan="7" style="color:var(--red)">Error loading applications.</td></tr>`;
+}
+
+function renderApplications(apps) {
+  document.getElementById('appsCount').textContent = `${apps.length} results`;
+  const tbody = document.getElementById('appsBody');
+
+  if (!apps.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty">
+      <h3>No applications here</h3>
+      <p>Go to the Grants tab and click <strong>Apply ✦</strong> or <strong>Both AI ⚡</strong> to generate your first application.</p>
+    </div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = apps.map(a => `
+    <tr>
+      <td style="color:var(--muted);font-size:12px">#${a.id}</td>
+      <td>
+        <div style="font-weight:600;max-width:260px">${esc(a.grant_name||'Unknown Grant')}</div>
+        ${a.amount_max ? `<div style="font-size:11px;color:var(--green)">${fmtMoneyShort(a.amount_max)}</div>` : ''}
+      </td>
+      <td style="color:var(--green);font-weight:600">${fmtMoneyShort(a.amount_max||0)}</td>
+      <td>${aiBadge(a.ai_mode)}</td>
+      <td>${statusPill(a.status)}</td>
+      <td style="font-size:12px;color:var(--muted)">${fmtDate(a.generated_at)}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn-blue btn-sm" onclick="openExistingApp(${a.id})">View / Edit</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+// ── Profile tab ─────────────────────────────────────────
+
+let _profile = {};
+
+async function loadProfile() {
+  try {
+    _profile = await fetch(`${API}/profile`).then(r=>r.json());
+    renderProfile(_profile);
+  } catch(e) {
+    document.getElementById('profileGrid').innerHTML =
+      `<div style="color:var(--red);padding:24px">Failed to load profile.</div>`;
+  }
+}
+
+function renderProfile(p) {
+  const loc = p.location || {};
+  const contact = p.contact || {};
+  document.getElementById('profileGrid').innerHTML = `
+    <div class="profile-card">
+      <h3>Business Info</h3>
+      <div class="profile-field"><label>Business Name</label><input id="pf-name" value="${esc(p.business_name||'')}" /></div>
+      <div class="profile-field"><label>Business Type</label><input id="pf-type" value="${esc(p.business_type||'')}" /></div>
+      <div class="profile-field"><label>Industry</label><input id="pf-industry" value="${esc(p.industry||'')}" /></div>
+      <div class="profile-field"><label>Founded Year</label><input id="pf-founded" type="number" value="${p.founded_year||''}" /></div>
+      <div class="profile-field"><label>Employees</label><input id="pf-employees" type="number" value="${p.employees||''}" /></div>
+      <div class="profile-field"><label>Annual Revenue ($)</label><input id="pf-revenue" type="number" value="${p.annual_revenue||''}" /></div>
+      <div class="profile-field"><label>EIN</label><input id="pf-ein" value="${esc(p.ein||'')}" placeholder="e.g. 12-3456789" /></div>
+    </div>
+    <div class="profile-card">
+      <h3>Contact & Location</h3>
+      <div class="profile-field"><label>Email</label><input id="pf-email" type="email" value="${esc(contact.email||'')}" /></div>
+      <div class="profile-field"><label>Phone</label><input id="pf-phone" value="${esc(contact.phone||'')}" /></div>
+      <div class="profile-field"><label>Website</label><input id="pf-website" value="${esc(contact.website||'')}" /></div>
+      <div class="profile-field"><label>City</label><input id="pf-city" value="${esc(loc.city||'')}" /></div>
+      <div class="profile-field"><label>State</label><input id="pf-state" value="${esc(loc.state||'')}" /></div>
+      <div class="profile-field"><label>ZIP</label><input id="pf-zip" value="${esc(loc.zip||'')}" /></div>
+      <div class="profile-field"><label>Notification Email</label><input id="pf-notify" type="email" value="${esc(p.notify_email||'')}" /></div>
+    </div>
+    <div class="profile-card">
+      <h3>Mission & Description</h3>
+      <div class="profile-field"><label>Mission</label><textarea id="pf-mission">${esc(p.mission||'')}</textarea></div>
+      <div class="profile-field"><label>Business Description</label><textarea id="pf-desc" style="min-height:100px">${esc(p.description||'')}</textarea></div>
+      <div class="profile-field"><label>Use of Funds Template</label><textarea id="pf-funds">${esc(p.use_of_funds_template||'')}</textarea></div>
+    </div>
+    <div class="profile-card">
+      <h3>Demographics & Targeting</h3>
+      <div class="profile-field"><label>Owner Demographics (comma-separated)</label>
+        <input id="pf-demo" value="${esc((p.owner_demographics||[]).join(', '))}" placeholder="e.g. Black-owned, minority-owned" /></div>
+      <div class="profile-field"><label>Target Grant Types (comma-separated)</label>
+        <input id="pf-grant-types" value="${esc((p.target_grant_types||[]).join(', '))}" /></div>
+      <div class="profile-field"><label>Min Grant Amount ($)</label><input id="pf-min-grant" type="number" value="${p.min_grant_amount||''}" /></div>
+      <div class="profile-field"><label>Max Effort Days</label><input id="pf-max-effort" type="number" value="${p.max_effort_days||''}" /></div>
+      <div style="margin-top:16px">
+        <button class="profile-save-btn" onclick="saveProfile()">💾 Save Profile</button>
+      </div>
+    </div>
+  `;
+}
+
+async function saveProfile() {
+  const g = id => (document.getElementById(id)||{}).value || '';
+  const data = {
+    business_name:         g('pf-name'),
+    business_type:         g('pf-type'),
+    industry:              g('pf-industry'),
+    founded_year:          parseInt(g('pf-founded'))||_profile.founded_year,
+    employees:             parseInt(g('pf-employees'))||_profile.employees,
+    annual_revenue:        parseInt(g('pf-revenue'))||_profile.annual_revenue,
+    ein:                   g('pf-ein'),
+    mission:               g('pf-mission'),
+    description:           g('pf-desc'),
+    use_of_funds_template: g('pf-funds'),
+    notify_email:          g('pf-notify'),
+    min_grant_amount:      parseInt(g('pf-min-grant'))||_profile.min_grant_amount,
+    max_effort_days:       parseInt(g('pf-max-effort'))||_profile.max_effort_days,
+    owner_demographics:    g('pf-demo').split(',').map(s=>s.trim()).filter(Boolean),
+    target_grant_types:    g('pf-grant-types').split(',').map(s=>s.trim()).filter(Boolean),
+    location: { city: g('pf-city'), state: g('pf-state'), zip: g('pf-zip'), address: (_profile.location||{}).address||'' },
+    contact:  { email: g('pf-email'), phone: g('pf-phone'), website: g('pf-website') },
+  };
+
+  try {
+    await fetch(`${API}/profile`, {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({data})
+    });
+    _profile = {..._profile, ...data};
+    showToast('Profile saved!', 'success');
+  } catch(e) {
+    showToast('Failed to save: ' + e.message, 'error');
+  }
+}
+
+// ── Init ────────────────────────────────────────────────
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadStats();
+  loadGrants();
+  document.getElementById('searchInput').addEventListener('keyup', e => {
+    if (e.key === 'Enter') liveSearch();
+  });
+  // Auto-refresh stats every 60s
+  setInterval(loadStats, 60000);
+});
+</script>
+
+</body>
+</html>

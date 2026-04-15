@@ -1,0 +1,40 @@
+{
+  "business_name": "GRAY HORIZONS ENTERPRISE",
+  "business_type": "DBA",
+  "industry": "Technology / Construction",
+  "founded_year": 2020,
+  "employees": 5,
+  "annual_revenue": 250000,
+  "location": {
+    "address": "",
+    "city": "Rialto",
+    "state": "CA",
+    "zip": "92377"
+  },
+  "contact": {
+    "email": "",
+    "phone": "",
+    "website": ""
+  },
+  "ein": "",
+  "owner_demographics": ["Black-owned", "minority-owned"],
+  "mission": "To provide innovative technology solutions that empower underserved communities through accessible digital tools and services.",
+  "description": "We are a Black-owned technology and general contracting firm based in Rialto, CA focused on smart home integration, commercial renovations, and community development projects.",
+  "use_of_funds_template": "Funds will be used to expand our team, purchase equipment, invest in marketing, and scale operations to serve more clients across Southern California and beyond.",
+  "past_projects": [
+    "Commercial renovation of 15,000 sq ft retail space",
+    "Smart home installations for 50+ residential clients",
+    "Community Wi-Fi infrastructure project serving 200 residents"
+  ],
+  "target_grant_types": [
+    "small business",
+    "minority business",
+    "technology",
+    "construction",
+    "community development",
+    "workforce development"
+  ],
+  "max_effort_days": 7,
+  "min_grant_amount": 5000,
+  "notify_email": ""
+}
