@@ -270,39 +270,52 @@ def dashboard():
 <title>Gray Horizons — Command Center</title>
 <style>
   *{{box-sizing:border-box;margin:0;padding:0}}
-  body{{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;}}
-  .header{{background:#020617;padding:16px;text-align:center;font-size:22px;font-weight:bold;border-bottom:1px solid #1e293b;}}
-  .nav{{display:flex;background:#020617;border-bottom:2px solid #1e293b;flex-wrap:wrap;}}
-  .nav a{{padding:10px 22px;color:#64748b;font-size:13px;text-decoration:none;cursor:pointer;border-bottom:3px solid transparent;}}
+  html,body{{height:100%;}}
+  body{{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;overflow-x:hidden;}}
+  .header{{background:#020617;padding:12px 16px;text-align:center;font-size:18px;font-weight:bold;border-bottom:1px solid #1e293b;}}
+  /* Nav — scrollable on mobile */
+  .nav{{display:flex;background:#020617;border-bottom:2px solid #1e293b;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;scrollbar-width:none;}}
+  .nav::-webkit-scrollbar{{display:none;}}
+  .nav a{{padding:10px 16px;color:#64748b;font-size:13px;text-decoration:none;cursor:pointer;border-bottom:3px solid transparent;display:inline-block;flex-shrink:0;}}
   .nav a.active{{color:#38bdf8;border-bottom:3px solid #38bdf8;font-weight:bold;}}
   .nav a.grants-tab{{color:#a78bfa;}}
   .nav a.grants-tab.active{{color:#a78bfa;border-bottom:3px solid #a78bfa;}}
-  .topbar{{display:flex;justify-content:space-between;align-items:center;padding:10px 24px;background:#020617;border-bottom:1px solid #1e293b;flex-wrap:wrap;gap:8px;}}
-  .stats{{display:flex;gap:20px;font-size:13px;color:#94a3b8;}}
+  .topbar{{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:#020617;border-bottom:1px solid #1e293b;flex-wrap:wrap;gap:6px;}}
+  .stats{{display:flex;gap:12px;font-size:12px;color:#94a3b8;flex-wrap:wrap;}}
   .stat-val{{color:#38bdf8;font-weight:bold;}}
-  .btn-link{{background:#3b82f6;color:white;border:none;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:12px;text-decoration:none;display:inline-block;}}
+  .btn-link{{background:#3b82f6;color:white;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;text-decoration:none;display:inline-block;}}
   .btn-link:hover{{background:#2563eb;}}
   .tab-content{{display:none;}}
   .tab-content.active{{display:block;}}
 
   /* Outreach cards */
-  .card{{background:#1e293b;padding:18px;margin:16px auto;width:92%;max-width:720px;border-radius:10px;}}
-  .card-title{{font-size:18px;color:#38bdf8;font-weight:bold;}}
-  .card-sub{{color:#94a3b8;font-size:13px;margin:4px 0 10px;}}
-  .card-msg{{line-height:1.6;font-size:14px;}}
+  .card{{background:#1e293b;padding:16px;margin:12px auto;width:94%;max-width:720px;border-radius:10px;}}
+  .card-title{{font-size:16px;color:#38bdf8;font-weight:bold;}}
+  .card-sub{{color:#94a3b8;font-size:12px;margin:4px 0 8px;}}
+  .card-msg{{line-height:1.6;font-size:13px;word-break:break-word;}}
   .btn-send{{background:#22c55e;color:white;border:none;padding:9px 16px;border-radius:6px;cursor:pointer;font-size:13px;text-decoration:none;display:inline-block;margin-top:10px;}}
   .btn-skip{{background:#ef4444;color:white;border:none;padding:9px 16px;border-radius:6px;cursor:pointer;font-size:13px;text-decoration:none;display:inline-block;margin-top:10px;margin-left:8px;}}
   .btn-disabled{{background:#475569;color:#94a3b8;border:none;padding:9px 16px;border-radius:6px;font-size:13px;margin-top:10px;}}
   .note{{text-align:center;font-size:11px;color:#475569;padding:6px;}}
 
-  /* Grants table */
+  /* Grant iframe wrapper */
+  .grants-iframe-wrap{{position:relative;width:100%;height:calc(100vh - 90px);overflow:auto;-webkit-overflow-scrolling:touch;}}
+  .grants-iframe-wrap iframe{{width:100%;height:100%;border:none;display:block;}}
+  /* Mobile fallback — shown only on small screens */
+  .grants-mobile-fallback{{display:none;padding:32px 20px;text-align:center;}}
+  .grants-mobile-fallback a{{display:inline-block;background:#7c3aed;color:white;padding:14px 28px;border-radius:8px;font-size:15px;font-weight:bold;text-decoration:none;margin-top:12px;}}
+  @media(max-width:640px){{
+    .grants-iframe-wrap{{display:none;}}
+    .grants-mobile-fallback{{display:block;}}
+    .header{{font-size:15px;padding:10px;}}
+    .nav a{{padding:8px 12px;font-size:12px;}}
+    .card{{padding:14px;}}
+    .topbar{{padding:8px 12px;}}
+    .stats{{gap:8px;font-size:11px;}}
+  }}
+
+  /* Grants table (legacy, kept for reference) */
   .grants-wrap{{padding:16px 20px;}}
-  .grants-topbar{{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}}
-  .grants-topbar h2{{font-size:16px;color:#a78bfa;}}
-  table{{width:100%;border-collapse:collapse;font-size:13px;}}
-  th{{background:#1e293b;padding:10px 12px;text-align:left;color:#94a3b8;font-weight:normal;border-bottom:1px solid #334155;}}
-  td{{padding:10px 12px;border-bottom:1px solid #1e293b;vertical-align:top;}}
-  tr:hover td{{background:#1e293b55;}}
   .badge{{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:bold;}}
   .badge-high{{background:#14532d;color:#4ade80;}}
   .badge-med{{background:#1e3a5f;color:#60a5fa;}}
@@ -365,17 +378,28 @@ def dashboard():
 
     html += "</div><!-- end outreach tab -->\n"
 
-    # GRANTS TAB — full grant agent embedded as iframe
+    # GRANTS TAB — full grant agent embedded as iframe (desktop) + link (mobile)
     html += f"""
 <!-- GRANTS TAB -->
-<div id="content-grants" class="tab-content {'active' if active_tab=='grants' else ''}" style="height:calc(100vh - 90px);overflow:hidden;">
-  <iframe
-    id="grants-iframe"
-    src="{URL_GRANTS}"
-    style="width:100%;height:100%;border:none;display:block;"
-    title="Grant Agent System"
-    loading="lazy"
-  ></iframe>
+<div id="content-grants" class="tab-content {'active' if active_tab=='grants' else ''}">
+  <!-- Desktop: full embedded grant agent -->
+  <div class="grants-iframe-wrap">
+    <iframe
+      id="grants-iframe"
+      src="{URL_GRANTS}"
+      title="Grant Agent System"
+      loading="lazy"
+      allowfullscreen
+    ></iframe>
+  </div>
+  <!-- Mobile: tap to open in full browser -->
+  <div class="grants-mobile-fallback">
+    <div style="font-size:32px;margin-bottom:12px;">💰</div>
+    <div style="font-size:18px;font-weight:bold;color:#a78bfa;margin-bottom:8px;">Grant Agent System</div>
+    <div style="color:#94a3b8;font-size:14px;margin-bottom:20px;">12 curated grants · SBIR · MBDA · SBA 8(a) · Google Black Founders Fund</div>
+    <a href="{URL_GRANTS}" target="_blank">Open Grant Agent ↗</a>
+    <div style="color:#475569;font-size:12px;margin-top:16px;">Opens full dashboard with scan, apply, and AI application tools</div>
+  </div>
 </div><!-- end grants tab -->
 
 <script>
