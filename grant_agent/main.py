@@ -93,52 +93,42 @@ threading.Thread(target=_keep_alive, daemon=True).start()
 
 @app.on_event("startup")
 async def on_startup():
-    # Launch background thread immediately — /health answers before ANY I/O
-    # This prevents Railway healthcheck timeout when SQLite volume is locked
-    # by a still-running previous container during rolling deploy.
-    def _background_init():
-        import time, json as _json
-        from pathlib import Path as _Path
+    import json as _json
+    from pathlib import Path as _Path
 
-        # Step 1: DB init (may briefly wait for SQLite lock on volume)
-        try:
-            init_db()
-        except Exception as e:
-            print(f"[Startup] init_db error: {e}")
+    # Step 1: DB init — synchronous so /health is ready immediately after
+    init_db()
 
-        # Step 2: Start cron scheduler
-        try:
-            start_scheduler()
-        except Exception as e:
-            print(f"[Startup] Scheduler error: {e}")
+    # Step 2: Seed curated grants so DB is never empty on first deploy
+    try:
+        from discovery.grants_gov import CURATED_GRANTS
+        from database.db import upsert_grant, update_scores
+        from scoring.scorer import score_grant
+        _pfile = _Path(__file__).parent / "user_profile.json"
+        profile = _json.loads(_pfile.read_text()) if _pfile.exists() else {}
+        seeded = 0
+        for grant in CURATED_GRANTS:
+            gid, is_new = upsert_grant(grant)
+            scores = score_grant(grant, profile)
+            update_scores(gid, scores)
+            if is_new:
+                seeded += 1
+        print(f"[Startup] Seeded {seeded} new curated grants ({len(CURATED_GRANTS)} total in library)")
+    except Exception as e:
+        print(f"[Startup] Curated grant seeding error (non-fatal): {e}")
 
-        # Step 3: Seed curated grants so DB is never empty
-        try:
-            from discovery.grants_gov import CURATED_GRANTS
-            from database.db import upsert_grant, update_scores
-            from scoring.scorer import score_grant
-            _pfile = _Path(__file__).parent / "user_profile.json"
-            profile = _json.loads(_pfile.read_text()) if _pfile.exists() else {}
-            seeded = 0
-            for grant in CURATED_GRANTS:
-                gid, is_new = upsert_grant(grant)
-                update_scores(gid, score_grant(grant, profile))
-                if is_new:
-                    seeded += 1
-            print(f"[Startup] Seeded {seeded} new curated grants ({len(CURATED_GRANTS)} total)")
-        except Exception as e:
-            print(f"[Startup] Seed error (non-fatal): {e}")
+    # Step 3: Start cron scheduler — synchronous
+    start_scheduler()
 
-        # Step 4: Live scan to top up from Grants.gov
-        try:
-            from scheduler.jobs import run_daily_scan
-            print("[Startup] Running initial live grant scan...")
-            run_daily_scan()
-        except Exception as e:
-            print(f"[Startup] Initial scan error (non-fatal): {e}")
+    # Step 4: Live scan in background (non-blocking — /health already answering)
+    def _initial_scan():
+        import time
+        time.sleep(3)
+        from scheduler.jobs import run_daily_scan
+        run_daily_scan()
 
-    threading.Thread(target=_background_init, daemon=True).start()
-    print("[Startup] Server ready — background init running")
+    threading.Thread(target=_initial_scan, daemon=True).start()
+    print("[Startup] Server ready — live scan running in background")
 
     print(f"\n  API:       http://localhost:{settings.port}/api")
     print(f"  Dashboard: http://localhost:{settings.port}/")
