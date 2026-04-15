@@ -118,22 +118,22 @@ def run_deep_scan():
 
 def start_scheduler() -> BackgroundScheduler:
     """Initialize and start the background scheduler."""
-    scheduler = BackgroundScheduler()
+    scheduler = BackgroundScheduler(timezone="America/Los_Angeles")
 
-    # Daily scan at configured time
+    # Daily scan at configured time (Pacific)
     scheduler.add_job(
         run_daily_scan,
-        trigger=CronTrigger(hour=settings.scan_hour, minute=settings.scan_minute),
+        trigger=CronTrigger(hour=settings.scan_hour, minute=settings.scan_minute, timezone="America/Los_Angeles"),
         id="daily_scan",
         name="Daily Grant Scan",
         replace_existing=True,
         misfire_grace_time=3600,
     )
 
-    # Weekly deep scan — Sundays at 3 AM
+    # Weekly deep scan — Sundays at 3 AM Pacific
     scheduler.add_job(
         run_deep_scan,
-        trigger=CronTrigger(day_of_week="sun", hour=3, minute=0),
+        trigger=CronTrigger(day_of_week="sun", hour=3, minute=0, timezone="America/Los_Angeles"),
         id="weekly_deep_scan",
         name="Weekly Deep Scan (Playwright)",
         replace_existing=True,
@@ -141,5 +141,5 @@ def start_scheduler() -> BackgroundScheduler:
     )
 
     scheduler.start()
-    print(f"[Scheduler] Started. Daily scan at {settings.scan_hour:02d}:{settings.scan_minute:02d}")
+    print(f"[Scheduler] Started. Daily scan at {settings.scan_hour:02d}:{settings.scan_minute:02d} Pacific")
     return scheduler

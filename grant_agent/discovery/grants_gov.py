@@ -7,11 +7,11 @@ Docs: https://api.grants.gov/v2/api-docs
 import requests
 from .normalizer import normalize
 
-GRANTS_GOV_SEARCH = "https://api.grants.gov/v2/opportunities/search"
+GRANTS_GOV_SEARCH = "https://api.grants.gov/v1/api/search2"
 
 DEFAULT_PARAMS = {
     "keyword": "",
-    "oppStatuses": "forecasted|posted",
+    "oppStatuses": ["posted"],
     "rows": 25,
     "startRecordNum": 0,
     "sortBy": "openDate|desc",
@@ -53,7 +53,7 @@ def search(keyword: str = "", rows: int = 25, offset: int = 0) -> list[dict]:
         print(f"[Grants.gov] Error: {e}")
         return []
 
-    opportunities = data.get("data", {}).get("oppHits", [])
+    opportunities = data.get("oppHits", []) or data.get("data", {}).get("oppHits", [])
     results = []
     for opp in opportunities:
         grant = normalize(opp, source="grants.gov")
