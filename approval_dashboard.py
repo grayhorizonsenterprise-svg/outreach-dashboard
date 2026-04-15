@@ -358,8 +358,25 @@ def dashboard():
         <a href="{URL_HVAC}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">HVAC</a>
         <a href="{URL_PLUMBING}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">Plumbing</a>
         <a href="{URL_HUB}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">All Niches</a>
-        <a href="{URL_GRANTS}" target="_blank" style="padding:10px 24px;color:#a78bfa;font-size:13px;font-weight:bold;text-decoration:none;">💰 Grants ↗</a>
-    </div>"""
+        <a onclick="toggleGrants()" style="padding:10px 24px;color:#a78bfa;font-size:13px;font-weight:bold;text-decoration:none;cursor:pointer;">💰 Grants</a>
+    </div>
+    <div id="grants-tab" style="display:none;width:100%;height:90vh;border:none;">
+        <iframe src="{URL_GRANTS}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>
+    </div>
+    <script>
+    function toggleGrants() {{
+        var tab = document.getElementById('grants-tab');
+        var outreach = document.getElementById('outreach-content');
+        if (tab.style.display === 'none') {{
+            tab.style.display = 'block';
+            if (outreach) outreach.style.display = 'none';
+        }} else {{
+            tab.style.display = 'none';
+            if (outreach) outreach.style.display = 'block';
+        }}
+    }}
+    </script>
+    <div id="outreach-content">"""
 
     status_text = '<span class="pipeline-active">Scraping new leads now...</span>' if pipeline_running else (
         f"Last run: {fmt_pacific(last_run_time)}" if last_run_time else "Starting soon..."
@@ -418,6 +435,7 @@ def dashboard():
         </div>
         """
 
+    html += "</div>"  # close outreach-content
     return html
 
 # =========================
