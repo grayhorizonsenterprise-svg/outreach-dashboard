@@ -26,11 +26,12 @@ app = Flask(__name__)
 DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 os.makedirs(DATA_DIR, exist_ok=True)
 
-URL_HOA    = os.getenv("HOA_URL", "#")
-URL_DENTAL = os.getenv("DENTAL_URL", "#")
-URL_HVAC   = os.getenv("HVAC_URL", "#")
-URL_HUB      = os.getenv("HUB_URL", "#")
-URL_PLUMBING = os.getenv("PLUMBING_URL", "#")
+URL_HOA       = os.getenv("HOA_URL", "#")
+URL_DENTAL    = os.getenv("DENTAL_URL", "#")
+URL_HVAC      = os.getenv("HVAC_URL", "#")
+URL_HUB       = os.getenv("HUB_URL", "#")
+URL_PLUMBING  = os.getenv("PLUMBING_URL", "#")
+URL_GRANTS    = os.getenv("GRANT_AGENT_URL", "http://localhost:8000")
 PIPELINE_SCRIPTS = ["prospect_finder.py", "prospect_enricher.py",
                     "prospect_qualifier.py", "outreach_generator.py"]
 
@@ -77,9 +78,17 @@ threading.Thread(target=run_pipeline_loop, daemon=True).start()
 # =========================
 def keep_alive():
     time.sleep(60)
+    # Support Render (RENDER_EXTERNAL_URL) and Railway (RAILWAY_PUBLIC_DOMAIN)
     render_url = os.getenv("RENDER_EXTERNAL_URL", "")
+    railway_domain = os.getenv("RAILWAY_PUBLIC_DOMAIN", "")
     port = os.getenv("PORT", "8080")
-    target = render_url if render_url else f"http://127.0.0.1:{port}"
+    if render_url:
+        target = render_url.rstrip("/")
+    elif railway_domain:
+        target = f"https://{railway_domain.rstrip('/')}"
+    else:
+        target = f"http://127.0.0.1:{port}"
+    print(f"[KeepAlive] Pinging {target}/health every 10 min", flush=True)
     while True:
         try:
             requests.get(f"{target}/health", timeout=10)
@@ -343,12 +352,13 @@ def dashboard():
 
     <div class="header">Gray Horizons — HOA Dashboard</div>
     """
-    html += f"""<div style="display:flex;justify-content:center;gap:0;background:#020617;border-bottom:1px solid #1e293b;">
+    html += f"""<div style="display:flex;justify-content:center;gap:0;background:#020617;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
         <a href="{URL_HOA}" style="padding:10px 24px;color:#38bdf8;font-weight:bold;font-size:13px;text-decoration:none;border-bottom:2px solid #38bdf8;">HOA</a>
         <a href="{URL_DENTAL}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">Dental</a>
         <a href="{URL_HVAC}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">HVAC</a>
         <a href="{URL_PLUMBING}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">Plumbing</a>
         <a href="{URL_HUB}" style="padding:10px 24px;color:#64748b;font-size:13px;text-decoration:none;">All Niches</a>
+        <a href="{URL_GRANTS}" target="_blank" style="padding:10px 24px;color:#a78bfa;font-size:13px;font-weight:bold;text-decoration:none;">💰 Grants ↗</a>
     </div>"""
 
     status_text = '<span class="pipeline-active">Scraping new leads now...</span>' if pipeline_running else (

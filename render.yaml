@@ -1,4 +1,5 @@
 services:
+  # ── Outreach Dashboard (Flask) ─────────────────────────────────────────────
   - type: web
     name: ghe-dashboard
     runtime: python
@@ -6,6 +7,7 @@ services:
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt
     startCommand: gunicorn approval_dashboard:app --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120 --keep-alive 10 --log-level info
     healthCheckPath: /health
+    autoDeploy: true
     envVars:
       - key: DATA_DIR
         value: /data
@@ -19,7 +21,52 @@ services:
         sync: false
       - key: SENDER_NAME
         value: Alex
+      # Set to the live Render URL of ghe-grant-agent after first deploy
+      - key: GRANT_AGENT_URL
+        sync: false
     disk:
       name: ghe-data
+      mountPath: /data
+      sizeGB: 1
+
+  # ── Grant Agent (FastAPI) ──────────────────────────────────────────────────
+  - type: web
+    name: ghe-grant-agent
+    runtime: python
+    pythonVersion: "3.11"
+    rootDir: grant_agent
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    # gunicorn + uvicorn worker = production-ready, survives crashes, auto-restarts
+    startCommand: gunicorn main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120 --keep-alive 10 --log-level info
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: RENDER
+        value: "true"
+      - key: ENV
+        value: production
+      - key: SCAN_HOUR
+        value: "6"
+      - key: SCAN_MINUTE
+        value: "0"
+      # Set these in the Render dashboard — never commit real keys
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: NOTIFY_EMAIL
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+    disk:
+      name: grant-agent-data
       mountPath: /data
       sizeGB: 1
