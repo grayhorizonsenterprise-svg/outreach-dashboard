@@ -66,7 +66,7 @@ def run_pipeline_once():
     print("[ENGINE] Cycle done.", flush=True)
 
 def run_pipeline_loop():
-    time.sleep(5)  # let server start first
+    time.sleep(600)  # wait 10 min — let gunicorn fully stabilize before pipeline starts
     while True:
         run_pipeline_once()
         print("[ENGINE] Sleeping 4 hours until next cycle.", flush=True)
@@ -172,10 +172,12 @@ def _build_html_body(name, sender_name, message):
     """
 
 def _send_via_sendgrid(api_key, sender_addr, sender_name, to_email, subject, html_body, name, company):
+    # Force lowercase — SendGrid sender verification is case-sensitive
+    verified_from = "grayhorizonsenterprise@gmail.com"
     payload = {
         "personalizations": [{"to": [{"email": to_email}]}],
-        "from": {"email": sender_addr, "name": sender_name},
-        "reply_to": {"email": sender_addr, "name": sender_name},
+        "from": {"email": verified_from, "name": sender_name},
+        "reply_to": {"email": verified_from, "name": sender_name},
         "subject": subject,
         "content": [{"type": "text/html", "value": html_body}]
     }
