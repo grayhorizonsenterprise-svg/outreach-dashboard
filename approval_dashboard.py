@@ -162,23 +162,8 @@ def log_sent(to_email, name, company, subject, success, error=""):
             writer.writeheader()
         writer.writerow(row)
 
-def send_email(to_email, name, company, message):
-    api_key     = os.getenv("SENDGRID_API_KEY")
-    sender_addr = os.getenv("SENDER_EMAIL")
-    sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
-    subject     = f"{company} — quick question"
-
-    if not api_key or not sender_addr:
-        print("[SEND] ERROR: Missing SENDGRID_API_KEY or SENDER_EMAIL env vars")
-        log_sent(to_email, name, company, subject, False, "missing env vars")
-        return False
-
-    if not to_email:
-        print("[SEND] ERROR: No recipient email")
-        log_sent(to_email, name, company, subject, False, "no recipient")
-        return False
-
-    html_body = f"""
+def _build_html_body(name, sender_name, message):
+    return f"""
     <div style="font-family:Arial;line-height:1.6;">
         <p>Hi {name or 'there'},</p>
         <p>{format_message(message)}</p>
@@ -186,6 +171,7 @@ def send_email(to_email, name, company, message):
     </div>
     """
 
+def _send_via_sendgrid(api_key, sender_addr, sender_name, to_email, subject, html_body, name, company):
     payload = {
         "personalizations": [{"to": [{"email": to_email}]}],
         "from": {"email": sender_addr, "name": sender_name},
@@ -193,30 +179,88 @@ def send_email(to_email, name, company, message):
         "subject": subject,
         "content": [{"type": "text/html", "value": html_body}]
     }
-
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
-
     try:
         resp = requests.post(
             "https://api.sendgrid.com/v3/mail/send",
             json=payload, headers=headers, timeout=15
         )
         if resp.status_code == 202:
-            print(f"[SEND] OK -> {to_email} ({company})")
-            log_sent(to_email, name, company, subject, True)
+            print(f"[SEND:SendGrid] OK -> {to_email} ({company})")
+            log_sent(to_email, name, company, subject, True, "sendgrid")
             return True
         else:
-            error_msg = f"HTTP {resp.status_code}: {resp.text[:300]}"
-            print(f"[SEND] FAILED -> {to_email} | {error_msg}")
-            log_sent(to_email, name, company, subject, False, error_msg)
+            err = f"HTTP {resp.status_code}: {resp.text[:300]}"
+            print(f"[SEND:SendGrid] FAILED -> {to_email} | {err}")
+            log_sent(to_email, name, company, subject, False, f"sendgrid: {err}")
             return False
     except Exception as e:
-        print(f"[SEND] EXCEPTION -> {to_email} | {e}")
-        log_sent(to_email, name, company, subject, False, str(e))
+        print(f"[SEND:SendGrid] EXCEPTION -> {to_email} | {e}")
+        log_sent(to_email, name, company, subject, False, f"sendgrid exception: {e}")
         return False
+
+def _send_via_smtp(sender_addr, smtp_password, to_email, subject, html_body, name, company):
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText as MIMETextPart
+    try:
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = subject
+        msg["From"]    = sender_addr
+        msg["To"]      = to_email
+        msg.attach(MIMETextPart(html_body, "html"))
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.ehlo()
+        server.starttls()
+        server.login(sender_addr, smtp_password)
+        server.sendmail(sender_addr, to_email, msg.as_string())
+        server.quit()
+        print(f"[SEND:SMTP] OK -> {to_email} ({company})")
+        log_sent(to_email, name, company, subject, True, "smtp")
+        return True
+    except Exception as e:
+        print(f"[SEND:SMTP] EXCEPTION -> {to_email} | {e}")
+        log_sent(to_email, name, company, subject, False, f"smtp: {e}")
+        return False
+
+def send_email(to_email, name, company, message):
+    sender_addr = os.getenv("SENDER_EMAIL", "").strip()
+    sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
+    subject     = f"{company} — quick question"
+
+    if not sender_addr:
+        print("[SEND] ERROR: SENDER_EMAIL not set")
+        log_sent(to_email, name, company, subject, False, "SENDER_EMAIL not set")
+        return False
+
+    if not to_email or not str(to_email).strip():
+        print("[SEND] ERROR: No recipient email")
+        log_sent(to_email, name, company, subject, False, "no recipient")
+        return False
+
+    html_body = _build_html_body(name, sender_name, message)
+
+    # ── Primary: SendGrid (if key is set) ─────────────────────────────────────
+    api_key = os.getenv("SENDGRID_API_KEY", "").strip()
+    if api_key:
+        return _send_via_sendgrid(api_key, sender_addr, sender_name,
+                                  to_email, subject, html_body, name, company)
+
+    # ── Fallback: Gmail SMTP (uses SENDER_APP_PASSWORD) ───────────────────────
+    smtp_password = os.getenv("SENDER_APP_PASSWORD", "").strip()
+    if smtp_password:
+        print(f"[SEND] No SendGrid key — using Gmail SMTP for {to_email}")
+        return _send_via_smtp(sender_addr, smtp_password,
+                              to_email, subject, html_body, name, company)
+
+    # ── Neither available ─────────────────────────────────────────────────────
+    print("[SEND] ERROR: No sending method — set SENDGRID_API_KEY or SENDER_APP_PASSWORD")
+    log_sent(to_email, name, company, subject, False,
+             "no sending method: set SENDGRID_API_KEY or SENDER_APP_PASSWORD")
+    return False
 
 # =========================
 # FETCH GRANTS FROM GRANT AGENT API
@@ -351,6 +395,7 @@ def dashboard():
     </div>
     <div style="display:flex;gap:8px;">
       <a href="/sent" class="btn-link" style="background:#7c3aed;">View Sent</a>
+      <a href="/resend-failed" class="btn-link" style="background:#f59e0b;color:#000;">Resend Failed</a>
       <a href="/refresh" class="btn-link">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
     </div>
   </div>
@@ -515,6 +560,173 @@ def test_email():
         </div>
     </div>
     """
+
+# =========================
+# RESEND FAILED EMAILS
+# GET  /resend-failed        — preview page showing what will be resent
+# POST /resend-failed        — fire the actual resend batch
+# =========================
+
+def _get_failed_emails_from_log():
+    """Return set of email addresses that have a failed delivery in sent_log.csv."""
+    failed = set()
+    if not os.path.exists(SENT_LOG):
+        return failed
+    try:
+        import csv as _csv
+        with open(SENT_LOG, newline="", encoding="utf-8") as f:
+            reader = _csv.DictReader(f)
+            for row in reader:
+                # Handle both old format (status/note) and new format (success/error)
+                success_raw = (
+                    row.get("success", "") or
+                    row.get("status",  "")
+                ).strip().lower()
+                email = (row.get("email", "") or "").strip().lower()
+                if email and success_raw in ("false", "0", ""):
+                    failed.add(email)
+    except Exception as e:
+        print(f"[resend] Could not parse sent_log: {e}")
+    return failed
+
+
+def _do_resend_batch(dry_run=False):
+    """
+    Find every queue row whose email appears in the failed-log set, then resend.
+    Returns list of result dicts.
+    """
+    failed_emails = _get_failed_emails_from_log()
+    df            = load_data()
+    results       = []
+
+    for i, row in df.iterrows():
+        email = str(row.get("email", "") or "").strip().lower()
+        if not email:
+            continue
+        # Resend if: email is in the failed set, OR status is "sent" with no prior success
+        in_failed_log = email in failed_emails
+        was_marked_sent = str(row.get("status", "")).strip().lower() == "sent"
+        if not (in_failed_log or was_marked_sent):
+            continue
+
+        company = row.get("company", "Unknown")
+        name    = row.get("name",    "")
+        message = row.get("message", "")
+
+        if dry_run:
+            results.append({"email": email, "company": company, "status": "preview — not sent"})
+            continue
+
+        ok = send_email(email, name, company, message)
+        results.append({
+            "email":   email,
+            "company": company,
+            "status":  "SENT" if ok else "FAILED",
+        })
+        # Keep queue row as "sent" regardless — delivery status is in sent_log
+        df.at[i, "status"] = "sent"
+
+    if not dry_run and results:
+        save_data(df)
+
+    return results
+
+
+@app.route('/resend-failed', methods=["GET"])
+def resend_failed_preview():
+    """Show a confirmation page listing what will be resent."""
+    preview = _do_resend_batch(dry_run=True)
+    count   = len(preview)
+
+    rows_html = "".join(
+        f"<tr><td>{r['company']}</td><td>{r['email']}</td></tr>"
+        for r in preview
+    )
+
+    return f"""
+    <div style="background:#0f172a;color:#e2e8f0;font-family:Arial;min-height:100vh;padding:40px 20px;">
+      <div style="max-width:700px;margin:0 auto;">
+        <h2 style="color:#f59e0b;margin-bottom:8px;">⚠ Resend Failed Emails</h2>
+        <p style="color:#94a3b8;margin-bottom:24px;">
+          Found <strong style="color:#f59e0b;">{count}</strong> email(s) queued for resend.
+          These are all addresses that previously failed delivery.
+          Click the button below to send them now via Gmail SMTP.
+        </p>
+
+        {'<p style="color:#22c55e;">Nothing to resend — no failed emails found.</p>' if count == 0 else f"""
+        <table style="width:100%;border-collapse:collapse;margin-bottom:24px;font-size:13px;">
+          <tr><th style="text-align:left;padding:8px;background:#1e293b;color:#38bdf8;">Company</th>
+              <th style="text-align:left;padding:8px;background:#1e293b;color:#38bdf8;">Email</th></tr>
+          {rows_html}
+        </table>
+        <form method="POST" action="/resend-failed">
+          <button type="submit"
+            style="background:#22c55e;color:white;border:none;padding:14px 28px;border-radius:8px;
+                   font-size:15px;font-weight:bold;cursor:pointer;width:100%;">
+            Send All {count} Email(s) Now
+          </button>
+        </form>"""}
+
+        <br><a href="/" style="color:#38bdf8;">← Back to Dashboard</a>
+        &nbsp;|&nbsp;
+        <a href="/sent" style="color:#38bdf8;">View Sent Log</a>
+      </div>
+    </div>
+    """
+
+
+@app.route('/resend-failed', methods=["POST"])
+def resend_failed_execute():
+    """Fire the actual resend batch and show results."""
+    results = _do_resend_batch(dry_run=False)
+    sent_ok  = [r for r in results if r["status"] == "SENT"]
+    failed   = [r for r in results if r["status"] == "FAILED"]
+
+    rows_html = "".join(
+        f"""<tr>
+          <td style="padding:8px;border-bottom:1px solid #1e293b;">{r['company']}</td>
+          <td style="padding:8px;border-bottom:1px solid #1e293b;">{r['email']}</td>
+          <td style="padding:8px;border-bottom:1px solid #1e293b;">
+            <span style="color:{'#22c55e' if r['status']=='SENT' else '#ef4444'};font-weight:bold;">
+              {r['status']}
+            </span>
+          </td>
+        </tr>"""
+        for r in results
+    )
+
+    summary_color = "#22c55e" if not failed else "#f59e0b"
+    summary_text  = (
+        f"All {len(sent_ok)} emails sent successfully." if not failed
+        else f"{len(sent_ok)} sent · {len(failed)} still failing — check env vars below."
+    )
+
+    return f"""
+    <div style="background:#0f172a;color:#e2e8f0;font-family:Arial;min-height:100vh;padding:40px 20px;">
+      <div style="max-width:700px;margin:0 auto;">
+        <h2 style="color:{summary_color};margin-bottom:8px;">Resend Complete</h2>
+        <p style="margin-bottom:24px;">{summary_text}</p>
+
+        {'<div style="background:#1e293b;padding:12px 16px;border-radius:8px;margin-bottom:20px;font-size:13px;color:#f59e0b;">Still failing? Go to <a href="/debug" style="color:#38bdf8;">/debug</a> and confirm SENDER_EMAIL and SENDER_APP_PASSWORD are set.</div>' if failed else ''}
+
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:24px;">
+          <tr>
+            <th style="text-align:left;padding:8px;background:#1e293b;color:#38bdf8;">Company</th>
+            <th style="text-align:left;padding:8px;background:#1e293b;color:#38bdf8;">Email</th>
+            <th style="text-align:left;padding:8px;background:#1e293b;color:#38bdf8;">Result</th>
+          </tr>
+          {rows_html}
+        </table>
+
+        <a href="/" style="color:#38bdf8;">← Back to Dashboard</a>
+        &nbsp;|&nbsp;
+        <a href="/sent" style="color:#38bdf8;">View Sent Log</a>
+        &nbsp;|&nbsp;
+        <a href="/resend-failed" style="color:#f59e0b;">Resend Again</a>
+      </div>
+    </div>
+    """
+
 
 # =========================
 # MANUAL REFRESH TRIGGER
