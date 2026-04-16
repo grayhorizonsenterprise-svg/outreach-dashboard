@@ -25,6 +25,10 @@ if os.environ.get("RENDER"):
         import shutil
         shutil.copy(_profile_src, _profile_dst)
 
+# Only import what's needed for the server to BIND and serve routes.
+# Heavy imports (scheduler, scraper, playwright deps) are deferred to
+# the background thread so a broken import can't prevent /health from
+# responding within Railway's 30-second healthcheck window.
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -32,7 +36,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from database.db import init_db
 from api.routes import router
-from scheduler.jobs import start_scheduler
 from config import settings
 
 # ─── App ──────────────────────────────────────────────────────────────────────
@@ -51,15 +54,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Health check — registered first so it's always available
+# /health registered before anything else — always returns 200
 @app.get("/health")
 def health():
     return {"status": "ok", "version": "1.0.0"}
 
-# Mount API routes
+# API routes
 app.include_router(router, prefix="/api")
 
-# Serve dashboard
+# Static dashboard
 dashboard_dir = Path(__file__).parent / "dashboard"
 if dashboard_dir.exists():
     app.mount("/static", StaticFiles(directory=str(dashboard_dir)), name="static")
@@ -69,10 +72,14 @@ if dashboard_dir.exists():
         return FileResponse(str(dashboard_dir / "index.html"))
 
 
-# ─── Background initialisation ────────────────────────────────────────────────
+# ─── Background init (all heavy I/O, deferred imports) ────────────────────────
 
 def _background_init():
-    """All heavy startup I/O runs here so the ASGI lifespan returns instantly."""
+    """
+    Runs in a daemon thread after uvicorn starts accepting connections.
+    Imports scheduler here so any broken dep (playwright, etc.) only fails
+    here — not at module load time, which would prevent /health from binding.
+    """
     import json as _json
 
     # 1. DB init
@@ -82,7 +89,7 @@ def _background_init():
     except Exception as e:
         print(f"[Init] init_db error: {e}", flush=True)
 
-    # 2. Seed curated grants so the dashboard is never empty
+    # 2. Seed curated grants
     try:
         from discovery.grants_gov import CURATED_GRANTS
         from database.db import upsert_grant, update_scores
@@ -99,12 +106,13 @@ def _background_init():
     except Exception as e:
         print(f"[Init] Seed error (non-fatal): {e}", flush=True)
 
-    # 3. Start cron scheduler
+    # 3. Start scheduler (imports scraper/jobs here, not at module load)
     try:
+        from scheduler.jobs import start_scheduler
         start_scheduler()
         print("[Init] Scheduler started", flush=True)
     except Exception as e:
-        print(f"[Init] Scheduler error: {e}", flush=True)
+        print(f"[Init] Scheduler error (non-fatal): {e}", flush=True)
 
     # 4. Initial live scan
     try:
@@ -118,12 +126,12 @@ def _background_init():
 
 
 def _keep_alive():
-    """Ping /health every 10 min so the service never idles on Railway."""
-    time.sleep(120)  # wait for server to fully start
+    """Ping /health every 10 min to prevent Railway from idling the service."""
+    time.sleep(120)
     import requests as _req
+    port = os.environ.get("PORT", str(settings.port))
     railway_domain = os.environ.get("RAILWAY_PUBLIC_DOMAIN", "")
     render_url = os.environ.get("RENDER_EXTERNAL_URL", "")
-    port = os.environ.get("PORT", str(settings.port))
     if railway_domain:
         target = f"https://{railway_domain.rstrip('/')}"
     elif render_url:
@@ -143,14 +151,10 @@ def _keep_alive():
 
 @app.on_event("startup")
 async def on_startup():
-    # Returns immediately — all I/O is in the background thread.
-    # uvicorn starts accepting connections (including /health) right away.
+    # Returns in <1ms — uvicorn starts accepting /health immediately
     threading.Thread(target=_background_init, daemon=True).start()
     threading.Thread(target=_keep_alive, daemon=True).start()
-    print(f"[Startup] Server ready — background init running", flush=True)
-    print(f"  API:       http://localhost:{settings.port}/api")
-    print(f"  Dashboard: http://localhost:{settings.port}/")
-    print(f"  Docs:      http://localhost:{settings.port}/docs")
+    print("[Startup] Server ready — background init running", flush=True)
 
 
 @app.on_event("shutdown")
@@ -158,7 +162,7 @@ async def on_shutdown():
     print("[App] Shutting down...")
 
 
-# ─── Run (local dev) ──────────────────────────────────────────────────────────
+# ─── Local dev ────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     import uvicorn

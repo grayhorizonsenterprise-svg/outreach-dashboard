@@ -15,9 +15,9 @@ from datetime import datetime
 try:
     from playwright.async_api import async_playwright
     PLAYWRIGHT_AVAILABLE = True
-except ImportError:
+except Exception:
     PLAYWRIGHT_AVAILABLE = False
-    print("[Scraper] Playwright not installed. Run: playwright install chromium")
+    print("[Scraper] Playwright unavailable (not installed or missing libs). Skipping dynamic scrape.")
 
 from .normalizer import normalize, make_external_id
 
