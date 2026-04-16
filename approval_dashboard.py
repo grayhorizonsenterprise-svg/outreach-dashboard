@@ -514,26 +514,49 @@ def sent_log_view():
     <style>
         body { background:#0f172a; color:white; font-family:Arial; margin:0; }
         .header { text-align:center; padding:20px; font-size:22px; font-weight:bold; background:#020617; }
-        table { width:90%; margin:20px auto; border-collapse:collapse; font-size:13px; }
-        th { background:#1e293b; padding:10px; text-align:left; color:#38bdf8; }
-        td { padding:9px 10px; border-bottom:1px solid #1e293b; }
-        .ok { color:#22c55e; font-weight:bold; }
+        .wrap { overflow-x:auto; width:96%; margin:20px auto; }
+        table { width:100%; border-collapse:collapse; font-size:13px; min-width:900px; }
+        th { background:#1e293b; padding:10px; text-align:left; color:#38bdf8; white-space:nowrap; }
+        td { padding:9px 10px; border-bottom:1px solid #1e293b; vertical-align:top; }
+        td.err { color:#f87171; font-size:12px; max-width:340px; word-break:break-word; white-space:pre-wrap; }
+        .ok   { color:#22c55e; font-weight:bold; }
         .fail { color:#ef4444; font-weight:bold; }
         a.back { display:block; text-align:center; margin:16px; color:#38bdf8; }
     </style>
     <div class="header">Sent Log</div>
-    <a class="back" href="/">← Back to Dashboard</a>
+    <a class="back" href="/">&#8592; Back to Dashboard</a>
+    <a class="back" href="/resend-failed" style="color:#f59e0b;">Resend Failed Emails</a>
     """
 
     if not rows:
         html += '<p style="text-align:center;color:#64748b;">No emails sent yet.</p>'
     else:
-        html += "<table><tr><th>Time</th><th>Company</th><th>Name</th><th>Email</th><th>Subject</th><th>Status</th><th>Error</th></tr>"
+        # also check old-format column names (status/note vs success/error)
+        html += "<div class='wrap'><table><tr><th>Time</th><th>Company</th><th>Email</th><th>Subject</th><th>Status</th><th>Error / Detail</th></tr>"
         for r in reversed(rows):
-            success_val = str(r.get("success", "")).strip().lower()
-            status_cell = '<span class="ok">SENT</span>' if success_val in ("true", "1", "yes") else '<span class="fail">FAILED</span>'
-            html += f"<tr><td>{r.get('timestamp','')}</td><td>{r.get('company','')}</td><td>{r.get('name','')}</td><td>{r.get('email','')}</td><td>{r.get('subject','')}</td><td>{status_cell}</td><td>{r.get('error','')}</td></tr>"
-        html += "</table>"
+            success_raw = str(r.get("success", r.get("status", ""))).strip().lower()
+            error_msg   = str(r.get("error",   r.get("note",   ""))).strip()
+            if success_raw in ("true", "1", "yes", "smtp", "sendgrid"):
+                status_cell = '<span class="ok">SENT</span>'
+            elif success_raw in ("skipped",):
+                status_cell = '<span style="color:#94a3b8;font-weight:bold;">SKIPPED</span>'
+            else:
+                status_cell = '<span class="fail">FAILED</span>'
+            company = str(r.get("company", r.get("company_name", ""))).strip()
+            email   = str(r.get("email", "")).strip()
+            subject = str(r.get("subject", "")).strip()
+            ts      = str(r.get("timestamp", "")).strip()
+            html += (
+                "<tr>"
+                "<td style='white-space:nowrap;color:#94a3b8;font-size:11px;'>" + ts + "</td>"
+                "<td>" + company + "</td>"
+                "<td style='color:#7dd3fc;'>" + email + "</td>"
+                "<td style='color:#cbd5e1;font-size:12px;'>" + subject + "</td>"
+                "<td>" + status_cell + "</td>"
+                "<td class='err'>" + error_msg + "</td>"
+                "</tr>"
+            )
+        html += "</table></div>"
 
     return html
 
@@ -744,27 +767,53 @@ def refresh():
 # =========================
 @app.route('/debug')
 def debug():
-    sg_key    = os.getenv("SENDGRID_API_KEY", "")
-    sender    = os.getenv("SENDER_EMAIL", "")
-    sg_set    = "SET" if sg_key else "MISSING"
-    sender_set = sender if sender else "MISSING"
-    color_key  = "#22c55e" if sg_key else "#ef4444"
-    color_sndr = "#22c55e" if sender else "#ef4444"
-    return f"""
-    <div style="background:#0f172a;color:white;font-family:Arial;padding:40px;">
-        <h2 style="color:#38bdf8;">Config Check</h2>
-        <p>SENDGRID_API_KEY: <strong style="color:{color_key};">{sg_set}</strong></p>
-        <p>SENDER_EMAIL: <strong style="color:{color_sndr};">{sender_set}</strong></p>
-        <p>DATA_DIR: {DATA_DIR}</p>
-        <p>Pipeline running: {pipeline_running}</p>
-        <br>
-        <a href="/test-email" style="color:#38bdf8;">Run Test Email</a>
-        &nbsp;|&nbsp;
-        <a href="/sent" style="color:#38bdf8;">View Sent Log</a>
-        &nbsp;|&nbsp;
-        <a href="/" style="color:#38bdf8;">Dashboard</a>
-    </div>
-    """
+    sg_key      = os.getenv("SENDGRID_API_KEY",    "").strip()
+    sender      = os.getenv("SENDER_EMAIL",         "").strip()
+    smtp_pass   = os.getenv("SENDER_APP_PASSWORD",  "").strip()
+    sender_name = os.getenv("SENDER_NAME",          "").strip()
+
+    def row(label, value, ok):
+        color = "#22c55e" if ok else "#ef4444"
+        icon  = "&#10003;" if ok else "&#10007; MISSING"
+        return (
+            "<tr>"
+            "<td style='padding:10px 16px;color:#94a3b8;'>" + label + "</td>"
+            "<td style='padding:10px 16px;'><strong style='color:" + color + ";'>" +
+            (value if ok else icon) + "</strong></td>"
+            "</tr>"
+        )
+
+    sg_ok    = bool(sg_key)
+    smtp_ok  = bool(smtp_pass)
+    send_ok  = bool(sender)
+
+    method = "SendGrid" if sg_ok else ("Gmail SMTP" if smtp_ok else "NONE — emails will fail")
+    method_color = "#22c55e" if (sg_ok or smtp_ok) else "#ef4444"
+
+    rows = (
+        row("SENDER_EMAIL",        sender    if send_ok  else "",  send_ok)  +
+        row("SENDER_APP_PASSWORD", "SET (" + str(len(smtp_pass)) + " chars)" if smtp_ok else "", smtp_ok) +
+        row("SENDGRID_API_KEY",    "SET"     if sg_ok    else "not set (optional)", sg_ok) +
+        row("SENDER_NAME",         sender_name if sender_name else "Gray Horizons (default)", True)
+    )
+
+    return (
+        "<div style='background:#0f172a;color:white;font-family:Arial;padding:40px;'>"
+        "<h2 style='color:#38bdf8;margin-bottom:4px;'>Config Check</h2>"
+        "<p style='color:#94a3b8;margin-bottom:24px;'>Active send method: "
+        "<strong style='color:" + method_color + ";'>" + method + "</strong></p>"
+        "<table style='border-collapse:collapse;background:#1e293b;border-radius:8px;overflow:hidden;margin-bottom:24px;'>"
+        + rows +
+        "</table>"
+        "<p style='color:#64748b;font-size:13px;'>DATA_DIR: " + DATA_DIR + "</p>"
+        "<p style='color:#64748b;font-size:13px;'>Pipeline running: " + str(pipeline_running) + "</p>"
+        "<br>"
+        "<a href='/test-email' style='color:#38bdf8;margin-right:16px;'>Run Test Email</a>"
+        "<a href='/sent'       style='color:#38bdf8;margin-right:16px;'>View Sent Log</a>"
+        "<a href='/resend-failed' style='color:#f59e0b;margin-right:16px;'>Resend Failed</a>"
+        "<a href='/'           style='color:#38bdf8;'>Dashboard</a>"
+        "</div>"
+    )
 
 # =========================
 # HEALTH CHECK
