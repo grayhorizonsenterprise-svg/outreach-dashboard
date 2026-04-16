@@ -8,7 +8,12 @@
  */
 const express      = require('express');
 const cors         = require('cors');
+const sgMail       = require('@sendgrid/mail');
 const { searchGrants } = require('./grantSearch');
+
+// ── SendGrid setup ────────────────────────────────────────────────────────────
+const SENDGRID_KEY = process.env.SENDGRID_API_KEY || '';
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const app = express();
 
@@ -151,15 +156,74 @@ async function callClaudeSafe(body) {
   }
 }
 
+// ── Email via SendGrid ────────────────────────────────────────────────────────
+
+async function sendEmail(email, subject, body) {
+  try {
+    const msg = {
+      to: email,
+      from: 'grayhorizonsenterprise@gmail.com', // HARD SET - DO NOT CHANGE
+      subject: subject,
+      text: body,
+    };
+
+    console.log('SENDING FROM:', msg.from);
+
+    await sgMail.send(msg);
+
+    console.log(`SENT -> ${email}`);
+    return true;
+
+  } catch (err) {
+    console.error(`FAILED -> ${email}`);
+    console.error(err.response?.body || err.message);
+    return false;
+  }
+}
+
+async function sendBatch(emails) {
+  const results = [];
+  for (const e of emails) {
+    const ok = await sendEmail(e.to, e.subject, e.text || e.body || '');
+    results.push({ to: e.to, success: ok });
+  }
+  const sent   = results.filter(r => r.success).length;
+  const failed = results.filter(r => !r.success).length;
+  console.log(`Batch done — ${sent} sent, ${failed} failed`);
+  return results;
+}
+
+// POST /send-email  — single email
+app.post('/send-email', async (req, res) => {
+  const { to, subject, text, body } = req.body;
+  if (!to || !subject || (!text && !body)) {
+    return res.status(400).json({ success: false, error: 'to, subject, and text are required' });
+  }
+  const ok = await sendEmail(to, subject, text || body);
+  res.status(ok ? 200 : 502).json({ success: ok });
+});
+
+// POST /send-batch  — array of { to, subject, text }
+app.post('/send-batch', async (req, res) => {
+  const { emails } = req.body;
+  if (!Array.isArray(emails) || emails.length === 0) {
+    return res.status(400).json({ success: false, error: 'emails array is required' });
+  }
+  const results = await sendBatch(emails);
+  const allOk   = results.every(r => r.success);
+  res.status(allOk ? 200 : 207).json({ results });
+});
+
 // ── Health — ALWAYS works regardless of Claude state ─────────────────────────
 
 app.get('/health', (_req, res) => {
   res.json({
-    status:  'ok',
-    model:   MODEL,
-    port:    PORT,
-    apiKey:  API_KEY ? 'SET ✓' : 'NOT SET ✗',
-    niches:  Object.keys(PROMPTS),
+    status:      'ok',
+    model:       MODEL,
+    port:        PORT,
+    claudeKey:   API_KEY      ? 'SET ✓' : 'NOT SET ✗',
+    sendgridKey: SENDGRID_KEY ? 'SET ✓' : 'NOT SET ✗',
+    niches:      Object.keys(PROMPTS),
   });
 });
 
@@ -269,8 +333,9 @@ app.use((err, _req, res, _next) => {
 
 app.listen(PORT, () => {
   console.log(`\n[Voice Server] http://localhost:${PORT}`);
-  console.log(`[Voice Server] Model:   ${MODEL}`);
-  console.log(`[Voice Server] API key: ${API_KEY ? 'SET ✓' : 'NOT SET ✗ (fallback mode active)'}`);
-  console.log(`[Voice Server] Niches:  ${Object.keys(PROMPTS).join(', ')}`);
-  console.log(`[Voice Server] Test:    http://localhost:${PORT}/test-claude\n`);
+  console.log(`[Voice Server] Model:      ${MODEL}`);
+  console.log(`[Voice Server] Claude key: ${API_KEY    ? 'SET ✓' : 'NOT SET ✗ (fallback mode active)'}`);
+  console.log(`SENDGRID KEY:              ${SENDGRID_KEY ? 'Loaded ✓' : 'Missing ✗'}`);
+  console.log(`[Voice Server] Niches:     ${Object.keys(PROMPTS).join(', ')}`);
+  console.log(`[Voice Server] Test:       http://localhost:${PORT}/test-claude\n`);
 });
