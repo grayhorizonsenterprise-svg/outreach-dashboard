@@ -1,6 +1,8 @@
 """
 Normalizes raw grant data from any source into a standard schema.
 """
+from __future__ import annotations
+
 import re
 import hashlib
 from datetime import datetime
