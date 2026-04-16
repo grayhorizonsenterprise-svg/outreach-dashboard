@@ -1,4 +1,7 @@
 providers = ["python"]
 
+[variables]
+PYTHON_VERSION = "3.11"
+
 [start]
-cmd = "gunicorn main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120 --keep-alive 10 --log-level info"
+cmd = "uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1 --log-level info"
