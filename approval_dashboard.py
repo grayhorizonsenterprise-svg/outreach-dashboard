@@ -403,12 +403,12 @@ def dashboard():
 </div><!-- end grants tab -->
 
 <script>
-function showTab(name) {
-  document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
-  document.querySelectorAll('.nav a[id^="tab-"]').forEach(function(el){ el.classList.remove('active'); });
+function showTab(name) {{
+  document.querySelectorAll('.tab-content').forEach(function(el){{ el.classList.remove('active'); }});
+  document.querySelectorAll('.nav a[id^="tab-"]').forEach(function(el){{ el.classList.remove('active'); }});
   document.getElementById('content-' + name).classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
-}
+}}
 </script>
 </body>
 </html>"""
