@@ -639,40 +639,42 @@ def resend_failed_preview():
     count   = len(preview)
 
     rows_html = "".join(
-        f"<tr><td>{r['company']}</td><td>{r['email']}</td></tr>"
+        "<tr><td style='padding:8px;border-bottom:1px solid #1e293b;'>" + r['company'] + "</td>"
+        "<td style='padding:8px;border-bottom:1px solid #1e293b;'>" + r['email'] + "</td></tr>"
         for r in preview
     )
 
-    return f"""
-    <div style="background:#0f172a;color:#e2e8f0;font-family:Arial;min-height:100vh;padding:40px 20px;">
-      <div style="max-width:700px;margin:0 auto;">
-        <h2 style="color:#f59e0b;margin-bottom:8px;">⚠ Resend Failed Emails</h2>
-        <p style="color:#94a3b8;margin-bottom:24px;">
-          Found <strong style="color:#f59e0b;">{count}</strong> email(s) queued for resend.
-          These are all addresses that previously failed delivery.
-          Click the button below to send them now via Gmail SMTP.
-        </p>
+    if count == 0:
+        body_html = '<p style="color:#22c55e;font-size:15px;">Nothing to resend — no failed emails found.</p>'
+    else:
+        body_html = (
+            '<table style="width:100%;border-collapse:collapse;margin-bottom:24px;font-size:13px;">'
+            '<tr>'
+            '<th style="text-align:left;padding:8px;background:#1e293b;color:#38bdf8;">Company</th>'
+            '<th style="text-align:left;padding:8px;background:#1e293b;color:#38bdf8;">Email</th>'
+            '</tr>'
+            + rows_html +
+            '</table>'
+            '<form method="POST" action="/resend-failed">'
+            '<button type="submit" style="background:#22c55e;color:white;border:none;'
+            'padding:14px 28px;border-radius:8px;font-size:15px;font-weight:bold;'
+            'cursor:pointer;width:100%;">Send All ' + str(count) + ' Email(s) Now</button>'
+            '</form>'
+        )
 
-        {'<p style="color:#22c55e;">Nothing to resend — no failed emails found.</p>' if count == 0 else f"""
-        <table style="width:100%;border-collapse:collapse;margin-bottom:24px;font-size:13px;">
-          <tr><th style="text-align:left;padding:8px;background:#1e293b;color:#38bdf8;">Company</th>
-              <th style="text-align:left;padding:8px;background:#1e293b;color:#38bdf8;">Email</th></tr>
-          {rows_html}
-        </table>
-        <form method="POST" action="/resend-failed">
-          <button type="submit"
-            style="background:#22c55e;color:white;border:none;padding:14px 28px;border-radius:8px;
-                   font-size:15px;font-weight:bold;cursor:pointer;width:100%;">
-            Send All {count} Email(s) Now
-          </button>
-        </form>"""}
-
-        <br><a href="/" style="color:#38bdf8;">← Back to Dashboard</a>
-        &nbsp;|&nbsp;
-        <a href="/sent" style="color:#38bdf8;">View Sent Log</a>
-      </div>
-    </div>
-    """
+    return (
+        '<div style="background:#0f172a;color:#e2e8f0;font-family:Arial;min-height:100vh;padding:40px 20px;">'
+        '<div style="max-width:700px;margin:0 auto;">'
+        '<h2 style="color:#f59e0b;margin-bottom:8px;">Resend Failed Emails</h2>'
+        '<p style="color:#94a3b8;margin-bottom:24px;">Found <strong style="color:#f59e0b;">'
+        + str(count) +
+        '</strong> email(s) queued for resend. These previously failed delivery. '
+        'Click the button below to send them now via Gmail SMTP.</p>'
+        + body_html +
+        '<br><br><a href="/" style="color:#38bdf8;">Back to Dashboard</a>'
+        '&nbsp;|&nbsp;<a href="/sent" style="color:#38bdf8;">View Sent Log</a>'
+        '</div></div>'
+    )
 
 
 @app.route('/resend-failed', methods=["POST"])
