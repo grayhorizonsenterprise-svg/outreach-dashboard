@@ -112,53 +112,68 @@ def clean_company_name(raw: str, website: str = "") -> str:
     return name
 
 
-def is_valid_raw(name: str) -> bool:
-    """Filter on the original scraped title before any cleaning."""
-    if pd.isna(name):
-        return False
-    n = name.lower()
-    for pattern in RAW_JUNK_PATTERNS:
-        if re.search(pattern, n):
-            return False
-    # Must have at least one business indicator word
-    if not any(word in n for word in BUSINESS_WORDS):
-        return False
-    return True
+KNOWN_NICHES = {"hoa", "hvac", "dental", "plumbing", "contractor"}
 
-
-# Niche keywords used to bypass strict name validation for non-HOA niches
+# Niche keywords used to loosen word-count and name validation
 NICHE_KEYWORDS = {
     "hvac", "heating", "cooling", "air conditioning", "plumbing", "plumber",
     "dental", "dentist", "contractor", "construction", "remodel",
 }
 
 
-def is_valid_clean(name: str) -> bool:
+def is_valid_raw(name: str, niche: str = "") -> bool:
+    """Filter on the original scraped title before any cleaning.
+    If the row came from a known niche query, skip the BUSINESS_WORDS
+    requirement — the search query already confirmed it's a niche company.
+    """
+    if pd.isna(name):
+        return False
+    n = name.lower()
+    for pattern in RAW_JUNK_PATTERNS:
+        if re.search(pattern, n):
+            return False
+    # If it came from a known niche query, trust it
+    if str(niche).strip().lower() in KNOWN_NICHES:
+        return True
+    # Otherwise require at least one business indicator word
+    if not any(word in n for word in BUSINESS_WORDS):
+        return False
+    return True
+
+
+def is_valid_clean(name: str, niche: str = "") -> bool:
     """Validate the cleaned company name is actually usable."""
-    if not name or len(name) < 4:
+    if not name or len(name) < 3:
         return False
     n = name.lower().strip()
 
-    # Starts with bad word
+    # Hard junk — always reject regardless of niche
+    if re.search(r"\b20\d{2}\b", name):
+        return False
+    if re.search(r"\bhow\s+to\b|\btips?\s+(to|for)\b|\btrends?\s+to\b|\b#\d+\b", name, re.IGNORECASE):
+        return False
+    if name.endswith("!"):
+        return False
+    if re.match(r"^\d", name):
+        return False
+
+    # If it came from a known niche query, only apply the hard-junk checks above
+    if str(niche).strip().lower() in KNOWN_NICHES:
+        # Still reject bare location names and obvious content titles
+        if re.match(r"^[a-zA-Z ]+,\s*[a-z]{2}$", n):
+            return False
+        if re.match(r"^(what|how|why|when|where|which|choosing|tips|guide|"
+                    r"topics|contact|about|staff|planning)\b", n, re.IGNORECASE):
+            return False
+        return True
+
+    # Strict path for anything without a niche tag
     if re.match(r"^(in|at|for|of|the|what|how|why|when|where|which|and|or|"
                 r"these|those|contact|choosing|serving|about|requests?|"
                 r"topics?|staff|city|planning|small|best|communities|"
                 r"enriching|homeowner\s+vendor|county)\b", n, re.IGNORECASE):
         return False
 
-    # Starts with a number
-    if re.match(r"^\d", name):
-        return False
-
-    # Has a 4-digit year (blog/article title)
-    if re.search(r"\b20\d{2}\b", name):
-        return False
-
-    # Looks like a how-to or listicle
-    if re.search(r"\bhow\s+to\b|\btips?\s+(to|for)\b|\btrends?\s+to\b|\b#\d+\b", name, re.IGNORECASE):
-        return False
-
-    # Bare junk words
     JUNK_SINGLES = {
         "best", "communities", "small", "staff", "city", "planning",
         "requests", "nevada", "arizona", "colorado", "idaho", "utah",
@@ -171,11 +186,9 @@ def is_valid_clean(name: str) -> bool:
     if n in JUNK_SINGLES:
         return False
 
-    # City, ST pattern
     if re.match(r"^[a-zA-Z ]+,\s*[a-z]{2}$", n):
         return False
 
-    # Bare state or city name
     LOCATIONS = {
         "arizona", "california", "colorado", "idaho", "montana", "nevada",
         "new mexico", "oregon", "utah", "washington", "spokane", "boise",
@@ -185,13 +198,8 @@ def is_valid_clean(name: str) -> bool:
     if n in LOCATIONS:
         return False
 
-    # Too many words — still a sentence fragment (allow up to 8 for non-HOA niches)
     niche_hit = any(k in n for k in NICHE_KEYWORDS)
     if len(name.split()) > (8 if niche_hit else 6):
-        return False
-
-    # Ends with ! (tagline)
-    if name.endswith("!"):
         return False
 
     return True
@@ -204,21 +212,31 @@ def clean():
     df = pd.read_csv(INPUT_FILE)
     original_count = len(df)
 
-    # Step 1: filter raw titles
-    df = df[df["company"].apply(is_valid_raw)].copy()
+    if "niche" not in df.columns:
+        df["niche"] = ""
+
+    # Step 1: filter raw titles — pass niche so known-niche rows bypass word check
+    mask = df.apply(lambda r: is_valid_raw(r["company"], r.get("niche", "")), axis=1)
+    df = df[mask].copy()
 
     # Step 2: clean names
     df["company"] = df.apply(
         lambda r: clean_company_name(r["company"], r.get("website", "")), axis=1
     )
 
-    # Step 3: validate cleaned names
-    df = df[df["company"].apply(is_valid_clean)].copy()
+    # Step 3: validate cleaned names — pass niche for looser rules on confirmed niches
+    mask2 = df.apply(lambda r: is_valid_clean(r["company"], r.get("niche", "")), axis=1)
+    df = df[mask2].copy()
 
     cleaned_count = len(df)
     df.to_csv(OUTPUT_FILE, index=False)
 
-    print(f"Removed {original_count - cleaned_count} non-company leads")
+    # Report per-niche survival counts
+    for niche in sorted(df["niche"].dropna().unique()):
+        cnt = len(df[df["niche"] == niche])
+        print(f"  {niche.upper():12s}: {cnt} leads")
+
+    print(f"\nRemoved {original_count - cleaned_count} non-company leads")
     print(f"{cleaned_count} valid prospects remaining")
 
 
