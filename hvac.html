@@ -45,8 +45,12 @@ textarea{resize:vertical;min-height:80px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .act-entry{padding:8px 10px;background:rgba(79,156,255,.06);border:1px solid rgba(79,156,255,.15);border-radius:6px;font-size:11px;line-height:1.7;}
 .sheet-wrap{margin-top:18px;border:1px solid rgba(79,156,255,.2);border-radius:10px;overflow:hidden;}
-.sheet-header{padding:10px 16px;background:rgba(79,156,255,.05);border-bottom:1px solid rgba(79,156,255,.15);font-size:12px;font-weight:700;color:#4f9cff;}
-iframe{width:100%;height:480px;border:none;display:block;}
+.sheet-header{padding:10px 16px;background:rgba(79,156,255,.05);border-bottom:1px solid rgba(79,156,255,.15);font-size:12px;font-weight:700;color:#4f9cff;display:flex;align-items:center;justify-content:space-between;}
+.sheet-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;}
+iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
+.refresh-btn{padding:4px 10px;border-radius:6px;border:1px solid rgba(79,156,255,.3);background:rgba(79,156,255,.08);color:#4f9cff;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.refresh-btn:hover{background:rgba(79,156,255,.18);}
+.refresh-hint{font-size:10px;color:#475569;padding:4px 16px;background:rgba(255,255,255,.02);}
 @media(max-width:560px){.two-col,.btn-row{grid-template-columns:1fr!important;}}
 </style>
 </head>
@@ -124,14 +128,22 @@ iframe{width:100%;height:480px;border:none;display:block;}
   </div>
 
   <div class="sheet-wrap">
-    <div class="sheet-header">&#128202; Live Service Log &mdash; Auto-Updates</div>
-    <iframe src="about:blank" id="sheet-frame" title="Live HVAC Service Log" loading="lazy"></iframe>
+    <div class="sheet-header">
+      &#128202; Live Service Log &mdash; Auto-Updates
+      <button class="refresh-btn" onclick="refreshSheet()">&#8635; Refresh</button>
+    </div>
+    <div class="refresh-hint">Sheet updates after each submission &bull; tap Refresh if not showing latest</div>
+    <div class="sheet-scroll">
+      <iframe id="sheet-frame" src="about:blank" title="Live HVAC Service Log" loading="lazy" scrolling="yes"></iframe>
+    </div>
   </div>
 </div>
 
 <script>
 var GHE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyTZ-7apQcSIGhVLyTqs24KOgHuybmAriRKvqFWmmLpHwIB7RatsWg91_1SS1Z5yw9B/exec';
+var SHEET_BASE='about:blank';
 var STORE_KEY='ghe_hvac_photos';var MAX_PHOTOS=12;
+function refreshSheet(){var f=document.getElementById('sheet-frame');if(f&&SHEET_BASE!=='about:blank')f.src=SHEET_BASE+'&_='+Date.now();}
 var selectedType='Repair';var pendingPhotoB64='';
 
 function selectPill(el,type){document.querySelectorAll('#type-pills .pill').forEach(function(p){p.classList.remove('active');});el.classList.add('active');selectedType=type;}
@@ -174,7 +186,7 @@ document.getElementById('form').addEventListener('submit',function(e){
   var payload={id:'R'+Date.now(),ts:new Date().toLocaleString(),name:name,email:email,unit:unit,type:selectedType,notice:notice,mode:'hvac',hasPhoto:!!pendingPhotoB64};
   if(pendingPhotoB64){savePhoto({b64:pendingPhotoB64,type:selectedType,name:name,unit:unit,notice:notice,date:new Date().toLocaleDateString()});renderGallery();}
   pushActivity(payload);
-  function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Request Service';if(ok){statusEl.innerText='\u2705 Request sent \u2014 team notified.';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
+  function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Request Service';if(ok){statusEl.innerText='\u2705 Request sent \u2014 sheet updating\u2026';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();setTimeout(function(){refreshSheet();statusEl.innerText='\u2705 Sheet updated.';},20000);}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
   sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_retried){_retried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
 });
 renderGallery();
