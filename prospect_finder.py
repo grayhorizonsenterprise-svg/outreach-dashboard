@@ -45,97 +45,81 @@ def get_headers():
     }
 
 # =========================
-# GEOGRAPHY
+# NICHE SEARCH QUERIES — regional coverage, fast execution
+# West Coast · Southwest · Midwest
+# 12 queries per niche × 5 niches = 60 total (~15 min runtime)
+# Each query yields ~10 results = ~600 prospects per run
 # =========================
-WEST_COAST_STATES = [
-    "California", "Oregon", "Washington", "Nevada", "Arizona",
-    "Utah", "Colorado", "Idaho", "Montana", "New Mexico"
-]
-
-WEST_COAST_CITIES = [
-    "Los Angeles", "San Francisco", "San Diego", "Sacramento",
-    "Portland", "Seattle", "Tacoma", "Spokane",
-    "Las Vegas", "Henderson", "Reno",
-    "Phoenix", "Tucson", "Scottsdale",
-    "Salt Lake City", "Denver", "Boise",
-]
-
-# =========================
-# NICHE SEARCH QUERIES
-# Each entry: (niche_tag, query_string)
-# =========================
-NICHE_QUERIES: list[tuple[str, str]] = []
-
-# ── HOA Management ────────────────────────────────────────────────────────────
-for state in WEST_COAST_STATES:
-    NICHE_QUERIES.append(("hoa", f"HOA property management company {state}"))
-    NICHE_QUERIES.append(("hoa", f"community association management {state}"))
-
-for city in WEST_COAST_CITIES:
-    NICHE_QUERIES.append(("hoa", f"HOA management company {city}"))
-
-NICHE_QUERIES += [
-    ("hoa", "homeowners association management firm west coast"),
+NICHE_QUERIES: list[tuple[str, str]] = [
+    # ── HOA ───────────────────────────────────────────────────────────────────
     ("hoa", "HOA management company California contact email"),
-    ("hoa", "community association management Oregon Washington"),
-    ("hoa", "property management HOA Nevada Arizona contact"),
-    ("hoa", "HOA management services Colorado Utah Idaho"),
-]
+    ("hoa", "HOA management company Arizona Nevada Utah contact email"),
+    ("hoa", "HOA management company Oregon Washington Idaho contact"),
+    ("hoa", "HOA management company Colorado New Mexico contact email"),
+    ("hoa", "HOA management company Texas contact email"),
+    ("hoa", "HOA management company Illinois Ohio Michigan contact"),
+    ("hoa", "HOA management company Florida Georgia contact email"),
+    ("hoa", "community association management company Midwest contact"),
+    ("hoa", "HOA management company Chicago Dallas Houston contact"),
+    ("hoa", "HOA management company Los Angeles Phoenix Denver contact"),
+    ("hoa", "homeowners association management Southwest contact email"),
+    ("hoa", "property management HOA company Southeast contact email"),
 
-# ── HVAC ──────────────────────────────────────────────────────────────────────
-for state in WEST_COAST_STATES:
-    NICHE_QUERIES.append(("hvac", f"HVAC company {state} contact email"))
-    NICHE_QUERIES.append(("hvac", f"air conditioning heating service {state}"))
-
-for city in WEST_COAST_CITIES:
-    NICHE_QUERIES.append(("hvac", f"HVAC contractor {city}"))
-
-NICHE_QUERIES += [
+    # ── HVAC ──────────────────────────────────────────────────────────────────
     ("hvac", "HVAC company California contact email"),
-    ("hvac", "heating cooling service company Arizona Nevada"),
-    ("hvac", "air conditioning repair company Colorado Utah"),
-]
+    ("hvac", "HVAC company Arizona Nevada Texas contact email"),
+    ("hvac", "HVAC contractor Oregon Washington Colorado contact"),
+    ("hvac", "heating cooling company Illinois Ohio Michigan contact"),
+    ("hvac", "HVAC company Chicago Dallas Houston contact email"),
+    ("hvac", "air conditioning company Los Angeles Phoenix contact"),
+    ("hvac", "HVAC company Florida Georgia contact email"),
+    ("hvac", "heating air conditioning Midwest company contact email"),
+    ("hvac", "HVAC service company Southwest contact email"),
+    ("hvac", "HVAC contractor Denver Salt Lake City contact email"),
+    ("hvac", "commercial HVAC company California Texas contact"),
+    ("hvac", "residential HVAC company contact email"),
 
-# ── Dental ────────────────────────────────────────────────────────────────────
-for state in WEST_COAST_STATES:
-    NICHE_QUERIES.append(("dental", f"dental office {state} contact email"))
-    NICHE_QUERIES.append(("dental", f"dentist practice {state}"))
-
-for city in WEST_COAST_CITIES:
-    NICHE_QUERIES.append(("dental", f"dental clinic {city} contact"))
-
-NICHE_QUERIES += [
+    # ── Dental ────────────────────────────────────────────────────────────────
     ("dental", "dental office California contact email"),
-    ("dental", "family dentist practice Arizona Nevada contact"),
-    ("dental", "dental group Colorado Utah Oregon"),
-]
+    ("dental", "dental clinic Arizona Nevada Texas contact email"),
+    ("dental", "dentist practice Oregon Washington contact email"),
+    ("dental", "dental office Illinois Ohio Michigan contact email"),
+    ("dental", "dental practice Chicago Dallas Houston contact"),
+    ("dental", "family dentist Los Angeles Phoenix contact email"),
+    ("dental", "dental clinic Florida Georgia contact email"),
+    ("dental", "dental group Midwest contact email"),
+    ("dental", "dentist office Southwest contact email"),
+    ("dental", "dental practice Colorado Utah contact email"),
+    ("dental", "multi-location dental office contact email"),
+    ("dental", "dental management group contact email"),
 
-# ── Plumbing ──────────────────────────────────────────────────────────────────
-for state in WEST_COAST_STATES:
-    NICHE_QUERIES.append(("plumbing", f"plumbing company {state} contact email"))
-    NICHE_QUERIES.append(("plumbing", f"plumber service {state}"))
-
-for city in WEST_COAST_CITIES:
-    NICHE_QUERIES.append(("plumbing", f"plumbing contractor {city}"))
-
-NICHE_QUERIES += [
+    # ── Plumbing ──────────────────────────────────────────────────────────────
     ("plumbing", "plumbing company California contact email"),
-    ("plumbing", "plumber service Arizona Nevada Utah"),
-    ("plumbing", "plumbing repair company Oregon Washington Colorado"),
-]
+    ("plumbing", "plumber Arizona Nevada Texas contact email"),
+    ("plumbing", "plumbing contractor Oregon Washington contact"),
+    ("plumbing", "plumbing company Illinois Ohio Michigan contact"),
+    ("plumbing", "plumber Chicago Dallas Houston contact email"),
+    ("plumbing", "plumbing service Los Angeles Phoenix contact email"),
+    ("plumbing", "plumbing company Florida Georgia contact email"),
+    ("plumbing", "plumbing contractor Midwest contact email"),
+    ("plumbing", "plumbing company Southwest contact email"),
+    ("plumbing", "plumbing repair service Colorado Utah contact"),
+    ("plumbing", "commercial plumbing company contact email"),
+    ("plumbing", "residential plumbing contractor contact email"),
 
-# ── General Contractor ────────────────────────────────────────────────────────
-for state in WEST_COAST_STATES:
-    NICHE_QUERIES.append(("contractor", f"general contractor {state} contact email"))
-    NICHE_QUERIES.append(("contractor", f"construction company {state}"))
-
-for city in WEST_COAST_CITIES:
-    NICHE_QUERIES.append(("contractor", f"general contractor {city}"))
-
-NICHE_QUERIES += [
+    # ── General Contractor ────────────────────────────────────────────────────
     ("contractor", "general contractor California contact email"),
-    ("contractor", "construction remodeling company Arizona Nevada"),
-    ("contractor", "home remodel contractor Colorado Utah Oregon"),
+    ("contractor", "general contractor Arizona Nevada Texas contact"),
+    ("contractor", "construction company Oregon Washington contact email"),
+    ("contractor", "general contractor Illinois Ohio Michigan contact"),
+    ("contractor", "construction company Chicago Dallas Houston contact"),
+    ("contractor", "home remodel contractor Los Angeles Phoenix contact"),
+    ("contractor", "general contractor Florida Georgia contact email"),
+    ("contractor", "construction remodeling Midwest contact email"),
+    ("contractor", "general contractor Southwest contact email"),
+    ("contractor", "construction company Colorado Utah contact email"),
+    ("contractor", "residential contractor company contact email"),
+    ("contractor", "commercial construction company contact email"),
 ]
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
