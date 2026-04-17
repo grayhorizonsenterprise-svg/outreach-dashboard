@@ -1,6 +1,7 @@
 """
 prospect_finder.py — Gray Horizons Enterprise
-Searches the web for HOA management companies across the entire West Coast.
+Searches the web for prospects across all 5 niches:
+  HOA Management · HVAC · Dental · Plumbing · General Contractor
 Rotates browser user agents to avoid blocks.
 Stores results in prospects_raw.csv.
 """
@@ -44,7 +45,7 @@ def get_headers():
     }
 
 # =========================
-# WEST COAST SEARCH QUERIES
+# GEOGRAPHY
 # =========================
 WEST_COAST_STATES = [
     "California", "Oregon", "Washington", "Nevada", "Arizona",
@@ -59,24 +60,82 @@ WEST_COAST_CITIES = [
     "Salt Lake City", "Denver", "Boise",
 ]
 
-SEARCH_QUERIES = []
+# =========================
+# NICHE SEARCH QUERIES
+# Each entry: (niche_tag, query_string)
+# =========================
+NICHE_QUERIES: list[tuple[str, str]] = []
 
-# State-level queries
+# ── HOA Management ────────────────────────────────────────────────────────────
 for state in WEST_COAST_STATES:
-    SEARCH_QUERIES.append(f"HOA property management company {state}")
-    SEARCH_QUERIES.append(f"community association management {state}")
+    NICHE_QUERIES.append(("hoa", f"HOA property management company {state}"))
+    NICHE_QUERIES.append(("hoa", f"community association management {state}"))
 
-# City-level queries for major metros
 for city in WEST_COAST_CITIES:
-    SEARCH_QUERIES.append(f"HOA management company {city}")
+    NICHE_QUERIES.append(("hoa", f"HOA management company {city}"))
 
-# Generic industry queries
-SEARCH_QUERIES += [
-    "homeowners association management firm west coast",
-    "HOA management company California contact email",
-    "community association management Oregon Washington",
-    "property management HOA Nevada Arizona contact",
-    "HOA management services Colorado Utah Idaho",
+NICHE_QUERIES += [
+    ("hoa", "homeowners association management firm west coast"),
+    ("hoa", "HOA management company California contact email"),
+    ("hoa", "community association management Oregon Washington"),
+    ("hoa", "property management HOA Nevada Arizona contact"),
+    ("hoa", "HOA management services Colorado Utah Idaho"),
+]
+
+# ── HVAC ──────────────────────────────────────────────────────────────────────
+for state in WEST_COAST_STATES:
+    NICHE_QUERIES.append(("hvac", f"HVAC company {state} contact email"))
+    NICHE_QUERIES.append(("hvac", f"air conditioning heating service {state}"))
+
+for city in WEST_COAST_CITIES:
+    NICHE_QUERIES.append(("hvac", f"HVAC contractor {city}"))
+
+NICHE_QUERIES += [
+    ("hvac", "HVAC company California contact email"),
+    ("hvac", "heating cooling service company Arizona Nevada"),
+    ("hvac", "air conditioning repair company Colorado Utah"),
+]
+
+# ── Dental ────────────────────────────────────────────────────────────────────
+for state in WEST_COAST_STATES:
+    NICHE_QUERIES.append(("dental", f"dental office {state} contact email"))
+    NICHE_QUERIES.append(("dental", f"dentist practice {state}"))
+
+for city in WEST_COAST_CITIES:
+    NICHE_QUERIES.append(("dental", f"dental clinic {city} contact"))
+
+NICHE_QUERIES += [
+    ("dental", "dental office California contact email"),
+    ("dental", "family dentist practice Arizona Nevada contact"),
+    ("dental", "dental group Colorado Utah Oregon"),
+]
+
+# ── Plumbing ──────────────────────────────────────────────────────────────────
+for state in WEST_COAST_STATES:
+    NICHE_QUERIES.append(("plumbing", f"plumbing company {state} contact email"))
+    NICHE_QUERIES.append(("plumbing", f"plumber service {state}"))
+
+for city in WEST_COAST_CITIES:
+    NICHE_QUERIES.append(("plumbing", f"plumbing contractor {city}"))
+
+NICHE_QUERIES += [
+    ("plumbing", "plumbing company California contact email"),
+    ("plumbing", "plumber service Arizona Nevada Utah"),
+    ("plumbing", "plumbing repair company Oregon Washington Colorado"),
+]
+
+# ── General Contractor ────────────────────────────────────────────────────────
+for state in WEST_COAST_STATES:
+    NICHE_QUERIES.append(("contractor", f"general contractor {state} contact email"))
+    NICHE_QUERIES.append(("contractor", f"construction company {state}"))
+
+for city in WEST_COAST_CITIES:
+    NICHE_QUERIES.append(("contractor", f"general contractor {city}"))
+
+NICHE_QUERIES += [
+    ("contractor", "general contractor California contact email"),
+    ("contractor", "construction remodeling company Arizona Nevada"),
+    ("contractor", "home remodel contractor Colorado Utah Oregon"),
 ]
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
@@ -180,13 +239,14 @@ def extract_company_name(soup: BeautifulSoup, url: str, fallback_title: str) -> 
     return fallback_title
 
 
-def scrape_prospect(url: str, title: str, snippet: str) -> dict:
+def scrape_prospect(url: str, title: str, snippet: str, niche: str = "hoa") -> dict:
     prospect = {
         "company": title,
         "website": url,
         "email": "",
         "contact_page_url": "",
         "location": "",
+        "niche": niche,
     }
     try:
         resp = requests.get(url, headers=get_headers(), timeout=10)
@@ -224,8 +284,10 @@ def run():
         "myfloridalicense.com", "newswire.com", "businesswire.com",
     }
 
-    for query in SEARCH_QUERIES:
-        print(f"\n[SEARCH] {query}")
+    niche_counts: dict[str, int] = {}
+
+    for niche, query in NICHE_QUERIES:
+        print(f"\n[SEARCH:{niche.upper()}] {query}")
         results = search_web(query, max_results=10)
         print(f"  Found {len(results)} results")
         time.sleep(random.uniform(1.5, 3.0))
@@ -242,9 +304,10 @@ def run():
                 continue
             seen_domains.add(domain)
 
-            print(f"  [SCRAPE] {url}")
-            prospect = scrape_prospect(url, result["title"], result["snippet"])
+            print(f"  [SCRAPE:{niche}] {url}")
+            prospect = scrape_prospect(url, result["title"], result["snippet"], niche)
             all_prospects.append(prospect)
+            niche_counts[niche] = niche_counts.get(niche, 0) + 1
             time.sleep(random.uniform(1.0, 2.5))
 
     if not all_prospects:
@@ -252,13 +315,15 @@ def run():
         return
 
     df = pd.DataFrame(all_prospects, columns=[
-        "company", "website", "email", "contact_page_url", "location"
+        "company", "website", "email", "contact_page_url", "location", "niche"
     ])
     df.drop_duplicates(subset=["website"], inplace=True)
 
     output_path = os.path.join(DATA_DIR, "prospects_raw.csv")
     df.to_csv(output_path, index=False)
     print(f"\n[DONE] Saved {len(df)} prospects to prospects_raw.csv")
+    for n, count in sorted(niche_counts.items()):
+        print(f"  {n.upper():12s}: {count}")
 
 
 if __name__ == "__main__":
