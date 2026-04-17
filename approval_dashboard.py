@@ -343,6 +343,16 @@ def dashboard():
   .btn-skip{{background:#ef4444;color:white;border:none;padding:9px 16px;border-radius:6px;cursor:pointer;font-size:13px;text-decoration:none;display:inline-block;margin-top:10px;margin-left:8px;}}
   .btn-disabled{{background:#475569;color:#94a3b8;border:none;padding:9px 16px;border-radius:6px;font-size:13px;margin-top:10px;}}
   .note{{text-align:center;font-size:11px;color:#475569;padding:6px;}}
+  .niche-filters{{display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px;background:#020617;border-bottom:1px solid #1e293b;}}
+  .nf-btn{{background:#1e293b;color:#94a3b8;border:1px solid #334155;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;}}
+  .nf-btn:hover{{background:#334155;color:#e2e8f0;}}
+  .nf-btn.active{{background:#38bdf8;color:#000;border-color:#38bdf8;}}
+  .niche-badge{{font-size:10px;font-weight:bold;padding:2px 8px;border-radius:10px;text-transform:uppercase;}}
+  .niche-hoa{{background:#1e3a5f;color:#60a5fa;}}
+  .niche-hvac{{background:#1a2e1a;color:#4ade80;}}
+  .niche-dental{{background:#2d1a3a;color:#c084fc;}}
+  .niche-plumbing{{background:#2a1f0a;color:#fbbf24;}}
+  .niche-contractor{{background:#2a1515;color:#f87171;}}
 
   /* Grant iframe wrapper */
   .grants-iframe-wrap{{position:relative;width:100%;height:calc(100vh - 90px);overflow:auto;-webkit-overflow-scrolling:touch;}}
@@ -377,13 +387,8 @@ def dashboard():
 <div class="header">Gray Horizons Enterprise — Command Center</div>
 
 <div class="nav">
-  <a href="{URL_HOA}" target="_blank">HOA</a>
-  <a href="{URL_DENTAL}" target="_blank">Dental</a>
-  <a href="{URL_HVAC}" target="_blank">HVAC</a>
-  <a href="{URL_PLUMBING}" target="_blank">Plumbing</a>
-  <a href="{URL_HUB}" target="_blank">All Niches</a>
   <a onclick="showTab('outreach')" id="tab-outreach" class="{'active' if active_tab=='outreach' else ''}">Outreach ({pending_count} pending)</a>
-  <a onclick="showTab('grants')" id="tab-grants" class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grant Agent</a>
+  <a onclick="showTab('grants')"   id="tab-grants"   class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grant Agent</a>
 </div>
 
 <!-- OUTREACH TAB -->
@@ -402,19 +407,31 @@ def dashboard():
     </div>
   </div>
   <div class="note">{len(df)} total leads · auto-refreshes every 5 min</div>
+  <div class="niche-filters">
+    <button class="nf-btn active" onclick="filterNiche('all',this)">All Niches</button>
+    <button class="nf-btn" onclick="filterNiche('hoa',this)">HOA</button>
+    <button class="nf-btn" onclick="filterNiche('hvac',this)">HVAC</button>
+    <button class="nf-btn" onclick="filterNiche('dental',this)">Dental</button>
+    <button class="nf-btn" onclick="filterNiche('plumbing',this)">Plumbing</button>
+    <button class="nf-btn" onclick="filterNiche('contractor',this)">Contractor</button>
+  </div>
 """
 
     # Outreach lead cards
     for i, row in df.iterrows():
         if row["status"] != "pending":
             continue
-        name    = row["name"] or "Contact"
-        company = row["company"] or "Unknown Company"
-        email   = row["email"]
+        name    = row.get("name", "") or "Contact"
+        company = row.get("company", "") or "Unknown Company"
+        email   = row.get("email", "")
+        niche   = str(row.get("niche", "hoa") or "hoa").strip().lower()
         html += f"""
-  <div class="card">
-    <div class="card-title">{name}</div>
-    <div class="card-sub">{company} &nbsp;·&nbsp; {email if email else '❌ No Email'}</div>
+  <div class="card" data-niche="{niche}">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div class="card-title">{company}</div>
+      <span class="niche-badge niche-{niche}">{niche.upper()}</span>
+    </div>
+    <div class="card-sub">{email if email else '❌ No Email'}</div>
     <div class="card-msg">{format_message(row["message"])}</div>
     <div>"""
         if email:
@@ -455,6 +472,18 @@ function showTab(name) {{
   document.querySelectorAll('.nav a[id^="tab-"]').forEach(function(el){{ el.classList.remove('active'); }});
   document.getElementById('content-' + name).classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
+}}
+
+function filterNiche(niche, btn) {{
+  document.querySelectorAll('.nf-btn').forEach(function(b){{ b.classList.remove('active'); }});
+  btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(function(card) {{
+    if (niche === 'all' || card.dataset.niche === niche) {{
+      card.style.display = '';
+    }} else {{
+      card.style.display = 'none';
+    }}
+  }});
 }}
 </script>
 </body>
