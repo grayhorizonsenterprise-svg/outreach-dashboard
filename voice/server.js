@@ -10,6 +10,7 @@ const express      = require('express');
 const cors         = require('cors');
 const sgMail       = require('@sendgrid/mail');
 const { searchGrants } = require('./grantSearch');
+const outreach     = require('./outreachEngine');
 
 // ── SendGrid setup ────────────────────────────────────────────────────────────
 const SENDGRID_KEY = process.env.SENDGRID_API_KEY || '';
@@ -181,37 +182,35 @@ async function sendEmail(email, subject, body) {
   }
 }
 
-async function sendBatch(emails) {
-  const results = [];
-  for (const e of emails) {
-    const ok = await sendEmail(e.to, e.subject, e.text || e.body || '');
-    results.push({ to: e.to, success: ok });
-  }
-  const sent   = results.filter(r => r.success).length;
-  const failed = results.filter(r => !r.success).length;
-  console.log(`Batch done — ${sent} sent, ${failed} failed`);
-  return results;
-}
+// ── Outreach endpoints (throttled, retrying, follow-up aware) ─────────────────
 
-// POST /send-email  — single email
+// POST /send-email — single email with retry
 app.post('/send-email', async (req, res) => {
-  const { to, subject, text, body } = req.body;
-  if (!to || !subject || (!text && !body)) {
+  const { to, subject, text } = req.body;
+  if (!to || !subject || !text) {
     return res.status(400).json({ success: false, error: 'to, subject, and text are required' });
   }
-  const ok = await sendEmail(to, subject, text || body);
-  res.status(ok ? 200 : 502).json({ success: ok });
+  const result = await outreach.sendEmailSafe({ to, subject, text });
+  res.status(result.success ? 200 : 502).json(result);
 });
 
-// POST /send-batch  — array of { to, subject, text }
+// POST /send-batch — throttled batch (max 150/day, 20s between sends)
 app.post('/send-batch', async (req, res) => {
-  const { emails } = req.body;
+  const { emails, followUp = false } = req.body;
   if (!Array.isArray(emails) || emails.length === 0) {
     return res.status(400).json({ success: false, error: 'emails array is required' });
   }
-  const results = await sendBatch(emails);
-  const allOk   = results.every(r => r.success);
-  res.status(allOk ? 200 : 207).json({ results });
+  const summary = await outreach.sendBatchSafe(emails);
+  if (followUp) {
+    const sent = summary.results.filter(r => r.success);
+    outreach.scheduleFollowUps(sent);
+  }
+  res.status(summary.failed === 0 ? 200 : 207).json(summary);
+});
+
+// GET /outreach-status — daily count, recent log
+app.get('/outreach-status', (_req, res) => {
+  res.json(outreach.getStatus());
 });
 
 // ── Health — ALWAYS works regardless of Claude state ─────────────────────────

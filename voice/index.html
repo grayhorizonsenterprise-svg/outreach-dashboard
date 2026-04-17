@@ -1,64 +1,441 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>AI Voice Demo</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gray Horizons AI Voice Agent</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1a1d2e;
+      padding: 18px 32px;
+      border-bottom: 1px solid #2d3148;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 { font-size: 1.2rem; font-weight: 600; color: #fff; }
+    header span { font-size: 0.85rem; color: #64748b; }
+
+    .tabs {
+      display: flex;
+      gap: 0;
+      background: #1a1d2e;
+      border-bottom: 1px solid #2d3148;
+      padding: 0 24px;
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 14px 22px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #64748b;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+      user-select: none;
+    }
+    .tab:hover { color: #cbd5e1; }
+    .tab.active { color: #6366f1; border-bottom-color: #6366f1; font-weight: 600; }
+
+    .tab-content { display: none; padding: 28px 32px; max-width: 860px; }
+    .tab-content.active { display: block; }
+
+    .niche-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .niche-icon { font-size: 2rem; }
+    .niche-title { font-size: 1.4rem; font-weight: 700; color: #fff; }
+    .niche-desc { font-size: 0.9rem; color: #94a3b8; margin-top: 4px; }
+
+    .handles {
+      background: #1a1d2e;
+      border: 1px solid #2d3148;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+    .handles h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; margin-bottom: 10px; }
+    .handle-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .handle-pill {
+      background: #252840;
+      border: 1px solid #3d4166;
+      border-radius: 20px;
+      padding: 5px 13px;
+      font-size: 0.82rem;
+      color: #a5b4fc;
+    }
+
+    .chat-box {
+      background: #1a1d2e;
+      border: 1px solid #2d3148;
+      border-radius: 10px;
+      padding: 16px;
+      min-height: 200px;
+      max-height: 340px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .chat-box p { margin-bottom: 10px; }
+    .chat-box p.you { color: #a5b4fc; }
+    .chat-box p.ai  { color: #86efac; }
+    .chat-box .empty { color: #475569; font-style: italic; }
+
+    .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+    .btn {
+      padding: 11px 22px;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: #6366f1; color: #fff; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-danger  { background: #ef4444; color: #fff; }
+    .btn-danger:hover { opacity: 0.88; }
+    .btn-ghost   { background: #252840; color: #cbd5e1; border: 1px solid #3d4166; }
+    .btn-ghost:hover { background: #2e3257; }
+
+    .status-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #374151;
+      display: inline-block;
+      margin-right: 6px;
+      transition: background 0.3s;
+    }
+    .status-dot.listening { background: #ef4444; box-shadow: 0 0 8px #ef444488; animation: pulse 1s infinite; }
+    .status-dot.thinking  { background: #f59e0b; }
+    .status-dot.ready     { background: #22c55e; }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .status-label { font-size: 0.85rem; color: #64748b; }
+
+    /* text input fallback */
+    .text-input-row { display: flex; gap: 8px; margin-top: 10px; width: 100%; }
+    .text-input-row input {
+      flex: 1;
+      background: #252840;
+      border: 1px solid #3d4166;
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .text-input-row input:focus { border-color: #6366f1; }
+  </style>
 </head>
 <body>
 
-<h2>📞 AI Voice Agent Demo</h2>
+<header>
+  <div>
+    <h1>Gray Horizons Enterprise — AI Voice Agent</h1>
+    <span>Select a service line below to start a conversation</span>
+  </div>
+</header>
 
-<select id="niche">
-  <option value="hoa">HOA</option>
-  <option value="hvac">HVAC</option>
-  <option value="dental">Dental</option>
-  <option value="plumbing">Plumbing</option>
-  <option value="contractor">Contractor</option>
-</select>
+<div class="tabs">
+  <div class="tab active"  onclick="switchTab('hoa',        this)">HOA Management</div>
+  <div class="tab"         onclick="switchTab('hvac',       this)">HVAC</div>
+  <div class="tab"         onclick="switchTab('dental',     this)">Dental</div>
+  <div class="tab"         onclick="switchTab('plumbing',   this)">Plumbing</div>
+  <div class="tab"         onclick="switchTab('contractor', this)">Contractor</div>
+</div>
 
-<div id="chat"></div>
+<!-- HOA -->
+<div id="tab-hoa" class="tab-content active">
+  <div class="niche-header">
+    <span class="niche-icon">🏘️</span>
+    <div>
+      <div class="niche-title">HOA Management</div>
+      <div class="niche-desc">Violation notices · Disputes · Parking · Maintenance · Board inquiries</div>
+    </div>
+  </div>
+  <div class="handles">
+    <h3>Handles</h3>
+    <div class="handle-list">
+      <span class="handle-pill">Violation notices</span>
+      <span class="handle-pill">Resident disputes</span>
+      <span class="handle-pill">Parking complaints</span>
+      <span class="handle-pill">Board inquiries</span>
+      <span class="handle-pill">Maintenance requests</span>
+    </div>
+  </div>
+  <div id="chat-hoa" class="chat-box"><p class="empty">Conversation will appear here...</p></div>
+  <div class="controls">
+    <span class="status-dot" id="dot-hoa"></span>
+    <span class="status-label" id="label-hoa">Ready</span>
+    <button class="btn btn-primary" onclick="startListening('hoa')">🎤 Start Talking</button>
+    <button class="btn btn-ghost"   onclick="resetSession('hoa')">Reset</button>
+  </div>
+  <div class="text-input-row">
+    <input id="text-hoa" type="text" placeholder="Or type a message and press Enter..." onkeydown="handleKey(event,'hoa')">
+    <button class="btn btn-ghost" onclick="sendText('hoa')">Send</button>
+  </div>
+</div>
 
-<button onclick="startListening()">🎤 Start Talking</button>
+<!-- HVAC -->
+<div id="tab-hvac" class="tab-content">
+  <div class="niche-header">
+    <span class="niche-icon">❄️</span>
+    <div>
+      <div class="niche-title">HVAC</div>
+      <div class="niche-desc">AC & heat failures · Emergency repairs · Tune-ups · Installations</div>
+    </div>
+  </div>
+  <div class="handles">
+    <h3>Handles</h3>
+    <div class="handle-list">
+      <span class="handle-pill">AC failures</span>
+      <span class="handle-pill">Heat failures</span>
+      <span class="handle-pill">Emergency repairs</span>
+      <span class="handle-pill">Tune-ups</span>
+      <span class="handle-pill">Installations</span>
+      <span class="handle-pill">Maintenance</span>
+    </div>
+  </div>
+  <div id="chat-hvac" class="chat-box"><p class="empty">Conversation will appear here...</p></div>
+  <div class="controls">
+    <span class="status-dot" id="dot-hvac"></span>
+    <span class="status-label" id="label-hvac">Ready</span>
+    <button class="btn btn-primary" onclick="startListening('hvac')">🎤 Start Talking</button>
+    <button class="btn btn-ghost"   onclick="resetSession('hvac')">Reset</button>
+  </div>
+  <div class="text-input-row">
+    <input id="text-hvac" type="text" placeholder="Or type a message and press Enter..." onkeydown="handleKey(event,'hvac')">
+    <button class="btn btn-ghost" onclick="sendText('hvac')">Send</button>
+  </div>
+</div>
+
+<!-- Dental -->
+<div id="tab-dental" class="tab-content">
+  <div class="niche-header">
+    <span class="niche-icon">🦷</span>
+    <div>
+      <div class="niche-title">Dental</div>
+      <div class="niche-desc">New patients · Scheduling · Insurance questions · Emergency tooth pain</div>
+    </div>
+  </div>
+  <div class="handles">
+    <h3>Handles</h3>
+    <div class="handle-list">
+      <span class="handle-pill">New patient bookings</span>
+      <span class="handle-pill">Appointment scheduling</span>
+      <span class="handle-pill">Insurance questions</span>
+      <span class="handle-pill">Emergency tooth pain</span>
+    </div>
+  </div>
+  <div id="chat-dental" class="chat-box"><p class="empty">Conversation will appear here...</p></div>
+  <div class="controls">
+    <span class="status-dot" id="dot-dental"></span>
+    <span class="status-label" id="label-dental">Ready</span>
+    <button class="btn btn-primary" onclick="startListening('dental')">🎤 Start Talking</button>
+    <button class="btn btn-ghost"   onclick="resetSession('dental')">Reset</button>
+  </div>
+  <div class="text-input-row">
+    <input id="text-dental" type="text" placeholder="Or type a message and press Enter..." onkeydown="handleKey(event,'dental')">
+    <button class="btn btn-ghost" onclick="sendText('dental')">Send</button>
+  </div>
+</div>
+
+<!-- Plumbing -->
+<div id="tab-plumbing" class="tab-content">
+  <div class="niche-header">
+    <span class="niche-icon">🔧</span>
+    <div>
+      <div class="niche-title">Plumbing</div>
+      <div class="niche-desc">Leaks · Burst pipes · Drain clogs · Water heaters · Emergency repairs</div>
+    </div>
+  </div>
+  <div class="handles">
+    <h3>Handles</h3>
+    <div class="handle-list">
+      <span class="handle-pill">Leaks</span>
+      <span class="handle-pill">Burst pipes</span>
+      <span class="handle-pill">Drain clogs</span>
+      <span class="handle-pill">Water heater issues</span>
+      <span class="handle-pill">Emergency repairs</span>
+      <span class="handle-pill">Inspections</span>
+    </div>
+  </div>
+  <div id="chat-plumbing" class="chat-box"><p class="empty">Conversation will appear here...</p></div>
+  <div class="controls">
+    <span class="status-dot" id="dot-plumbing"></span>
+    <span class="status-label" id="label-plumbing">Ready</span>
+    <button class="btn btn-primary" onclick="startListening('plumbing')">🎤 Start Talking</button>
+    <button class="btn btn-ghost"   onclick="resetSession('plumbing')">Reset</button>
+  </div>
+  <div class="text-input-row">
+    <input id="text-plumbing" type="text" placeholder="Or type a message and press Enter..." onkeydown="handleKey(event,'plumbing')">
+    <button class="btn btn-ghost" onclick="sendText('plumbing')">Send</button>
+  </div>
+</div>
+
+<!-- Contractor -->
+<div id="tab-contractor" class="tab-content">
+  <div class="niche-header">
+    <span class="niche-icon">🏗️</span>
+    <div>
+      <div class="niche-title">General Contractor</div>
+      <div class="niche-desc">Remodels · Roofing · New builds · Additions · Project estimates</div>
+    </div>
+  </div>
+  <div class="handles">
+    <h3>Handles</h3>
+    <div class="handle-list">
+      <span class="handle-pill">Kitchen remodels</span>
+      <span class="handle-pill">Bathroom remodels</span>
+      <span class="handle-pill">Roofing</span>
+      <span class="handle-pill">New builds</span>
+      <span class="handle-pill">Additions</span>
+      <span class="handle-pill">Project estimates</span>
+    </div>
+  </div>
+  <div id="chat-contractor" class="chat-box"><p class="empty">Conversation will appear here...</p></div>
+  <div class="controls">
+    <span class="status-dot" id="dot-contractor"></span>
+    <span class="status-label" id="label-contractor">Ready</span>
+    <button class="btn btn-primary" onclick="startListening('contractor')">🎤 Start Talking</button>
+    <button class="btn btn-ghost"   onclick="resetSession('contractor')">Reset</button>
+  </div>
+  <div class="text-input-row">
+    <input id="text-contractor" type="text" placeholder="Or type a message and press Enter..." onkeydown="handleKey(event,'contractor')">
+    <button class="btn btn-ghost" onclick="sendText('contractor')">Send</button>
+  </div>
+</div>
 
 <script>
-let sessionId = Date.now();
+  const sessions = {};
 
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-recognition.lang = "en-US";
+  function getSession(niche) {
+    if (!sessions[niche]) sessions[niche] = 'session-' + niche + '-' + Date.now();
+    return sessions[niche];
+  }
 
-recognition.onresult = async (event) => {
-  const text = event.results[0][0].transcript;
+  function switchTab(niche, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('tab-' + niche).classList.add('active');
+  }
 
-  addMessage("You", text);
+  function setStatus(niche, state, label) {
+    const dot = document.getElementById('dot-' + niche);
+    const lbl = document.getElementById('label-' + niche);
+    dot.className = 'status-dot ' + state;
+    lbl.textContent = label;
+  }
 
-  const res = await fetch("/voice", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      message: text,
-      sessionId,
-      niche: document.getElementById("niche").value
-    })
-  });
+  function addMessage(niche, sender, text) {
+    const box = document.getElementById('chat-' + niche);
+    // Clear placeholder
+    const empty = box.querySelector('.empty');
+    if (empty) empty.remove();
+    const p = document.createElement('p');
+    p.className = sender === 'You' ? 'you' : 'ai';
+    p.innerHTML = '<b>' + sender + ':</b> ' + text;
+    box.appendChild(p);
+    box.scrollTop = box.scrollHeight;
+  }
 
-  const data = await res.json();
+  async function sendMessage(niche, text) {
+    if (!text || !text.trim()) return;
+    addMessage(niche, 'You', text);
+    setStatus(niche, 'thinking', 'Thinking...');
 
-  speak(data.reply);
-  addMessage("AI", data.reply);
-};
+    try {
+      const res = await fetch('/voice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, sessionId: getSession(niche), niche }),
+      });
+      const data = await res.json();
+      const reply = data.reply || 'Sorry, no response.';
+      addMessage(niche, 'AI', reply);
+      speak(reply);
+      setStatus(niche, 'ready', 'Ready');
+    } catch (err) {
+      addMessage(niche, 'AI', 'Connection error — please try again.');
+      setStatus(niche, '', 'Error');
+    }
+  }
 
-function startListening() {
-  recognition.start();
-}
+  // Voice input
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-function speak(text) {
-  const utter = new SpeechSynthesisUtterance(text);
-  speechSynthesis.speak(utter);
-}
+  function startListening(niche) {
+    if (!SpeechRec) {
+      alert('Speech recognition not supported in this browser. Use Chrome or Edge.');
+      return;
+    }
+    const rec = new SpeechRec();
+    rec.lang = 'en-US';
+    rec.interimResults = false;
+    setStatus(niche, 'listening', 'Listening...');
+    rec.start();
+    rec.onresult = (e) => {
+      const text = e.results[0][0].transcript;
+      sendMessage(niche, text);
+    };
+    rec.onerror = () => setStatus(niche, '', 'Mic error — try again');
+    rec.onend   = () => {
+      if (document.getElementById('label-' + niche).textContent === 'Listening...') {
+        setStatus(niche, '', 'Ready');
+      }
+    };
+  }
 
-function addMessage(sender, text) {
-  document.getElementById("chat").innerHTML +=
-    "<p><b>" + sender + ":</b> " + text + "</p>";
-}
+  // Text input
+  function handleKey(e, niche) {
+    if (e.key === 'Enter') sendText(niche);
+  }
+
+  function sendText(niche) {
+    const input = document.getElementById('text-' + niche);
+    const val   = input.value.trim();
+    if (!val) return;
+    input.value = '';
+    sendMessage(niche, val);
+  }
+
+  function resetSession(niche) {
+    delete sessions[niche];
+    fetch('/reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: getSession(niche) }),
+    });
+    const box = document.getElementById('chat-' + niche);
+    box.innerHTML = '<p class="empty">Conversation will appear here...</p>';
+    setStatus(niche, '', 'Ready');
+  }
+
+  function speak(text) {
+    if (!window.speechSynthesis) return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1.05;
+    speechSynthesis.speak(u);
+  }
 </script>
 
 </body>
