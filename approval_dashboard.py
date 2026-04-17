@@ -419,6 +419,17 @@ def dashboard():
   </div>
 """
 
+    # Empty state when nothing is pending
+    pending_rows = df[df["status"] == "pending"]
+    if len(pending_rows) == 0:
+        scraping_msg = "Pipeline is scraping new leads now — check back in a few minutes." if pipeline_running else "No pending leads. Click Refresh Leads to scrape new ones."
+        html += f"""
+  <div style="text-align:center;padding:60px 20px;color:#64748b;">
+    <div style="font-size:2rem;margin-bottom:12px;">{'⏳' if pipeline_running else '🔄'}</div>
+    <div style="font-size:16px;color:#94a3b8;margin-bottom:8px;">{scraping_msg}</div>
+    <div style="font-size:13px;">Sent: {sent_count} · Skipped: {skipped_count}</div>
+  </div>"""
+
     # Outreach lead cards
     for i, row in df.iterrows():
         if row["status"] != "pending":
