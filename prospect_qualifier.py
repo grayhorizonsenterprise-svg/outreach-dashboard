@@ -8,9 +8,23 @@ INPUT_FILE  = os.path.join(DATA_DIR, "prospects_raw.csv")
 OUTPUT_FILE = os.path.join(DATA_DIR, "prospects_raw.csv")
 
 BUSINESS_WORDS = [
+    # HOA
     "management", "association", "properties", "property",
-    "hoa", "community", "realty", "services", "group", "company",
-    "mgmt", "residential", "condo", "homeowner",
+    "hoa", "community", "realty", "mgmt", "residential", "condo", "homeowner",
+    # HVAC
+    "hvac", "heating", "cooling", "air conditioning", "furnace", "heat pump",
+    "refrigeration", "mechanical", "climate", "ventilation",
+    # Dental
+    "dental", "dentist", "orthodontic", "oral", "smile", "teeth", "tooth",
+    "periodontal", "endodontic", "implant",
+    # Plumbing
+    "plumbing", "plumber", "drain", "sewer", "pipe", "rooter",
+    "waterworks", "water heater",
+    # Contractor
+    "contractor", "construction", "remodel", "renovation", "builder",
+    "roofing", "flooring", "framing", "general contractor",
+    # Generic business
+    "services", "group", "company", "inc", "llc", "corp",
 ]
 
 # These patterns in the RAW title mean skip the row entirely
@@ -106,9 +120,17 @@ def is_valid_raw(name: str) -> bool:
     for pattern in RAW_JUNK_PATTERNS:
         if re.search(pattern, n):
             return False
+    # Must have at least one business indicator word
     if not any(word in n for word in BUSINESS_WORDS):
         return False
     return True
+
+
+# Niche keywords used to bypass strict name validation for non-HOA niches
+NICHE_KEYWORDS = {
+    "hvac", "heating", "cooling", "air conditioning", "plumbing", "plumber",
+    "dental", "dentist", "contractor", "construction", "remodel",
+}
 
 
 def is_valid_clean(name: str) -> bool:
@@ -163,8 +185,9 @@ def is_valid_clean(name: str) -> bool:
     if n in LOCATIONS:
         return False
 
-    # Too many words — still a sentence fragment
-    if len(name.split()) > 6:
+    # Too many words — still a sentence fragment (allow up to 8 for non-HOA niches)
+    niche_hit = any(k in n for k in NICHE_KEYWORDS)
+    if len(name.split()) > (8 if niche_hit else 6):
         return False
 
     # Ends with ! (tagline)

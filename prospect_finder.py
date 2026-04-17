@@ -233,7 +233,7 @@ def scrape_prospect(url: str, title: str, snippet: str, niche: str = "hoa") -> d
         "niche": niche,
     }
     try:
-        resp = requests.get(url, headers=get_headers(), timeout=10)
+        resp = requests.get(url, headers=get_headers(), timeout=6)
         resp.raise_for_status()
         soup = BeautifulSoup(resp.text, "html.parser")
 
@@ -274,7 +274,7 @@ def run():
         print(f"\n[SEARCH:{niche.upper()}] {query}")
         results = search_web(query, max_results=10)
         print(f"  Found {len(results)} results")
-        time.sleep(random.uniform(1.5, 3.0))
+        time.sleep(random.uniform(0.8, 1.5))
 
         for result in results:
             url = result["url"]
@@ -292,7 +292,7 @@ def run():
             prospect = scrape_prospect(url, result["title"], result["snippet"], niche)
             all_prospects.append(prospect)
             niche_counts[niche] = niche_counts.get(niche, 0) + 1
-            time.sleep(random.uniform(1.0, 2.5))
+            time.sleep(random.uniform(0.5, 1.2))
 
     if not all_prospects:
         print("\n[INFO] No prospects collected. Check network connectivity.")
