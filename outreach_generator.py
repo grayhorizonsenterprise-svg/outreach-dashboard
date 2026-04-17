@@ -3,203 +3,279 @@ import random
 import re
 import os
 
-DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR    = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 INPUT_FILE  = os.path.join(DATA_DIR, "prospects_raw.csv")
 OUTPUT_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
 
-SUBJECTS = [
-    "how do you handle violation tracking?",
-    "quick question about your workflow",
-    "how does your team handle this?",
-    "had a question about {company}",
-    "saw your firm — quick question",
-]
+# =========================
+# NICHE MESSAGE TEMPLATES
+# =========================
 
-def generate_subject(company):
-    subject = random.choice(SUBJECTS)
-    return subject.replace("{company}", company)
+NICHE_MESSAGES = {
 
-MESSAGES = [
-    """\
+    "hoa": [
+        """\
 Hey,
 
-Came across {company} and wanted to reach out directly.
+Quick question — when a homeowner submits a violation or complaint, how does your team track it from that first report all the way to resolution? Still email threads, or do you have something more structured?
 
-I'm curious — when a homeowner submits a violation or complaint, how does your team keep track of it from that first report all the way to resolution? Still email threads, or do you have something built out?
+We work with a few HOA firms and that handoff tends to be where things fall through. Happy to share what we put together if it's relevant.
 
-Reason I'm asking is we work with a few HOA firms and that handoff tends to be where things fall through. We put together something pretty simple that keeps it all in one place, and I wanted to see if it's even a problem you're running into.
+— Alex
+Gray Horizons Enterprise""",
 
-Either way, happy to chat if it's relevant.
-
-Alex
-Gray Horizons Enterprise
-grayhorizonsenterprise.com\
-""",
-    """\
+        """\
 Hi there,
 
-I noticed {company} while doing some research on HOA management firms and wanted to shoot you a quick note.
+How are you handling violation notices and compliance documentation across your communities? It sounds simple but gets messy fast once you're managing more than a handful of associations.
 
-How are you guys currently handling violation notices and compliance documentation across your communities? I ask because it's one of those things that sounds simple but gets messy fast once you're managing more than a handful of associations.
+Not a pitch — just genuinely curious how you're running it right now.
 
-We've been helping firms like yours get that process a lot tighter — nothing complicated, just a cleaner way to track things end to end.
+— Alex
+Gray Horizons Enterprise""",
 
-Worth a 15-minute call if that's something you're actively dealing with. No pressure either way.
-
-Alex
-Gray Horizons Enterprise
-grayhorizonsenterprise.com\
-""",
-    """\
+        """\
 Hey,
 
-Found {company} while looking into firms managing communities on the West Coast — reached out because I had a genuine question.
+Direct question — how does your team deal with violation management across multiple HOAs? Specifically the documentation side — keeping records, following up, making sure nothing gets dropped.
 
-How does your team currently deal with violation management across multiple HOAs? Specifically the documentation side — keeping records, following up, making sure nothing gets dropped.
+Happy to compare notes if that's a pain point.
 
-We built something that a few management firms have been using to clean that up. Some were doing it in spreadsheets, some in email, some in a mix of both. Not here to pitch hard — just wanted to see if it's a headache you're familiar with.
+— Alex
+Gray Horizons Enterprise""",
+    ],
 
-Let me know if it's worth talking.
-
-Alex
-Gray Horizons Enterprise
-grayhorizonsenterprise.com\
-""",
-    """\
-Hi,
-
-Quick one — how does {company} handle it when a community board flags a violation? Is there a system in place or is it mostly managed through email and manual follow-up?
-
-I work with HOA management firms to tighten up that process, specifically around tracking and documentation so things don't fall through the cracks between the board and the management team.
-
-If that's something you're still piecing together, I'd love to show you what we've built. Takes about 10 minutes to see if it's even relevant to how you operate.
-
-Alex
-Gray Horizons Enterprise
-grayhorizonsenterprise.com\
-""",
-    """\
+    "hvac": [
+        """\
 Hey,
 
-Reached out because I came across {company} and it looked like you guys are running a real operation — wanted to ask a direct question.
+Quick one — when a customer calls in for an emergency repair, how are you dispatching and tracking that job from the first call to close-out? Still phone and spreadsheet, or do you have a system?
 
-When your team gets a violation report or a compliance issue from one of your HOAs, where does it live? Email inbox, shared doc, some software? Or is it still kind of scattered depending on who's handling it?
+We've been working with HVAC companies to tighten up that gap. Curious how you're handling it.
 
-We work with management firms that were dealing with exactly that and helped them get it centralized. Not trying to sell you anything today — just genuinely wanted to know if it's on your radar.
+— Alex
+Gray Horizons Enterprise""",
 
-Happy to show you what it looks like if you're curious.
+        """\
+Hi there,
 
-Alex
-Gray Horizons Enterprise
-grayhorizonsenterprise.com\
-""",
-]
+Not sure if this is relevant, but — how are you managing your service calls and maintenance schedules right now? Specifically keeping techs, customers, and follow-ups all in sync without things falling through.
+
+Happy to share what we've seen work well if it's useful.
+
+— Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Wanted to ask something real quick — during peak season when calls are stacking up, how does your team keep track of which jobs are pending, in progress, and completed? Is it centralized anywhere or still kind of scattered?
+
+— Alex
+Gray Horizons Enterprise""",
+    ],
+
+    "dental": [
+        """\
+Hey,
+
+Quick question — how are you handling new patient intake and appointment follow-ups right now? Specifically making sure patients who inquire actually get booked and don't fall off.
+
+We've been working with a few dental practices on exactly that. Curious how you're running it.
+
+— Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi there,
+
+Not sure if this is an issue on your end, but — how does your front desk handle it when someone calls for an emergency appointment and the schedule is already full? Is there a system for that or is it mostly judgment call?
+
+Happy to share what we've seen work.
+
+— Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Random question — how are you tracking patients who called, got put on a waitlist, and never followed up? That gap between first inquiry and actual booking is where a lot of practices lose people.
+
+Curious if that's something you're actively managing.
+
+— Alex
+Gray Horizons Enterprise""",
+    ],
+
+    "plumbing": [
+        """\
+Hey,
+
+Quick one — when an emergency call comes in, how are you routing it to a tech and making sure the customer gets an update without someone manually tracking it the whole time?
+
+We work with plumbing companies to clean up that dispatch-to-completion flow. Curious how you're handling it.
+
+— Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi there,
+
+Not sure if this is relevant, but — how are you managing job tracking across your crews right now? Specifically knowing where each job stands without having to call the tech directly.
+
+Happy to compare notes if that's something you deal with.
+
+— Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Direct question — when a customer calls about a burst pipe or active leak, what does the first 10 minutes look like on your end? Is dispatch centralized or is it still kind of ad hoc?
+
+— Alex
+Gray Horizons Enterprise""",
+    ],
+
+    "contractor": [
+        """\
+Hey,
+
+Quick question — how are you managing the gap between a client's first estimate request and when the actual project kicks off? That handoff tends to be where leads go cold.
+
+We've been working with contracting firms on tightening up that process. Curious how you're running it.
+
+— Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi there,
+
+Not sure if this applies, but — how are you tracking open bids and follow-ups right now? Specifically making sure estimates you sent out actually get a response before they go stale.
+
+Happy to share what we've put together if it's useful.
+
+— Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Random question — when a potential client reaches out about a remodel or addition, how quickly does your team get them a quote and follow up? That response window is usually the difference between winning the job and losing it.
+
+Curious how you're handling the volume.
+
+— Alex
+Gray Horizons Enterprise""",
+    ],
+}
+
+NICHE_SUBJECTS = {
+    "hoa":        ["Quick question", "How do you handle violation tracking?", "Quick one for you"],
+    "hvac":       ["Quick question", "How are you dispatching right now?",    "Quick one for you"],
+    "dental":     ["Quick question", "How are you handling new patients?",    "Quick one for you"],
+    "plumbing":   ["Quick question", "How do you handle emergency calls?",    "Quick one for you"],
+    "contractor": ["Quick question", "How are you managing bids?",            "Quick one for you"],
+}
 
 def is_clean_name(name: str) -> bool:
-    """Returns True if the name is human-readable enough to use in an email."""
     if not name or len(name) < 3:
         return False
-    # Domain slugs: all lowercase with no spaces
     if name == name.lower() and " " not in name:
         return False
-    # CamelCase stuck together
     if re.search(r"[a-z][A-Z]", name):
         return False
-    # Contains URL-like patterns
     if re.search(r"https?://|\.[a-z]{2,4}(/|$)", name, re.IGNORECASE):
         return False
-    # Has a year or looks like a sentence
     if re.search(r"\b20\d{2}\b|^\d", name):
         return False
-    # Too long — still a page title fragment
     if len(name.split()) > 5:
         return False
     return True
 
-
-def generate_subject(company):
-    subject = random.choice(SUBJECTS)
-    display = company if is_clean_name(company) else "your firm"
+def generate_subject(company, niche):
+    subjects = NICHE_SUBJECTS.get(niche, NICHE_SUBJECTS["hoa"])
+    subject  = random.choice(subjects)
+    display  = company if is_clean_name(company) else "your firm"
     return subject.replace("{company}", display)
 
-
-def generate_message(company):
-    template = random.choice(MESSAGES)
-    if is_clean_name(company):
-        return template.replace("{company}", company)
-    else:
-        # Use generic but still natural phrasing
-        return (template
-                .replace("{company}", "your firm")
-                .replace("Hi {company}", "Hi there")
-                .replace("Hi your firm team,", "Hi there,")
-                .replace("Hi your firm,", "Hi there,"))
+def generate_message(company, niche):
+    templates = NICHE_MESSAGES.get(niche, NICHE_MESSAGES["hoa"])
+    template  = random.choice(templates)
+    display   = company if is_clean_name(company) else "your team"
+    return template.replace("{company}", display)
 
 def run():
     if not os.path.exists(INPUT_FILE):
         print(f"[SKIP] {INPUT_FILE} not found yet — skipping outreach generation.")
         return
-    df = pd.read_csv(INPUT_FILE)
+
+    df = pd.read_csv(INPUT_FILE).fillna("")
 
     # Load existing queue to preserve sent/skipped status
-    done_emails = set()
+    done_emails  = set()
     existing_rows = []
     if os.path.exists(OUTPUT_FILE):
         try:
             existing = pd.read_csv(OUTPUT_FILE).fillna("")
             for _, r in existing.iterrows():
                 status = str(r.get("status", "")).strip()
-                email  = str(r.get("email", "")).strip().lower()
+                email  = str(r.get("email",  "")).strip().lower()
                 if status in ("sent", "skipped") and email:
                     done_emails.add(email)
                     existing_rows.append(r.to_dict())
         except Exception:
             pass
 
-    rows = []
-    skipped = 0
+    rows        = []
+    skipped     = 0
     seen_emails = set(done_emails)
+    niche_count: dict[str, int] = {}
+
+    junk_patterns = [
+        "email@email", "@email.com", "example", "test@", "noreply",
+        "placeholder", "demo@", "fake@", "domain.com", "company.com",
+        "yourname", "sample@", "null@", "none@", "@mailinator", "@tempmail"
+    ]
 
     for _, row in df.iterrows():
         email = str(row.get("email", "")).strip()
-
-        # Only include leads where we have a confirmed email
         if email in ("", "nan", "None"):
             skipped += 1
             continue
-
-        # Skip duplicates and already-processed emails
         if email.lower() in seen_emails:
             skipped += 1
             continue
-
-        # Block obvious placeholder/junk emails
         e = email.lower()
-        junk = ["email@email", "@email.com", "example", "test@", "noreply",
-                "placeholder", "demo@", "fake@", "domain.com", "company.com",
-                "yourname", "sample@", "null@", "none@", "@mailinator", "@tempmail"]
-        if any(p in e for p in junk):
+        if any(p in e for p in junk_patterns):
             skipped += 1
             continue
 
         seen_emails.add(email.lower())
 
         company = str(row.get("company", "")).strip()
+        niche   = str(row.get("niche",   "hoa")).strip().lower()
+        if niche not in NICHE_MESSAGES:
+            niche = "hoa"
 
         rows.append({
             "company": company,
-            "name": "",
-            "email": email,
+            "name":    "",
+            "email":   email,
             "website": row.get("website", ""),
-            "subject": generate_subject(company),
-            "message": generate_message(company),
-            "status": "pending"
+            "niche":   niche,
+            "subject": generate_subject(company, niche),
+            "message": generate_message(company, niche),
+            "status":  "pending",
         })
+        niche_count[niche] = niche_count.get(niche, 0) + 1
 
     out = pd.DataFrame(existing_rows + rows)
     out.to_csv(OUTPUT_FILE, index=False, quoting=1)
 
     print(f"[DONE] outreach_queue.csv: {len(rows)} new leads added, {len(done_emails)} preserved, {skipped} skipped")
+    for n, c in sorted(niche_count.items()):
+        print(f"  {n.upper():12s}: {c} leads")
 
 if __name__ == "__main__":
     run()

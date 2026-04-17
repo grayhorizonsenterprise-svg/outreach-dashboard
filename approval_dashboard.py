@@ -117,12 +117,14 @@ def load_data():
         "Name": "name"
     })
 
-    for col in ["company","name","email","message","status"]:
+    for col in ["company","name","email","message","status","niche"]:
         if col not in df.columns:
             df[col] = ""
 
     df = df.fillna("")
     df.loc[df["status"] == "", "status"] = "pending"
+    # Tag all untagged rows as hoa (existing data pre-dates niche column)
+    df.loc[df["niche"] == "", "niche"] = "hoa"
 
     return df
 
