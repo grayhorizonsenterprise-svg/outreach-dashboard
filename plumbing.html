@@ -6,130 +6,162 @@
 <title>Plumbing Service System</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,sans-serif;background:#0b1220;color:#e2e8f0;padding:40px 20px;}
-.container{max-width:800px;margin:auto;}
-h1{font-size:24px;font-weight:800;margin-bottom:24px;color:#4f9cff;}
-label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:4px;}
-input,select,textarea{width:100%;padding:10px 12px;margin-bottom:14px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#e2e8f0;font-size:14px;font-family:inherit;}
+body{font-family:Arial,sans-serif;background:#0b1220;color:#e2e8f0;padding:30px 16px;}
+.container{max-width:820px;margin:auto;}
+h1{font-size:22px;font-weight:800;margin-bottom:6px;color:#4f9cff;}
+.subtitle{font-size:12px;color:#64748b;margin-bottom:24px;}
+.section{background:#0f1e35;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:18px;}
+.section-title{font-size:13px;font-weight:800;color:#4f9cff;margin-bottom:14px;}
+.photo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px;}
+.photo-cell{position:relative;aspect-ratio:4/3;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;overflow:hidden;}
+.photo-cell img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-cell .label{position:absolute;bottom:0;left:0;right:0;padding:5px 8px;background:linear-gradient(transparent,rgba(0,0,0,.8));font-size:10px;font-weight:700;color:#fff;}
+.photo-cell .tag{position:absolute;top:6px;left:6px;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;}
+.tag-emergency{background:#ef4444;color:#fff;}
+.tag-repair{background:#f97316;color:#fff;}
+.tag-install{background:#3b82f6;color:#fff;}
+.tag-inspect{background:#22c55e;color:#fff;}
+.photo-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:24px;color:#475569;font-size:12px;text-align:center;grid-column:span 2;}
+.photo-empty .icon{font-size:32px;opacity:.4;}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-photo{padding:10px;border-radius:8px;border:1px solid rgba(79,156,255,.3);background:rgba(79,156,255,.08);color:#4f9cff;font-weight:700;font-size:13px;cursor:pointer;transition:.15s;}
+.btn-photo:hover{background:rgba(79,156,255,.18);}
+.photo-hint{font-size:11px;color:#475569;margin-top:8px;}
+.photo-preview{display:none;margin-top:10px;position:relative;}
+.photo-preview img{width:100%;border-radius:8px;max-height:200px;object-fit:cover;}
+.photo-preview .remove-btn{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.6);border:none;color:#fff;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;}
+label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:4px;}
+input,select,textarea{width:100%;padding:10px 12px;margin-bottom:14px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#e2e8f0;font-size:14px;font-family:inherit;}
 textarea{resize:vertical;min-height:80px;}
-button[type=submit]{width:100%;padding:12px;border-radius:6px;border:none;background:#2563eb;color:#fff;font-weight:700;font-size:15px;cursor:pointer;transition:background .15s;}
-button[type=submit]:hover{background:#1d4ed8;}
-button[type=submit]:disabled{opacity:.6;cursor:not-allowed;}
-#status{margin-top:14px;font-size:14px;font-weight:600;min-height:20px;}
-.sheet-wrap{margin-top:32px;border:1px solid rgba(79,156,255,.25);border-radius:10px;overflow:hidden;}
-.sheet-header{padding:10px 16px;background:rgba(79,156,255,.06);border-bottom:1px solid rgba(79,156,255,.18);font-size:12px;font-weight:700;color:#4f9cff;}
-iframe{width:100%;height:500px;border:none;display:block;background:#fff;}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.pill{padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#94a3b8;font-size:12px;font-weight:700;cursor:pointer;transition:.15s;}
+.pill.active{border-color:#4f9cff;background:rgba(79,156,255,.15);color:#4f9cff;}
+.pill.urgent{border-color:#ef4444;color:#ef4444;}
+.pill.urgent.active{background:rgba(239,68,68,.15);}
+.btn-submit{width:100%;padding:13px;border-radius:8px;border:none;background:#2563eb;color:#fff;font-weight:800;font-size:15px;cursor:pointer;transition:.15s;}
+.btn-submit:hover{background:#1d4ed8;}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;}
+#status{margin-top:12px;font-size:14px;font-weight:600;min-height:20px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.act-entry{padding:8px 10px;background:rgba(79,156,255,.06);border:1px solid rgba(79,156,255,.15);border-radius:6px;font-size:11px;line-height:1.7;}
+.sheet-wrap{margin-top:18px;border:1px solid rgba(79,156,255,.2);border-radius:10px;overflow:hidden;}
+.sheet-header{padding:10px 16px;background:rgba(79,156,255,.05);border-bottom:1px solid rgba(79,156,255,.15);font-size:12px;font-weight:700;color:#4f9cff;}
+iframe{width:100%;height:480px;border:none;display:block;}
+@media(max-width:560px){.two-col,.btn-row{grid-template-columns:1fr!important;}}
 </style>
 </head>
 <body>
 <div class="container">
   <h1>Plumbing Service System</h1>
+  <div class="subtitle">Smart Dispatch &bull; Issue Photo Log &bull; Automated Follow-Up</div>
 
-  <form id="form">
-    <label>Customer Name</label>
-    <input id="name" placeholder="e.g. John Doe" required>
-    <label>Email Address</label>
-    <input id="email" type="email" placeholder="e.g. john@email.com" required>
-    <label>Property Address</label>
-    <input id="unit" placeholder="e.g. 456 Oak Ave">
-    <label>Service Type</label>
-    <select id="type">
-      <option>Leak Repair</option>
-      <option>Drain Cleaning</option>
-      <option>Water Heater</option>
-      <option>Emergency</option>
-      <option>Pipe Installation</option>
-      <option>Inspection</option>
-      <option>Other</option>
-    </select>
-    <label>Issue Description</label>
-    <textarea id="notice" placeholder="Describe the plumbing issue…"></textarea>
-    <button type="submit" id="submit-btn">Request Service</button>
-  </form>
+  <!-- ── Recent Issue Photos ── -->
+  <div class="section">
+    <div class="section-title">&#128247; Recent Issue Photos</div>
+    <div class="photo-grid" id="issue-gallery">
+      <div class="photo-empty"><div class="icon">&#128694;</div><div>No issue photos yet<br>Attach a photo when submitting a service request</div></div>
+    </div>
+    <button class="btn-photo" style="width:100%" onclick="toggleExpanded()">View All Issues</button>
+    <div id="expand-gallery" style="display:none;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px;"></div>
+  </div>
 
-  <div id="status"></div>
+  <!-- ── Service Type Pills ── -->
+  <div class="section">
+    <div class="section-title">&#128694; Issue Type</div>
+    <div class="pill-row" id="type-pills">
+      <div class="pill active" onclick="selectPill(this,'Leak Repair')">&#128167; Leak</div>
+      <div class="pill" onclick="selectPill(this,'Drain Cleaning')">&#128299; Drain</div>
+      <div class="pill urgent" onclick="selectPill(this,'Emergency')">&#128680; Emergency</div>
+      <div class="pill" onclick="selectPill(this,'Water Heater')">&#9889; Water Heater</div>
+      <div class="pill" onclick="selectPill(this,'Pipe Installation')">&#128295; Pipe Install</div>
+      <div class="pill" onclick="selectPill(this,'Inspection')">&#128269; Inspection</div>
+    </div>
+  </div>
+
+  <!-- ── Photo Capture ── -->
+  <div class="section">
+    <div class="section-title">&#128247; Issue Photo</div>
+    <div class="btn-row">
+      <button class="btn-photo" onclick="document.getElementById('camera-input').click()">&#128247; Take Photo</button>
+      <button class="btn-photo" onclick="document.getElementById('upload-input').click()">&#128193; Upload Photo</button>
+    </div>
+    <div class="photo-hint">Photo of the leak, clog, or damage helps dispatch the right tech with the right parts</div>
+    <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="previewPhoto(this)">
+    <input type="file" id="upload-input" accept="image/*" style="display:none" onchange="previewPhoto(this)">
+    <div class="photo-preview" id="photo-preview">
+      <img id="preview-img" src="" alt="preview">
+      <button class="remove-btn" onclick="clearPhoto()">&#10005;</button>
+    </div>
+  </div>
+
+  <!-- ── Service Request Form ── -->
+  <div class="section">
+    <div class="section-title">&#128203; Service Request</div>
+    <form id="form">
+      <label>Customer Name</label>
+      <input id="name" placeholder="e.g. John Doe" required>
+      <label>Email Address</label>
+      <input id="email" type="email" placeholder="e.g. john@email.com" required>
+      <label>Property Address</label>
+      <input id="unit" placeholder="e.g. 456 Oak Ave, Dallas TX">
+      <label>Describe the Issue</label>
+      <textarea id="notice" placeholder="Where is the leak? Is water currently flowing? Any sounds or smells?" required></textarea>
+      <button type="submit" class="btn-submit" id="submit-btn">Request Service</button>
+    </form>
+    <div id="status"></div>
+  </div>
+
+  <div class="two-col">
+    <div class="section">
+      <div class="section-title">&#128200; Request Status</div>
+      <div id="global-status" style="font-size:11px;color:#64748b;padding:8px;background:rgba(255,255,255,.03);border-radius:6px;margin-bottom:10px;">Received &rarr; Processing &rarr; Dispatched &rarr; Completed</div>
+      <div style="font-size:11px;color:#22d3ee;font-weight:700;margin-bottom:8px;">&#9200; Tech dispatched within 30 min</div>
+      <div id="global-summary" style="font-size:11px;color:#64748b;line-height:1.8;">No submissions yet</div>
+    </div>
+    <div class="section">
+      <div class="section-title">&#9889; Live Activity</div>
+      <div id="activity-feed" style="font-size:11px;color:#64748b;line-height:1.8;display:flex;flex-direction:column;gap:6px;"><span style="font-style:italic">No activity yet</span></div>
+    </div>
+  </div>
 
   <div class="sheet-wrap">
     <div class="sheet-header">&#128202; Live Service Log &mdash; Auto-Updates</div>
-    <!-- TODO: Replace src with Plumbing sheet embed URL once sheet is created -->
     <iframe src="about:blank" id="sheet-frame" title="Live Plumbing Service Log" loading="lazy"></iframe>
   </div>
 </div>
 
 <script>
-var GHE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTZ-7apQcSIGhVLyTqs24KOgHuybmAriRKvqFWmmLpHwIB7RatsWg91_1SS1Z5yw9B/exec';
+var GHE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyTZ-7apQcSIGhVLyTqs24KOgHuybmAriRKvqFWmmLpHwIB7RatsWg91_1SS1Z5yw9B/exec';
+var STORE_KEY='ghe_plumbing_photos';var MAX_PHOTOS=12;
+var selectedType='Leak Repair';var pendingPhotoB64='';
 
-function sendJSONP(url, payload, onSuccess, onFail) {
-  var cb = '_ghe_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
-  var s = document.createElement('script');
-  var done = false;
-  var timer = setTimeout(function() { if (!done) { done = true; cleanup(); onFail(new Error('timeout')); } }, 12000);
-  function cleanup() { clearTimeout(timer); try { delete window[cb]; } catch(e) {} if (s.parentNode) s.parentNode.removeChild(s); }
-  window[cb] = function(r) { if (done) return; done = true; cleanup(); r && r.status === 'ok' ? onSuccess(r) : onFail(new Error(r && r.msg || 'error')); };
-  s.onerror = function() { if (!done) { done = true; cleanup(); onFail(new Error('load error')); } };
-  s.src = url + '?callback=' + cb + '&data=' + encodeURIComponent(JSON.stringify(payload));
-  document.head.appendChild(s);
-}
+function selectPill(el,type){document.querySelectorAll('#type-pills .pill').forEach(function(p){p.classList.remove('active');});el.classList.add('active');selectedType=type;}
+function previewPhoto(input){var file=input.files[0];if(!file)return;var r=new FileReader();r.onload=function(e){pendingPhotoB64=e.target.result;document.getElementById('preview-img').src=pendingPhotoB64;document.getElementById('photo-preview').style.display='block';};r.readAsDataURL(file);}
+function clearPhoto(){pendingPhotoB64='';document.getElementById('photo-preview').style.display='none';document.getElementById('camera-input').value='';document.getElementById('upload-input').value='';}
+function toggleExpanded(){var el=document.getElementById('expand-gallery');el.style.display=el.style.display==='none'?'grid':'none';}
+function loadPhotos(){return JSON.parse(localStorage.getItem(STORE_KEY)||'[]');}
+function savePhoto(entry){var p=loadPhotos();p.unshift(entry);if(p.length>MAX_PHOTOS)p=p.slice(0,MAX_PHOTOS);localStorage.setItem(STORE_KEY,JSON.stringify(p));}
+function getTag(type){if(type==='Emergency')return['tag-emergency','URGENT'];if(type==='Pipe Installation')return['tag-install','INSTALL'];if(type==='Inspection')return['tag-inspect','INSPECT'];return['tag-repair','REPAIR'];}
+function renderGallery(){var photos=loadPhotos();var grid=document.getElementById('issue-gallery');if(!photos.length){grid.innerHTML='<div class="photo-empty"><div class="icon">&#128694;</div><div>No issue photos yet</div></div>';return;}grid.innerHTML='';photos.slice(0,4).forEach(function(p){grid.appendChild(makeCell(p));});var exp=document.getElementById('expand-gallery');exp.innerHTML='';photos.slice(4).forEach(function(p){exp.appendChild(makeCell(p));});}
+function makeCell(p){var cell=document.createElement('div');cell.className='photo-cell';var tag=getTag(p.type);cell.innerHTML='<img src="'+p.b64+'" alt="issue"><div class="label">'+_esc(p.name)+' &bull; '+p.date+'</div><div class="tag '+tag[0]+'">'+tag[1]+'</div>';return cell;}
+function sendJSONP(url,payload,onSuccess,onFail){var cb='_ghe_'+Date.now()+'_'+Math.floor(Math.random()*9999);var s=document.createElement('script');var done=false;var timer=setTimeout(function(){if(!done){done=true;cleanup();onFail(new Error('timeout'));}},12000);function cleanup(){clearTimeout(timer);try{delete window[cb];}catch(e){}if(s.parentNode)s.parentNode.removeChild(s);}window[cb]=function(r){if(done)return;done=true;cleanup();r&&r.status==='ok'?onSuccess(r):onFail(new Error(r&&r.msg||'error'));};s.onerror=function(){if(!done){done=true;cleanup();onFail(new Error('load error'));}};s.src=url+'?callback='+cb+'&data='+encodeURIComponent(JSON.stringify(payload));document.head.appendChild(s);}
+function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function pushActivity(payload){var feed=document.getElementById('activity-feed');var empty=feed.querySelector('span[style]');if(empty)empty.remove();var e=document.createElement('div');e.className='act-entry';e.innerHTML='&#10003; <strong style="color:#e2e8f0">'+_esc(payload.name)+'</strong> &bull; <span style="color:#4f9cff">'+_esc(payload.type)+'</span>'+(pendingPhotoB64?' &bull; <span style="color:#22d3ee">&#128247; photo</span>':'');feed.prepend(e);if(feed.children.length>8)feed.removeChild(feed.lastChild);document.getElementById('global-summary').innerHTML='&#10003; Received<br>&#10003; Logged: '+payload.ts+'<br>&#10003; Tech dispatched';}
 
-var _sub = false, _retried = false;
-document.getElementById('form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  if (_sub) return;
-  var nameEl = document.getElementById('name');
-  var emailEl = document.getElementById('email');
-  var unitEl = document.getElementById('unit');
-  var typeEl = document.getElementById('type');
-  var noticeEl = document.getElementById('notice');
-  var statusEl = document.getElementById('status');
-  var btn = document.getElementById('submit-btn');
-
-  if (!nameEl.value.trim() || !emailEl.value.trim() || !noticeEl.value.trim()) {
-    statusEl.innerText = '\u26A0 Please fill in all required fields.';
-    statusEl.style.color = '#f87171';
-    return;
-  }
-
-  _sub = true; _retried = false;
-  btn.disabled = true; btn.textContent = 'Sending\u2026';
-  statusEl.innerText = 'Processing\u2026'; statusEl.style.color = '#e2e8f0';
-
-  var payload = {
-    id: 'R' + Date.now(),
-    ts: new Date().toLocaleString(),
-    name: nameEl.value.trim(),
-    email: emailEl.value.trim(),
-    unit: unitEl.value.trim(),
-    type: typeEl.value,
-    notice: noticeEl.value.trim(),
-    mode: 'plumbing'
-  };
-
-  function onDone(ok) {
-    _sub = false;
-    btn.disabled = false; btn.textContent = 'Request Service';
-    if (ok) {
-      statusEl.innerText = '\u2705 Request Sent \u2014 team notified.';
-      statusEl.style.color = '#22c55e';
-      document.getElementById('form').reset();
-    } else {
-      statusEl.innerText = '\u2705 Submitted \u2014 processing in background.';
-      statusEl.style.color = '#94a3b8';
-    }
-  }
-
-  sendJSONP(GHE_SCRIPT_URL, payload,
-    function() { onDone(true); },
-    function(err) {
-      if (!_retried) {
-        _retried = true;
-        statusEl.innerText = '\u23F3 Retrying\u2026';
-        setTimeout(function() {
-          sendJSONP(GHE_SCRIPT_URL, payload, function() { onDone(true); }, function() { onDone(false); });
-        }, 2000);
-      } else { onDone(false); }
-    }
-  );
+var _sub=false,_retried=false;
+document.getElementById('form').addEventListener('submit',function(e){
+  e.preventDefault();if(_sub)return;
+  var name=document.getElementById('name').value.trim();var email=document.getElementById('email').value.trim();var unit=document.getElementById('unit').value.trim();var notice=document.getElementById('notice').value.trim();
+  var statusEl=document.getElementById('status');var btn=document.getElementById('submit-btn');
+  if(!name||!email||!notice){statusEl.innerText='\u26A0 Please fill in all required fields.';statusEl.style.color='#f87171';return;}
+  _sub=true;_retried=false;btn.disabled=true;btn.textContent='Sending\u2026';statusEl.innerText='Processing\u2026';statusEl.style.color='#e2e8f0';
+  var payload={id:'R'+Date.now(),ts:new Date().toLocaleString(),name:name,email:email,unit:unit,type:selectedType,notice:notice,mode:'plumbing',hasPhoto:!!pendingPhotoB64};
+  if(pendingPhotoB64){savePhoto({b64:pendingPhotoB64,type:selectedType,name:name,unit:unit,notice:notice,date:new Date().toLocaleDateString()});renderGallery();}
+  pushActivity(payload);
+  function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Request Service';if(ok){statusEl.innerText='\u2705 Request sent \u2014 tech notified.';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
+  sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_retried){_retried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
 });
+renderGallery();
 </script>
 </body>
 </html>

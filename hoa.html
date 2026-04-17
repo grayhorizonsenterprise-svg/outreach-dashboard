@@ -6,189 +6,261 @@
 <title>HOA Compliance System</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,sans-serif;background:#0b1220;color:#e2e8f0;padding:40px 20px;}
-.container{max-width:800px;margin:auto;}
-h1{font-size:24px;font-weight:800;margin-bottom:24px;color:#4f9cff;}
-label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:4px;}
-input,select,textarea{width:100%;padding:10px 12px;margin-bottom:14px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#e2e8f0;font-size:14px;font-family:inherit;}
+body{font-family:Arial,sans-serif;background:#0b1220;color:#e2e8f0;padding:30px 16px;}
+.container{max-width:820px;margin:auto;}
+h1{font-size:22px;font-weight:800;margin-bottom:6px;color:#4f9cff;}
+.subtitle{font-size:12px;color:#64748b;margin-bottom:24px;}
+
+/* ── Photo Gallery ── */
+.section{background:#0f1e35;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:18px;}
+.section-title{font-size:13px;font-weight:800;color:#4f9cff;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.photo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px;}
+.photo-cell{position:relative;aspect-ratio:4/3;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;overflow:hidden;cursor:pointer;}
+.photo-cell img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-cell .label{position:absolute;bottom:0;left:0;right:0;padding:5px 8px;background:linear-gradient(transparent,rgba(0,0,0,.75));font-size:10px;font-weight:700;color:#fff;}
+.photo-cell .badge{position:absolute;top:6px;right:6px;font-size:9px;font-weight:800;padding:2px 6px;border-radius:10px;}
+.badge-high{background:#ef4444;color:#fff;}
+.badge-med{background:#f97316;color:#fff;}
+.badge-low{background:#22c55e;color:#fff;}
+.photo-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:24px;color:#475569;font-size:12px;text-align:center;grid-column:span 2;}
+.photo-empty .icon{font-size:32px;opacity:.4;}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-photo{padding:10px;border-radius:8px;border:1px solid rgba(79,156,255,.3);background:rgba(79,156,255,.08);color:#4f9cff;font-weight:700;font-size:13px;cursor:pointer;transition:.15s;}
+.btn-photo:hover{background:rgba(79,156,255,.18);}
+.photo-hint{font-size:11px;color:#475569;margin-top:8px;}
+.photo-preview{display:none;margin-top:10px;position:relative;}
+.photo-preview img{width:100%;border-radius:8px;max-height:200px;object-fit:cover;}
+.photo-preview .remove-btn{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.6);border:none;color:#fff;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;}
+
+/* ── Form ── */
+label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:4px;}
+input,select,textarea{width:100%;padding:10px 12px;margin-bottom:14px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#e2e8f0;font-size:14px;font-family:inherit;}
 textarea{resize:vertical;min-height:80px;}
-button[type=submit]{width:100%;padding:12px;border-radius:6px;border:none;background:#2563eb;color:#fff;font-weight:700;font-size:15px;cursor:pointer;transition:background .15s;}
-button[type=submit]:hover{background:#1d4ed8;}
-button[type=submit]:disabled{opacity:.6;cursor:not-allowed;}
-#status{margin-top:14px;font-size:14px;font-weight:600;min-height:20px;}
-.sheet-wrap{margin-top:32px;border:1px solid rgba(34,211,238,.25);border-radius:10px;overflow:hidden;}
-.sheet-header{padding:10px 16px;background:rgba(34,211,238,.06);border-bottom:1px solid rgba(34,211,238,.18);font-size:12px;font-weight:700;color:#22d3ee;}
-iframe{width:100%;height:500px;border:none;display:block;background:#fff;}
+
+/* ── Type pills ── */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.pill{padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#94a3b8;font-size:12px;font-weight:700;cursor:pointer;transition:.15s;}
+.pill.active{border-color:#4f9cff;background:rgba(79,156,255,.15);color:#4f9cff;}
+
+/* ── Submit ── */
+.btn-submit{width:100%;padding:13px;border-radius:8px;border:none;background:#2563eb;color:#fff;font-weight:800;font-size:15px;cursor:pointer;transition:.15s;}
+.btn-submit:hover{background:#1d4ed8;}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;}
+#status{margin-top:12px;font-size:14px;font-weight:600;min-height:20px;}
+
+/* ── Activity ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.act-entry{padding:8px 10px;background:rgba(79,156,255,.06);border:1px solid rgba(79,156,255,.15);border-radius:6px;font-size:11px;line-height:1.7;}
+
+/* ── Sheet ── */
+.sheet-wrap{margin-top:18px;border:1px solid rgba(34,211,238,.2);border-radius:10px;overflow:hidden;}
+.sheet-header{padding:10px 16px;background:rgba(34,211,238,.05);border-bottom:1px solid rgba(34,211,238,.15);font-size:12px;font-weight:700;color:#22d3ee;}
+iframe{width:100%;height:480px;border:none;display:block;}
+
+@media(max-width:560px){.two-col,.btn-row{grid-template-columns:1fr!important;}.photo-grid{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>HOA Violation System</h1>
+  <h1>HOA Compliance System</h1>
+  <div class="subtitle">Smart Violations &bull; Photo Evidence &bull; Automated Notices</div>
 
-  <form id="form">
-    <label>Resident Name</label>
-    <input id="name" placeholder="e.g. Jane Smith" required>
-    <label>Email Address</label>
-    <input id="email" type="email" placeholder="e.g. jane@email.com" required>
-    <label>Unit Number</label>
-    <input id="unit" placeholder="e.g. 204">
-    <label>Violation Type</label>
-    <select id="type">
-      <option>Parking Violation</option>
-      <option>Landscaping / Lawn Care</option>
-      <option>Noise Complaint</option>
-      <option>Unauthorized Structure</option>
-      <option>Pet Violation</option>
-      <option>Trash / Debris</option>
-      <option>Vehicle Storage</option>
-      <option>Unapproved Modification</option>
-      <option>Other</option>
-    </select>
-    <label>Violation Notice</label>
-    <textarea id="notice" placeholder="Describe the violation…"></textarea>
-    <button type="submit" id="submit-btn">Send Notice</button>
-  </form>
-
-  <div id="status"></div>
-
-  <!-- Global Experience System -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px;">
-    <div style="background:#0f2040;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:20px;">
-      <h3 style="font-size:14px;font-weight:800;color:#4f9cff;margin-bottom:14px;">Live Request Experience</h3>
-      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:5px;">Status</div>
-      <div id="global-status" style="font-size:12px;font-weight:600;color:#64748b;padding:8px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:6px;margin-bottom:12px;">&#10003; Received &rarr; Processing &rarr; Scheduled &rarr; Completed</div>
-      <div style="font-size:12px;color:#22d3ee;font-weight:700;margin-bottom:10px;">&#9200; Guaranteed response within 15 minutes</div>
-      <div id="global-summary" style="font-size:12px;color:#64748b;line-height:1.7;margin-bottom:10px;">No submissions yet</div>
-      <div id="smart-recommendation" style="font-size:12px;font-weight:600;color:#4f9cff;margin-bottom:12px;"></div>
-      <div style="font-size:11px;color:#64748b;line-height:2;border-top:1px solid rgba(255,255,255,.06);padding-top:10px;">&#10003; Real-time tracking<br>&#10003; Automated confirmations<br>&#10003; No lost requests<br>&#10003; Instant processing</div>
+  <!-- ── Recent Violations Gallery ── -->
+  <div class="section">
+    <div class="section-title">&#128248; Recent Violation Photos</div>
+    <div class="photo-grid" id="violation-gallery">
+      <div class="photo-empty">
+        <div class="icon">&#128247;</div>
+        <div>No violation photos yet<br>Submit a report with a photo to populate this gallery</div>
+      </div>
     </div>
-    <div style="background:#0f2040;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:20px;">
-      <h3 style="font-size:14px;font-weight:800;color:#4f9cff;margin-bottom:14px;">Live Activity</h3>
-      <div id="activity-feed" style="font-size:12px;color:#64748b;line-height:1.8;display:flex;flex-direction:column;gap:6px;"><span style="font-style:italic;">No activity yet</span></div>
+    <button class="btn-photo" style="width:100%" onclick="document.getElementById('expand-gallery').style.display=document.getElementById('expand-gallery').style.display==='none'?'grid':'none'">View All Violations</button>
+    <div id="expand-gallery" style="display:none;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px;"></div>
+  </div>
+
+  <!-- ── Violation Type Pills ── -->
+  <div class="section">
+    <div class="section-title">&#128204; Violation Category</div>
+    <div class="pill-row" id="type-pills">
+      <div class="pill active" onclick="selectPill(this,'Parking Violation')">&#128663; Parking</div>
+      <div class="pill" onclick="selectPill(this,'Landscaping')">&#127807; Landscaping</div>
+      <div class="pill" onclick="selectPill(this,'Noise Complaint')">&#128266; Noise</div>
+      <div class="pill" onclick="selectPill(this,'Unauthorized Structure')">&#9888; Structure</div>
+      <div class="pill" onclick="selectPill(this,'Pet Violation')">&#128062; Pet</div>
+      <div class="pill" onclick="selectPill(this,'Trash / Debris')">&#128465; Trash</div>
+      <div class="pill" onclick="selectPill(this,'Unapproved Modification')">&#128296; Modification</div>
     </div>
   </div>
-  <style>@media(max-width:600px){#global-experience-wrap-hoa,div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;}}</style>
+
+  <!-- ── Photo Capture ── -->
+  <div class="section">
+    <div class="section-title">&#128247; Attach Violation Photo</div>
+    <div class="btn-row">
+      <button class="btn-photo" onclick="document.getElementById('camera-input').click()">&#128247; Take Photo</button>
+      <button class="btn-photo" onclick="document.getElementById('upload-input').click()">&#128193; Upload Photo</button>
+    </div>
+    <div class="photo-hint">Photo will be attached to the violation report and saved to the gallery</div>
+    <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="previewPhoto(this)">
+    <input type="file" id="upload-input" accept="image/*" style="display:none" onchange="previewPhoto(this)">
+    <div class="photo-preview" id="photo-preview">
+      <img id="preview-img" src="" alt="preview">
+      <button class="remove-btn" onclick="clearPhoto()">&#10005;</button>
+    </div>
+  </div>
+
+  <!-- ── Violation Form ── -->
+  <div class="section">
+    <div class="section-title">&#128203; Violation Report</div>
+    <form id="form">
+      <label>Resident Name</label>
+      <input id="name" placeholder="e.g. Jane Smith" required>
+      <label>Email Address</label>
+      <input id="email" type="email" placeholder="e.g. jane@email.com" required>
+      <label>Unit / Address</label>
+      <input id="unit" placeholder="e.g. Unit 204 or 123 Oak Lane">
+      <label>Violation Description</label>
+      <textarea id="notice" placeholder="Describe what you observed, when it occurred, and any prior notices…" required></textarea>
+      <button type="submit" class="btn-submit" id="submit-btn">Submit Violation Report</button>
+    </form>
+    <div id="status"></div>
+  </div>
+
+  <!-- ── Live Activity ── -->
+  <div class="two-col">
+    <div class="section">
+      <div class="section-title">&#128200; Request Status</div>
+      <div id="global-status" style="font-size:11px;color:#64748b;padding:8px;background:rgba(255,255,255,.03);border-radius:6px;margin-bottom:10px;">Received &rarr; Processing &rarr; Scheduled &rarr; Completed</div>
+      <div style="font-size:11px;color:#22d3ee;font-weight:700;margin-bottom:8px;">&#9200; Response within 15 minutes</div>
+      <div id="global-summary" style="font-size:11px;color:#64748b;line-height:1.8;">No submissions yet</div>
+    </div>
+    <div class="section">
+      <div class="section-title">&#9889; Live Activity</div>
+      <div id="activity-feed" style="font-size:11px;color:#64748b;line-height:1.8;display:flex;flex-direction:column;gap:6px;"><span style="font-style:italic">No activity yet</span></div>
+    </div>
+  </div>
 
   <div class="sheet-wrap">
     <div class="sheet-header">&#128202; Live Compliance Log &mdash; Auto-Updates</div>
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSbTSRXRxZfmzDLkF0RMzn36ovb5ek5W9vjuIdY0S7kW6k6xDA_smaThdtb_QfhF2RaDDvm61xyVAtZ/pubhtml?widget=true&headers=false"
-      title="Live HOA Compliance Log" loading="lazy" sandbox="allow-scripts"></iframe>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSbTSRXRxZfmzDLkF0RMzn36ovb5ek5W9vjuIdY0S7kW6k6xDA_smaThdtb_QfhF2RaDDvm61xyVAtZ/pubhtml?widget=true&headers=false" loading="lazy" sandbox="allow-scripts"></iframe>
   </div>
 </div>
 
 <script>
-var GHE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTZ-7apQcSIGhVLyTqs24KOgHuybmAriRKvqFWmmLpHwIB7RatsWg91_1SS1Z5yw9B/exec';
+var GHE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyTZ-7apQcSIGhVLyTqs24KOgHuybmAriRKvqFWmmLpHwIB7RatsWg91_1SS1Z5yw9B/exec';
+var STORE_KEY='ghe_hoa_photos';
+var MAX_PHOTOS=12;
+var selectedType='Parking Violation';
+var pendingPhotoB64='';
+var pendingPhotoName='';
 
-function sendJSONP(url, payload, onSuccess, onFail) {
-  var cb = '_ghe_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
-  var s = document.createElement('script');
-  var done = false;
-  var timer = setTimeout(function() { if (!done) { done = true; cleanup(); onFail(new Error('timeout')); } }, 12000);
-  function cleanup() { clearTimeout(timer); try { delete window[cb]; } catch(e) {} if (s.parentNode) s.parentNode.removeChild(s); }
-  window[cb] = function(r) { if (done) return; done = true; cleanup(); r && r.status === 'ok' ? onSuccess(r) : onFail(new Error(r && r.msg || 'error')); };
-  s.onerror = function() { if (!done) { done = true; cleanup(); onFail(new Error('load error')); } };
-  s.src = url + '?callback=' + cb + '&data=' + encodeURIComponent(JSON.stringify(payload));
+/* ── Pill selection ── */
+function selectPill(el,type){
+  document.querySelectorAll('#type-pills .pill').forEach(function(p){p.classList.remove('active');});
+  el.classList.add('active');
+  selectedType=type;
+}
+
+/* ── Photo preview ── */
+function previewPhoto(input){
+  var file=input.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    pendingPhotoB64=e.target.result;
+    pendingPhotoName=file.name;
+    document.getElementById('preview-img').src=pendingPhotoB64;
+    document.getElementById('photo-preview').style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
+function clearPhoto(){
+  pendingPhotoB64='';pendingPhotoName='';
+  document.getElementById('photo-preview').style.display='none';
+  document.getElementById('camera-input').value='';
+  document.getElementById('upload-input').value='';
+}
+
+/* ── Gallery storage ── */
+function loadPhotos(){return JSON.parse(localStorage.getItem(STORE_KEY)||'[]');}
+function savePhoto(entry){
+  var photos=loadPhotos();
+  photos.unshift(entry);
+  if(photos.length>MAX_PHOTOS)photos=photos.slice(0,MAX_PHOTOS);
+  localStorage.setItem(STORE_KEY,JSON.stringify(photos));
+}
+function getPriorityBadge(text){
+  text=(text||'').toLowerCase();
+  if(text.includes('urgent')||text.includes('emergency'))return['badge-high','HIGH'];
+  if(text.includes('unauthorized')||text.includes('structure'))return['badge-med','MED'];
+  return['badge-low','LOW'];
+}
+function renderGallery(){
+  var photos=loadPhotos();
+  var grid=document.getElementById('violation-gallery');
+  if(!photos.length){
+    grid.innerHTML='<div class="photo-empty"><div class="icon">&#128247;</div><div>No violation photos yet<br>Submit a report with a photo to populate this gallery</div></div>';
+    return;
+  }
+  grid.innerHTML='';
+  photos.slice(0,4).forEach(function(p){grid.appendChild(makeCell(p));});
+  var expanded=document.getElementById('expand-gallery');
+  expanded.innerHTML='';
+  photos.slice(4).forEach(function(p){expanded.appendChild(makeCell(p));});
+}
+function makeCell(p){
+  var cell=document.createElement('div');cell.className='photo-cell';
+  var badge=getPriorityBadge(p.notice);
+  cell.innerHTML='<img src="'+p.b64+'" alt="violation"><div class="label">'+_esc(p.type)+' &bull; '+p.date+'</div><div class="badge '+badge[0]+'">'+badge[1]+'</div>';
+  return cell;
+}
+
+/* ── JSONP ── */
+function sendJSONP(url,payload,onSuccess,onFail){
+  var cb='_ghe_'+Date.now()+'_'+Math.floor(Math.random()*9999);
+  var s=document.createElement('script');
+  var done=false;
+  var timer=setTimeout(function(){if(!done){done=true;cleanup();onFail(new Error('timeout'));}},12000);
+  function cleanup(){clearTimeout(timer);try{delete window[cb];}catch(e){}if(s.parentNode)s.parentNode.removeChild(s);}
+  window[cb]=function(r){if(done)return;done=true;cleanup();r&&r.status==='ok'?onSuccess(r):onFail(new Error(r&&r.msg||'error'));};
+  s.onerror=function(){if(!done){done=true;cleanup();onFail(new Error('load error'));}};
+  s.src=url+'?callback='+cb+'&data='+encodeURIComponent(JSON.stringify(payload));
   document.head.appendChild(s);
 }
 
-/* ── Global Experience Engine ── */
-function updateGlobalSystem(payload){
-  var statusEl=document.getElementById('global-status');
-  var summaryEl=document.getElementById('global-summary');
-  var recEl=document.getElementById('smart-recommendation');
-  var feedEl=document.getElementById('activity-feed');
-  if(statusEl)statusEl.innerHTML='&#10003; Received &rarr; &#10003; Processing &rarr; &#10003; Scheduled &rarr; Completed';
-  if(summaryEl)summaryEl.innerHTML='&#10003; Request received<br>&#10003; Logged at: '+payload.ts+'<br>&#10003; Confirmation sent<br>&#10003; Processing started';
-  if(recEl)recEl.innerHTML=getRecommendation(payload.notice||'');
-  if(feedEl){
-    var empty=feedEl.querySelector('span[style]');if(empty)empty.remove();
-    var entry=document.createElement('div');
-    entry.style.cssText='padding:7px 10px;background:rgba(79,156,255,.08);border:1px solid rgba(79,156,255,.2);border-radius:6px;font-size:12px;';
-    entry.innerHTML='&#10003; HOA violation from <strong style="color:#e2e8f0">'+_esc(payload.name)+'</strong>'+
-      ' &middot; <span style="color:#4f9cff">'+_esc(payload.type)+'</span>'+
-      ' &mdash; <span style="color:#22d3ee;font-size:11px;font-weight:700">'+getPriority(payload.notice||'')+'</span>';
-    feedEl.prepend(entry);
-    if(feedEl.children.length>10)feedEl.removeChild(feedEl.lastChild);
-  }
+/* ── Activity feed ── */
+function pushActivity(payload){
+  var feed=document.getElementById('activity-feed');
+  var empty=feed.querySelector('span[style]');if(empty)empty.remove();
+  var e=document.createElement('div');e.className='act-entry';
+  e.innerHTML='&#10003; <strong style="color:#e2e8f0">'+_esc(payload.name)+'</strong> &bull; <span style="color:#4f9cff">'+_esc(payload.type)+'</span>'+(pendingPhotoB64?' &bull; <span style="color:#22d3ee">&#128247; photo</span>':'');
+  feed.prepend(e);
+  if(feed.children.length>8)feed.removeChild(feed.lastChild);
+  document.getElementById('global-summary').innerHTML='&#10003; Received<br>&#10003; Logged: '+payload.ts+'<br>&#10003; Confirmation sent';
 }
 function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function getRecommendation(text){
-  if(!text)return'&#10003; Standard violation notice recommended';
-  text=text.toLowerCase();
-  if(text.includes('emergency')||text.includes('urgent'))return'&#128680; Urgent &mdash; escalate to board immediately';
-  if(text.includes('noise'))return'&#128266; Noise complaint &mdash; immediate notice recommended';
-  if(text.includes('parking'))return'&#128663; Parking violation &mdash; 24-hour cure notice';
-  if(text.includes('unauthorized')||text.includes('structure'))return'&#9888; Unauthorized structure &mdash; compliance review needed';
-  return'&#10003; Standard violation notice recommended';
-}
-function getPriority(text){
-  if(!text)return'&#128994; Low';
-  text=text.toLowerCase();
-  if(text.includes('urgent')||text.includes('emergency'))return'&#128308; High Priority';
-  if(text.includes('unauthorized')||text.includes('damage'))return'&#128992; Medium Priority';
-  return'&#128994; Low';
-}
 
-var _sub = false, _retried = false;
-document.getElementById('form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  if (_sub) return;
-  var nameEl = document.getElementById('name');
-  var emailEl = document.getElementById('email');
-  var unitEl = document.getElementById('unit');
-  var typeEl = document.getElementById('type');
-  var noticeEl = document.getElementById('notice');
-  var statusEl = document.getElementById('status');
-  var btn = document.getElementById('submit-btn');
-
-  if (!nameEl.value.trim() || !emailEl.value.trim() || !noticeEl.value.trim()) {
-    statusEl.innerText = '\u26A0 Please fill in all required fields.';
-    statusEl.style.color = '#f87171';
-    return;
-  }
-
-  _sub = true; _retried = false;
-  btn.disabled = true; btn.textContent = 'Sending\u2026';
-  statusEl.innerText = 'Processing\u2026'; statusEl.style.color = '#e2e8f0';
-
-  var payload = {
-    id: 'R' + Date.now(),
-    ts: new Date().toLocaleString(),
-    name: nameEl.value.trim(),
-    email: emailEl.value.trim(),
-    unit: unitEl.value.trim(),
-    type: typeEl.value,
-    notice: noticeEl.value.trim(),
-    mode: 'hoa'
-  };
-  try{updateGlobalSystem(payload);}catch(_){}
-
-  function onDone(ok) {
-    _sub = false;
-    btn.disabled = false; btn.textContent = 'Send Notice';
-    if (ok) {
-      statusEl.innerText = '\u2705 Notice Sent \u2014 logged to compliance sheet.';
-      statusEl.style.color = '#22c55e';
-      document.getElementById('form').reset();
-    } else {
-      statusEl.innerText = '\u2705 Submitted \u2014 processing in background.';
-      statusEl.style.color = '#94a3b8';
-    }
-  }
-
-  sendJSONP(GHE_SCRIPT_URL, payload,
-    function() { onDone(true); },
-    function(err) {
-      if (!_retried) {
-        _retried = true;
-        statusEl.innerText = '\u23F3 Retrying\u2026';
-        setTimeout(function() {
-          sendJSONP(GHE_SCRIPT_URL, payload, function() { onDone(true); }, function() { onDone(false); });
-        }, 2000);
-      } else { onDone(false); }
-    }
-  );
+/* ── Form submit ── */
+var _sub=false,_retried=false;
+document.getElementById('form').addEventListener('submit',function(e){
+  e.preventDefault();if(_sub)return;
+  var name=document.getElementById('name').value.trim();
+  var email=document.getElementById('email').value.trim();
+  var unit=document.getElementById('unit').value.trim();
+  var notice=document.getElementById('notice').value.trim();
+  var statusEl=document.getElementById('status');
+  var btn=document.getElementById('submit-btn');
+  if(!name||!email||!notice){statusEl.innerText='\u26A0 Please fill in all required fields.';statusEl.style.color='#f87171';return;}
+  _sub=true;_retried=false;
+  btn.disabled=true;btn.textContent='Sending\u2026';
+  statusEl.innerText='Processing\u2026';statusEl.style.color='#e2e8f0';
+  var payload={id:'R'+Date.now(),ts:new Date().toLocaleString(),name:name,email:email,unit:unit,type:selectedType,notice:notice,mode:'hoa',hasPhoto:!!pendingPhotoB64};
+  if(pendingPhotoB64){savePhoto({b64:pendingPhotoB64,type:selectedType,name:name,unit:unit,notice:notice,date:new Date().toLocaleDateString()});renderGallery();}
+  pushActivity(payload);
+  function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Submit Violation Report';if(ok){statusEl.innerText='\u2705 Report submitted \u2014 logged to compliance sheet.';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
+  sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_retried){_retried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
 });
+
+renderGallery();
 </script>
 </body>
 </html>

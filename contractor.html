@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Intake System</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;background:#0b1220;color:#e2e8f0;padding:30px 16px;}
+.container{max-width:820px;margin:auto;}
+h1{font-size:22px;font-weight:800;margin-bottom:6px;color:#4f9cff;}
+.subtitle{font-size:12px;color:#64748b;margin-bottom:24px;}
+.section{background:#0f1e35;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:18px;}
+.section-title{font-size:13px;font-weight:800;color:#4f9cff;margin-bottom:14px;}
+
+/* ── Photo Gallery ── */
+.photo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px;}
+.photo-cell{position:relative;aspect-ratio:4/3;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;overflow:hidden;cursor:pointer;}
+.photo-cell img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-cell .label{position:absolute;bottom:0;left:0;right:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-size:10px;font-weight:700;color:#fff;}
+.photo-cell .tag{position:absolute;top:6px;left:6px;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;}
+.tag-remodel{background:#8b5cf6;color:#fff;}
+.tag-newbuild{background:#3b82f6;color:#fff;}
+.tag-repair{background:#f97316;color:#fff;}
+.tag-estimate{background:#22c55e;color:#fff;}
+.tag-urgent{background:#ef4444;color:#fff;}
+.photo-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:28px;color:#475569;font-size:12px;text-align:center;grid-column:span 2;}
+.photo-empty .icon{font-size:36px;opacity:.4;}
+
+/* ── Buttons ── */
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-photo{padding:11px;border-radius:8px;border:1px solid rgba(79,156,255,.3);background:rgba(79,156,255,.08);color:#4f9cff;font-weight:700;font-size:13px;cursor:pointer;transition:.15s;}
+.btn-photo:hover{background:rgba(79,156,255,.18);}
+.btn-photo-full{width:100%;padding:11px;border-radius:8px;border:1px solid rgba(79,156,255,.25);background:rgba(79,156,255,.06);color:#4f9cff;font-weight:700;font-size:13px;cursor:pointer;transition:.15s;margin-top:10px;}
+.btn-photo-full:hover{background:rgba(79,156,255,.14);}
+.photo-hint{font-size:11px;color:#475569;margin-top:8px;}
+.photo-preview{display:none;margin-top:10px;position:relative;}
+.photo-preview img{width:100%;border-radius:8px;max-height:220px;object-fit:cover;}
+.photo-preview .remove-btn{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.6);border:none;color:#fff;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:15px;}
+
+/* ── Form ── */
+label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:4px;}
+input,select,textarea{width:100%;padding:10px 12px;margin-bottom:14px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#e2e8f0;font-size:14px;font-family:inherit;}
+textarea{resize:vertical;min-height:80px;}
+
+/* ── Pills ── */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.pill{padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#94a3b8;font-size:12px;font-weight:700;cursor:pointer;transition:.15s;}
+.pill.active{border-color:#4f9cff;background:rgba(79,156,255,.15);color:#4f9cff;}
+.pill.urgent{border-color:#f97316;color:#f97316;}
+.pill.urgent.active{background:rgba(249,115,22,.15);}
+
+/* ── Schedule slots ── */
+.slot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px;}
+.slot{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#94a3b8;font-size:11px;font-weight:700;text-align:center;cursor:pointer;transition:.15s;}
+.slot:hover,.slot.active{border-color:#4f9cff;background:rgba(79,156,255,.15);color:#4f9cff;}
+.slot-hint{font-size:11px;color:#475569;}
+
+/* ── Submit ── */
+.btn-submit{width:100%;padding:13px;border-radius:8px;border:none;background:#2563eb;color:#fff;font-weight:800;font-size:15px;cursor:pointer;transition:.15s;}
+.btn-submit:hover{background:#1d4ed8;}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;}
+#status{margin-top:12px;font-size:14px;font-weight:600;min-height:20px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.act-entry{padding:8px 10px;background:rgba(79,156,255,.06);border:1px solid rgba(79,156,255,.15);border-radius:6px;font-size:11px;line-height:1.7;}
+.sheet-wrap{margin-top:18px;border:1px solid rgba(79,156,255,.2);border-radius:10px;overflow:hidden;}
+.sheet-header{padding:10px 16px;background:rgba(79,156,255,.05);border-bottom:1px solid rgba(79,156,255,.15);font-size:12px;font-weight:700;color:#4f9cff;}
+iframe{width:100%;height:480px;border:none;display:block;}
+@media(max-width:560px){.two-col,.btn-row,.slot-grid{grid-template-columns:1fr 1fr!important;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Project Intake System</h1>
+  <div class="subtitle">Smart Estimates &bull; Automated Scheduling &bull; Photo Documentation</div>
+
+  <!-- ── Recent Projects Gallery ── -->
+  <div class="section">
+    <div class="section-title">&#127968; Explore Recent Projects</div>
+    <div class="photo-grid" id="project-gallery">
+      <div class="photo-empty"><div class="icon">&#127968;</div><div>No project photos yet<br>Submit a project with photos to build your portfolio</div></div>
+    </div>
+    <button class="btn-photo-full" onclick="toggleExpanded()">View More Builds</button>
+    <div id="expand-gallery" style="display:none;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px;"></div>
+    <div class="photo-hint" style="margin-top:8px;">Helps match your project with similar work</div>
+  </div>
+
+  <!-- ── Submit Your Project (Photo First) ── -->
+  <div class="section">
+    <div class="section-title">&#128247; Submit Your Project</div>
+    <div class="btn-row">
+      <button class="btn-photo" onclick="document.getElementById('camera-input').click()">&#128247; Take Photo</button>
+      <button class="btn-photo" onclick="document.getElementById('upload-input').click()">&#128193; Upload</button>
+    </div>
+    <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="previewPhoto(this)">
+    <input type="file" id="upload-input" accept="image/*" style="display:none" onchange="previewPhoto(this)">
+    <div class="photo-preview" id="photo-preview">
+      <img id="preview-img" src="" alt="preview">
+      <button class="remove-btn" onclick="clearPhoto()">&#10005;</button>
+    </div>
+    <div class="photo-hint">Photos are analyzed before scheduling &bull; Before/after both welcome</div>
+  </div>
+
+  <!-- ── Project Type Pills ── -->
+  <div class="section">
+    <div class="section-title">&#128296; What do you need help with?</div>
+    <div class="pill-row" id="type-pills">
+      <div class="pill active" onclick="selectPill(this,'Remodel')">&#128296; Remodel</div>
+      <div class="pill" onclick="selectPill(this,'Repair')">&#128295; Repair</div>
+      <div class="pill" onclick="selectPill(this,'New Build')">&#127968; New Build</div>
+      <div class="pill urgent" onclick="selectPill(this,'Urgent')">&#128680; Urgent</div>
+      <div class="pill" onclick="selectPill(this,'Estimate Only')">&#128203; Estimate</div>
+      <div class="pill" onclick="selectPill(this,'Roofing')">&#127968; Roofing</div>
+      <div class="pill" onclick="selectPill(this,'Flooring')">&#9744; Flooring</div>
+      <div class="pill" onclick="selectPill(this,'Addition')">&#10133; Addition</div>
+    </div>
+    <div class="photo-hint">Select project type</div>
+  </div>
+
+  <!-- ── Schedule Consultation ── -->
+  <div class="section">
+    <div class="section-title">&#128197; Schedule Consultation</div>
+    <div class="slot-grid" id="slot-grid">
+      <div class="slot" onclick="selectSlot(this,'Mon 2:00')">Mon 2:00</div>
+      <div class="slot" onclick="selectSlot(this,'Tue 10:30')">Tue 10:30</div>
+      <div class="slot active" onclick="selectSlot(this,'Wed 4:15')">Wed 4:15</div>
+      <div class="slot" onclick="selectSlot(this,'Thu 1:00')">Thu 1:00</div>
+      <div class="slot" onclick="selectSlot(this,'Fri 11:45')">Fri 11:45</div>
+      <div class="slot" onclick="selectSlot(this,'Sat 9:30')">Sat 9:30</div>
+    </div>
+    <div class="slot-hint">Select a time to confirm your estimate</div>
+  </div>
+
+  <!-- ── Project Details Form ── -->
+  <div class="section">
+    <div class="section-title">&#128203; Project Details</div>
+    <form id="form">
+      <label>Your Name</label>
+      <input id="name" placeholder="e.g. Mike Johnson" required>
+      <label>Email Address</label>
+      <input id="email" type="email" placeholder="e.g. mike@email.com" required>
+      <label>Property Address</label>
+      <input id="unit" placeholder="e.g. 789 Maple Dr, Los Angeles CA">
+      <label>Project Description</label>
+      <textarea id="notice" placeholder="Describe your project — scope, materials, timeline, budget range…" required></textarea>
+      <button type="submit" class="btn-submit" id="submit-btn">Submit Project Details</button>
+    </form>
+    <div id="status"></div>
+  </div>
+
+  <div class="two-col">
+    <div class="section">
+      <div class="section-title">&#128200; Project Status</div>
+      <div id="global-status" style="font-size:11px;color:#64748b;padding:8px;background:rgba(255,255,255,.03);border-radius:6px;margin-bottom:10px;">Received &rarr; Estimate &rarr; Scheduled &rarr; In Progress</div>
+      <div style="font-size:11px;color:#22d3ee;font-weight:700;margin-bottom:8px;">&#10003; Estimate within 24 hours</div>
+      <div id="global-summary" style="font-size:11px;color:#64748b;line-height:1.8;">No submissions yet</div>
+    </div>
+    <div class="section">
+      <div class="section-title">&#9889; Live Activity</div>
+      <div id="activity-feed" style="font-size:11px;color:#64748b;line-height:1.8;display:flex;flex-direction:column;gap:6px;"><span style="font-style:italic">No activity yet</span></div>
+    </div>
+  </div>
+
+  <div class="sheet-wrap">
+    <div class="sheet-header">&#128202; Live Project Log &mdash; Auto-Updates</div>
+    <iframe src="about:blank" id="sheet-frame" title="Live Contractor Project Log" loading="lazy"></iframe>
+  </div>
+</div>
+
+<script>
+var GHE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyTZ-7apQcSIGhVLyTqs24KOgHuybmAriRKvqFWmmLpHwIB7RatsWg91_1SS1Z5yw9B/exec';
+var STORE_KEY='ghe_contractor_photos';var MAX_PHOTOS=12;
+var selectedType='Remodel';var selectedSlot='Wed 4:15';var pendingPhotoB64='';
+
+function selectPill(el,type){document.querySelectorAll('#type-pills .pill').forEach(function(p){p.classList.remove('active');});el.classList.add('active');selectedType=type;}
+function selectSlot(el,slot){document.querySelectorAll('#slot-grid .slot').forEach(function(s){s.classList.remove('active');});el.classList.add('active');selectedSlot=slot;}
+function previewPhoto(input){var file=input.files[0];if(!file)return;var r=new FileReader();r.onload=function(e){pendingPhotoB64=e.target.result;document.getElementById('preview-img').src=pendingPhotoB64;document.getElementById('photo-preview').style.display='block';};r.readAsDataURL(file);}
+function clearPhoto(){pendingPhotoB64='';document.getElementById('photo-preview').style.display='none';document.getElementById('camera-input').value='';document.getElementById('upload-input').value='';}
+function toggleExpanded(){var el=document.getElementById('expand-gallery');el.style.display=el.style.display==='none'?'grid':'none';}
+function loadPhotos(){return JSON.parse(localStorage.getItem(STORE_KEY)||'[]');}
+function savePhoto(entry){var p=loadPhotos();p.unshift(entry);if(p.length>MAX_PHOTOS)p=p.slice(0,MAX_PHOTOS);localStorage.setItem(STORE_KEY,JSON.stringify(p));}
+function getTag(type){
+  if(type==='Urgent')return['tag-urgent','URGENT'];
+  if(type==='New Build'||type==='Addition')return['tag-newbuild','NEW'];
+  if(type==='Estimate Only')return['tag-estimate','ESTIMATE'];
+  if(type==='Repair'||type==='Roofing'||type==='Flooring')return['tag-repair',type.toUpperCase().slice(0,5)];
+  return['tag-remodel','REMODEL'];
+}
+function renderGallery(){
+  var photos=loadPhotos();var grid=document.getElementById('project-gallery');
+  if(!photos.length){grid.innerHTML='<div class="photo-empty"><div class="icon">&#127968;</div><div>No project photos yet<br>Submit a project with photos to build your portfolio</div></div>';return;}
+  grid.innerHTML='';photos.slice(0,4).forEach(function(p){grid.appendChild(makeCell(p));});
+  var exp=document.getElementById('expand-gallery');exp.innerHTML='';photos.slice(4).forEach(function(p){exp.appendChild(makeCell(p));});
+}
+function makeCell(p){
+  var cell=document.createElement('div');cell.className='photo-cell';
+  var tag=getTag(p.type);
+  cell.innerHTML='<img src="'+p.b64+'" alt="project"><div class="label">'+_esc(p.type)+' &bull; '+_esc(p.name)+'<br><span style="font-weight:400;opacity:.8">'+p.date+'</span></div><div class="tag '+tag[0]+'">'+tag[1]+'</div>';
+  return cell;
+}
+function sendJSONP(url,payload,onSuccess,onFail){var cb='_ghe_'+Date.now()+'_'+Math.floor(Math.random()*9999);var s=document.createElement('script');var done=false;var timer=setTimeout(function(){if(!done){done=true;cleanup();onFail(new Error('timeout'));}},12000);function cleanup(){clearTimeout(timer);try{delete window[cb];}catch(e){}if(s.parentNode)s.parentNode.removeChild(s);}window[cb]=function(r){if(done)return;done=true;cleanup();r&&r.status==='ok'?onSuccess(r):onFail(new Error(r&&r.msg||'error'));};s.onerror=function(){if(!done){done=true;cleanup();onFail(new Error('load error'));}};s.src=url+'?callback='+cb+'&data='+encodeURIComponent(JSON.stringify(payload));document.head.appendChild(s);}
+function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function pushActivity(payload){var feed=document.getElementById('activity-feed');var empty=feed.querySelector('span[style]');if(empty)empty.remove();var e=document.createElement('div');e.className='act-entry';e.innerHTML='&#10003; <strong style="color:#e2e8f0">'+_esc(payload.name)+'</strong> &bull; <span style="color:#4f9cff">'+_esc(payload.type)+'</span> &bull; '+_esc(payload.slot)+(pendingPhotoB64?' &bull; <span style="color:#22d3ee">&#128247;</span>':'');feed.prepend(e);if(feed.children.length>8)feed.removeChild(feed.lastChild);document.getElementById('global-summary').innerHTML='&#10003; Project received<br>&#10003; Slot: '+_esc(payload.slot)+'<br>&#10003; Estimate being prepared';}
+
+var _sub=false,_retried=false;
+document.getElementById('form').addEventListener('submit',function(e){
+  e.preventDefault();if(_sub)return;
+  var name=document.getElementById('name').value.trim();var email=document.getElementById('email').value.trim();var unit=document.getElementById('unit').value.trim();var notice=document.getElementById('notice').value.trim();
+  var statusEl=document.getElementById('status');var btn=document.getElementById('submit-btn');
+  if(!name||!email||!notice){statusEl.innerText='\u26A0 Please fill in all required fields.';statusEl.style.color='#f87171';return;}
+  _sub=true;_retried=false;btn.disabled=true;btn.textContent='Sending\u2026';statusEl.innerText='Processing\u2026';statusEl.style.color='#e2e8f0';
+  var payload={id:'R'+Date.now(),ts:new Date().toLocaleString(),name:name,email:email,unit:unit,type:selectedType,slot:selectedSlot,notice:notice,mode:'contractor',hasPhoto:!!pendingPhotoB64};
+  if(pendingPhotoB64){savePhoto({b64:pendingPhotoB64,type:selectedType,name:name,unit:unit,notice:notice,date:new Date().toLocaleDateString()});renderGallery();}
+  pushActivity(payload);
+  function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Submit Project Details';if(ok){statusEl.innerText='\u2705 Project submitted \u2014 estimate coming soon.';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
+  sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_retried){_retried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
+});
+renderGallery();
+</script>
+</body>
+</html>
