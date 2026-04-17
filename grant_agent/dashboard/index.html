@@ -281,6 +281,7 @@
       <table class="data-table">
         <thead>
           <tr>
+            <th>Track</th>
             <th>Score</th>
             <th>Grant Name</th>
             <th>Amount</th>
@@ -291,7 +292,7 @@
           </tr>
         </thead>
         <tbody id="grantsBody">
-          <tr class="loading-row"><td colspan="7"><span class="spinner"></span>Loading grants…</td></tr>
+          <tr class="loading-row"><td colspan="8"><span class="spinner"></span>Loading grants…</td></tr>
         </tbody>
       </table>
     </div>
@@ -593,12 +594,57 @@ async function triggerScan(deep = false) {
 
 function renderGrantsLoading() {
   document.getElementById('grantsBody').innerHTML =
-    `<tr class="loading-row"><td colspan="7"><span class="spinner"></span>Loading…</td></tr>`;
+    `<tr class="loading-row"><td colspan="8"><span class="spinner"></span>Loading…</td></tr>`;
   document.getElementById('grantsCount').textContent = '';
 }
 function renderGrantsError() {
   document.getElementById('grantsBody').innerHTML =
-    `<tr class="loading-row"><td colspan="7" style="color:var(--red)">Error loading grants. Is the server running?</td></tr>`;
+    `<tr class="loading-row"><td colspan="8" style="color:var(--red)">Error loading grants. Is the server running?</td></tr>`;
+}
+
+function trackBadge(track) {
+  if (track === 'apply_now') return `<span style="background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.35);color:#3fb950;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">✅ APPLY NOW</span>`;
+  if (track === 'avoid')     return `<span style="background:rgba(248,81,73,.12);border:1px solid rgba(248,81,73,.3);color:#f85149;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">✗ AVOID</span>`;
+  return `<span style="background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.25);color:#58a6ff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">REVIEW</span>`;
+}
+
+function grantRow(g) {
+  const dl = fmtDeadline(g.deadline);
+  const dlHtml = g.deadline
+    ? `<span style="color:${dl.soon?'var(--orange)':'inherit'};font-weight:${dl.soon?700:400}">${dl.text}${dl.soon?` <small>(${dl.days}d)</small>`:''}</span>`
+    : `<span style="color:var(--muted)">Rolling</span>`;
+  const dimmed = g.track === 'avoid' ? 'opacity:.5' : '';
+  return `
+    <tr style="${dimmed}">
+      <td>${trackBadge(g.track||'review')}</td>
+      <td>${scoreBadge(g.match_score||0)}</td>
+      <td>
+        <div style="font-weight:600;max-width:260px">${esc(g.name||'—')}</div>
+        <div style="font-size:11px;color:var(--muted)">${esc(g.source||'')}</div>
+      </td>
+      <td style="color:var(--green);font-weight:600">${fmtMoney(g.amount_min,g.amount_max)}</td>
+      <td>${dlHtml}</td>
+      <td>${effortPill(g.effort_level)}</td>
+      <td style="color:var(--muted)">${g.win_probability||0}%</td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${g.track !== 'avoid' ? `
+          <button class="btn-blue btn-sm" onclick="openApply(${g.id||0},'${esc(g.name||'',true)}','${esc(g.url||'',true)}',${g.amount_max||0},'${g.deadline||''}',false)">Apply ✦</button>
+          <button class="btn-purple btn-sm" onclick="openApply(${g.id||0},'${esc(g.name||'',true)}','${esc(g.url||'',true)}',${g.amount_max||0},'${g.deadline||''}',true)" title="Claude + GPT-4o">Both AI ⚡</button>
+          ` : `<span style="color:var(--muted);font-size:11px">Skip for now</span>`}
+          ${g.url?`<a href="${esc(g.url)}" target="_blank"><button class="btn-secondary btn-sm">↗</button></a>`:''}
+        </div>
+      </td>
+    </tr>`;
+}
+
+function sectionHeader(label, color, count) {
+  return `<tr><td colspan="8" style="padding:18px 12px 6px;background:transparent;">
+    <div style="display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);padding-bottom:8px;">
+      <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:${color}">${label}</span>
+      <span style="font-size:11px;color:var(--muted)">${count} grant${count!==1?'s':''}</span>
+    </div>
+  </td></tr>`;
 }
 
 function renderGrants(grants) {
@@ -607,40 +653,32 @@ function renderGrants(grants) {
   grants.forEach(g => { if (g.name) _liveGrantsMap[g.name] = g; });
 
   if (!grants.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><h3>No grants found</h3><p>Try scanning or adjusting your filters.</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><h3>No grants found</h3><p>Try scanning or adjusting your filters.</p></div></td></tr>`;
     return;
   }
 
-  tbody.innerHTML = grants.map(g => {
-    const dl = fmtDeadline(g.deadline);
-    const dlHtml = g.deadline
-      ? `<span style="color:${dl.soon?'var(--orange)':'inherit'};font-weight:${dl.soon?700:400}">${dl.text}${dl.soon?` <small>(${dl.days}d)</small>`:''}</span>`
-      : `<span style="color:var(--muted)">Rolling</span>`;
-    return `
-      <tr>
-        <td>${scoreBadge(g.match_score||0)}</td>
-        <td>
-          <div style="font-weight:600;max-width:280px">${esc(g.name||'—')}</div>
-          <div style="font-size:11px;color:var(--muted)">${esc(g.source||'')}</div>
-        </td>
-        <td style="color:var(--green);font-weight:600">${fmtMoney(g.amount_min,g.amount_max)}</td>
-        <td>${dlHtml}</td>
-        <td>${effortPill(g.effort_level)}</td>
-        <td style="color:var(--muted)">${g.win_probability||0}%</td>
-        <td>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="btn-blue btn-sm" onclick="openApply(${g.id||0},'${esc(g.name||'',true)}','${esc(g.url||'',true)}',${g.amount_max||0},'${g.deadline||''}',false)">
-              Apply ✦
-            </button>
-            <button class="btn-purple btn-sm" onclick="openApply(${g.id||0},'${esc(g.name||'',true)}','${esc(g.url||'',true)}',${g.amount_max||0},'${g.deadline||''}',true)"
-              title="Claude + GPT-4o synthesis">
-              Both AI ⚡
-            </button>
-            ${g.url?`<a href="${esc(g.url)}" target="_blank"><button class="btn-secondary btn-sm">↗</button></a>`:''}
-          </div>
-        </td>
-      </tr>`;
-  }).join('');
+  const applyNow = grants.filter(g => g.track === 'apply_now');
+  const review   = grants.filter(g => !g.track || g.track === 'review');
+  const avoid    = grants.filter(g => g.track === 'avoid');
+
+  let html = '';
+
+  if (applyNow.length) {
+    html += sectionHeader('✅ Apply Now — Best fits for your stage', '#3fb950', applyNow.length);
+    html += applyNow.map(grantRow).join('');
+  }
+
+  if (review.length) {
+    html += sectionHeader('🔍 Review — Worth a closer look', '#58a6ff', review.length);
+    html += review.map(grantRow).join('');
+  }
+
+  if (avoid.length) {
+    html += sectionHeader('✗ Avoid for Now — Too competitive or requires track record', '#f85149', avoid.length);
+    html += avoid.map(grantRow).join('');
+  }
+
+  tbody.innerHTML = html;
 }
 
 // ── Application modal — open from Grants tab ───────────
@@ -906,7 +944,7 @@ function filterApps(status, btn) {
 
 function renderAppsLoading() {
   document.getElementById('appsBody').innerHTML =
-    `<tr class="loading-row"><td colspan="7"><span class="spinner"></span>Loading…</td></tr>`;
+    `<tr class="loading-row"><td colspan="8"><span class="spinner"></span>Loading…</td></tr>`;
   document.getElementById('appsCount').textContent = '';
 }
 function renderAppsError() {

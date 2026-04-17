@@ -55,6 +55,65 @@ INDUSTRY_KEYWORDS = {
     "economic development": ["economic", "business development", "entrepreneurship", "startup", "small business"],
 }
 
+# ─── Track classification ─────────────────────────────────────────────────────
+# Track 2 — Apply Now: good fits for early-stage minority-owned business
+APPLY_NOW_SIGNALS = [
+    "minority", "minority-owned", "black-owned", "black owned", "african american",
+    "bipoc", "mbe", "8(a)", "8a", "disadvantaged", "underrepresented", "underserved",
+    "emerging entrepreneur", "emerging business", "pilot grant", "pilot program",
+    "innovation grant", "small business innovation", "city grant", "county grant",
+    "local grant", "municipal grant", "community grant", "neighborhood grant",
+    "microgrant", "micro grant", "seed grant", "starter grant",
+    "new business", "early stage", "early-stage", "startup grant",
+    "sbir phase i", "sttr phase i",
+]
+
+# Avoid for now: too competitive or require proven track record
+AVOID_SIGNALS = [
+    "proven track record", "track record required", "established business",
+    "years in operation", "minimum 3 years", "minimum 5 years", "minimum 2 years",
+    "large-scale infrastructure", "infrastructure grant", "large infrastructure",
+    "highly competitive", "national competition", "federal competition",
+    "sbir phase ii", "sttr phase ii",  # Phase II requires prior Phase I award
+    "audit required", "financial audit", "certified financial",
+    "501(c)", "501c3", "nonprofit only", "non-profit only",
+    "government entity", "municipality only", "public agency",
+]
+
+
+def classify_track(grant: dict) -> str:
+    """
+    Returns one of:
+      'apply_now'  — good fit for early-stage, minority-owned business
+      'avoid'      — too competitive or requires proven track record
+      'review'     — neutral, worth a closer look
+    """
+    text = " ".join([
+        grant.get("name", ""),
+        grant.get("description", ""),
+        grant.get("eligibility", ""),
+        grant.get("category", ""),
+    ]).lower()
+
+    avoid_hit  = any(sig in text for sig in AVOID_SIGNALS)
+    apply_hit  = any(sig in text for sig in APPLY_NOW_SIGNALS)
+
+    # Explicit avoid signals override everything
+    if avoid_hit and not apply_hit:
+        return "avoid"
+
+    # High competition federal grants = avoid unless minority-targeted
+    source = grant.get("source", "")
+    amount = grant.get("amount_max", 0) or 0
+    if source.startswith("grants.gov") and amount > 500000 and not apply_hit:
+        return "avoid"
+
+    if apply_hit:
+        return "apply_now"
+
+    return "review"
+
+
 LOW_EFFORT_SIGNALS = [
     "simple application", "one-page", "letter of intent", "loi", "short form",
     "online form", "quick apply", "2-page", "two-page",
@@ -200,11 +259,12 @@ def score_grant(grant: dict, profile: dict = None) -> dict:
         match_score = int(match_score * 0.85)  # Slight penalty for over-effort
 
     return {
-        "match_score": match_score,
+        "match_score":    match_score,
         "win_probability": win_prob,
-        "effort_level": effort,
-        "days_to_apply": days,
-        "score_reasons": reasons,
+        "effort_level":   effort,
+        "days_to_apply":  days,
+        "score_reasons":  reasons,
+        "track":          classify_track(grant),
     }
 
 

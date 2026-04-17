@@ -73,11 +73,28 @@ def list_grants(
     min_score: int = Query(0, ge=0, le=100),
     status: Optional[str] = None,
     search: Optional[str] = None,
+    track: Optional[str] = None,   # apply_now | avoid | review
     limit: int = Query(50, le=200),
 ):
-    """Return ranked grant list from DB."""
+    """Return ranked grant list from DB, optionally filtered by track."""
+    from scoring.scorer import classify_track
     grants = get_grants(min_score=min_score, status=status, limit=limit, search=search)
-    return {"grants": grants, "count": len(grants)}
+
+    # Attach track to any grant missing it, then filter
+    for g in grants:
+        if not g.get("track"):
+            g["track"] = classify_track(g)
+
+    if track:
+        grants = [g for g in grants if g.get("track") == track]
+
+    # Summary counts for UI
+    counts = {"apply_now": 0, "avoid": 0, "review": 0}
+    for g in grants:
+        t = g.get("track", "review")
+        counts[t] = counts.get(t, 0) + 1
+
+    return {"grants": grants, "count": len(grants), "track_counts": counts}
 
 
 @router.get("/grants/{grant_id}")
