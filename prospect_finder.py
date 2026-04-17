@@ -124,6 +124,15 @@ NICHE_QUERIES: list[tuple[str, str]] = [
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
 
+WEST_COAST_STATES = [
+    "California", "Oregon", "Washington", "Nevada", "Arizona", "Utah", "Idaho",
+    "Colorado", "New Mexico", "Montana", "Wyoming",
+    "Texas", "Illinois", "Ohio", "Michigan", "Indiana", "Wisconsin",
+    "Florida", "Georgia", "North Carolina", "Tennessee",
+    "Los Angeles", "Phoenix", "Denver", "Seattle", "Portland", "Las Vegas",
+    "Chicago", "Dallas", "Houston", "Atlanta", "Miami",
+]
+
 JUNK_EMAIL_PATTERNS = [
     "example", "domain", "user@", "noreply", "no-reply",
     "sentry", "wixpress", "pinterest", "youtube", "twitter",
