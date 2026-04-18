@@ -91,7 +91,7 @@
     .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .nav-burger.open span:nth-child(2) { opacity: 0; }
     .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    .nav-dropdown { display: none; position: fixed; top: 58px; left: 0; right: 0; z-index: 99; background: rgba(7,20,38,.97); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 8px 16px 12px; flex-direction: column; gap: 4px; }
+    .nav-dropdown { display: none; position: fixed; top: 58px; left: 0; right: 0; z-index: 101; background: rgba(7,20,38,.97); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 8px 16px 12px; flex-direction: column; gap: 4px; }
     .nav-dropdown.open { display: flex; }
     .nav-dd-item { padding: 12px 16px; font-size: 15px; font-weight: 600; font-family: inherit; color: var(--muted); background: none; border: none; border-radius: 8px; cursor: pointer; text-align: left; transition: color .15s, background .15s; -webkit-tap-highlight-color: transparent; }
     .nav-dd-item:hover, .nav-dd-item:active { color: var(--text); background: rgba(255,255,255,.06); }
@@ -736,6 +736,60 @@
     </div>
   </div>
 
+  <!-- ── How It Works ── -->
+  <div style="max-width:1160px;margin:80px auto 0;padding:0 48px;" data-reveal>
+    <p class="sec-label" style="text-align:center;margin-bottom:8px">The Process</p>
+    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:40px;">How the system works</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="hiw-grid">
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));"></div>
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(79,156,255,.12);border:1px solid rgba(79,156,255,.3);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--blue);margin-bottom:16px;">1</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Request comes in</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.65;">Customer fills a form, submits a photo, or calls the voice line — the system captures everything in real time, no manual entry.</div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--blue));"></div>
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--cyan);margin-bottom:16px;">2</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">System responds instantly</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.65;">Confirmations, notices, and follow-ups fire within seconds — no one types a single email or makes a manual call.</div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(34,197,94,.6),var(--cyan));"></div>
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#4ade80;margin-bottom:16px;">3</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Everything is tracked</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.65;">Every request, status update, and message lives in one place — organized automatically, visible in real time on the live dashboard.</div>
+      </div>
+    </div>
+  </div>
+  <style>@media(max-width:768px){.hiw-grid{grid-template-columns:1fr !important;}}</style>
+
+  <!-- ── Before / After ── -->
+  <div style="max-width:1160px;margin:60px auto 0;padding:0 48px;" data-reveal>
+    <p class="sec-label" style="text-align:center;margin-bottom:8px">Why It Matters</p>
+    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:40px;">The difference is immediate</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" class="ba-grid">
+      <div style="background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.2);border-radius:16px;padding:28px 24px;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:18px;">Before</div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;">
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>Manual tracking across spreadsheets and sticky notes</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>Missed follow-ups and leads that fall through the cracks</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>Scattered records across inboxes and text threads</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>Hours spent writing the same follow-up emails</li>
+        </ul>
+      </div>
+      <div style="background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.2);border-radius:16px;padding:28px 24px;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#4ade80;margin-bottom:18px;">After</div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;">
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>Fully automated pipeline — zero manual steps</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>Every lead captured and followed up within seconds</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>One centralized log — every interaction on record</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>Sub-second response time, 24/7, without lifting a finger</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <style>@media(max-width:768px){.ba-grid{grid-template-columns:1fr !important;}}</style>
+
   <div class="industries" id="industries">
     <p class="sec-label" data-reveal>Built for your trade</p>
     <h2 class="sec-title" data-reveal>Select your industry</h2>
@@ -768,7 +822,7 @@
       </div>
       <div class="photo-value-strip">&#128247; <strong>Photo Intake Included</strong> &nbsp;<span>Customers submit job photos before you arrive — right size unit, right parts, faster close</span></div>
       <div class="btn-row" style="margin-bottom:20px">
-        <a class="btn btn-photo" href="hvac.html" target="_blank">&#128247; Submit a Job Photo</a>
+        <a class="btn btn-photo" href="hvac.html">&#128247; Submit a Job Photo</a>
         <button class="btn btn-book" type="button" onclick="openCal()">&#128197; Book a Demo Call</button>
       </div>
 
@@ -789,31 +843,6 @@
           <div class="gc-pipe-col">
             <div class="gc-pipe-header">&#10003; Job Complete</div>
             <div class="gc-pipe-body" id="hvac-complete-body"></div>
-          </div>
-        </div>
-        <div class="gc-pipe-actions">
-          <button class="gc-btn gc-btn-primary" type="button" onclick="hvacDemo('dispatch')">&#128295; Dispatch Tech</button>
-          <button class="gc-btn gc-btn-primary" type="button" onclick="hvacDemo('complete')">&#10003; Mark Complete</button>
-          <button class="gc-btn gc-btn-muted" type="button" onclick="hvacDemo('reset')">&#8635; Reset Demo</button>
-        </div>
-        <div class="gc-cards-row">
-          <div class="gc-card">
-            <div class="gc-card-title">Lead Decision</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="gc-btn gc-btn-success" type="button" onclick="hvacAction('accept')">Accept Job</button>
-              <button class="gc-btn gc-btn-muted" type="button" onclick="hvacAction('reject')">Decline</button>
-            </div>
-            <div class="gc-status-line" id="hvac-decision-status"></div>
-          </div>
-          <div class="gc-card">
-            <div class="gc-card-title">Quote Agent</div>
-            <button class="gc-btn gc-btn-primary" type="button" onclick="hvacAction('quote')">&#9889; Send Quote</button>
-            <div class="gc-status-line" id="hvac-quote-status"></div>
-          </div>
-          <div class="gc-card">
-            <div class="gc-card-title">Auto Confirmation</div>
-            <button class="gc-btn gc-btn-primary" type="button" onclick="hvacAction('confirm')">&#9993; Send Confirmation</button>
-            <div class="gc-status-line" id="hvac-confirm-status"></div>
           </div>
         </div>
         <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:16px;">
@@ -927,7 +956,7 @@
       </div>
       <div class="photo-value-strip">&#128247; <strong>Case Photo Intake Included</strong> &nbsp;<span>Patients upload X-rays and photos before appointments — staff arrives prepared, zero back-and-forth</span></div>
       <div class="btn-row" style="margin-bottom:20px">
-        <a class="btn btn-photo" href="dental.html" target="_blank">&#128247; Upload a Case Photo</a>
+        <a class="btn btn-photo" href="dental.html">&#128247; Upload a Case Photo</a>
         <button class="btn btn-book" type="button" onclick="openCal()">&#128197; Book a Demo Call</button>
       </div>
 
@@ -948,31 +977,6 @@
           <div class="gc-pipe-col">
             <div class="gc-pipe-header">&#129463; Visit Complete</div>
             <div class="gc-pipe-body" id="dental-visited-body"></div>
-          </div>
-        </div>
-        <div class="gc-pipe-actions">
-          <button class="gc-btn gc-btn-primary" type="button" onclick="dentalDemo('confirm')">&#10003; Confirm Appt</button>
-          <button class="gc-btn gc-btn-primary" type="button" onclick="dentalDemo('complete')">&#129463; Log Visit</button>
-          <button class="gc-btn gc-btn-muted" type="button" onclick="dentalDemo('reset')">&#8635; Reset Demo</button>
-        </div>
-        <div class="gc-cards-row">
-          <div class="gc-card">
-            <div class="gc-card-title">Appointment Decision</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="gc-btn gc-btn-success" type="button" onclick="dentalAction('accept')">Confirm</button>
-              <button class="gc-btn gc-btn-muted" type="button" onclick="dentalAction('cancel')">Cancel</button>
-            </div>
-            <div class="gc-status-line" id="dental-decision-status"></div>
-          </div>
-          <div class="gc-card">
-            <div class="gc-card-title">Reminder Agent</div>
-            <button class="gc-btn gc-btn-primary" type="button" onclick="dentalAction('remind')">&#9889; Send Reminder</button>
-            <div class="gc-status-line" id="dental-remind-status"></div>
-          </div>
-          <div class="gc-card">
-            <div class="gc-card-title">Auto Confirmation</div>
-            <button class="gc-btn gc-btn-primary" type="button" onclick="dentalAction('confirm')">&#9993; Send Confirmation</button>
-            <div class="gc-status-line" id="dental-confirm-status"></div>
           </div>
         </div>
         <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:16px;">
@@ -1086,7 +1090,7 @@
       </div>
       <div class="photo-value-strip">&#128247; <strong>Issue Photo Intake Included</strong> &nbsp;<span>Customers photograph the leak or clog — techs show up with the right parts, no wasted trips</span></div>
       <div class="btn-row" style="margin-bottom:20px">
-        <a class="btn btn-photo" href="plumbing.html" target="_blank">&#128247; Submit an Issue Photo</a>
+        <a class="btn btn-photo" href="plumbing.html">&#128247; Submit an Issue Photo</a>
         <button class="btn btn-book" type="button" onclick="openCal()">&#128197; Book a Demo Call</button>
       </div>
 
@@ -1107,31 +1111,6 @@
           <div class="gc-pipe-col">
             <div class="gc-pipe-header">&#128197; Job Booked</div>
             <div class="gc-pipe-body" id="plumbing-booked-body"></div>
-          </div>
-        </div>
-        <div class="gc-pipe-actions">
-          <button class="gc-btn gc-btn-primary" type="button" onclick="plumbingDemo('quote')">&#128178; Send Quote</button>
-          <button class="gc-btn gc-btn-primary" type="button" onclick="plumbingDemo('book')">&#128197; Book Job</button>
-          <button class="gc-btn gc-btn-muted" type="button" onclick="plumbingDemo('reset')">&#8635; Reset Demo</button>
-        </div>
-        <div class="gc-cards-row">
-          <div class="gc-card">
-            <div class="gc-card-title">Job Decision</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="gc-btn gc-btn-success" type="button" onclick="plumbingAction('accept')">Accept Job</button>
-              <button class="gc-btn gc-btn-muted" type="button" onclick="plumbingAction('reject')">Decline</button>
-            </div>
-            <div class="gc-status-line" id="plumbing-decision-status"></div>
-          </div>
-          <div class="gc-card">
-            <div class="gc-card-title">Dispatch Agent</div>
-            <button class="gc-btn gc-btn-primary" type="button" onclick="plumbingAction('dispatch')">&#9889; Dispatch Tech</button>
-            <div class="gc-status-line" id="plumbing-dispatch-status"></div>
-          </div>
-          <div class="gc-card">
-            <div class="gc-card-title">Auto Confirmation</div>
-            <button class="gc-btn gc-btn-primary" type="button" onclick="plumbingAction('confirm')">&#9993; Send Confirmation</button>
-            <div class="gc-status-line" id="plumbing-confirm-status"></div>
           </div>
         </div>
         <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:16px;">
@@ -1247,7 +1226,7 @@
       </div>
       <div class="photo-value-strip">&#128247; <strong>Project Photo Portfolio Included</strong> &nbsp;<span>Clients submit photos, pick from similar past builds, and schedule — all before the first call</span></div>
       <div class="btn-row" style="margin-bottom:20px">
-        <a class="btn btn-photo" href="contractor.html" target="_blank">&#128247; Submit a Project Photo</a>
+        <a class="btn btn-photo" href="contractor.html">&#128247; Submit a Project Photo</a>
         <button class="btn btn-book" type="button" onclick="openCal()">&#128197; Book a Demo Call</button>
       </div>
 
@@ -1272,41 +1251,12 @@
             <div class="gc-pipe-body" id="gc-scheduled-body"></div>
           </div>
         </div>
-        <div class="gc-pipe-actions">
-          <button class="gc-btn gc-btn-muted" type="button" onclick="gcDemo('newlead')">&#43; New Lead</button>
-          <button class="gc-btn gc-btn-primary" type="button" onclick="gcDemo('qualify')">&#10003; Qualify</button>
-          <button class="gc-btn gc-btn-primary" type="button" onclick="gcDemo('schedule')">&#128197; Schedule</button>
-          <button class="gc-btn gc-btn-muted" type="button" onclick="gcDemo('reset')">&#8635; Reset</button>
-        </div>
-
         <!-- Submitted Project Viewer -->
         <div class="gc-card">
           <div class="gc-card-title">Submitted Project Viewer</div>
           <div class="gc-project-viewer">
             <div class="gc-project-viewer-empty" id="gc-project-viewer-empty">Submit the intake form below to see project details appear here automatically.</div>
             <div class="gc-project-viewer-content" id="gc-project-viewer-content" style="display:none"></div>
-          </div>
-        </div>
-
-        <!-- Controls row -->
-        <div class="gc-cards-row">
-          <div class="gc-card">
-            <div class="gc-card-title">Job Decision Control</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="gc-btn gc-btn-success" type="button" onclick="gcAction('accept')">Accept Job</button>
-              <button class="gc-btn gc-btn-muted" type="button" onclick="gcAction('reject')">Reject Job</button>
-            </div>
-            <div class="gc-status-line" id="gc-decision-status"></div>
-          </div>
-          <div class="gc-card">
-            <div class="gc-card-title">Scheduling Agent</div>
-            <button class="gc-btn gc-btn-primary" type="button" onclick="gcAction('autoschedule')">&#9889; Auto Schedule</button>
-            <div class="gc-status-line" id="gc-schedule-status"></div>
-          </div>
-          <div class="gc-card">
-            <div class="gc-card-title">Auto Confirmation System</div>
-            <button class="gc-btn gc-btn-primary" type="button" onclick="gcAction('confirm')">&#9993; Send Confirmation</button>
-            <div class="gc-status-line" id="gc-confirm-status"></div>
           </div>
         </div>
 
@@ -1662,13 +1612,38 @@
 
       <div class="photo-value-strip">&#128247; <strong>Violation Photo Evidence Included</strong> &nbsp;<span>Board members and residents submit photo proof of violations — timestamped, logged, and sent automatically</span></div>
       <div class="btn-row" style="margin-bottom:20px">
-        <a class="btn btn-photo" href="hoa.html" target="_blank">&#128247; Submit a Violation Photo</a>
+        <a class="btn btn-photo" href="hoa.html">&#128247; Submit a Violation Photo</a>
         <button class="btn btn-book" type="button" onclick="openCal()">&#128197; Book a Demo Call</button>
       </div>
 
     </div>
 
   </div><!-- /industries -->
+
+  <!-- ── Live Outreach Engine ── -->
+  <div style="max-width:1160px;margin:80px auto 0;padding:0 48px;" data-reveal>
+    <p class="sec-label" style="text-align:center;margin-bottom:8px">Backend System</p>
+    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:8px;">Live Outreach Engine</h2>
+    <p style="text-align:center;color:var(--muted);font-size:15px;margin-bottom:32px;">The prospecting and outreach system running behind every campaign &mdash; live, not a demo.</p>
+    <div style="border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.02);">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(34,211,238,.06);border-bottom:1px solid rgba(34,211,238,.18);font-size:12px;font-weight:700;color:var(--cyan);gap:10px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="sim-pulse"></div>
+          Outreach Dashboard &mdash; Live System
+        </div>
+        <span class="hoa-wf-badge">&#9889; Live</span>
+      </div>
+      <div style="background:#0b1221;border-radius:0 0 6px 6px;">
+        <iframe
+          src="https://outreach-dashboard-production-b5b1.up.railway.app/"
+          width="100%" height="640"
+          style="border:none;display:block;"
+          title="Live Outreach Engine Dashboard"
+          loading="lazy"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"></iframe>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Global Experience System ── -->
   <div style="max-width:1160px;margin:40px auto 0;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:20px;" id="global-experience-wrap">
@@ -2159,7 +2134,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheetsM
       /* 1. Persist locally + render immediately */
       var entries=loadCache(mode);
       var newId=entries.length?Math.max.apply(null,entries.map(function(e){return parseInt(e.id)||0;}))+1:1;
-      var payload={id:newId,ts:stamp(),ts_iso:stampISO(),name:name,email:email,unit:unit,type:type,notice:notice,mode:mode};
+      var payload={id:newId,ts:stamp(),ts_iso:stampISO(),name:name,email:email,unit:unit,type:type,notice:notice,mode:mode,noEmail:true,demo:true};
       entries.push(payload);saveCache(mode,entries);renderTable(mode,newId);
       try{updateGlobalSystem(payload);}catch(_){}
 
@@ -2195,7 +2170,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheetsM
         } else {
           setStatus('&#10003; Submitted &mdash; beacon delivered.',false,8000);
         }
-        setTimeout(function(){clearCache(mode);renderTable(mode);},10000);
+        /* Auto-clear demo entry from local cache and sheet after 5 minutes */
+        setTimeout(function(){
+          clearCache(mode);renderTable(mode);
+          sendJSONP(GHE_SCRIPT_URL,{action:'clearDemo',mode:mode,id:newId},function(){},function(){});
+        },300000);
       }
 
       /* 4. JSONP primary — GAS must handle mode='hvac'|'dental'|'plumbing' */
@@ -2634,7 +2613,7 @@ window.addEventListener('beforeunload',function(){
 })();
 
 /* ── Mobile nav toggle ── */
-function toggleNavMenu(){var b=document.getElementById('nav-burger'),d=document.getElementById('nav-dropdown');if(!b||!d)return;var o=d.classList.contains('open');b.classList.toggle('open',!o);d.classList.toggle('open',!o);}
+function toggleNavMenu(){var b=document.getElementById('nav-burger'),d=document.getElementById('nav-dropdown');if(!b||!d)return;var o=d.classList.contains('open');if(!o){var sb=document.querySelector('.sys-status-bar');var top=58;if(sb){var r=sb.getBoundingClientRect();top=Math.round(r.bottom);}d.style.top=top+'px';}b.classList.toggle('open',!o);d.classList.toggle('open',!o);}
 function closeNavMenu(){var b=document.getElementById('nav-burger'),d=document.getElementById('nav-dropdown');if(b)b.classList.remove('open');if(d)d.classList.remove('open');}
 document.addEventListener('click',function(e){var d=document.getElementById('nav-dropdown'),b=document.getElementById('nav-burger');if(d&&d.classList.contains('open')&&!d.contains(e.target)&&b&&!b.contains(e.target))closeNavMenu();});
 </script>

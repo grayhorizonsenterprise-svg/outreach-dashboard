@@ -173,10 +173,10 @@ document.getElementById('form').addEventListener('submit',function(e){
   var statusEl=document.getElementById('status');var btn=document.getElementById('submit-btn');
   if(!name||!email||!notice){statusEl.innerText='\u26A0 Please fill in all required fields.';statusEl.style.color='#f87171';return;}
   _sub=true;_retried=false;btn.disabled=true;btn.textContent='Sending\u2026';statusEl.innerText='Processing\u2026';statusEl.style.color='#e2e8f0';
-  var payload={id:'R'+Date.now(),ts:new Date().toLocaleString(),name:name,email:email,unit:unit,type:selectedType,notice:notice,mode:'dental',hasPhoto:!!pendingPhotoB64};
+  var payload={id:'R'+Date.now(),ts:new Date().toLocaleString(),name:name,email:email,unit:unit,type:selectedType,notice:notice,mode:'dental',hasPhoto:!!pendingPhotoB64,noEmail:true};
   if(pendingPhotoB64){savePhoto({b64:pendingPhotoB64,type:selectedType,name:name,unit:unit,notice:notice,date:new Date().toLocaleDateString()});renderGallery();}
   pushActivity(payload);
-  function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Book Appointment';if(ok){statusEl.innerText='\u2705 Appointment booked \u2014 sheet updating\u2026';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();setTimeout(function(){refreshSheet();statusEl.innerText='\u2705 Sheet updated.';},20000);}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
+  function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Book Appointment';if(ok){statusEl.innerText='\u2705 Appointment booked \u2014 sheet updating\u2026';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();setTimeout(function(){refreshSheet();statusEl.innerText='\u2705 Sheet updated.';},3000);}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
   sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_retried){_retried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
 });
 renderGallery();
