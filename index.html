@@ -2310,8 +2310,10 @@ function reloadSheet(mode){
   }
   /* Cancel any pending auto-clear for this mode */
   if(_sheetClearTimers[mode]){clearTimeout(_sheetClearTimers[mode]);_sheetClearTimers[mode]=null;}
-  /* Convert edit URL to pubhtml embed URL */
-  var pubUrl=editUrl.replace(/\/edit.*$/,'/pubhtml?widget=true&headers=false');
+  /* Convert edit URL to pubhtml embed URL — single=true hides the sheet tab bar */
+  var gidMatch=editUrl.match(/[#&]gid=(\d+)/);
+  var gid=gidMatch?gidMatch[1]:'0';
+  var pubUrl=editUrl.replace(/\/edit.*$/,'/pubhtml?single=true&gid='+gid+'&widget=false&headers=false&_='+Date.now());
   if(msg)msg.style.display='none';
   iframe.src=pubUrl;
   iframe.style.display='block';

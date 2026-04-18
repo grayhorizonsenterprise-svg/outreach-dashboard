@@ -151,14 +151,14 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
     </div>
     <div class="refresh-hint">Sheet updates after each submission &bull; tap Refresh if not showing latest</div>
     <div class="sheet-scroll">
-      <iframe id="sheet-frame" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSbTSRXRxZfmzDLkF0RMzn36ovb5ek5W9vjuIdY0S7kW6k6xDA_smaThdtb_QfhF2RaDDvm61xyVAtZ/pubhtml?widget=true&headers=false" loading="lazy" sandbox="allow-scripts allow-popups allow-same-origin" scrolling="yes"></iframe>
+      <iframe id="sheet-frame" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSbTSRXRxZfmzDLkF0RMzn36ovb5ek5W9vjuIdY0S7kW6k6xDA_smaThdtb_QfhF2RaDDvm61xyVAtZ/pubhtml?single=true&widget=false&headers=false" loading="lazy" sandbox="allow-scripts allow-popups allow-same-origin" scrolling="yes"></iframe>
     </div>
   </div>
 </div>
 
 <script>
 var GHE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbx_uysFilFHaeMrBKyJxUuPfEZC5litkHHftn_p5gZ_W9k51gvnPunMnI5tuF3fM_qi/exec';
-var SHEET_BASE='https://docs.google.com/spreadsheets/d/e/2PACX-1vSbTSRXRxZfmzDLkF0RMzn36ovb5ek5W9vjuIdY0S7kW6k6xDA_smaThdtb_QfhF2RaDDvm61xyVAtZ/pubhtml?widget=true&headers=false';
+var SHEET_BASE='https://docs.google.com/spreadsheets/d/e/2PACX-1vSbTSRXRxZfmzDLkF0RMzn36ovb5ek5W9vjuIdY0S7kW6k6xDA_smaThdtb_QfhF2RaDDvm61xyVAtZ/pubhtml?single=true&widget=false&headers=false';
 var STORE_KEY='ghe_hoa_photos';
 function refreshSheet(){var f=document.getElementById('sheet-frame');if(f)f.src=SHEET_BASE+'&_='+Date.now();}
 var MAX_PHOTOS=12;
