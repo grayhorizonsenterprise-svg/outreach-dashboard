@@ -1586,27 +1586,21 @@
         </div>
       </div>
 
-      <!-- Live Google Sheets embed — sheet must be published: File > Share > Publish to web > Web page > Publish -->
       <div style="border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(34,211,238,.06);border-bottom:1px solid rgba(34,211,238,.18);font-size:12px;font-weight:700;color:var(--cyan);gap:10px;">
+          <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live Compliance Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
-            <div class="sim-pulse"></div>
-            Live Compliance Log &mdash; Google Sheets
+            <button type="button" onclick="reloadSheet('hoa')" style="font-size:11px;font-weight:700;font-family:inherit;padding:4px 10px;border-radius:5px;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.25);color:var(--cyan);cursor:pointer;">&#8635; Refresh</button>
+            <span class="hoa-wf-badge">&#128202; Live</span>
           </div>
-          <span class="hoa-wf-badge">&#128202; Auto-Updates</span>
         </div>
         <div style="overflow:hidden;background:#fff;border-radius:0 0 6px 6px;">
-          <iframe
-            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSbTSRXRxZfmzDLkF0RMzn36ovb5ek5W9vjuIdY0S7kW6k6xDA_smaThdtb_QfhF2RaDDvm61xyVAtZ/pubhtml?widget=true&headers=false"
-            width="100%" height="540"
-            style="border:none;display:block;"
-            title="Live HOA Violation Compliance Log"
-            loading="lazy"
-            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+          <div id="hoa-sheet-embed-msg" style="padding:40px 24px;text-align:center;font-size:13px;color:#94a3b8;background:#f8fafc;min-height:120px;display:flex;align-items:center;justify-content:center;">Submit the form above to generate your live HOA sheet &mdash; it will load here automatically once created.</div>
+          <iframe id="hoa-sheet-iframe" src="" width="100%" height="540" style="border:none;display:none;opacity:0;transition:opacity .5s;" title="Live HOA Compliance Log" loading="lazy"></iframe>
         </div>
         <div style="padding:10px 18px;font-size:12px;color:var(--muted);text-align:center;">
-          Live data &mdash; refreshes automatically when a notice is submitted. &nbsp;
-          <a href="https://docs.google.com/spreadsheets/d/1yYneTtS53eZy_Jw8yFCLxhijB190KFy4el3SKzfn9-w/edit" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;text-decoration:none;">Open full view &#8599;</a>
+          Live data &mdash; updates when you submit the form above. &nbsp;
+          <a id="hoa-sheet-full-link" href="#" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;text-decoration:none;opacity:.4;pointer-events:none;">Open full view &#8599;</a>
         </div>
       </div>
 
