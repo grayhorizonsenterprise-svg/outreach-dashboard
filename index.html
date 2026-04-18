@@ -122,6 +122,10 @@
     .btn-book:hover, .btn-book:active { background: #b45309; border-color: #92400e; transform: translateY(-2px); box-shadow: 0 0 0 4px rgba(217,119,6,.35), 0 6px 20px rgba(0,0,0,.4); }
     .btn-watch { background: #7c3aed; color: #fff; border: 2px solid #6d28d9; font-size: 15px; font-weight: 800; letter-spacing: .03em; text-shadow: 0 1px 2px rgba(0,0,0,.3); box-shadow: 0 0 0 3px rgba(124,58,237,.25), 0 4px 14px rgba(0,0,0,.4); }
     .btn-watch:hover, .btn-watch:active { background: #6d28d9; border-color: #5b21b6; transform: translateY(-2px); box-shadow: 0 0 0 4px rgba(124,58,237,.35), 0 6px 20px rgba(0,0,0,.4); }
+    .btn-photo { background: linear-gradient(90deg,#0e7490,#0891b2); color: #fff; border: 2px solid #0e7490; font-size: 15px; font-weight: 800; letter-spacing: .03em; text-shadow: 0 1px 2px rgba(0,0,0,.25); box-shadow: 0 0 0 3px rgba(8,145,178,.25), 0 4px 14px rgba(0,0,0,.35); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-photo:hover, .btn-photo:active { background: linear-gradient(90deg,#0891b2,#06b6d4); border-color: #0891b2; transform: translateY(-2px); box-shadow: 0 0 0 4px rgba(8,145,178,.35), 0 6px 20px rgba(0,0,0,.4); }
+    .photo-value-strip { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: rgba(8,145,178,.06); border: 1px solid rgba(8,145,178,.2); border-radius: 8px; margin-bottom: 16px; font-size: 12px; font-weight: 600; color: #67e8f9; }
+    .photo-value-strip span { color: var(--muted); font-weight: 400; }
 
     /* ── Simulation ── */
     .sim-output { margin-top: 28px; width: 100%; max-width: 560px; }
@@ -762,7 +766,9 @@
         <div class="metric-card"><span class="metric-val" data-target="39">0</span><span class="metric-lbl">Follow-ups Sent</span></div>
         <div class="metric-card"><span class="metric-val" data-target="21">0</span><span class="metric-lbl">Jobs Booked</span></div>
       </div>
+      <div class="photo-value-strip">&#128247; <strong>Photo Intake Included</strong> &nbsp;<span>Customers submit job photos before you arrive — right size unit, right parts, faster close</span></div>
       <div class="btn-row" style="margin-bottom:20px">
+        <a class="btn btn-photo" href="hvac.html" target="_blank">&#128247; Submit a Job Photo</a>
         <button class="btn btn-book" type="button" onclick="openCal()">&#128197; Book a Demo Call</button>
       </div>
 
@@ -919,7 +925,9 @@
         <div class="metric-card"><span class="metric-val" data-target="54">0</span><span class="metric-lbl">Reminders Sent</span></div>
         <div class="metric-card"><span class="metric-val" data-target="26">0</span><span class="metric-lbl">Bookings Confirmed</span></div>
       </div>
+      <div class="photo-value-strip">&#128247; <strong>Case Photo Intake Included</strong> &nbsp;<span>Patients upload X-rays and photos before appointments — staff arrives prepared, zero back-and-forth</span></div>
       <div class="btn-row" style="margin-bottom:20px">
+        <a class="btn btn-photo" href="dental.html" target="_blank">&#128247; Upload a Case Photo</a>
         <button class="btn btn-book" type="button" onclick="openCal()">&#128197; Book a Demo Call</button>
       </div>
 
@@ -1076,7 +1084,9 @@
         <div class="metric-card"><span class="metric-val" data-target="33">0</span><span class="metric-lbl">Quotes Sent</span></div>
         <div class="metric-card"><span class="metric-val" data-target="19">0</span><span class="metric-lbl">Jobs Closed</span></div>
       </div>
+      <div class="photo-value-strip">&#128247; <strong>Issue Photo Intake Included</strong> &nbsp;<span>Customers photograph the leak or clog — techs show up with the right parts, no wasted trips</span></div>
       <div class="btn-row" style="margin-bottom:20px">
+        <a class="btn btn-photo" href="plumbing.html" target="_blank">&#128247; Submit an Issue Photo</a>
         <button class="btn btn-book" type="button" onclick="openCal()">&#128197; Book a Demo Call</button>
       </div>
 
@@ -1235,7 +1245,9 @@
         <div class="metric-card"><span class="metric-val" data-target="24">0</span><span class="metric-lbl">Jobs Scheduled</span></div>
         <div class="metric-card"><span class="metric-val" data-target="17">0</span><span class="metric-lbl">Contracts Closed</span></div>
       </div>
+      <div class="photo-value-strip">&#128247; <strong>Project Photo Portfolio Included</strong> &nbsp;<span>Clients submit photos, pick from similar past builds, and schedule — all before the first call</span></div>
       <div class="btn-row" style="margin-bottom:20px">
+        <a class="btn btn-photo" href="contractor.html" target="_blank">&#128247; Submit a Project Photo</a>
         <button class="btn btn-book" type="button" onclick="openCal()">&#128197; Book a Demo Call</button>
       </div>
 
@@ -1648,10 +1660,9 @@
         </div>
       </div>
 
+      <div class="photo-value-strip">&#128247; <strong>Violation Photo Evidence Included</strong> &nbsp;<span>Board members and residents submit photo proof of violations — timestamped, logged, and sent automatically</span></div>
       <div class="btn-row" style="margin-bottom:20px">
-        <button class="btn btn-watch" type="button" onclick="toggleVideo('hoa')">
-          <span id="hoa-demo-label">&#9654; Watch Walkthrough</span>
-        </button>
+        <a class="btn btn-photo" href="hoa.html" target="_blank">&#128247; Submit a Violation Photo</a>
         <button class="btn btn-book" type="button" onclick="openCal()">&#128197; Book a Demo Call</button>
       </div>
 
