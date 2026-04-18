@@ -2170,11 +2170,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheetsM
         } else {
           setStatus('&#10003; Submitted &mdash; beacon delivered.',false,8000);
         }
-        /* Auto-clear demo entry from local cache and sheet after 5 minutes */
+        /* Auto-clear demo entry from local cache and sheet after 90 seconds */
         setTimeout(function(){
           clearCache(mode);renderTable(mode);
           sendJSONP(GHE_SCRIPT_URL,{action:'clearDemo',mode:mode,id:newId},function(){},function(){});
-        },300000);
+        },90000);
       }
 
       /* 4. JSONP primary — GAS must handle mode='hvac'|'dental'|'plumbing' */
