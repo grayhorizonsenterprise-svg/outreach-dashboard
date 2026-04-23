@@ -89,6 +89,11 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
 .s-proc{background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:#fbbf24;}
 .comm-ph{font-size:9px;color:#475569;margin-left:3px;}
 .attach-ok{font-size:11px;color:#22c55e;font-weight:700;margin-top:6px;display:none;}
+.mode-switcher{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.mode-btn{padding:13px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#94a3b8;font-size:14px;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;}
+.mode-btn:hover{background:rgba(255,255,255,.08);}
+.mode-btn.active.viol{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.1);color:#f87171;}
+.mode-btn.active.res{border-color:rgba(74,222,128,.4);background:rgba(74,222,128,.1);color:#4ade80;}
 @media(max-width:560px){
   .two-col,.btn-row,.demo-cols{grid-template-columns:1fr!important;}
   .demo-panel.blue{border-right:none;border-bottom:1px solid rgba(255,255,255,.06);}
@@ -99,6 +104,15 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
 <div class="container">
   <h1>HOA Compliance System</h1>
   <div class="subtitle">Smart Violations &bull; Photo Evidence &bull; Automated Notices &bull; Resident Portal</div>
+
+  <!-- Mode Switcher -->
+  <div class="mode-switcher">
+    <button class="mode-btn active viol" id="btn-violation" onclick="switchMode('violation')">&#128274; File a Violation</button>
+    <button class="mode-btn res" id="btn-resident" onclick="switchMode('resident')">&#127968; Resident Photo Response</button>
+  </div>
+
+  <!-- ═══ VIOLATION VIEW ═══ -->
+  <div id="violation-view">
 
   <!-- ══════════════════════════════════════
        MOCK DEMO PANE — Both Sides Preview
@@ -249,6 +263,55 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
     <div id="status"></div>
   </div>
 
+  </div><!-- end #violation-view -->
+
+  <!-- ═══ RESIDENT RESPONSE VIEW ═══ -->
+  <div id="resident-view" style="display:none">
+
+    <div class="section">
+      <div class="section-title">&#127968; Resident Photo Response</div>
+      <div style="font-size:12px;color:#64748b;margin-bottom:14px;">Received a notice? Submit photos of the issue and request a repair or booking below.</div>
+
+      <!-- Repair type pills -->
+      <div class="pill-row" id="res-type-pills">
+        <div class="pill active" onclick="selectResPill(this,'Plumbing')">&#128694; Plumbing</div>
+        <div class="pill" onclick="selectResPill(this,'Electrical')">&#9889; Electrical</div>
+        <div class="pill" onclick="selectResPill(this,'HVAC')">&#10052; HVAC</div>
+        <div class="pill" onclick="selectResPill(this,'General Maintenance')">&#128295; Maintenance</div>
+        <div class="pill" onclick="selectResPill(this,'Pest Control')">&#128027; Pest Control</div>
+        <div class="pill" onclick="selectResPill(this,'Other')">&#128204; Other</div>
+      </div>
+
+      <!-- Photo upload -->
+      <div class="btn-row" style="margin-bottom:8px;">
+        <button class="btn-photo" onclick="document.getElementById('res-camera').click()">&#128247; Take Photo</button>
+        <button class="btn-photo" onclick="document.getElementById('res-upload').click()">&#128193; Upload Photo</button>
+      </div>
+      <input type="file" id="res-camera" accept="image/*" capture="environment" style="display:none" onchange="resPreviewPhoto(this)">
+      <input type="file" id="res-upload" accept="image/*" style="display:none" onchange="resPreviewPhoto(this)">
+      <div class="photo-preview" id="res-photo-preview">
+        <img id="res-preview-img" src="" alt="preview">
+        <button class="remove-btn" onclick="resClearPhoto()">&#10005;</button>
+      </div>
+      <div class="attach-ok" id="res-attach-ok">&#10003; Photo attached</div>
+
+      <!-- Resident form -->
+      <form id="res-form" style="margin-top:14px;">
+        <label>Your Name</label>
+        <input id="res-name" placeholder="e.g. Jane Smith" required>
+        <label>Email Address</label>
+        <input id="res-email" type="email" placeholder="e.g. jane@email.com" required>
+        <label>Unit / Address</label>
+        <input id="res-unit" placeholder="e.g. Unit 204 or 123 Oak Lane">
+        <label>Describe What Needs to Be Fixed</label>
+        <textarea id="res-notice" placeholder="What is the issue? When did it start? Any prior attempts to fix it&#8230;" required></textarea>
+        <button type="submit" class="btn-submit" id="res-submit-btn" style="background:#16a34a;">&#128232; Send Response &amp; Request Booking &#8594;</button>
+      </form>
+      <div id="res-status"></div>
+    </div>
+
+  </div><!-- end #resident-view -->
+
   <div class="two-col">
     <div class="section">
       <div class="section-title">&#128200; Report Status</div>
@@ -262,7 +325,7 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
     </div>
   </div>
 
-  <div class="sheet-wrap">
+  <div class="sheet-wrap" style="display:none">
     <div class="sheet-header">
       &#128202; Live Compliance Log &mdash; Auto-Updates
       <button class="refresh-btn" onclick="refreshSheet()">&#8635; Refresh</button>
@@ -378,6 +441,46 @@ document.getElementById('form').addEventListener('submit',function(e){
   sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_retried){_retried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
 });
 renderGallery();
+
+/* ── Mode switcher ── */
+function switchMode(mode){
+  var vv=document.getElementById('violation-view');
+  var rv=document.getElementById('resident-view');
+  var bv=document.getElementById('btn-violation');
+  var br=document.getElementById('btn-resident');
+  if(mode==='violation'){
+    vv.style.display='block';rv.style.display='none';
+    bv.classList.add('active');br.classList.remove('active');
+  } else {
+    vv.style.display='none';rv.style.display='block';
+    br.classList.add('active');bv.classList.remove('active');
+  }
+}
+
+/* ── Resident photo ── */
+var resPhotoB64='';
+var resSelectedType='Plumbing';
+function selectResPill(el,type){document.querySelectorAll('#res-type-pills .pill').forEach(function(p){p.classList.remove('active');});el.classList.add('active');resSelectedType=type;}
+function resPreviewPhoto(input){var file=input.files[0];if(!file)return;var r=new FileReader();r.onload=function(e){resPhotoB64=e.target.result;document.getElementById('res-preview-img').src=resPhotoB64;document.getElementById('res-photo-preview').style.display='block';var ok=document.getElementById('res-attach-ok');if(ok)ok.style.display='block';};r.readAsDataURL(file);}
+function resClearPhoto(){resPhotoB64='';document.getElementById('res-photo-preview').style.display='none';document.getElementById('res-camera').value='';document.getElementById('res-upload').value='';var ok=document.getElementById('res-attach-ok');if(ok)ok.style.display='none';}
+
+/* ── Resident form submit ── */
+var _resSub=false,_resRetried=false;
+document.getElementById('res-form').addEventListener('submit',function(e){
+  e.preventDefault();if(_resSub)return;
+  var name=document.getElementById('res-name').value.trim();
+  var email=document.getElementById('res-email').value.trim();
+  var unit=document.getElementById('res-unit').value.trim();
+  var notice=document.getElementById('res-notice').value.trim();
+  var statusEl=document.getElementById('res-status');
+  var btn=document.getElementById('res-submit-btn');
+  if(!name||!email||!notice){statusEl.innerText='\u26A0 Please fill in all required fields.';statusEl.style.color='#f87171';return;}
+  _resSub=true;_resRetried=false;btn.disabled=true;btn.textContent='Sending\u2026';statusEl.innerText='Processing\u2026';statusEl.style.color='#e2e8f0';
+  var payload={id:'R'+Date.now(),ts:new Date().toLocaleString(),name:name,email:email,unit:unit,type:resSelectedType,notice:notice,mode:'hoa_resident',hasPhoto:!!resPhotoB64,noEmail:true,source:'Resident Submission',status:'Processing'};
+  pushActivity(payload);
+  function onDone(ok){_resSub=false;btn.disabled=false;btn.textContent='Send Response \u0026 Request Booking \u2192';if(ok){statusEl.innerText='\u2705 Response sent \u2014 HOA will confirm your booking shortly.';statusEl.style.color='#22c55e';document.getElementById('res-form').reset();resClearPhoto();}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
+  sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_resRetried){_resRetried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
+});
 </script>
 </body>
 </html>
