@@ -51,6 +51,10 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
 .refresh-btn{padding:4px 10px;border-radius:6px;border:1px solid rgba(79,156,255,.3);background:rgba(79,156,255,.08);color:#4f9cff;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;}
 .refresh-btn:hover{background:rgba(79,156,255,.18);}
 .refresh-hint{font-size:10px;color:#475569;padding:4px 16px;background:rgba(255,255,255,.02);}
+.status-pill{display:inline-block;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;vertical-align:middle;}
+.s-proc{background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:#fbbf24;}
+.comm-ph{font-size:9px;color:#475569;margin-left:3px;}
+.attach-ok{font-size:11px;color:#22c55e;font-weight:700;margin-top:6px;display:none;}
 @media(max-width:560px){.two-col,.btn-row{grid-template-columns:1fr!important;}}
 </style>
 </head>
@@ -96,6 +100,7 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
       <img id="preview-img" src="" alt="preview">
       <button class="remove-btn" onclick="clearPhoto()">&#10005;</button>
     </div>
+    <div class="attach-ok" id="attach-ok">&#10003; Attachment received</div>
   </div>
 
   <!-- ── Service Request Form ── -->
@@ -142,14 +147,16 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
 
 <script>
 var GHE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbx_uysFilFHaeMrBKyJxUuPfEZC5litkHHftn_p5gZ_W9k51gvnPunMnI5tuF3fM_qi/exec';
-var SHEET_BASE='about:blank';
 var STORE_KEY='ghe_plumbing_photos';var MAX_PHOTOS=12;
-function refreshSheet(){var f=document.getElementById('sheet-frame');if(f&&SHEET_BASE!=='about:blank')f.src=SHEET_BASE+'&_='+Date.now();}
+var _editUrl='';
+function _loadSheet(u){var f=document.getElementById('sheet-frame');if(!f)return;if(!u){return;}var gm=u.match(/[#&]gid=(\d+)/);var g=gm?gm[1]:'0';f.src=u.replace(/\/edit.*$/,'/pubhtml?single=true&gid='+g+'&widget=false&headers=false&_='+Date.now());f.style.display='block';}
+function refreshSheet(){var cb='_ghe_ls_'+Date.now();var s=document.createElement('script');var done=false;var t=setTimeout(function(){if(!done){done=true;if(s.parentNode)s.parentNode.removeChild(s);if(_editUrl)_loadSheet(_editUrl);}},5000);window[cb]=function(r){clearTimeout(t);done=true;if(s.parentNode)s.parentNode.removeChild(s);if(r&&r.status==='ok'&&r.sheets&&r.sheets.plumbing){_editUrl=r.sheets.plumbing;}_loadSheet(_editUrl);};s.onerror=function(){if(!done){done=true;if(_editUrl)_loadSheet(_editUrl);}};s.src=GHE_SCRIPT_URL+'?action=listSheets&callback='+cb;document.head.appendChild(s);}
+(function(){refreshSheet();})();
 var selectedType='Leak Repair';var pendingPhotoB64='';
 
 function selectPill(el,type){document.querySelectorAll('#type-pills .pill').forEach(function(p){p.classList.remove('active');});el.classList.add('active');selectedType=type;}
-function previewPhoto(input){var file=input.files[0];if(!file)return;var r=new FileReader();r.onload=function(e){pendingPhotoB64=e.target.result;document.getElementById('preview-img').src=pendingPhotoB64;document.getElementById('photo-preview').style.display='block';};r.readAsDataURL(file);}
-function clearPhoto(){pendingPhotoB64='';document.getElementById('photo-preview').style.display='none';document.getElementById('camera-input').value='';document.getElementById('upload-input').value='';}
+function previewPhoto(input){var file=input.files[0];if(!file)return;var r=new FileReader();r.onload=function(e){pendingPhotoB64=e.target.result;document.getElementById('preview-img').src=pendingPhotoB64;document.getElementById('photo-preview').style.display='block';var ok=document.getElementById('attach-ok');if(ok)ok.style.display='block';};r.readAsDataURL(file);}
+function clearPhoto(){pendingPhotoB64='';document.getElementById('photo-preview').style.display='none';document.getElementById('camera-input').value='';document.getElementById('upload-input').value='';var ok=document.getElementById('attach-ok');if(ok)ok.style.display='none';}
 function toggleExpanded(){var el=document.getElementById('expand-gallery');el.style.display=el.style.display==='none'?'grid':'none';}
 function loadPhotos(){return JSON.parse(localStorage.getItem(STORE_KEY)||'[]');}
 function savePhoto(entry){var p=loadPhotos();p.unshift(entry);if(p.length>MAX_PHOTOS)p=p.slice(0,MAX_PHOTOS);localStorage.setItem(STORE_KEY,JSON.stringify(p));}
@@ -158,7 +165,7 @@ function renderGallery(){var photos=loadPhotos();var grid=document.getElementByI
 function makeCell(p){var cell=document.createElement('div');cell.className='photo-cell';var tag=getTag(p.type);cell.innerHTML='<img src="'+p.b64+'" alt="issue"><div class="label">'+_esc(p.name)+' &bull; '+p.date+'</div><div class="tag '+tag[0]+'">'+tag[1]+'</div>';return cell;}
 function sendJSONP(url,payload,onSuccess,onFail){var cb='_ghe_'+Date.now()+'_'+Math.floor(Math.random()*9999);var s=document.createElement('script');var done=false;var timer=setTimeout(function(){if(!done){done=true;cleanup();onFail(new Error('timeout'));}},12000);function cleanup(){clearTimeout(timer);try{delete window[cb];}catch(e){}if(s.parentNode)s.parentNode.removeChild(s);}window[cb]=function(r){if(done)return;done=true;cleanup();r&&r.status==='ok'?onSuccess(r):onFail(new Error(r&&r.msg||'error'));};s.onerror=function(){if(!done){done=true;cleanup();onFail(new Error('load error'));}};s.src=url+'?callback='+cb+'&data='+encodeURIComponent(JSON.stringify(payload));document.head.appendChild(s);}
 function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function pushActivity(payload){var feed=document.getElementById('activity-feed');var empty=feed.querySelector('span[style]');if(empty)empty.remove();var e=document.createElement('div');e.className='act-entry';e.innerHTML='&#10003; <strong style="color:#e2e8f0">'+_esc(payload.name)+'</strong> &bull; <span style="color:#4f9cff">'+_esc(payload.type)+'</span>'+(pendingPhotoB64?' &bull; <span style="color:#22d3ee">&#128247; photo</span>':'');feed.prepend(e);if(feed.children.length>8)feed.removeChild(feed.lastChild);document.getElementById('global-summary').innerHTML='&#10003; Received<br>&#10003; Logged: '+payload.ts+'<br>&#10003; Tech dispatched';}
+function pushActivity(payload){var feed=document.getElementById('activity-feed');var empty=feed.querySelector('span[style]');if(empty)empty.remove();var e=document.createElement('div');e.className='act-entry';e.innerHTML='&#10003; <strong style="color:#e2e8f0">'+_esc(payload.name)+'</strong> &bull; <span style="color:#4f9cff">'+_esc(payload.type)+'</span>'+(payload.hasPhoto?' &bull; <span style="color:#22d3ee">&#128247; photo</span>':'')+'<br><span class="status-pill s-proc">Processing</span><span class="comm-ph">&#9993; Email</span><span class="comm-ph" style="opacity:.4">&#128241; SMS</span><span class="comm-ph" style="opacity:.4">&#128222; Call</span> &nbsp;&middot;&nbsp; <span style="color:#475569;font-size:9px;">'+_esc(payload.source||'Resident Submission')+'</span>';feed.prepend(e);if(feed.children.length>8)feed.removeChild(feed.lastChild);document.getElementById('global-summary').innerHTML='&#10003; Received<br>&#10003; Logged: '+payload.ts+'<br>&#10003; Tech dispatched';}
 
 var _sub=false,_retried=false;
 document.getElementById('form').addEventListener('submit',function(e){
@@ -167,7 +174,7 @@ document.getElementById('form').addEventListener('submit',function(e){
   var statusEl=document.getElementById('status');var btn=document.getElementById('submit-btn');
   if(!name||!email||!notice){statusEl.innerText='\u26A0 Please fill in all required fields.';statusEl.style.color='#f87171';return;}
   _sub=true;_retried=false;btn.disabled=true;btn.textContent='Sending\u2026';statusEl.innerText='Processing\u2026';statusEl.style.color='#e2e8f0';
-  var payload={id:'R'+Date.now(),ts:new Date().toLocaleString(),name:name,email:email,unit:unit,type:selectedType,notice:notice,mode:'plumbing',hasPhoto:!!pendingPhotoB64,noEmail:true};
+  var payload={id:'R'+Date.now(),ts:new Date().toLocaleString(),name:name,email:email,unit:unit,type:selectedType,notice:notice,mode:'plumbing',hasPhoto:!!pendingPhotoB64,noEmail:true,source:'Resident Submission',status:'Processing'};
   if(pendingPhotoB64){savePhoto({b64:pendingPhotoB64,type:selectedType,name:name,unit:unit,notice:notice,date:new Date().toLocaleDateString()});renderGallery();}
   pushActivity(payload);
   function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Request Service';if(ok){statusEl.innerText='\u2705 Request sent \u2014 sheet updating\u2026';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();setTimeout(function(){refreshSheet();statusEl.innerText='\u2705 Sheet updated.';},3000);}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
