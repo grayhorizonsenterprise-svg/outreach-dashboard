@@ -173,9 +173,9 @@
     .tab:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
 
     /* ── Panels ── */
-    .panel { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 44px; position: relative; overflow: hidden; animation: panelIn .3s ease-out; }
+    .panel { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 44px; position: relative; overflow: hidden; animation: panelIn .3s ease-out; -webkit-transform: translateZ(0); transform: translateZ(0); }
     .panel.active { display: block; }
-    @keyframes panelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes panelIn { from { opacity: 0; } to { opacity: 1; } }
     .panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--blue) 40%, var(--cyan) 60%, transparent); }
     .panel h2 { font-size: clamp(20px,3vw,30px); font-weight: 800; letter-spacing: -.03em; margin-bottom: 8px; }
     .panel-desc { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 28px; }
@@ -519,7 +519,7 @@
     .hoa-wf-field { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 140px; }
     .hoa-wf-field-wide { flex: 2; min-width: 200px; }
     .hoa-wf-field label { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
-    .hoa-wf-field input, .hoa-wf-field select { padding: 9px 12px; font-size: 14px; font-family: inherit; font-weight: 500; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 7px; color: var(--text); transition: border-color .15s, background .15s; -webkit-appearance: none; appearance: none; outline: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-user-select: text; user-select: text; position: relative; z-index: 1; }
+    .hoa-wf-field input, .hoa-wf-field select { padding: 9px 12px; font-size: 14px; font-family: inherit; font-weight: 500; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 7px; color: var(--text); transition: border-color .15s, background .15s; -webkit-appearance: none; appearance: none; outline: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-user-select: text; user-select: text; position: relative; z-index: 5; pointer-events: auto; cursor: text; }
     .hoa-wf-field input::placeholder { color: var(--muted); opacity: .6; }
     .hoa-wf-field input:focus, .hoa-wf-field select:focus { border-color: var(--cyan); background: rgba(34,211,238,.06); }
     .hoa-wf-field select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
@@ -900,7 +900,7 @@
           <div class="hoa-wf-empty" id="hvac-wf-empty">No requests logged yet &mdash; fill out the form above to test the workflow.</div>
         </div>
       </div>
-      <div class="sheets-redirect-wrap">
+      <div class="sheets-redirect-wrap" style="display:none">
         <div class="sheets-redirect-header">
           <div class="hoa-wf-header-left"><div class="sim-pulse"></div>Live HVAC Log &mdash; Google Sheets</div>
           <span class="hoa-wf-badge">&#128202; Live Data</span>
@@ -917,7 +917,7 @@
         </div>
       </div>
 
-      <div style="border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
+      <div style="display:none;border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(34,211,238,.06);border-bottom:1px solid rgba(34,211,238,.18);font-size:12px;font-weight:700;color:var(--cyan);gap:10px;">
           <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live HVAC Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -1034,7 +1034,7 @@
           <div class="hoa-wf-empty" id="dental-wf-empty">No appointments logged yet &mdash; fill out the form above to test the workflow.</div>
         </div>
       </div>
-      <div class="sheets-redirect-wrap">
+      <div class="sheets-redirect-wrap" style="display:none">
         <div class="sheets-redirect-header">
           <div class="hoa-wf-header-left"><div class="sim-pulse"></div>Live Dental Log &mdash; Google Sheets</div>
           <span class="hoa-wf-badge">&#128202; Live Data</span>
@@ -1051,7 +1051,7 @@
         </div>
       </div>
 
-      <div style="border:1px solid rgba(74,222,128,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
+      <div style="display:none;border:1px solid rgba(74,222,128,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(74,222,128,.06);border-bottom:1px solid rgba(74,222,128,.18);font-size:12px;font-weight:700;color:#4ade80;gap:10px;">
           <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live Dental Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -1170,7 +1170,7 @@
           <div class="hoa-wf-empty" id="plumbing-wf-empty">No requests logged yet &mdash; fill out the form above to test the workflow.</div>
         </div>
       </div>
-      <div class="sheets-redirect-wrap">
+      <div class="sheets-redirect-wrap" style="display:none">
         <div class="sheets-redirect-header">
           <div class="hoa-wf-header-left"><div class="sim-pulse"></div>Live Plumbing Log &mdash; Google Sheets</div>
           <span class="hoa-wf-badge">&#128202; Live Data</span>
@@ -1187,7 +1187,7 @@
         </div>
       </div>
 
-      <div style="border:1px solid rgba(79,156,255,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
+      <div style="display:none;border:1px solid rgba(79,156,255,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(79,156,255,.06);border-bottom:1px solid rgba(79,156,255,.18);font-size:12px;font-weight:700;color:var(--blue);gap:10px;">
           <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live Plumbing Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -1409,7 +1409,7 @@
           <div class="hoa-wf-empty" id="contractor-wf-empty">No projects logged yet &mdash; fill out the form above to test the workflow.</div>
         </div>
       </div>
-      <div class="sheets-redirect-wrap">
+      <div class="sheets-redirect-wrap" style="display:none">
         <div class="sheets-redirect-header">
           <div class="hoa-wf-header-left"><div class="sim-pulse"></div>Live Contractor Log &mdash; Google Sheets</div>
           <span class="hoa-wf-badge">&#128202; Live Data</span>
@@ -1426,7 +1426,7 @@
         </div>
       </div>
 
-      <div style="border:1px solid rgba(251,191,36,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
+      <div style="display:none;border:1px solid rgba(251,191,36,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(251,191,36,.06);border-bottom:1px solid rgba(251,191,36,.18);font-size:12px;font-weight:700;color:#fbbf24;gap:10px;">
           <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live Contractor Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -1566,7 +1566,7 @@
         </div>
       </div>
 
-      <div class="sheets-redirect-wrap">
+      <div class="sheets-redirect-wrap" style="display:none">
         <div class="sheets-redirect-header">
           <div class="hoa-wf-header-left">
             <div class="sim-pulse"></div>
@@ -1586,7 +1586,7 @@
         </div>
       </div>
 
-      <div style="border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
+      <div style="display:none;border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(34,211,238,.06);border-bottom:1px solid rgba(34,211,238,.18);font-size:12px;font-weight:700;color:var(--cyan);gap:10px;">
           <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live Compliance Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -1614,30 +1614,6 @@
 
   </div><!-- /industries -->
 
-  <!-- ── Live Outreach Engine ── -->
-  <div style="max-width:1160px;margin:80px auto 0;padding:0 48px;" data-reveal>
-    <p class="sec-label" style="text-align:center;margin-bottom:8px">Backend System</p>
-    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:8px;">Live Outreach Engine</h2>
-    <p style="text-align:center;color:var(--muted);font-size:15px;margin-bottom:32px;">The prospecting and outreach system running behind every campaign &mdash; live, not a demo.</p>
-    <div style="border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.02);">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(34,211,238,.06);border-bottom:1px solid rgba(34,211,238,.18);font-size:12px;font-weight:700;color:var(--cyan);gap:10px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div class="sim-pulse"></div>
-          Outreach Dashboard &mdash; Live System
-        </div>
-        <span class="hoa-wf-badge">&#9889; Live</span>
-      </div>
-      <div style="background:#0b1221;border-radius:0 0 6px 6px;">
-        <iframe
-          src="https://outreach-dashboard-production-b5b1.up.railway.app/"
-          width="100%" height="640"
-          style="border:none;display:block;"
-          title="Live Outreach Engine Dashboard"
-          loading="lazy"
-          sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"></iframe>
-      </div>
-    </div>
-  </div>
 
   <!-- ── Global Experience System ── -->
   <div style="max-width:1160px;margin:40px auto 0;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:20px;" id="global-experience-wrap">
