@@ -1844,6 +1844,7 @@ function runSim(){
   var pipeline=document.getElementById('sim-pipeline'),body=document.getElementById('sim-pipeline-body'),progress=document.getElementById('sim-progress'),result=document.getElementById('sim-result'),title=document.getElementById('sim-pipeline-title'),pulse=document.getElementById('sim-pulse');
   if(!pipeline||!body||!progress||!result||!title||!pulse)return;
   pipeline.classList.add('visible');result.classList.remove('show');progress.style.width='0%';title.textContent='Pipeline Running\u2026';pulse.style.display='';
+  var simOut=document.getElementById('sim-out');if(simOut){var _simTop=simOut.getBoundingClientRect().top+window.scrollY-80;window.scrollTo({top:_simTop,behavior:'smooth'});}
   body.innerHTML='';
   SIM_STAGES.forEach(function(s,i){
     if(i>0){var conn=document.createElement('div');conn.className='sim-connector';conn.id='conn-'+i;body.appendChild(conn);}
