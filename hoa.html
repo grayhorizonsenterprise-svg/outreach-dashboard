@@ -94,6 +94,45 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
 .mode-btn:hover{background:rgba(255,255,255,.08);}
 .mode-btn.active.viol{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.1);color:#f87171;}
 .mode-btn.active.res{border-color:rgba(74,222,128,.4);background:rgba(74,222,128,.1);color:#4ade80;}
+@keyframes ldot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.65)}}
+.metrics-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.metric-item{padding:16px 12px;background:#0f1e35;text-align:center;}
+.metric-val-lg{font-size:26px;font-weight:900;color:#4f9cff;font-variant-numeric:tabular-nums;letter-spacing:-.03em;}
+.metric-lbl-sm{font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.07em;margin-top:3px;}
+.lead-panel{background:#0f1e35;border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.lead-panel-hdr{padding:11px 16px;background:rgba(79,156,255,.06);border-bottom:1px solid rgba(79,156,255,.12);display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:800;color:#4f9cff;}
+.live-ind{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:#22c55e;}
+.ldot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px #22c55e;animation:ldot 1.4s ease-in-out infinite;display:inline-block;}
+.lead-empty-msg{padding:28px;text-align:center;font-size:12px;color:#475569;font-style:italic;}
+.lead-row{display:grid;grid-template-columns:1fr 58px 100px 62px 1fr 88px;align-items:center;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.05);transition:opacity .5s;}
+.lead-row:last-child{border-bottom:none;}
+.lr-name{font-size:13px;font-weight:700;color:#e2e8f0;}
+.lr-meta{font-size:10px;color:#475569;margin-top:2px;}
+.lr-val{font-size:14px;font-weight:900;color:#22c55e;text-align:center;}
+.lr-src{text-align:center;}.lr-resp{font-size:10px;font-weight:700;color:#22d3ee;text-align:center;}
+.src-badge{font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;}
+.src-manual{background:rgba(79,156,255,.15);border:1px solid rgba(79,156,255,.3);color:#4f9cff;}
+.src-resident{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);color:#4ade80;}
+.st-badge{font-size:9px;font-weight:800;padding:3px 8px;border-radius:10px;white-space:nowrap;}
+.st-captured{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:#fbbf24;}
+.st-responded{background:rgba(79,156,255,.12);border:1px solid rgba(79,156,255,.28);color:#4f9cff;}
+.st-followup{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.28);color:#4ade80;}
+.st-complete{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#475569;}
+.mc-btn{padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#64748b;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap;}
+.mc-btn:hover{border-color:rgba(255,255,255,.2);color:#94a3b8;}
+.st-assigned{background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.28);color:#818cf8;}
+.st-inprog{background:rgba(14,165,233,.12);border:1px solid rgba(14,165,233,.28);color:#38bdf8;}
+.prio-em{font-size:8px;font-weight:800;padding:1px 5px;border-radius:4px;background:#ef4444;color:#fff;margin-left:5px;vertical-align:middle;}
+.prio-hi{font-size:8px;font-weight:800;padding:1px 5px;border-radius:4px;background:#f97316;color:#fff;margin-left:5px;vertical-align:middle;}
+.prio-nm{font-size:8px;font-weight:800;padding:1px 5px;border-radius:4px;background:rgba(100,116,139,.25);color:#64748b;margin-left:5px;vertical-align:middle;}
+.src-sms{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:#a78bfa;}
+.src-call{background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.28);color:#fb923c;}
+.intake-sim-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#475569;margin-bottom:8px;}
+.intake-sim{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.intake-sim-btn{padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#64748b;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;display:flex;align-items:center;justify-content:space-between;}
+.intake-sim-btn:hover{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#94a3b8;}
+.intake-sim-tag{font-size:9px;font-weight:600;color:#334155;background:rgba(255,255,255,.04);padding:2px 6px;border-radius:4px;}
+@media(max-width:600px){.lead-row{grid-template-columns:1fr 58px 1fr;}.lr-src,.lr-resp{display:none;}}
 @media(max-width:560px){
   .two-col,.btn-row,.demo-cols{grid-template-columns:1fr!important;}
   .demo-panel.blue{border-right:none;border-bottom:1px solid rgba(255,255,255,.06);}
@@ -104,6 +143,13 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
 <div class="container">
   <h1>HOA Compliance System</h1>
   <div class="subtitle">Smart Violations &bull; Photo Evidence &bull; Automated Notices &bull; Resident Portal</div>
+
+  <!-- Simulated Intake -->
+  <div class="intake-sim-label">&#128202; Simulate Intake Channel</div>
+  <div class="intake-sim">
+    <button class="intake-sim-btn" onclick="simulateIntake('SMS')">&#128241; SMS Intake <span class="intake-sim-tag">tap to demo</span></button>
+    <button class="intake-sim-btn" onclick="simulateIntake('Call')">&#128222; Call Intake <span class="intake-sim-tag">tap to demo</span></button>
+  </div>
 
   <!-- Mode Switcher -->
   <div class="mode-switcher">
@@ -312,6 +358,18 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
 
   </div><!-- end #resident-view -->
 
+  <!-- Premium Dashboard -->
+  <div class="metrics-bar">
+    <div class="metric-item"><div class="metric-val-lg" id="metric-count">0</div><div class="metric-lbl-sm">Leads Today</div></div>
+    <div class="metric-item"><div class="metric-val-lg" id="metric-responded">0</div><div class="metric-lbl-sm">Responded</div></div>
+    <div class="metric-item"><div class="metric-val-lg" id="metric-value">$0</div><div class="metric-lbl-sm">Est. Value</div></div>
+  </div>
+  <div class="lead-panel">
+    <div class="lead-panel-hdr"><span>&#9889; Live Request Log</span><div class="live-ind"><div class="ldot"></div> Live</div></div>
+    <div id="lead-table-empty" class="lead-empty-msg">Awaiting first submission&hellip;</div>
+    <div id="lead-table"></div>
+  </div>
+
   <div class="two-col">
     <div class="section">
       <div class="section-title">&#128200; Report Status</div>
@@ -424,7 +482,7 @@ function makeCell(p){
 /* ── JSONP ── */
 function sendJSONP(url,payload,onSuccess,onFail){var cb='_ghe_'+Date.now()+'_'+Math.floor(Math.random()*9999);var s=document.createElement('script');var done=false;var timer=setTimeout(function(){if(!done){done=true;cleanup();onFail(new Error('timeout'));}},12000);function cleanup(){clearTimeout(timer);try{delete window[cb];}catch(e){}if(s.parentNode)s.parentNode.removeChild(s);}window[cb]=function(r){if(done)return;done=true;cleanup();r&&r.status==='ok'?onSuccess(r):onFail(new Error(r&&r.msg||'error'));};s.onerror=function(){if(!done){done=true;cleanup();onFail(new Error('load error'));}};s.src=url+'?callback='+cb+'&data='+encodeURIComponent(JSON.stringify(payload));document.head.appendChild(s);}
 function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function pushActivity(payload){var feed=document.getElementById('activity-feed');var empty=feed.querySelector('span');if(empty)empty.remove();var e=document.createElement('div');e.className='act-entry';e.innerHTML='&#10003; <strong style="color:#e2e8f0">'+_esc(payload.name)+'</strong> &bull; <span style="color:#4f9cff">'+_esc(payload.type)+'</span>'+(payload.hasPhoto?' &bull; <span style="color:#22d3ee">&#128247;</span>':'')+'<br><span class="status-pill s-proc">Processing</span><span class="comm-ph">&#9993; Email</span><span class="comm-ph" style="opacity:.4">&#128241; SMS</span><span class="comm-ph" style="opacity:.4">&#128222; Call</span> &nbsp;&middot;&nbsp; <span style="color:#475569;font-size:9px;">'+_esc(payload.source||'Resident Submission')+'</span>';feed.prepend(e);if(feed.children.length>8)feed.removeChild(feed.lastChild);document.getElementById('global-summary').innerHTML='&#10003; Received<br>&#10003; Logged: '+payload.ts+'<br>&#10003; Notice queued';}
+function pushActivity(payload){var feed=document.getElementById('activity-feed');var empty=feed.querySelector('span');if(empty)empty.remove();var e=document.createElement('div');e.className='act-entry';e.innerHTML='&#10003; <strong style="color:#e2e8f0">'+_esc(payload.name)+'</strong> &bull; <span style="color:#4f9cff">'+_esc(payload.type)+'</span>'+(payload.hasPhoto?' &bull; <span style="color:#22d3ee">&#128247;</span>':'')+'<br><span class="status-pill s-proc">Processing</span><span class="comm-ph">&#9993; Email</span><span class="comm-ph" style="opacity:.4">&#128241; SMS</span><span class="comm-ph" style="opacity:.4">&#128222; Call</span> &nbsp;&middot;&nbsp; <span style="color:#475569;font-size:9px;">'+_esc(payload.source||'Resident Submission')+'</span>';feed.prepend(e);if(feed.children.length>8)feed.removeChild(feed.lastChild);document.getElementById('global-summary').innerHTML='&#10003; Received<br>&#10003; Logged: '+payload.ts+'<br>&#10003; Notice queued';addLeadRow(payload);}
 
 /* ── Form submit ── */
 var _sub=false,_retried=false;
@@ -441,6 +499,44 @@ document.getElementById('form').addEventListener('submit',function(e){
   sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_retried){_retried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
 });
 renderGallery();
+
+/* ── Premium Lead Table ── */
+var _lc=0,_tv=0,_rc=0;
+var _staff=['Agent Martinez','Agent Thompson','Agent Davis'];
+var _simNames=['Unit 118 — Garcia','Unit 204 — Williams','Unit 307 — Patel','Unit 91 — Thompson','Unit 55 — Okonkwo'];
+var _simTypes=['Parking Violation','Noise Complaint','Landscaping','Trash / Debris','Unapproved Modification'];
+function _lv(t){var h=['Emergency','Unauthorized Structure','Pet Violation'];var l=['Noise Complaint','Trash / Debris','Landscaping'];return h.indexOf(t)>-1?1000:l.indexOf(t)>-1?200:500;}
+function _getPrio(t){var em=['Emergency','Unauthorized Structure','Pet Violation'];var hi=['Parking Violation','Noise Complaint'];return em.indexOf(t)>-1?'em':hi.indexOf(t)>-1?'hi':'nm';}
+function _getSrcBadge(src){if(!src)return['src-resident','Resident'];if(src.indexOf('SMS')>-1)return['src-sms','SMS'];if(src.indexOf('Call')>-1)return['src-call','Call'];if(src.indexOf('Manual')>-1)return['src-manual','Manual'];return['src-resident','Resident'];}
+function addLeadRow(p){
+  _lc++;_tv+=_lv(p.type);
+  var mc=document.getElementById('metric-count'),mv=document.getElementById('metric-value');
+  if(mc)mc.textContent=_lc;if(mv)mv.textContent='$'+_tv.toLocaleString();
+  var em=document.getElementById('lead-table-empty');if(em)em.style.display='none';
+  var rid='lr-'+p.id,row=document.createElement('div');row.className='lead-row';row.id=rid;
+  var sb=_getSrcBadge(p.source),prio=_getPrio(p.type);
+  var prioHtml='<span class="prio-'+prio+'">'+(prio==='em'?'EMERGENCY':prio==='hi'?'HIGH':'NORMAL')+'</span>';
+  var att=p.hasPhoto?'&#128247; &#10003; &bull; ':'';
+  row.innerHTML='<div><div class="lr-name">'+_esc(p.name)+prioHtml+'</div><div class="lr-meta">'+_esc(p.type)+' &bull; '+att+_esc(p.ts)+'</div></div>'
+    +'<div class="lr-val">$'+_lv(p.type)+'</div>'
+    +'<div class="lr-src"><span class="src-badge '+sb[0]+'">'+sb[1]+'</span></div>'
+    +'<div class="lr-resp">&lt;10s</div>'
+    +'<div id="'+rid+'-st"><span class="st-badge st-captured">Captured &#10003;</span></div>'
+    +'<div><button class="mc-btn" onclick="markComplete(\''+rid+'\')">Mark Complete</button></div>';
+  var tbl=document.getElementById('lead-table');if(tbl)tbl.insertBefore(row,tbl.firstChild);
+  var agent=_staff[_lc%_staff.length];
+  setTimeout(function(){var s=document.getElementById(rid+'-st');if(s){s.innerHTML='<span class="st-badge st-responded">Responded &#10003;</span>';_rc++;var mr=document.getElementById('metric-responded');if(mr)mr.textContent=_rc;}},3000);
+  setTimeout(function(){var s=document.getElementById(rid+'-st');if(s)s.innerHTML='<span class="st-badge st-assigned">Assigned &#10003;</span><div style="font-size:9px;color:#818cf8;margin-top:2px;">'+agent+'</div>';},6000);
+  setTimeout(function(){var s=document.getElementById(rid+'-st');if(s)s.innerHTML='<span class="st-badge st-inprog">In Progress &#10003;</span>';},11000);
+  setTimeout(function(){var s=document.getElementById(rid+'-st');if(s)s.innerHTML='<span class="st-badge st-followup">Follow-up Scheduled &#10003;</span>';},17000);
+}
+function markComplete(rid){var s=document.getElementById(rid+'-st');if(s)s.innerHTML='<span class="st-badge st-complete">Completed &#10003;</span>';var r=document.getElementById(rid);if(r)r.style.opacity='.4';}
+function simulateIntake(ch){
+  var n=_simNames[Math.floor(Math.random()*_simNames.length)];
+  var t=_simTypes[Math.floor(Math.random()*_simTypes.length)];
+  var p={id:'R'+Date.now(),ts:new Date().toLocaleString(),name:n,email:'',unit:'',type:t,notice:'',mode:'hoa',hasPhoto:false,noEmail:true,source:ch+' Intake',status:'Processing'};
+  pushActivity(p);
+}
 
 /* ── Mode switcher ── */
 function switchMode(mode){
