@@ -498,6 +498,7 @@ document.getElementById('form').addEventListener('submit',function(e){
   function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Submit Violation Report \u2192';if(ok){statusEl.innerText='\u2705 Report filed \u2014 sheet updating\u2026';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();setTimeout(function(){refreshSheet();statusEl.innerText='\u2705 Sheet updated.';},3000);}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
   sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_retried){_retried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
 });
+(function(){var _b=[{id:'DA1',ts:'Today 8:15 AM',name:'Unit 118 \u2014 Garcia',type:'Parking Violation',source:'SMS Intake',hasPhoto:false},{id:'DA2',ts:'Today 8:55 AM',name:'Unit 204 \u2014 Williams',type:'Unauthorized Structure',source:'Call Intake',hasPhoto:false},{id:'DA3',ts:'Today 9:30 AM',name:'Unit 307 \u2014 Patel',type:'Noise Complaint',source:'Resident Submission',hasPhoto:false}];_b.forEach(function(d,i){setTimeout(function(){pushActivity(d);},300+i*300);});}());
 renderGallery();
 
 /* ── Premium Lead Table ── */

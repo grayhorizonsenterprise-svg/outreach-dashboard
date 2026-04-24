@@ -179,9 +179,11 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
 
 <script>
 var GHE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbx_uysFilFHaeMrBKyJxUuPfEZC5litkHHftn_p5gZ_W9k51gvnPunMnI5tuF3fM_qi/exec';
-var SHEET_BASE='about:blank';
 var STORE_KEY='ghe_contractor_photos';var MAX_PHOTOS=12;
-function refreshSheet(){var f=document.getElementById('sheet-frame');if(f&&SHEET_BASE!=='about:blank')f.src=SHEET_BASE+'&_='+Date.now();}
+var _editUrl='';
+function _loadSheet(u){var f=document.getElementById('sheet-frame');if(!f)return;if(!u){return;}var gm=u.match(/[#&]gid=(\d+)/);var g=gm?gm[1]:'0';f.src=u.replace(/\/edit.*$/,'/pubhtml?single=true&gid='+g+'&widget=false&headers=false&_='+Date.now());f.style.display='block';}
+function refreshSheet(){var cb='_ghe_ls_'+Date.now();var s=document.createElement('script');var done=false;var t=setTimeout(function(){if(!done){done=true;if(s.parentNode)s.parentNode.removeChild(s);if(_editUrl)_loadSheet(_editUrl);}},5000);window[cb]=function(r){clearTimeout(t);done=true;if(s.parentNode)s.parentNode.removeChild(s);if(r&&r.status==='ok'&&r.sheets&&r.sheets.contractor){_editUrl=r.sheets.contractor;}_loadSheet(_editUrl);};s.onerror=function(){if(!done){done=true;if(_editUrl)_loadSheet(_editUrl);}};s.src=GHE_SCRIPT_URL+'?action=listSheets&callback='+cb;document.head.appendChild(s);}
+(function(){refreshSheet();})();
 var selectedType='Remodel';var selectedSlot='Wed 4:15';var pendingPhotoB64='';
 
 function selectPill(el,type){document.querySelectorAll('#type-pills .pill').forEach(function(p){p.classList.remove('active');});el.classList.add('active');selectedType=type;}
@@ -227,6 +229,7 @@ document.getElementById('form').addEventListener('submit',function(e){
   function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Submit Project Details';if(ok){statusEl.innerText='\u2705 Project submitted \u2014 sheet updating\u2026';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();setTimeout(function(){refreshSheet();statusEl.innerText='\u2705 Sheet updated.';},3000);}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
   sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_retried){_retried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
 });
+(function(){var _b=[{name:'David H.',type:'Remodel',slot:'Fri 2:00 PM'},{name:'Lisa K.',type:'New Build',slot:'Sat 10:00 AM'},{name:'Tom R.',type:'Repair',slot:'Mon 9:30 AM'}];_b.forEach(function(d,i){setTimeout(function(){pushActivity(d);},300+i*300);});}());
 renderGallery();
 </script>
 </body>

@@ -557,7 +557,8 @@
     }
 
     /* ── Sheets redirect panel ── */
-    .sheets-redirect-wrap { border: 1px solid rgba(34,211,238,.25); border-radius: 14px; overflow: hidden; margin-bottom: 20px; background: rgba(255,255,255,.02); }
+    .sheets-redirect-wrap { display: none !important; }
+    .ghe-sheet-panel      { display: none !important; }
     .sheets-redirect-header { display: flex; align-items: center; justify-content: space-between; padding: 11px 18px; background: rgba(34,211,238,.06); border-bottom: 1px solid rgba(34,211,238,.18); font-size: 12px; font-weight: 700; color: var(--cyan); gap: 10px; }
     .sheets-redirect-body { padding: 28px 24px; display: flex; flex-direction: column; gap: 20px; }
     .sheets-redirect-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 28px; font-size: 15px; font-weight: 800; font-family: inherit; border-radius: 10px; text-decoration: none; cursor: pointer; border: none; background: linear-gradient(90deg, #16a34a, #15803d); color: #fff; box-shadow: 0 0 0 3px rgba(22,163,74,.25), 0 4px 14px rgba(0,0,0,.4); transition: opacity .15s, transform .15s; align-self: flex-start; letter-spacing: .02em; }
@@ -917,7 +918,7 @@
         </div>
       </div>
 
-      <div style="display:none;border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
+      <div class="ghe-sheet-panel" style="display:none;border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(34,211,238,.06);border-bottom:1px solid rgba(34,211,238,.18);font-size:12px;font-weight:700;color:var(--cyan);gap:10px;">
           <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live HVAC Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -1051,7 +1052,7 @@
         </div>
       </div>
 
-      <div style="display:none;border:1px solid rgba(74,222,128,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
+      <div class="ghe-sheet-panel" style="display:none;border:1px solid rgba(74,222,128,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(74,222,128,.06);border-bottom:1px solid rgba(74,222,128,.18);font-size:12px;font-weight:700;color:#4ade80;gap:10px;">
           <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live Dental Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -1187,7 +1188,7 @@
         </div>
       </div>
 
-      <div style="display:none;border:1px solid rgba(79,156,255,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
+      <div class="ghe-sheet-panel" style="display:none;border:1px solid rgba(79,156,255,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(79,156,255,.06);border-bottom:1px solid rgba(79,156,255,.18);font-size:12px;font-weight:700;color:var(--blue);gap:10px;">
           <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live Plumbing Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -1426,7 +1427,7 @@
         </div>
       </div>
 
-      <div style="display:none;border:1px solid rgba(251,191,36,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
+      <div class="ghe-sheet-panel" style="display:none;border:1px solid rgba(251,191,36,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(251,191,36,.06);border-bottom:1px solid rgba(251,191,36,.18);font-size:12px;font-weight:700;color:#fbbf24;gap:10px;">
           <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live Contractor Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -1586,7 +1587,7 @@
         </div>
       </div>
 
-      <div style="display:none;border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
+      <div class="ghe-sheet-panel" style="display:none;border:1px solid rgba(34,211,238,.25);border-radius:14px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,.02);">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(34,211,238,.06);border-bottom:1px solid rgba(34,211,238,.18);font-size:12px;font-weight:700;color:var(--cyan);gap:10px;">
           <div style="display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>Live Compliance Log &mdash; Real-Time View</div>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -1628,9 +1629,9 @@
       </div>
       <div style="margin-bottom:14px;color:var(--cyan);font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px;">
         <span style="width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);display:inline-block;flex-shrink:0;"></span>
-        Guaranteed response within 15 minutes
+        Instant response &mdash; no request goes unanswered
       </div>
-      <div id="global-summary" style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;min-height:20px;">No submissions yet</div>
+      <div id="global-summary" style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;min-height:20px;">&#10003; Request received<br>&#10003; Logged: Today 10:03 AM<br>&#10003; Confirmation sent<br>&#10003; Processing started</div>
       <div id="smart-recommendation" style="font-size:13px;font-weight:600;color:var(--blue);min-height:18px;margin-bottom:16px;"></div>
       <div style="font-size:12px;color:var(--muted);line-height:2;border-top:1px solid var(--border);padding-top:12px;">
         &#10003; Real-time tracking<br>&#10003; Automated confirmations<br>&#10003; No lost requests<br>&#10003; Instant processing
@@ -1639,7 +1640,11 @@
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue) 40%,var(--cyan) 60%,transparent);"></div>
       <h2 style="font-size:18px;font-weight:800;letter-spacing:-.02em;margin-bottom:18px;">Live Activity</h2>
-      <div id="activity-feed" style="font-size:13px;color:var(--muted);line-height:1.8;display:flex;flex-direction:column;gap:6px;"><span style="font-style:italic;">No activity yet</span></div>
+      <div id="activity-feed" style="font-size:13px;color:var(--muted);line-height:1.8;display:flex;flex-direction:column;gap:6px;">
+        <div style="padding:8px 12px;background:rgba(79,156,255,.06);border:1px solid rgba(79,156,255,.18);border-radius:7px;font-size:13px;">&#10003; <strong style="color:var(--text)">HVAC</strong> &mdash; <strong>James R.</strong> &middot; <span style="color:var(--blue)">Emergency</span> &mdash; <span style="font-size:11px;color:var(--muted)">Today 8:42 AM</span> &mdash; <span style="color:var(--cyan);font-size:11px;font-weight:700">&#128680; Emergency priority &mdash; immediate dispatch</span></div>
+        <div style="padding:8px 12px;background:rgba(79,156,255,.06);border:1px solid rgba(79,156,255,.18);border-radius:7px;font-size:13px;">&#10003; <strong style="color:var(--text)">PLUMBING</strong> &mdash; <strong>Maria L.</strong> &middot; <span style="color:var(--blue)">Leak Repair</span> &mdash; <span style="font-size:11px;color:var(--muted)">Today 9:00 AM</span> &mdash; <span style="color:var(--cyan);font-size:11px;font-weight:700">&#128167; High water damage risk detected</span></div>
+        <div style="padding:8px 12px;background:rgba(79,156,255,.06);border:1px solid rgba(79,156,255,.18);border-radius:7px;font-size:13px;">&#10003; <strong style="color:var(--text)">DENTAL</strong> &mdash; <strong>Angela K.</strong> &middot; <span style="color:var(--blue)">Emergency</span> &mdash; <span style="font-size:11px;color:var(--muted)">Today 8:30 AM</span> &mdash; <span style="color:var(--cyan);font-size:11px;font-weight:700">&#129463; Urgent dental case detected</span></div>
+      </div>
     </div>
   </div>
   <style>@media(max-width:768px){#global-experience-wrap{grid-template-columns:1fr;padding:0 16px;}}</style>

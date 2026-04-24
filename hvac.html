@@ -55,6 +55,33 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
 .s-proc{background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:#fbbf24;}
 .comm-ph{font-size:9px;color:#475569;margin-left:3px;}
 .attach-ok{font-size:11px;color:#22c55e;font-weight:700;margin-top:6px;display:none;}
+@keyframes ldot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.65)}}
+.metrics-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.metric-item{padding:16px 12px;background:#0f1e35;text-align:center;}
+.metric-val-lg{font-size:26px;font-weight:900;color:#4f9cff;font-variant-numeric:tabular-nums;letter-spacing:-.03em;}
+.metric-lbl-sm{font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.07em;margin-top:3px;}
+.lead-panel{background:#0f1e35;border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.lead-panel-hdr{padding:11px 16px;background:rgba(79,156,255,.06);border-bottom:1px solid rgba(79,156,255,.12);display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:800;color:#4f9cff;}
+.live-ind{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:#22c55e;}
+.ldot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px #22c55e;animation:ldot 1.4s ease-in-out infinite;display:inline-block;}
+.lead-empty-msg{padding:28px;text-align:center;font-size:12px;color:#475569;font-style:italic;}
+.lead-row{display:grid;grid-template-columns:1fr 58px 100px 62px 1fr 88px;align-items:center;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.05);transition:opacity .5s;}
+.lead-row:last-child{border-bottom:none;}
+.lr-name{font-size:13px;font-weight:700;color:#e2e8f0;}
+.lr-meta{font-size:10px;color:#475569;margin-top:2px;}
+.lr-val{font-size:14px;font-weight:900;color:#22c55e;text-align:center;}
+.lr-src{text-align:center;}.lr-resp{font-size:10px;font-weight:700;color:#22d3ee;text-align:center;}
+.src-badge{font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;}
+.src-manual{background:rgba(79,156,255,.15);border:1px solid rgba(79,156,255,.3);color:#4f9cff;}
+.src-resident{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);color:#4ade80;}
+.st-badge{font-size:9px;font-weight:800;padding:3px 8px;border-radius:10px;white-space:nowrap;}
+.st-captured{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:#fbbf24;}
+.st-responded{background:rgba(79,156,255,.12);border:1px solid rgba(79,156,255,.28);color:#4f9cff;}
+.st-followup{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.28);color:#4ade80;}
+.st-complete{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#475569;}
+.mc-btn{padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#64748b;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap;}
+.mc-btn:hover{border-color:rgba(255,255,255,.2);color:#94a3b8;}
+@media(max-width:600px){.lead-row{grid-template-columns:1fr 58px 1fr;}.lr-src,.lr-resp{display:none;}}
 @media(max-width:560px){.two-col,.btn-row{grid-template-columns:1fr!important;}}
 </style>
 </head>
@@ -119,6 +146,18 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
     <div id="status"></div>
   </div>
 
+  <!-- Premium Dashboard -->
+  <div class="metrics-bar">
+    <div class="metric-item"><div class="metric-val-lg" id="metric-count">0</div><div class="metric-lbl-sm">Leads Today</div></div>
+    <div class="metric-item"><div class="metric-val-lg" id="metric-responded">0</div><div class="metric-lbl-sm">Responded</div></div>
+    <div class="metric-item"><div class="metric-val-lg" id="metric-value">$0</div><div class="metric-lbl-sm">Est. Value</div></div>
+  </div>
+  <div class="lead-panel">
+    <div class="lead-panel-hdr"><span>&#9889; Live Request Log</span><div class="live-ind"><div class="ldot"></div> Live</div></div>
+    <div id="lead-table-empty" class="lead-empty-msg">Awaiting first submission&hellip;</div>
+    <div id="lead-table"></div>
+  </div>
+
   <div class="two-col">
     <div class="section">
       <div class="section-title">&#128200; Request Status</div>
@@ -132,7 +171,7 @@ iframe{width:100%;min-width:680px;height:520px;border:none;display:block;}
     </div>
   </div>
 
-  <div class="sheet-wrap">
+  <div class="sheet-wrap" style="display:none">
     <div class="sheet-header">
       &#128202; Live Service Log &mdash; Auto-Updates
       <button class="refresh-btn" onclick="refreshSheet()">&#8635; Refresh</button>
@@ -181,7 +220,7 @@ function makeCell(p){
 }
 function sendJSONP(url,payload,onSuccess,onFail){var cb='_ghe_'+Date.now()+'_'+Math.floor(Math.random()*9999);var s=document.createElement('script');var done=false;var timer=setTimeout(function(){if(!done){done=true;cleanup();onFail(new Error('timeout'));}},12000);function cleanup(){clearTimeout(timer);try{delete window[cb];}catch(e){}if(s.parentNode)s.parentNode.removeChild(s);}window[cb]=function(r){if(done)return;done=true;cleanup();r&&r.status==='ok'?onSuccess(r):onFail(new Error(r&&r.msg||'error'));};s.onerror=function(){if(!done){done=true;cleanup();onFail(new Error('load error'));}};s.src=url+'?callback='+cb+'&data='+encodeURIComponent(JSON.stringify(payload));document.head.appendChild(s);}
 function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function pushActivity(payload){var feed=document.getElementById('activity-feed');var empty=feed.querySelector('span[style]');if(empty)empty.remove();var e=document.createElement('div');e.className='act-entry';e.innerHTML='&#10003; <strong style="color:#e2e8f0">'+_esc(payload.name)+'</strong> &bull; <span style="color:#4f9cff">'+_esc(payload.type)+'</span>'+(payload.hasPhoto?' &bull; <span style="color:#22d3ee">&#128247; photo</span>':'')+'<br><span class="status-pill s-proc">Processing</span><span class="comm-ph">&#9993; Email</span><span class="comm-ph" style="opacity:.4">&#128241; SMS</span><span class="comm-ph" style="opacity:.4">&#128222; Call</span> &nbsp;&middot;&nbsp; <span style="color:#475569;font-size:9px;">'+_esc(payload.source||'Resident Submission')+'</span>';feed.prepend(e);if(feed.children.length>8)feed.removeChild(feed.lastChild);document.getElementById('global-summary').innerHTML='&#10003; Received<br>&#10003; Logged: '+payload.ts+'<br>&#10003; Dispatch initiated';}
+function pushActivity(payload){var feed=document.getElementById('activity-feed');var empty=feed.querySelector('span[style]');if(empty)empty.remove();var e=document.createElement('div');e.className='act-entry';e.innerHTML='&#10003; <strong style="color:#e2e8f0">'+_esc(payload.name)+'</strong> &bull; <span style="color:#4f9cff">'+_esc(payload.type)+'</span>'+(payload.hasPhoto?' &bull; <span style="color:#22d3ee">&#128247; photo</span>':'')+'<br><span class="status-pill s-proc">Processing</span><span class="comm-ph">&#9993; Email</span><span class="comm-ph" style="opacity:.4">&#128241; SMS</span><span class="comm-ph" style="opacity:.4">&#128222; Call</span> &nbsp;&middot;&nbsp; <span style="color:#475569;font-size:9px;">'+_esc(payload.source||'Resident Submission')+'</span>';feed.prepend(e);if(feed.children.length>8)feed.removeChild(feed.lastChild);document.getElementById('global-summary').innerHTML='&#10003; Received<br>&#10003; Logged: '+payload.ts+'<br>&#10003; Dispatch initiated';addLeadRow(payload);}
 
 var _sub=false,_retried=false;
 document.getElementById('form').addEventListener('submit',function(e){
@@ -196,6 +235,29 @@ document.getElementById('form').addEventListener('submit',function(e){
   function onDone(ok){_sub=false;btn.disabled=false;btn.textContent='Request Service';if(ok){statusEl.innerText='\u2705 Request sent \u2014 sheet updating\u2026';statusEl.style.color='#22c55e';document.getElementById('form').reset();clearPhoto();setTimeout(function(){refreshSheet();statusEl.innerText='\u2705 Sheet updated.';},3000);}else{statusEl.innerText='\u2705 Submitted \u2014 processing in background.';statusEl.style.color='#94a3b8';}}
   sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){if(!_retried){_retried=true;statusEl.innerText='\u23F3 Retrying\u2026';setTimeout(function(){sendJSONP(GHE_SCRIPT_URL,payload,function(){onDone(true);},function(){onDone(false);});},2000);}else{onDone(false);}});
 });
+/* ── Premium Lead Table ── */
+var _lc=0,_tv=0,_rc=0;
+function _lv(t){var h=['Emergency','Urgent'];var l=['Inspection','Maintenance','Courtesy'];return h.indexOf(t)>-1?1000:l.indexOf(t)>-1?200:500;}
+function addLeadRow(p){
+  _lc++;_tv+=_lv(p.type);
+  var mc=document.getElementById('metric-count'),mv=document.getElementById('metric-value');
+  if(mc)mc.textContent=_lc;if(mv)mv.textContent='$'+_tv.toLocaleString();
+  var em=document.getElementById('lead-table-empty');if(em)em.style.display='none';
+  var rid='lr-'+p.id,row=document.createElement('div');row.className='lead-row';row.id=rid;
+  var src=p.source||'Resident Submission',sc=src.indexOf('Manual')>-1?'src-manual':'src-resident';
+  var att=p.hasPhoto?'&#128247; &#10003; &bull; ':'';
+  row.innerHTML='<div><div class="lr-name">'+_esc(p.name)+'</div><div class="lr-meta">'+_esc(p.type)+' &bull; '+att+_esc(p.ts)+'</div></div>'
+    +'<div class="lr-val">$'+_lv(p.type)+'</div>'
+    +'<div class="lr-src"><span class="src-badge '+sc+'">'+_esc(src.split(' ')[0])+'</span></div>'
+    +'<div class="lr-resp">&lt;10s</div>'
+    +'<div id="'+rid+'-st"><span class="st-badge st-captured">Captured &#10003;</span></div>'
+    +'<div><button class="mc-btn" onclick="markComplete(\''+rid+'\')">Mark Complete</button></div>';
+  var tbl=document.getElementById('lead-table');if(tbl)tbl.insertBefore(row,tbl.firstChild);
+  setTimeout(function(){var s=document.getElementById(rid+'-st');if(s){s.innerHTML='<span class="st-badge st-responded">Responded &#10003;</span>';_rc++;var mr=document.getElementById('metric-responded');if(mr)mr.textContent=_rc;}},4000);
+  setTimeout(function(){var s=document.getElementById(rid+'-st');if(s)s.innerHTML='<span class="st-badge st-followup">Follow-up Scheduled &#10003;</span>';},9000);
+}
+function markComplete(rid){var s=document.getElementById(rid+'-st');if(s)s.innerHTML='<span class="st-badge st-complete">Complete &#10003;</span>';var r=document.getElementById(rid);if(r)r.style.opacity='.4';}
+(function(){var _b=[{id:'DH1',ts:'Today 8:42 AM',name:'James R.',type:'Emergency',source:'Manual',hasPhoto:false},{id:'DH2',ts:'Today 9:15 AM',name:'Sarah M.',type:'Repair',source:'Resident Submission',hasPhoto:false},{id:'DH3',ts:'Today 10:03 AM',name:'Mike T.',type:'Maintenance',source:'Resident Submission',hasPhoto:false}];_b.forEach(function(d,i){setTimeout(function(){pushActivity(d);},300+i*300);});}());
 renderGallery();
 </script>
 </body>
