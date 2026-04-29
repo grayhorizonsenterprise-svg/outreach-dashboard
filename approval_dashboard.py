@@ -138,7 +138,15 @@ def save_data(df):
 def format_message(msg):
     if not msg:
         return ""
-    return msg.replace("\n", "<br>").replace(". ", ".<br><br>")
+    # Preserve paragraph breaks (double newline) and single line breaks
+    # Do NOT break on every ". " — that makes emails look choppy
+    paragraphs = msg.split("\n\n")
+    parts = []
+    for p in paragraphs:
+        parts.append(p.replace("\n", "<br>"))
+    return "</p><p style='margin:0 0 12px 0;'>".join(
+        f"<p style='margin:0 0 12px 0;'>{p}</p>" for p in parts
+    )
 
 # =========================
 # SEND EMAIL (SENDGRID)
