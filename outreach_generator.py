@@ -21,7 +21,7 @@ Quick question — when a homeowner submits a violation or complaint, how does y
 
 We work with a few HOA firms and that handoff tends to be where things fall through. Happy to share what we put together if it's relevant.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -31,7 +31,7 @@ How are you handling violation notices and compliance documentation across your 
 
 Not a pitch — just genuinely curious how you're running it right now.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -41,7 +41,7 @@ Direct question — how does your team deal with violation management across mul
 
 Happy to compare notes if that's a pain point.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
     ],
 
@@ -53,7 +53,7 @@ Quick one — when a customer calls in for an emergency repair, how are you disp
 
 We've been working with HVAC companies to tighten up that gap. Curious how you're handling it.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -63,7 +63,7 @@ Not sure if this is relevant, but — how are you managing your service calls an
 
 Happy to share what we've seen work well if it's useful.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -71,7 +71,7 @@ Hey,
 
 Wanted to ask something real quick — during peak season when calls are stacking up, how does your team keep track of which jobs are pending, in progress, and completed? Is it centralized anywhere or still kind of scattered?
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
     ],
 
@@ -83,7 +83,7 @@ Quick question — how are you handling new patient intake and appointment follo
 
 We've been working with a few dental practices on exactly that. Curious how you're running it.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -93,7 +93,7 @@ Not sure if this is an issue on your end, but — how does your front desk handl
 
 Happy to share what we've seen work.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -103,7 +103,7 @@ Random question — how are you tracking patients who called, got put on a waitl
 
 Curious if that's something you're actively managing.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
     ],
 
@@ -115,7 +115,7 @@ Quick one — when an emergency call comes in, how are you routing it to a tech 
 
 We work with plumbing companies to clean up that dispatch-to-completion flow. Curious how you're handling it.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -125,7 +125,7 @@ Not sure if this is relevant, but — how are you managing job tracking across y
 
 Happy to compare notes if that's something you deal with.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -133,7 +133,7 @@ Hey,
 
 Direct question — when a customer calls about a burst pipe or active leak, what does the first 10 minutes look like on your end? Is dispatch centralized or is it still kind of ad hoc?
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
     ],
 
@@ -145,7 +145,7 @@ Quick question — how are you managing the gap between a client's first estimat
 
 We've been working with contracting firms on tightening up that process. Curious how you're running it.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -155,7 +155,7 @@ Not sure if this applies, but — how are you tracking open bids and follow-ups 
 
 Happy to share what we've put together if it's useful.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -165,7 +165,7 @@ Random question — when a potential client reaches out about a remodel or addit
 
 Curious how you're handling the volume.
 
-— Alex
+Alex
 Gray Horizons Enterprise""",
     ],
 }

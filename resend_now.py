@@ -125,7 +125,7 @@ with open(LOG_FILE, "a", newline="", encoding="utf-8") as log_f:
             "<div style='font-family:Arial;line-height:1.6;'>"
             "<p>Hi " + (name or "there") + ",</p>"
             "<p>" + message.replace("\n", "<br>") + "</p>"
-            "<p>— Alex<br>Gray Horizons Enterprise<br>grayhorizonsenterprise.com</p>"
+            "<p>Alex<br>Gray Horizons Enterprise<br>grayhorizonsenterprise.com</p>"
             "</div>"
         )
 
@@ -141,7 +141,7 @@ with open(LOG_FILE, "a", newline="", encoding="utf-8") as log_f:
             writer.writerow({
                 "timestamp": datetime.now().strftime("%Y-%m-%d %I:%M %p"),
                 "company": company, "name": name, "email": email,
-                "subject": subject, "success": True, "error": "smtp-local"
+                "subject": subject, "success": True, "error": "gmail-smtp-accepted"
             })
             # Mark sent in memory
             row["status"] = "sent"

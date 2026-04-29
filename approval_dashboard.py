@@ -169,7 +169,7 @@ def _build_html_body(name, sender_name, message):
     <div style="font-family:Arial;line-height:1.6;">
         <p>Hi {name or 'there'},</p>
         <p>{format_message(message)}</p>
-        <p>— {sender_name}<br>Gray Horizons Enterprise</p>
+        <p>{sender_name}<br>Gray Horizons Enterprise</p>
     </div>
     """
 
@@ -554,22 +554,69 @@ def sent_log_view():
         except Exception:
             pass
 
-    html = """
+    # Compute stats for the banner
+    total_entries = len(rows)
+    sent_count_log = sum(
+        1 for r in rows
+        if str(r.get("success", r.get("status", ""))).strip().lower()
+        in ("true", "1", "smtp", "sendgrid", "gmail-smtp-accepted")
+    )
+    failed_count_log = sum(
+        1 for r in rows
+        if str(r.get("success", r.get("status", ""))).strip().lower()
+        in ("false", "0", "")
+        and str(r.get("error", r.get("note", ""))).strip().lower() not in ("skipped", "no email address found")
+    )
+
+    html = f"""
     <style>
-        body { background:#0f172a; color:white; font-family:Arial; margin:0; }
-        .header { text-align:center; padding:20px; font-size:22px; font-weight:bold; background:#020617; }
-        .wrap { overflow-x:auto; width:96%; margin:20px auto; }
-        table { width:100%; border-collapse:collapse; font-size:13px; min-width:900px; }
-        th { background:#1e293b; padding:10px; text-align:left; color:#38bdf8; white-space:nowrap; }
-        td { padding:9px 10px; border-bottom:1px solid #1e293b; vertical-align:top; }
-        td.err { color:#f87171; font-size:12px; max-width:340px; word-break:break-word; white-space:pre-wrap; }
-        .ok   { color:#22c55e; font-weight:bold; }
-        .fail { color:#ef4444; font-weight:bold; }
-        a.back { display:block; text-align:center; margin:16px; color:#38bdf8; }
+        body {{ background:#0f172a; color:white; font-family:Arial; margin:0; }}
+        .header {{ text-align:center; padding:20px; font-size:22px; font-weight:bold; background:#020617; }}
+        .stats-bar {{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; padding:16px; background:#020617; border-bottom:1px solid #1e293b; }}
+        .stat-box {{ background:#0f172a; border:1px solid #1e293b; border-radius:8px; padding:12px 24px; text-align:center; }}
+        .stat-num {{ font-size:28px; font-weight:bold; }}
+        .stat-lbl {{ font-size:11px; color:#64748b; margin-top:4px; }}
+        .notice {{ background:#1e293b; border-left:4px solid #f59e0b; margin:16px auto; width:92%; max-width:860px; padding:12px 16px; border-radius:6px; font-size:13px; color:#cbd5e1; line-height:1.6; }}
+        .verify-btn {{ display:block; text-align:center; margin:12px auto; }}
+        .verify-btn a {{ background:#22c55e; color:#000; font-weight:bold; padding:10px 28px; border-radius:8px; text-decoration:none; font-size:14px; }}
+        .wrap {{ overflow-x:auto; width:96%; margin:20px auto; }}
+        table {{ width:100%; border-collapse:collapse; font-size:13px; min-width:900px; }}
+        th {{ background:#1e293b; padding:10px; text-align:left; color:#38bdf8; white-space:nowrap; }}
+        td {{ padding:9px 10px; border-bottom:1px solid #1e293b; vertical-align:top; }}
+        td.err {{ color:#f87171; font-size:12px; max-width:340px; word-break:break-word; white-space:pre-wrap; }}
+        .ok   {{ color:#22c55e; font-weight:bold; }}
+        .fail {{ color:#ef4444; font-weight:bold; }}
+        a.back {{ display:inline-block; margin:8px 12px; color:#38bdf8; }}
     </style>
-    <div class="header">Sent Log</div>
-    <a class="back" href="/">&#8592; Back to Dashboard</a>
-    <a class="back" href="/resend-failed" style="color:#f59e0b;">Resend Failed Emails</a>
+    <div class="header">Outreach Sent Log</div>
+    <div class="stats-bar">
+        <div class="stat-box">
+            <div class="stat-num" style="color:#22c55e;">{sent_count_log}</div>
+            <div class="stat-lbl">Accepted by Gmail SMTP</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color:#ef4444;">{failed_count_log}</div>
+            <div class="stat-lbl">Failed to Send</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color:#94a3b8;">{total_entries}</div>
+            <div class="stat-lbl">Total Log Entries</div>
+        </div>
+    </div>
+    <div class="notice">
+        <strong style="color:#f59e0b;">What "SENT" means:</strong>
+        Gmail's SMTP server accepted the message — the email left this system successfully.
+        Inbox delivery depends on the recipient's spam filters. To get open/click/bounce tracking,
+        connect <a href="https://sendgrid.com" target="_blank" style="color:#38bdf8;">SendGrid</a>
+        (free tier: 100/day) by adding <code>SENDGRID_API_KEY</code> to your .env file.
+        &nbsp;&nbsp;<strong>→</strong>&nbsp;
+        <a href="/test-email" style="color:#22c55e;font-weight:bold;">Send live test email to your inbox now</a>
+    </div>
+    <div style="text-align:center;margin:8px 0;">
+        <a class="back" href="/">&#8592; Dashboard</a>
+        <a class="back" href="/resend-failed" style="color:#f59e0b;">Resend Failed</a>
+        <a class="back" href="/test-email" style="color:#22c55e;">&#10003; Send Test Email</a>
+    </div>
     """
 
     if not rows:
