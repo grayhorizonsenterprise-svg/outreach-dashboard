@@ -177,7 +177,7 @@ We've been working with a few HOA teams and noticed things tend to fall apart be
 
 ${closer}
 
-— Alex`,
+Alex`,
   };
 }
 
@@ -206,7 +206,7 @@ function generateFollowUp(original) {
 
 ${_pick(FOLLOWUP_CLOSERS)}
 
-— Alex`,
+Alex`,
   };
 }
 
