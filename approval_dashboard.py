@@ -122,6 +122,13 @@ def load_data():
             df[col] = ""
 
     df = df.fillna("")
+
+    df["message"] = (
+        df["message"]
+        .str.replace("—", ",", regex=False)
+        .str.replace("--", ",", regex=False)
+        .str.replace("  ", " ", regex=False)
+    )
     df.loc[df["status"] == "", "status"] = "pending"
     # Tag all untagged rows as hoa (existing data pre-dates niche column)
     df.loc[df["niche"] == "", "niche"] = "hoa"
