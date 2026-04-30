@@ -17,7 +17,7 @@ NICHE_MESSAGES = {
         """\
 Hey,
 
-Quick question — when a homeowner submits a violation or complaint, how does your team track it from that first report all the way to resolution? Still email threads, or do you have something more structured?
+Quick question: when a homeowner submits a violation or complaint, how does your team track it from that first report all the way to resolution? Still email threads, or do you have something more structured?
 
 We work with a few HOA firms and that handoff tends to be where things fall through. Happy to share what we put together if it's relevant.
 
@@ -29,7 +29,7 @@ Hi there,
 
 How are you handling violation notices and compliance documentation across your communities? It sounds simple but gets messy fast once you're managing more than a handful of associations.
 
-Not a pitch — just genuinely curious how you're running it right now.
+Not a pitch, just genuinely curious how you're running it right now.
 
 Alex
 Gray Horizons Enterprise""",
@@ -37,7 +37,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Direct question — how does your team deal with violation management across multiple HOAs? Specifically the documentation side — keeping records, following up, making sure nothing gets dropped.
+Direct question: how does your team deal with violation management across multiple HOAs? Specifically the documentation side, keeping records, following up, making sure nothing gets dropped.
 
 Happy to compare notes if that's a pain point.
 
@@ -49,7 +49,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick one — when a customer calls in for an emergency repair, how are you dispatching and tracking that job from the first call to close-out? Still phone and spreadsheet, or do you have a system?
+Quick one: when a customer calls in for an emergency repair, how are you dispatching and tracking that job from the first call to close-out? Still phone and spreadsheet, or do you have a system?
 
 We've been working with HVAC companies to tighten up that gap. Curious how you're handling it.
 
@@ -59,7 +59,7 @@ Gray Horizons Enterprise""",
         """\
 Hi there,
 
-Not sure if this is relevant, but — how are you managing your service calls and maintenance schedules right now? Specifically keeping techs, customers, and follow-ups all in sync without things falling through.
+Not sure if this is relevant, but how are you managing your service calls and maintenance schedules right now? Specifically keeping techs, customers, and follow-ups all in sync without things falling through.
 
 Happy to share what we've seen work well if it's useful.
 
@@ -69,7 +69,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Wanted to ask something real quick — during peak season when calls are stacking up, how does your team keep track of which jobs are pending, in progress, and completed? Is it centralized anywhere or still kind of scattered?
+Wanted to ask something real quick: during peak season when calls are stacking up, how does your team keep track of which jobs are pending, in progress, and completed? Is it centralized anywhere or still kind of scattered?
 
 Alex
 Gray Horizons Enterprise""",
@@ -79,7 +79,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick question — how are you handling new patient intake and appointment follow-ups right now? Specifically making sure patients who inquire actually get booked and don't fall off.
+Quick question: how are you handling new patient intake and appointment follow-ups right now? Specifically making sure patients who inquire actually get booked and don't fall off.
 
 We've been working with a few dental practices on exactly that. Curious how you're running it.
 
@@ -89,7 +89,7 @@ Gray Horizons Enterprise""",
         """\
 Hi there,
 
-Not sure if this is an issue on your end, but — how does your front desk handle it when someone calls for an emergency appointment and the schedule is already full? Is there a system for that or is it mostly judgment call?
+Not sure if this is an issue on your end, but how does your front desk handle it when someone calls for an emergency appointment and the schedule is already full? Is there a system for that or is it mostly judgment call?
 
 Happy to share what we've seen work.
 
@@ -99,7 +99,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Random question — how are you tracking patients who called, got put on a waitlist, and never followed up? That gap between first inquiry and actual booking is where a lot of practices lose people.
+Random question: how are you tracking patients who called, got put on a waitlist, and never followed up? That gap between first inquiry and actual booking is where a lot of practices lose people.
 
 Curious if that's something you're actively managing.
 
@@ -111,7 +111,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick one — when an emergency call comes in, how are you routing it to a tech and making sure the customer gets an update without someone manually tracking it the whole time?
+Quick one: when an emergency call comes in, how are you routing it to a tech and making sure the customer gets an update without someone manually tracking it the whole time?
 
 We work with plumbing companies to clean up that dispatch-to-completion flow. Curious how you're handling it.
 
@@ -121,7 +121,7 @@ Gray Horizons Enterprise""",
         """\
 Hi there,
 
-Not sure if this is relevant, but — how are you managing job tracking across your crews right now? Specifically knowing where each job stands without having to call the tech directly.
+Not sure if this is relevant, but how are you managing job tracking across your crews right now? Specifically knowing where each job stands without having to call the tech directly.
 
 Happy to compare notes if that's something you deal with.
 
@@ -131,7 +131,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Direct question — when a customer calls about a burst pipe or active leak, what does the first 10 minutes look like on your end? Is dispatch centralized or is it still kind of ad hoc?
+Direct question: when a customer calls about a burst pipe or active leak, what does the first 10 minutes look like on your end? Is dispatch centralized or is it still kind of ad hoc?
 
 Alex
 Gray Horizons Enterprise""",
@@ -141,7 +141,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick question — how are you managing the gap between a client's first estimate request and when the actual project kicks off? That handoff tends to be where leads go cold.
+Quick question: how are you managing the gap between a client's first estimate request and when the actual project kicks off? That handoff tends to be where leads go cold.
 
 We've been working with contracting firms on tightening up that process. Curious how you're running it.
 
@@ -151,7 +151,7 @@ Gray Horizons Enterprise""",
         """\
 Hi there,
 
-Not sure if this applies, but — how are you tracking open bids and follow-ups right now? Specifically making sure estimates you sent out actually get a response before they go stale.
+Not sure if this applies, but how are you tracking open bids and follow-ups right now? Specifically making sure estimates you sent out actually get a response before they go stale.
 
 Happy to share what we've put together if it's useful.
 
@@ -161,7 +161,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Random question — when a potential client reaches out about a remodel or addition, how quickly does your team get them a quote and follow up? That response window is usually the difference between winning the job and losing it.
+Random question: when a potential client reaches out about a remodel or addition, how quickly does your team get them a quote and follow up? That response window is usually the difference between winning the job and losing it.
 
 Curious how you're handling the volume.
 
