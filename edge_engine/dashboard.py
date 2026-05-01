@@ -238,6 +238,11 @@ def background_refresh():
 def index():
     return render_template("index.html")
 
+@app.route("/health")
+def health():
+    """Railway health check — returns immediately, never blocks."""
+    return jsonify({"status": "ok", "loading": CACHE["loading"]}), 200
+
 @app.route("/api/data")
 def api_data():
     with CACHE_LOCK:
