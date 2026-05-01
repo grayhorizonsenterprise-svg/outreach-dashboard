@@ -25,7 +25,7 @@ CB_KEY    = os.getenv("COINBASE_API_KEY", "")
 CB_SECRET = os.getenv("COINBASE_API_SECRET", "")
 
 # ── Thresholds ─────────────────────────────────────────────────────────────────
-PROFIT_ALERT_USD  = 500
+PROFIT_ALERT_USD  = 1000
 BIWEEKLY_DAYS     = 14
 MIN_BET_EDGE_PCT  = 3.0
 MIN_SIGNAL_SCORE  = 65

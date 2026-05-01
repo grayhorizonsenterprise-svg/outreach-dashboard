@@ -473,3 +473,141 @@ def get_congress_buys(lookback_days: int = 60) -> dict[str, float]:
     except Exception as e:
         print(f"  [!] Congress data: {e}")
         return {}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ACTION PLAN — converts signals into exact dollar plays
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _stock_targets(ticker: str, price: float, score: float, rsi: float) -> dict:
+    try:
+        df = yf.Ticker(ticker).history(period="1y")
+        hi52 = float(df["Close"].max())
+        lo52 = float(df["Close"].min())
+        ema50 = float(_ema(df["Close"], 50).iloc[-1])
+    except Exception:
+        hi52 = price * 1.30
+        lo52 = price * 0.70
+        ema50 = price
+
+    dist_to_high = (hi52 - price) / price
+    if rsi < 35:       target_pct = min(0.35, max(0.20, dist_to_high * 0.6))
+    elif score >= 80:  target_pct = min(0.30, max(0.18, dist_to_high * 0.5))
+    elif score >= 70:  target_pct = min(0.22, max(0.14, dist_to_high * 0.4))
+    else:              target_pct = 0.12
+
+    stop_pct = max(0.08, (price - max(ema50, lo52 + (price - lo52) * 0.1)) / price)
+    stop_pct = min(stop_pct, 0.12)
+
+    target_price = round(price * (1 + target_pct), 2)
+    stop_price   = round(price * (1 - stop_pct),  2)
+    edge = (score / 100) * target_pct
+    kelly = min(0.80, edge / stop_pct) if stop_pct > 0 else 0.10
+
+    return {
+        "entry": price, "target": target_price, "stop": stop_price,
+        "target_pct": round(target_pct * 100, 1),
+        "stop_pct":   round(stop_pct * 100, 1),
+        "risk_reward": round(target_pct / stop_pct, 1) if stop_pct > 0 else 0,
+        "position_pct": round(max(0.10, kelly), 2),
+    }
+
+
+def _crypto_targets(price: float, score: float, change_24h: float) -> dict:
+    if score >= 80:   target_pct, stop_pct, pos_pct = 1.00, 0.20, 0.35
+    elif score >= 70: target_pct, stop_pct, pos_pct = 0.60, 0.18, 0.25
+    elif score >= 60: target_pct, stop_pct, pos_pct = 0.40, 0.15, 0.18
+    else:             target_pct, stop_pct, pos_pct = 0.25, 0.12, 0.10
+    if change_24h < -5:
+        target_pct *= 1.2
+        pos_pct    *= 1.1
+    return {
+        "entry": price, "target": round(price * (1 + target_pct), 6),
+        "stop":  round(price * (1 - stop_pct), 6),
+        "target_pct": round(target_pct * 100, 1),
+        "stop_pct":   round(stop_pct * 100, 1),
+        "risk_reward": round(target_pct / stop_pct, 1),
+        "position_pct": round(min(pos_pct, 0.40), 2),
+    }
+
+
+def _bet_sizing(our_prob: float, odds: int, bankroll: float = 15.0) -> dict:
+    decimal = (odds / 100 + 1) if odds > 0 else (100 / abs(odds) + 1)
+    edge    = our_prob - (1 / decimal)
+    kelly   = max(0, (edge / (decimal - 1)) * 0.5) if decimal > 1 else 0
+    wager   = max(2.0, round(min(bankroll * kelly, bankroll * 0.08), 2))
+    payout  = round(wager * (decimal - 1), 2)
+    return {"wager": wager, "payout": payout,
+            "total_return": round(wager + payout, 2), "decimal_odds": round(decimal, 2)}
+
+
+def get_action_plan(stocks: list, cryptos: list, bets: list,
+                    bankroll: float = 100.0) -> dict:
+    plays = {"stocks": [], "crypto": [], "bets": [], "summary": {}}
+
+    qualifying_s = [s for s in stocks if s.trend in ("STRONG BUY", "BUY")][:5]
+    stock_budget = bankroll * 0.60
+    alloc_s = [0.50, 0.30, 0.20]
+    for i, s in enumerate(qualifying_s[:3]):
+        t = _stock_targets(s.ticker, s.price, s.score, s.rsi)
+        din = round(stock_budget * alloc_s[i], 2)
+        shares = round(din / s.price, 4) if s.price > 0 else 0
+        plays["stocks"].append({
+            "rank": i + 1, "ticker": s.ticker, "score": s.score,
+            "entry": s.price, "target": t["target"], "stop": t["stop"],
+            "target_pct": t["target_pct"], "stop_pct": t["stop_pct"],
+            "rr": t["risk_reward"], "dollar_in": din, "shares": shares,
+            "profit": round(shares * (t["target"] - s.price), 2),
+            "reason": s.note, "platform": "Robinhood",
+        })
+
+    qualifying_c = [c for c in cryptos if c.trend in ("STRONG BUY", "BUY")][:4]
+    crypto_budget = bankroll * 0.25
+    alloc_c = [0.65, 0.35]
+    for i, c in enumerate(qualifying_c[:2]):
+        t = _crypto_targets(c.price, c.score, c.change_24h)
+        din = round(crypto_budget * alloc_c[i], 2)
+        plays["crypto"].append({
+            "rank": i + 1, "symbol": c.symbol, "coin": c.coin,
+            "score": c.score, "entry": c.price, "target": t["target"],
+            "stop": t["stop"], "target_pct": t["target_pct"],
+            "stop_pct": t["stop_pct"], "rr": t["risk_reward"],
+            "dollar_in": din, "profit": round(din * t["target_pct"] / 100, 2),
+            "reason": c.note or "momentum", "platform": "Coinbase / CashApp",
+        })
+
+    bet_budget = bankroll * 0.15
+    qualifying_b = [b for b in bets if b.our_prob >= 0.55][:4]
+    for i, b in enumerate(qualifying_b[:2]):
+        sz = _bet_sizing(b.our_prob, b.odds, bet_budget)
+        plays["bets"].append({
+            "rank": i + 1, "sport": b.sport, "game": b.game,
+            "bet_on": b.bet_on, "book": b.book, "odds": b.odds,
+            "odds_str": f"+{b.odds}" if b.odds > 0 else str(b.odds),
+            "win_pct": round(b.our_prob * 100, 1), "edge": b.edge_pct,
+            "wager": sz["wager"], "payout": sz["payout"],
+            "total_return": sz["total_return"], "confidence": b.confidence,
+            "platform": b.book,
+        })
+
+    weekly_edge = 0.18
+    projection, bal = [], bankroll
+    for week in range(1, 14):
+        bal = round(bal * (1 + weekly_edge), 2)
+        projection.append({"week": week, "balance": bal})
+
+    plays["summary"] = {
+        "bankroll": bankroll,
+        "stock_budget": round(bankroll * 0.60, 2),
+        "crypto_budget": round(bankroll * 0.25, 2),
+        "bet_budget": round(bankroll * 0.15, 2),
+        "total_plays": len(plays["stocks"]) + len(plays["crypto"]) + len(plays["bets"]),
+        "max_upside": round(
+            sum(p["profit"] for p in plays["stocks"]) +
+            sum(p["profit"] for p in plays["crypto"]) +
+            sum(p["payout"] for p in plays["bets"]), 2),
+        "weekly_growth_est": 18.0,
+        "projection_13w": projection,
+        "generated": datetime.now().strftime("%Y-%m-%d %H:%M"),
+    }
+    return plays

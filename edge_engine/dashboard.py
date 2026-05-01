@@ -27,7 +27,8 @@ from config import (
 )
 from signals import (
     get_stock_signals, get_crypto_signals,
-    get_betting_signals, get_congress_buys, StockSignal
+    get_betting_signals, get_congress_buys, StockSignal,
+    get_action_plan
 )
 from patterns import detect_patterns, bad_stock_warnings
 
@@ -42,6 +43,7 @@ CACHE: dict = {
     "bets": [],
     "warnings": [],
     "regime": "UNKNOWN",
+    "action_plan": {},
     "loading": True,
 }
 CACHE_LOCK = threading.Lock()
@@ -186,20 +188,24 @@ def refresh_cache():
                     "patterns": [p for p in row["patterns"] if p["type"] in ("BEARISH","WARNING")],
                 })
 
-        crypto_rows = build_crypto_rows(get_crypto_signals())
-        bet_rows    = build_bet_rows(get_betting_signals())
+        crypto_sigs = get_crypto_signals()
+        bet_sigs    = get_betting_signals()
+        crypto_rows = build_crypto_rows(crypto_sigs)
+        bet_rows    = build_bet_rows(bet_sigs)
         regime      = market_regime_check()
+        action_plan = get_action_plan(all_signals, crypto_sigs, bet_sigs, bankroll=100.0)
 
         with CACHE_LOCK:
             CACHE.update({
                 "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "stocks":   stock_rows[:40],
-                "spacex":   spacex_rows,
-                "crypto":   crypto_rows,
-                "bets":     bet_rows,
-                "warnings": all_warnings,
-                "regime":   regime,
-                "loading":  False,
+                "stocks":      stock_rows[:40],
+                "spacex":      spacex_rows,
+                "crypto":      crypto_rows,
+                "bets":        bet_rows,
+                "warnings":    all_warnings,
+                "regime":      regime,
+                "action_plan": action_plan,
+                "loading":     False,
             })
         print(f"[{datetime.now().strftime('%H:%M:%S')}] Cache refreshed. "
               f"{len(stock_rows)} stocks | {len(crypto_rows)} crypto | "

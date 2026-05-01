@@ -192,6 +192,56 @@
   .modal-section h4 { color: var(--cyan); font-size: 11px; text-transform: uppercase;
     letter-spacing: 1px; margin-bottom: 8px; }
 
+  /* ── Action Center ── */
+  .action-center {
+    background: linear-gradient(135deg, #0d1f0d 0%, #0a1628 100%);
+    border-bottom: 2px solid var(--green); padding: 16px 24px;
+  }
+  .action-center-title {
+    font-size: 11px; font-weight: 700; color: var(--green);
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .action-center-title .pulse-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  .plays-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+  }
+  .play-card {
+    background: rgba(0,0,0,0.4); border-radius: 10px; padding: 14px 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .play-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .play-type { font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted); }
+  .play-ticker { font-size: 20px; font-weight: 800; color: #fff; }
+  .play-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .play-action {
+    display: inline-block; padding: 4px 10px; border-radius: 6px;
+    font-size: 10px; font-weight: 700;
+    background: var(--green); color: #000;
+  }
+  .play-action.crypto { background: var(--purple); color: #fff; }
+  .play-action.bet { background: var(--yellow); color: #000; }
+  .play-rows { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+  .play-stat { }
+  .play-stat-label { font-size: 9px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.5px; }
+  .play-stat-value { font-size: 13px; font-weight: 700; color: var(--text); margin-top: 1px; }
+  .play-stat-value.green { color: var(--green); }
+  .play-stat-value.red { color: var(--red); }
+  .play-stat-value.yellow { color: var(--yellow); }
+  .play-reason { font-size: 10px; color: var(--muted); margin-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.05); padding-top: 6px; }
+  .play-platform { font-size: 10px; color: var(--cyan); margin-top: 4px; }
+  .no-plays { color: var(--muted); font-size: 13px; padding: 10px 0; }
+
   /* ── Responsive ── */
   @media (max-width: 768px) {
     .header h1 { font-size: 14px; }
@@ -209,6 +259,18 @@
     <span id="regime-badge" class="regime-badge regime-UNKNOWN">LOADING...</span>
     <span class="last-updated" id="last-updated">Fetching data...</span>
     <button class="refresh-btn" id="refresh-btn" onclick="manualRefresh()">Refresh</button>
+  </div>
+</div>
+
+<!-- ── Action Center ── -->
+<div class="action-center" id="action-center">
+  <div class="action-center-title">
+    <div class="pulse-dot"></div>
+    TODAY'S PLAYS &mdash; EXACT DOLLAR ACTIONS
+    <span style="margin-left:auto;font-size:10px;color:var(--muted)" id="action-generated"></span>
+  </div>
+  <div class="plays-grid" id="plays-grid">
+    <div class="no-plays pulse">Loading plays...</div>
   </div>
 </div>
 
@@ -517,8 +579,125 @@ function renderWarnings(rows) {
 }
 
 // ── Main render ───────────────────────────────────────────────────────────────
+function renderActionPlan(plan) {
+  if (!plan || !plan.summary) return;
+  const grid = document.getElementById('plays-grid');
+  const gen  = document.getElementById('action-generated');
+  gen.textContent = plan.summary.generated || '';
+  let html = '';
+
+  plan.stocks.forEach(p => {
+    html += `<div class="play-card">
+      <div class="play-card-header">
+        <div>
+          <div class="play-type">Stock #${p.rank} &bull; Robinhood</div>
+          <div class="play-ticker">${p.ticker}</div>
+          <div class="play-sub">Score ${p.score} &bull; Entry $${p.entry.toFixed(2)}</div>
+        </div>
+        <span class="play-action">BUY NOW</span>
+      </div>
+      <div class="play-rows">
+        <div class="play-stat"><div class="play-stat-label">Invest</div>
+          <div class="play-stat-value yellow">$${p.dollar_in}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Target</div>
+          <div class="play-stat-value green">$${p.target} (+${p.target_pct}%)</div></div>
+        <div class="play-stat"><div class="play-stat-label">Stop Loss</div>
+          <div class="play-stat-value red">$${p.stop} (-${p.stop_pct}%)</div></div>
+        <div class="play-stat"><div class="play-stat-label">Risk/Reward</div>
+          <div class="play-stat-value">${p.rr}:1</div></div>
+        <div class="play-stat"><div class="play-stat-label">Profit at Target</div>
+          <div class="play-stat-value green">+$${p.profit}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Shares (~)</div>
+          <div class="play-stat-value">${p.shares}</div></div>
+      </div>
+      <div class="play-reason">Signal: ${p.reason}</div>
+    </div>`;
+  });
+
+  plan.crypto.forEach(p => {
+    html += `<div class="play-card">
+      <div class="play-card-header">
+        <div>
+          <div class="play-type">Crypto #${p.rank} &bull; Coinbase / CashApp</div>
+          <div class="play-ticker">${p.symbol}</div>
+          <div class="play-sub">${p.coin} &bull; Entry $${p.entry.toLocaleString()}</div>
+        </div>
+        <span class="play-action crypto">BUY NOW</span>
+      </div>
+      <div class="play-rows">
+        <div class="play-stat"><div class="play-stat-label">Invest</div>
+          <div class="play-stat-value yellow">$${p.dollar_in}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Target</div>
+          <div class="play-stat-value green">+${p.target_pct}%</div></div>
+        <div class="play-stat"><div class="play-stat-label">Stop Loss</div>
+          <div class="play-stat-value red">-${p.stop_pct}%</div></div>
+        <div class="play-stat"><div class="play-stat-label">Risk/Reward</div>
+          <div class="play-stat-value">${p.rr}:1</div></div>
+        <div class="play-stat"><div class="play-stat-label">Profit at Target</div>
+          <div class="play-stat-value green">+$${p.profit}</div></div>
+      </div>
+      <div class="play-reason">Signal: ${p.reason}</div>
+    </div>`;
+  });
+
+  plan.bets.forEach(p => {
+    html += `<div class="play-card">
+      <div class="play-card-header">
+        <div>
+          <div class="play-type">Bet #${p.rank} &bull; ${p.platform}</div>
+          <div class="play-ticker" style="font-size:14px">${p.bet_on}</div>
+          <div class="play-sub">${p.game}</div>
+        </div>
+        <span class="play-action bet">BET</span>
+      </div>
+      <div class="play-rows">
+        <div class="play-stat"><div class="play-stat-label">Wager</div>
+          <div class="play-stat-value yellow">$${p.wager}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Odds</div>
+          <div class="play-stat-value">${p.odds_str}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Win Probability</div>
+          <div class="play-stat-value green">${p.win_pct}%</div></div>
+        <div class="play-stat"><div class="play-stat-label">Payout if Win</div>
+          <div class="play-stat-value green">+$${p.payout}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Edge</div>
+          <div class="play-stat-value">+${p.edge}%</div></div>
+        <div class="play-stat"><div class="play-stat-label">Confidence</div>
+          <div class="play-stat-value">${p.confidence}</div></div>
+      </div>
+    </div>`;
+  });
+
+  if (!html) {
+    html = `<div class="no-plays">No high-confidence plays right now. Check back after market open or add ODDS_API_KEY for live bet signals.</div>`;
+  }
+
+  // Summary bar
+  const s = plan.summary;
+  html += `<div class="play-card" style="border-color:var(--cyan);background:rgba(6,182,212,0.05)">
+    <div class="play-type" style="color:var(--cyan)">Compound Growth Projection (18% avg weekly gain)</div>
+    <div class="play-rows" style="margin-top:10px">
+      <div class="play-stat"><div class="play-stat-label">Bankroll</div>
+        <div class="play-stat-value">$${s.bankroll}</div></div>
+      <div class="play-stat"><div class="play-stat-label">Week 4</div>
+        <div class="play-stat-value green">$${(s.projection_13w[3]||{}).balance||'--'}</div></div>
+      <div class="play-stat"><div class="play-stat-label">Week 8</div>
+        <div class="play-stat-value green">$${(s.projection_13w[7]||{}).balance||'--'}</div></div>
+      <div class="play-stat"><div class="play-stat-label">Week 12</div>
+        <div class="play-stat-value green">$${(s.projection_13w[11]||{}).balance||'--'}</div></div>
+      <div class="play-stat"><div class="play-stat-label">Max Upside Today</div>
+        <div class="play-stat-value green">+$${s.max_upside}</div></div>
+    </div>
+    <div class="play-reason" style="color:var(--muted);margin-top:8px">
+      Pull profits at $1,000+ milestone. Reinvest 70%, pocket 30%. Bi-weekly rebalance.
+    </div>
+  </div>`;
+
+  grid.innerHTML = html;
+}
+
 function renderAll(data) {
   currentData = data;
+  if (data.action_plan) renderActionPlan(data.action_plan);
 
   // Header
   const regime = data.regime || 'UNKNOWN';
