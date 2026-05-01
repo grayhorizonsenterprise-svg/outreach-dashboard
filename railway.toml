@@ -2,9 +2,8 @@
 builder = "NIXPACKS"
 
 [deploy]
-startCommand = "python start.py"
+startCommand = "cd edge_engine && gunicorn dashboard:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120 --keep-alive 5"
+healthcheckPath = "/health"
+healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
-
-# Set GRANT_AGENT_URL in Railway dashboard to the live grant agent service URL
-# e.g. https://ghe-grant-agent.up.railway.app
