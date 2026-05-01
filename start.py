@@ -1,22 +1,20 @@
 """
-start.py — Gray Horizons Dashboard
-Reads PORT from environment directly — bypasses Railway shell expansion issues.
+start.py — launches Edge Engine dashboard from edge_engine/
 """
 import os
 import subprocess
 import sys
 
-port = os.environ.get("PORT", "8080")
-
-print(f"[start.py] Starting gunicorn on port {port}", flush=True)
+port = os.environ.get("PORT", "5050")
+print(f"[start.py] Starting Edge Engine on port {port}", flush=True)
 
 subprocess.run([
     sys.executable, "-m", "gunicorn",
-    "approval_dashboard:app",
+    "dashboard:app",
     "--bind", f"0.0.0.0:{port}",
     "--workers", "1",
-    "--threads", "2",
+    "--threads", "4",
     "--timeout", "120",
-    "--keep-alive", "10",
+    "--keep-alive", "5",
     "--log-level", "info",
-])
+], cwd=os.path.join(os.path.dirname(os.path.abspath(__file__)), "edge_engine"))
