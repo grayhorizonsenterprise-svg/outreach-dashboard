@@ -33,18 +33,6 @@ from patterns import detect_patterns, bad_stock_warnings
 
 app = Flask(__name__)
 
-# Start background refresh when loaded by gunicorn (not just __main__)
-_started = False
-def _ensure_started():
-    global _started
-    if not _started:
-        _started = True
-        t = threading.Thread(target=background_refresh, daemon=True)
-        t.start()
-
-with app.app_context():
-    _ensure_started()
-
 # ── In-memory cache — refreshed every 15 minutes in background ────────────────
 CACHE: dict = {
     "last_updated": None,
@@ -228,6 +216,18 @@ def background_refresh():
     while True:
         time.sleep(900)  # 15 minutes
         refresh_cache()
+
+
+# Start background thread when loaded by gunicorn
+_started = False
+def _ensure_started():
+    global _started
+    if not _started:
+        _started = True
+        threading.Thread(target=background_refresh, daemon=True).start()
+
+with app.app_context():
+    _ensure_started()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
