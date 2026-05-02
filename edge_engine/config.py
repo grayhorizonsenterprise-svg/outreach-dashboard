@@ -24,6 +24,9 @@ RH_PASS = os.getenv("RH_PASSWORD", "")
 CB_KEY    = os.getenv("COINBASE_API_KEY", "")
 CB_SECRET = os.getenv("COINBASE_API_SECRET", "")
 
+# ── CoinGecko (optional — free demo key at coingecko.com/api/pricing) ──────────
+COINGECKO_KEY = os.getenv("COINGECKO_KEY", "")
+
 # ── Thresholds ─────────────────────────────────────────────────────────────────
 PROFIT_ALERT_USD  = 1000
 BIWEEKLY_DAYS     = 14
@@ -113,12 +116,23 @@ STOCKS = list(dict.fromkeys(
     SPACEX_TICKERS + MOMENTUM_TECH + NICHE_STOCKS
 ))
 
-# ── Crypto watchlist ───────────────────────────────────────────────────────────
+# ── Crypto watchlist (CoinGecko IDs — used when COINGECKO_KEY is set) ──────────
+# CoinPaprika fallback covers top-100 by market cap automatically (no IDs needed)
 CRYPTOS = [
-    "bitcoin","ethereum","solana","avalanche-2","chainlink",
-    "sui","aptos","injective-protocol","fetch-ai","near",
-    "render-token","worldcoin-wld","the-graph","celestia",
-    "arbitrum","optimism","polygon","immutable-x",
+    # Blue chips
+    "bitcoin","ethereum","solana","binancecoin","ripple","cardano",
+    "avalanche-2","polkadot","chainlink","litecoin","bitcoin-cash",
+    "stellar","dogecoin","shiba-inu",
+    # Layer 2 / modular
+    "arbitrum","optimism","polygon","immutable-x","celestia","starknet",
+    # AI / DePIN / DeFi
+    "fetch-ai","render-token","the-graph","injective-protocol",
+    "worldcoin-wld","near","sui","aptos","toncoin","hedera-hashgraph",
+    "kaspa","sei-network","stacks","mantra-dao","ondo-finance",
+    # High-momentum (meme + narrative)
+    "pepe","bonk-2","dogwifcoin","floki","brett-based",
+    # DeFi protocols
+    "uniswap","aave","maker","curve-dao-token","lido-dao","jupiter-exchange-solana",
 ]
 
 # ── Sports to scan daily ───────────────────────────────────────────────────────

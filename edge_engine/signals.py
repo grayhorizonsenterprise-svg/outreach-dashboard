@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 from config import (
     STOCKS, CRYPTOS, SPORTS, ODDS_KEY, QUIVER_KEY,
-    MIN_BET_EDGE_PCT, MIN_SIGNAL_SCORE
+    MIN_BET_EDGE_PCT, MIN_SIGNAL_SCORE, COINGECKO_KEY
 )
 
 HEADERS = {"User-Agent": "EdgeEngine/1.0"}
@@ -281,61 +281,141 @@ class CryptoSignal:
     trend: str
     note: str
 
-def get_crypto_signals() -> list[CryptoSignal]:
-    print("  Scanning crypto...")
-    ids = ",".join(CRYPTOS)
-    url = (
-        "https://api.coingecko.com/api/v3/coins/markets"
+def _fetch_coingecko() -> list[dict]:
+    """CoinGecko — works with optional free demo key from coingecko.com/api/pricing."""
+    base = "https://pro-api.coingecko.com" if COINGECKO_KEY else "https://api.coingecko.com"
+    ids  = ",".join(CRYPTOS)
+    url  = (
+        f"{base}/api/v3/coins/markets"
         f"?vs_currency=usd&ids={ids}&order=volume_desc"
         "&per_page=50&page=1&sparkline=false"
-        "&price_change_percentage=1h,24h,7d"
+        "&price_change_percentage=24h,7d"
     )
+    hdrs = dict(HEADERS)
+    if COINGECKO_KEY:
+        hdrs["x-cg-demo-api-key"] = COINGECKO_KEY
     try:
-        r = requests.get(url, headers=HEADERS, timeout=12)
+        r = requests.get(url, headers=hdrs, timeout=12)
+        if r.status_code in (401, 403):
+            print("  [!] CoinGecko: key missing/invalid — add COINGECKO_KEY to env (free at coingecko.com/api/pricing)")
+            return []
         if r.status_code == 429:
-            print("  [!] CoinGecko rate limit — try again in 60s")
+            print("  [!] CoinGecko: rate-limited")
             return []
         r.raise_for_status()
-        coins = r.json()
+        raw = r.json()
+        if not isinstance(raw, list):
+            return []
+        # Normalise field names
+        out = []
+        for c in raw:
+            out.append({
+                "name":    c.get("name",""),
+                "symbol":  c.get("symbol","").upper(),
+                "price":   c.get("current_price", 0) or 0,
+                "h1":      0,  # not available on free tier
+                "h24":     c.get("price_change_percentage_24h_in_currency") or
+                           c.get("price_change_percentage_24h") or 0,
+                "d7":      c.get("price_change_percentage_7d_in_currency") or 0,
+                "vol":     c.get("total_volume", 0) or 0,
+                "mc":      c.get("market_cap", 1) or 1,
+                "source":  "coingecko",
+            })
+        return out
     except Exception as e:
-        print(f"  [!] Crypto fetch failed: {e}")
+        print(f"  [!] CoinGecko fetch error: {e}")
         return []
 
-    results = []
-    for c in coins:
-        h1  = c.get("price_change_percentage_1h_in_currency")  or 0
-        h24 = c.get("price_change_percentage_24h_in_currency") or 0
-        d7  = c.get("price_change_percentage_7d_in_currency")  or 0
-        vol = c.get("total_volume") or 0
-        mc  = c.get("market_cap")   or 1
 
-        # Momentum score
-        mom = np.clip(50 + (h1*0.4 + h24*0.4 + d7*0.2)*3, 0, 100)
+def _fetch_coinpaprika() -> list[dict]:
+    """
+    CoinPaprika — completely free, no key, returns top-2000 coins.
+    Has 1h/24h/7d change, volume, market cap.
+    """
+    try:
+        r = requests.get(
+            "https://api.coinpaprika.com/v1/tickers?quotes=USD&limit=150",
+            headers=HEADERS, timeout=12
+        )
+        r.raise_for_status()
+        raw = r.json()
+        if not isinstance(raw, list):
+            return []
+        out = []
+        for c in raw:
+            q = c.get("quotes", {}).get("USD", {})
+            price = q.get("price", 0) or 0
+            if price <= 0:
+                continue
+            out.append({
+                "name":   c.get("name", ""),
+                "symbol": c.get("symbol", "").upper(),
+                "price":  price,
+                "h1":     q.get("percent_change_1h",  0) or 0,
+                "h24":    q.get("percent_change_24h", 0) or 0,
+                "d7":     q.get("percent_change_7d",  0) or 0,
+                "vol":    q.get("volume_24h",   0) or 0,
+                "mc":     q.get("market_cap",   1) or 1,
+                "source": "coinpaprika",
+            })
+        return out
+    except Exception as e:
+        print(f"  [!] CoinPaprika fetch error: {e}")
+        return []
 
-        # Volume vs market cap ratio (high ratio = active)
-        vol_ratio = vol / mc
-        vol_score = np.clip(vol_ratio * 500, 0, 40)
 
-        score = float(np.clip(mom*0.65 + vol_score*0.35, 0, 100))
+def _score_coin(c: dict) -> CryptoSignal:
+    h1, h24, d7 = c["h1"], c["h24"], c["d7"]
+    vol, mc     = c["vol"], max(c["mc"], 1)
 
-        trend = ("STRONG BUY" if score >= 75 else
-                 "BUY"        if score >= 60 else
-                 "WATCH"      if score >= 45 else "SKIP")
+    mom       = float(np.clip(50 + (h1*0.3 + h24*0.5 + d7*0.2) * 3, 0, 100))
+    vol_ratio = vol / mc
+    vol_score = float(np.clip(vol_ratio * 500, 0, 40))
+    score     = float(np.clip(mom * 0.65 + vol_score * 0.35, 0, 100))
 
-        notes = []
-        if h1  >  1: notes.append(f"1h +{h1:.1f}%")
-        if h24 >  3: notes.append(f"24h +{h24:.1f}%")
-        if h24 < -5: notes.append(f"24h {h24:.1f}% (dip?)")
-        if vol_ratio > 0.1: notes.append("high volume")
+    trend = ("STRONG BUY" if score >= 75 else
+             "BUY"        if score >= 60 else
+             "WATCH"      if score >= 45 else "SKIP")
 
-        results.append(CryptoSignal(
-            coin=c["name"], symbol=c["symbol"].upper(),
-            score=round(score,1), price=c["current_price"],
-            change_1h=round(h1,2), change_24h=round(h24,2),
-            change_7d=round(d7,2), volume_24h=vol, market_cap=mc,
-            trend=trend, note=" | ".join(notes) or "standard"
-        ))
+    notes = []
+    if h1  >  1:  notes.append(f"1h +{h1:.1f}%")
+    if h24 >  3:  notes.append(f"24h +{h24:.1f}%")
+    if h24 < -5:  notes.append(f"24h {h24:.1f}% dip")
+    if vol_ratio > 0.10: notes.append("high volume")
+    if c["source"] == "coinpaprika": notes.append("via CoinPaprika")
 
+    return CryptoSignal(
+        coin=c["name"], symbol=c["symbol"],
+        score=round(score, 1), price=c["price"],
+        change_1h=round(h1, 2), change_24h=round(h24, 2), change_7d=round(d7, 2),
+        volume_24h=vol, market_cap=mc,
+        trend=trend, note=" | ".join(notes) or "standard",
+    )
+
+
+def get_crypto_signals() -> list[CryptoSignal]:
+    print("  Scanning crypto (multi-source)...")
+
+    # 1. Try CoinGecko first
+    cg_data = _fetch_coingecko()
+    cg_symbols = {c["symbol"] for c in cg_data}
+
+    # 2. Always pull CoinPaprika (free, reliable, more coins)
+    cp_data = _fetch_coinpaprika()
+
+    # Merge: use CoinGecko data where available, fill in new symbols from CoinPaprika
+    combined = list(cg_data)
+    for c in cp_data:
+        if c["symbol"] not in cg_symbols:
+            combined.append(c)
+
+    if not combined:
+        print("  [!] All crypto sources failed — check network/API status")
+        return []
+
+    print(f"  Crypto: {len(cg_data)} CoinGecko + {len(cp_data)} CoinPaprika = {len(combined)} total")
+
+    results = [_score_coin(c) for c in combined if c["price"] > 0]
     return sorted(results, key=lambda x: x.score, reverse=True)
 
 
