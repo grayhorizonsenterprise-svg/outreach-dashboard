@@ -240,9 +240,14 @@ with app.app_context():
 # ROUTES
 # ══════════════════════════════════════════════════════════════════════════════
 
+NAV_LINKS = {
+    "outreach": os.getenv("GHE_DASHBOARD_URL", ""),
+    "grants":   os.getenv("GHE_GRANT_AGENT_URL", ""),
+}
+
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", nav=NAV_LINKS)
 
 @app.route("/health")
 def health():

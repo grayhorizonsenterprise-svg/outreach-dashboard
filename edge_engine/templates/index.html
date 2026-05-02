@@ -242,6 +242,27 @@
   .play-platform { font-size: 10px; color: var(--cyan); margin-top: 4px; }
   .no-plays { color: var(--muted); font-size: 13px; padding: 10px 0; }
 
+  /* ── Dashboard switcher nav ── */
+  .dash-nav {
+    background: #060a12; border-bottom: 1px solid var(--border);
+    padding: 6px 24px; display: flex; align-items: center; gap: 6px;
+  }
+  .dash-nav-label { font-size: 9px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 1px; margin-right: 8px; }
+  .dash-btn {
+    padding: 4px 12px; border-radius: 5px; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.5px; text-decoration: none; transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+  .dash-btn.active {
+    background: var(--cyan); color: #000; border-color: var(--cyan);
+  }
+  .dash-btn.inactive {
+    background: transparent; color: var(--muted); border-color: var(--border);
+  }
+  .dash-btn.inactive:hover { color: var(--text); border-color: var(--muted); }
+  .dash-btn.disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+
   /* ── Responsive ── */
   @media (max-width: 768px) {
     .header h1 { font-size: 14px; }
@@ -251,6 +272,22 @@
 </style>
 </head>
 <body>
+
+<!-- ── Dashboard Switcher ── -->
+<div class="dash-nav">
+  <span class="dash-nav-label">Dashboard</span>
+  <a class="dash-btn active" href="#">Edge Engine</a>
+  {% if nav.outreach %}
+  <a class="dash-btn inactive" href="{{ nav.outreach }}" target="_blank">Outreach</a>
+  {% else %}
+  <span class="dash-btn disabled">Outreach</span>
+  {% endif %}
+  {% if nav.grants %}
+  <a class="dash-btn inactive" href="{{ nav.grants }}" target="_blank">Grant Agent</a>
+  {% else %}
+  <span class="dash-btn disabled">Grant Agent</span>
+  {% endif %}
+</div>
 
 <!-- ── Header ── -->
 <div class="header">
