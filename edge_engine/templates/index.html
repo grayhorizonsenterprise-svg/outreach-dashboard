@@ -629,7 +629,7 @@ function renderActionPlan(plan) {
         <div>
           <div class="play-type">Stock #${p.rank} &bull; Robinhood</div>
           <div class="play-ticker">${p.ticker}</div>
-          <div class="play-sub">Score ${p.score} &bull; Entry $${p.entry.toFixed(2)}</div>
+          <div class="play-sub">Score ${p.score} &bull; Entry $${(+p.entry||0).toFixed(2)}</div>
         </div>
         <span class="play-action">BUY NOW</span>
       </div>
@@ -657,7 +657,7 @@ function renderActionPlan(plan) {
         <div>
           <div class="play-type">Crypto #${p.rank} &bull; Coinbase / CashApp</div>
           <div class="play-ticker">${p.symbol}</div>
-          <div class="play-sub">${p.coin} &bull; Entry $${p.entry.toLocaleString()}</div>
+          <div class="play-sub">${p.coin} &bull; Entry $${(+p.entry||0).toLocaleString()}</div>
         </div>
         <span class="play-action crypto">BUY NOW</span>
       </div>
@@ -734,7 +734,7 @@ function renderActionPlan(plan) {
 
 function renderAll(data) {
   currentData = data;
-  if (data.action_plan) renderActionPlan(data.action_plan);
+  try { if (data.action_plan) renderActionPlan(data.action_plan); } catch(e) { console.warn('Action plan:', e); }
 
   // Header
   const regime = data.regime || 'UNKNOWN';
