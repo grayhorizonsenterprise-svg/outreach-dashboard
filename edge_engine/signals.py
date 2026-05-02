@@ -541,17 +541,51 @@ def _bet_sizing(our_prob: float, odds: int, bankroll: float = 15.0) -> dict:
             "total_return": round(wager + payout, 2), "decimal_odds": round(decimal, 2)}
 
 
+def _stock_projection(price: float, target: float, score: float) -> dict:
+    """Project profit at $100, $500, $1000 entry sizes with timeline estimate."""
+    pct = (target - price) / price if price > 0 else 0
+    # Estimate weeks to target based on score (higher score = faster move)
+    weeks = max(1, round(12 - score / 12))
+    return {
+        "pct":        round(pct * 100, 1),
+        "weeks_est":  weeks,
+        "profit_100":  round(100  * pct, 2),
+        "profit_500":  round(500  * pct, 2),
+        "profit_1000": round(1000 * pct, 2),
+    }
+
+
+def _build_power_play(b: "BetSignal", wager: float) -> dict:
+    """High-odds bet card — $100-$200 in, $30K-$60K potential out."""
+    decimal = (b.odds / 100 + 1) if b.odds > 0 else (100 / abs(b.odds) + 1)
+    payout  = round(wager * (decimal - 1), 2)
+    return {
+        "sport":    b.sport,
+        "game":     b.game,
+        "bet_on":   b.bet_on,
+        "book":     b.book,
+        "odds":     b.odds,
+        "odds_str": f"+{b.odds}" if b.odds > 0 else str(b.odds),
+        "wager":    wager,
+        "payout":   payout,
+        "win_pct":  round(b.our_prob * 100, 1),
+        "confidence": b.confidence,
+    }
+
+
 def get_action_plan(stocks: list, cryptos: list, bets: list,
                     bankroll: float = 100.0) -> dict:
-    plays = {"stocks": [], "crypto": [], "bets": [], "summary": {}}
+    plays = {"stocks": [], "crypto": [], "bets": [], "power_plays": [], "summary": {}}
 
+    # ── Stocks with projections ──────────────────────────────────────────────
     qualifying_s = [s for s in stocks if s.trend in ("STRONG BUY", "BUY")][:5]
     stock_budget = bankroll * 0.60
     alloc_s = [0.50, 0.30, 0.20]
     for i, s in enumerate(qualifying_s[:3]):
-        t = _stock_targets(s.ticker, s.price, s.score, s.rsi)
+        t   = _stock_targets(s.ticker, s.price, s.score, s.rsi)
         din = round(stock_budget * alloc_s[i], 2)
         shares = round(din / s.price, 4) if s.price > 0 else 0
+        proj = _stock_projection(s.price, t["target"], s.score)
         plays["stocks"].append({
             "rank": i + 1, "ticker": s.ticker, "score": s.score,
             "entry": s.price, "target": t["target"], "stop": t["stop"],
@@ -559,13 +593,15 @@ def get_action_plan(stocks: list, cryptos: list, bets: list,
             "rr": t["risk_reward"], "dollar_in": din, "shares": shares,
             "profit": round(shares * (t["target"] - s.price), 2),
             "reason": s.note, "platform": "Robinhood",
+            "proj": proj,
         })
 
+    # ── Crypto ───────────────────────────────────────────────────────────────
     qualifying_c = [c for c in cryptos if c.trend in ("STRONG BUY", "BUY")][:4]
     crypto_budget = bankroll * 0.25
     alloc_c = [0.65, 0.35]
     for i, c in enumerate(qualifying_c[:2]):
-        t = _crypto_targets(c.price, c.score, c.change_24h)
+        t   = _crypto_targets(c.price, c.score, c.change_24h)
         din = round(crypto_budget * alloc_c[i], 2)
         plays["crypto"].append({
             "rank": i + 1, "symbol": c.symbol, "coin": c.coin,
@@ -576,6 +612,7 @@ def get_action_plan(stocks: list, cryptos: list, bets: list,
             "reason": c.note or "momentum", "platform": "Coinbase / CashApp",
         })
 
+    # ── Standard bets ────────────────────────────────────────────────────────
     bet_budget = bankroll * 0.15
     qualifying_b = [b for b in bets if b.our_prob >= 0.55][:4]
     for i, b in enumerate(qualifying_b[:2]):
@@ -590,6 +627,44 @@ def get_action_plan(stocks: list, cryptos: list, bets: list,
             "platform": b.book,
         })
 
+    # ── Power Plays: $100-$200 in, $30K-$60K potential ───────────────────────
+    # Find highest-odds bets (long shots with positive EV or high upside)
+    # Sort all bets by potential payout on $150 wager descending
+    power_candidates = sorted(
+        [b for b in bets if b.odds > 0],  # positive odds only = underdog/longshot
+        key=lambda b: b.odds,
+        reverse=True
+    )
+    wagers = [150, 100]  # $150 first pick, $100 second pick
+    for i, b in enumerate(power_candidates[:2]):
+        w = wagers[i]
+        pp = _build_power_play(b, w)
+        # Only show if payout is meaningful ($5K+)
+        if pp["payout"] >= 5000:
+            plays["power_plays"].append(pp)
+
+    # If no high-odds bets, build a conceptual parlay from top 2 bets
+    if not plays["power_plays"] and len(qualifying_b) >= 2:
+        b1, b2 = qualifying_b[0], qualifying_b[1]
+        d1 = b1.odds / 100 + 1 if b1.odds > 0 else 100 / abs(b1.odds) + 1
+        d2 = b2.odds / 100 + 1 if b2.odds > 0 else 100 / abs(b2.odds) + 1
+        parlay_decimal = d1 * d2
+        parlay_odds    = round((parlay_decimal - 1) * 100)
+        wager = 100
+        plays["power_plays"].append({
+            "sport":    "PARLAY",
+            "game":     f"{b1.bet_on} + {b2.bet_on}",
+            "bet_on":   f"2-leg parlay",
+            "book":     b1.book,
+            "odds":     parlay_odds,
+            "odds_str": f"+{parlay_odds}",
+            "wager":    wager,
+            "payout":   round(wager * (parlay_decimal - 1), 2),
+            "win_pct":  round(b1.our_prob * b2.our_prob * 100, 1),
+            "confidence": "PARLAY",
+        })
+
+    # ── Compound projection ───────────────────────────────────────────────────
     weekly_edge = 0.18
     projection, bal = [], bankroll
     for week in range(1, 14):
@@ -605,7 +680,7 @@ def get_action_plan(stocks: list, cryptos: list, bets: list,
         "max_upside": round(
             sum(p["profit"] for p in plays["stocks"]) +
             sum(p["profit"] for p in plays["crypto"]) +
-            sum(p["payout"] for p in plays["bets"]), 2),
+            sum(p.get("payout", 0) for p in plays["bets"]), 2),
         "weekly_growth_est": 18.0,
         "projection_13w": projection,
         "generated": datetime.now().strftime("%Y-%m-%d %H:%M"),

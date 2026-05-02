@@ -263,6 +263,28 @@
   .dash-btn.inactive:hover { color: var(--text); border-color: var(--muted); }
   .dash-btn.disabled { opacity: 0.3; cursor: default; pointer-events: none; }
 
+  /* ── Power Plays ── */
+  .power-play-card {
+    background: rgba(245,158,11,0.08); border-radius: 10px; padding: 14px 16px;
+    border: 1px solid rgba(245,158,11,0.45);
+  }
+  .power-play-badge {
+    display: inline-block; background: #92400e; color: #fcd34d;
+    font-size: 9px; font-weight: 800; letter-spacing: 2px;
+    padding: 3px 9px; border-radius: 4px; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .power-play-header {
+    font-size: 11px; font-weight: 800; color: #fcd34d;
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;
+    grid-column: 1 / -1;
+  }
+  .proj-row {
+    font-size: 11px; color: var(--muted); margin-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.05); padding-top: 6px;
+    line-height: 1.7;
+  }
+  .proj-row .proj-val { color: var(--green); font-weight: 700; }
+
   /* ── Responsive ── */
   @media (max-width: 768px) {
     .header h1 { font-size: 14px; }
@@ -624,6 +646,14 @@ function renderActionPlan(plan) {
   let html = '';
 
   plan.stocks.forEach(p => {
+    const proj = p.proj || {};
+    const projRow = (proj.profit_100 !== undefined) ? `
+      <div class="proj-row">If you invest &rarr;
+        <strong>$100</strong>: <span class="proj-val">+$${(+proj.profit_100||0).toFixed(2)}</span> &nbsp;|&nbsp;
+        <strong>$500</strong>: <span class="proj-val">+$${(+proj.profit_500||0).toFixed(2)}</span> &nbsp;|&nbsp;
+        <strong>$1,000</strong>: <span class="proj-val">+$${(+proj.profit_1000||0).toFixed(2)}</span>
+        &nbsp;&mdash; Est. target in ~${proj.weeks_est||'?'} wks
+      </div>` : '';
     html += `<div class="play-card">
       <div class="play-card-header">
         <div>
@@ -648,6 +678,7 @@ function renderActionPlan(plan) {
           <div class="play-stat-value">${p.shares}</div></div>
       </div>
       <div class="play-reason">Signal: ${p.reason}</div>
+      ${projRow}
     </div>`;
   });
 
@@ -703,6 +734,40 @@ function renderActionPlan(plan) {
       </div>
     </div>`;
   });
+
+  // Power Plays section — high-odds bets, $100-$200 in, $30K-$60K potential
+  if (plan.power_plays && plan.power_plays.length) {
+    html += `<div style="grid-column:1/-1;margin-top:4px">
+      <div class="power-play-header">&#9889; Power Plays &mdash; Max Return Bets ($100-$200 in)</div>
+    </div>`;
+    plan.power_plays.forEach((pp, i) => {
+      const raw = +pp.payout || 0;
+      const payoutFmt = raw >= 1000 ? '$' + (raw/1000).toFixed(1) + 'K' : '$' + raw.toFixed(2);
+      html += `<div class="play-card power-play-card">
+        <div class="power-play-badge">Power Play #${i+1}</div>
+        <div class="play-card-header">
+          <div>
+            <div class="play-type">${pp.sport || 'BET'} &bull; ${pp.book || 'Sportsbook'}</div>
+            <div class="play-ticker" style="font-size:15px;line-height:1.2">${pp.bet_on}</div>
+            <div class="play-sub" style="max-width:220px;white-space:normal">${pp.game}</div>
+          </div>
+          <span class="play-action bet">BET $${pp.wager}</span>
+        </div>
+        <div class="play-rows">
+          <div class="play-stat"><div class="play-stat-label">Entry Wager</div>
+            <div class="play-stat-value yellow">$${pp.wager}</div></div>
+          <div class="play-stat"><div class="play-stat-label">Potential Payout</div>
+            <div class="play-stat-value" style="color:#fcd34d;font-size:20px;font-weight:800">${payoutFmt}</div></div>
+          <div class="play-stat"><div class="play-stat-label">Odds</div>
+            <div class="play-stat-value">${pp.odds_str}</div></div>
+          <div class="play-stat"><div class="play-stat-label">Win %</div>
+            <div class="play-stat-value green">${pp.win_pct}%</div></div>
+          <div class="play-stat"><div class="play-stat-label">Confidence</div>
+            <div class="play-stat-value">${pp.confidence}</div></div>
+        </div>
+      </div>`;
+    });
+  }
 
   if (!html) {
     html = `<div class="no-plays">No high-confidence plays right now. Check back after market open or add ODDS_API_KEY for live bet signals.</div>`;
