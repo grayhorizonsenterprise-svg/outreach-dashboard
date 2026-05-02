@@ -26,11 +26,12 @@ app = Flask(__name__)
 DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 os.makedirs(DATA_DIR, exist_ok=True)
 
-URL_HOA       = os.getenv("HOA_URL", "#")
-URL_DENTAL    = os.getenv("DENTAL_URL", "#")
-URL_HVAC      = os.getenv("HVAC_URL", "#")
-URL_HUB       = os.getenv("HUB_URL", "#")
-URL_PLUMBING  = os.getenv("PLUMBING_URL", "#")
+URL_HOA        = os.getenv("HOA_URL", "#")
+URL_DENTAL     = os.getenv("DENTAL_URL", "#")
+URL_HVAC       = os.getenv("HVAC_URL", "#")
+URL_HUB        = os.getenv("HUB_URL", "#")
+URL_PLUMBING   = os.getenv("PLUMBING_URL", "#")
+EDGE_ENGINE_URL = os.getenv("EDGE_ENGINE_URL", "")
 URL_GRANTS       = "https://ghe-grant-agent-production.up.railway.app"
 URL_VOICE_SERVER = os.getenv("VOICE_SERVER_URL", "https://ghe-voice-production.up.railway.app")
 PIPELINE_SCRIPTS = ["prospect_finder.py", "prospect_enricher.py",
@@ -402,6 +403,8 @@ def dashboard():
 </head>
 <body>
 <div class="header">Gray Horizons Enterprise — Command Center</div>
+
+{'<div style="background:#060a12;border-bottom:1px solid #1f2937;padding:6px 24px;display:flex;align-items:center;gap:6px;"><span style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-right:8px;">Dashboard</span><a href="' + EDGE_ENGINE_URL + '" style="padding:4px 12px;border-radius:5px;font-size:10px;font-weight:700;text-decoration:none;background:transparent;color:#6b7280;border:1px solid #1f2937;" target="_blank">Edge Engine</a><span style="padding:4px 12px;border-radius:5px;font-size:10px;font-weight:700;background:#06b6d4;color:#000;border:1px solid #06b6d4;">Outreach</span></div>' if EDGE_ENGINE_URL else ''}
 
 <div class="nav">
   <a onclick="showTab('outreach')" id="tab-outreach" class="{'active' if active_tab=='outreach' else ''}">Outreach ({pending_count} pending)</a>
