@@ -640,7 +640,7 @@ def get_action_plan(stocks: list, cryptos: list, bets: list,
         w = wagers[i]
         pp = _build_power_play(b, w)
         # Only show if payout is meaningful ($5K+)
-        if pp["payout"] >= 5000:
+        if pp["payout"] >= 500:
             plays["power_plays"].append(pp)
 
     # If no high-odds bets, build a conceptual parlay from top 2 bets
