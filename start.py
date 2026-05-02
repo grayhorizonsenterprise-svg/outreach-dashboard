@@ -1,20 +1,20 @@
 """
-start.py — launches Edge Engine dashboard from edge_engine/
+start.py — Gray Horizons Approval Dashboard (ghe-dashboard service)
 """
 import os
 import subprocess
 import sys
 
-port = os.environ.get("PORT", "5050")
-print(f"[start.py] Starting Edge Engine on port {port}", flush=True)
+port = os.environ.get("PORT", "8080")
+print(f"[start.py] Starting Approval Dashboard on port {port}", flush=True)
 
 subprocess.run([
     sys.executable, "-m", "gunicorn",
-    "dashboard:app",
+    "approval_dashboard:app",
     "--bind", f"0.0.0.0:{port}",
     "--workers", "1",
-    "--threads", "4",
+    "--threads", "2",
     "--timeout", "120",
-    "--keep-alive", "5",
+    "--keep-alive", "10",
     "--log-level", "info",
-], cwd=os.path.join(os.path.dirname(os.path.abspath(__file__)), "edge_engine"))
+])
