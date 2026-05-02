@@ -552,9 +552,23 @@ function renderBets(rows) {
     </tr></thead><tbody>`;
     sports.forEach(r => {
       const evCls = r.ev > 0 ? 'ev-pos' : 'ev-neg';
+      const scrubIcon = r.scrubbed
+        ? `<span title="Intel scrubbed — news/injury checked" style="color:var(--green);font-size:10px">&#10003; SCRUBBED</span>`
+        : `<span title="Intel not yet verified" style="color:var(--muted);font-size:10px">--</span>`;
+      const warnHtml = (r.warnings && r.warnings.length)
+        ? `<div style="margin-top:4px">${r.warnings.map(w =>
+            `<div style="color:var(--orange);font-size:10px">&#9888; ${w}</div>`).join('')}</div>` : '';
+      const rulesHtml = (r.rules && r.rules.length)
+        ? `<details style="margin-top:4px"><summary style="color:var(--muted);font-size:10px;cursor:pointer">House Rules (${r.rules.length})</summary>
+            <div style="padding:4px 0">${r.rules.map(rule =>
+              `<div style="color:var(--muted);font-size:10px;padding:1px 0">&#8226; ${rule}</div>`).join('')}</div>
+           </details>` : '';
       html += `<tr>
         <td style="color:var(--cyan)">${r.sport}</td>
-        <td><strong>${r.bet_on}</strong></td>
+        <td>
+          <strong>${r.bet_on}</strong>
+          ${warnHtml}${rulesHtml}
+        </td>
         <td style="color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis">${r.game}</td>
         <td style="color:var(--muted)">${r.commence}</td>
         <td>${r.book}</td>
@@ -562,7 +576,10 @@ function renderBets(rows) {
         <td class="bet-color-${r.color}">${r.win_pct}%</td>
         <td style="color:var(--green)">+${r.edge.toFixed(1)}%</td>
         <td class="${evCls}">$${r.ev > 0 ? '+' : ''}${r.ev.toFixed(2)}</td>
-        <td><span class="trend trend-${r.conf==='HIGH'?'sb':r.conf==='MEDIUM'?'b':'w'}">${r.conf}</span></td>
+        <td>
+          <span class="trend trend-${r.conf==='HIGH'?'sb':r.conf==='MEDIUM'?'b':'w'}">${r.conf}</span>
+          <div style="margin-top:3px">${scrubIcon}</div>
+        </td>
       </tr>`;
     });
     html += '</tbody></table></div>';

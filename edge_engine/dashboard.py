@@ -134,18 +134,21 @@ def build_bet_rows(signals) -> list[dict]:
     rows = []
     for s in signals:
         rows.append({
-            "sport":    s.sport,
-            "game":     s.game,
-            "bet_on":   s.bet_on,
-            "book":     s.book,
-            "odds":     s.odds,
-            "odds_str": (f"+{s.odds}" if s.odds > 0 else str(s.odds)),
-            "win_pct":  round(s.our_prob * 100, 1),
-            "edge":     s.edge_pct,
-            "ev":       s.expected_value,
-            "conf":     s.confidence,
-            "commence": s.commence,
-            "color":    "green" if s.our_prob >= 0.65 else "yellow" if s.our_prob >= 0.55 else "orange",
+            "sport":     s.sport,
+            "game":      s.game,
+            "bet_on":    s.bet_on,
+            "book":      s.book,
+            "odds":      s.odds,
+            "odds_str":  (f"+{s.odds}" if s.odds > 0 else str(s.odds)),
+            "win_pct":   round(s.our_prob * 100, 1),
+            "edge":      s.edge_pct,
+            "ev":        s.expected_value,
+            "conf":      s.confidence,
+            "commence":  s.commence,
+            "color":     "green" if s.our_prob >= 0.65 else "yellow" if s.our_prob >= 0.55 else "orange",
+            "warnings":  s.warnings,
+            "rules":     s.rules,
+            "scrubbed":  s.scrubbed,
         })
     return rows
 

@@ -17,6 +17,119 @@ from config import (
 
 HEADERS = {"User-Agent": "EdgeEngine/1.0"}
 
+# ── Sportsbook underhook / house rules (voids / gotchas per sport) ─────────────
+SPORTSBOOK_RULES: dict[str, list[str]] = {
+    "NFL":      ["Game must complete 55 min for moneyline to grade",
+                 "OT counts for moneyline, not always for spread",
+                 "Confirm starter listed before game time — line shifts if QB out"],
+    "NBA":      ["Player props void if player doesn't play",
+                 "Moneyline includes OT",
+                 "Game must tip for bets to stand — postponement = void"],
+    "MLB":      ["Listed pitcher rule: bet voids if named pitcher doesn't start",
+                 "Game must complete 5 innings (4.5 if home leads) to grade",
+                 "Extra innings count toward totals (O/U)"],
+    "NHL":      ["Moneyline includes OT and shootout",
+                 "Game must begin for bets to stand",
+                 "Period lines do NOT include OT — regulation only"],
+    "SOCCER":   ["90 min + injury time only (not ET/pens) for most markets",
+                 "Player prop voids if not in starting XI",
+                 "Match abandoned before 90 min = void at most books"],
+    "MMA":      ["Fighter missing weight by 2+ lbs shifts odds significantly",
+                 "No contest (NC) returns stake at most books",
+                 "Late replacement fighters have much higher uncertainty"],
+    "TENNIS":   ["Retirement/walkover before completion voids most bets",
+                 "Rain delays can dramatically shift player condition/momentum"],
+    "BOXING":   ["Bet is action if fight starts — KO in round 1 still grades",
+                 "Draws are rare but possible — factor into moneyline risk"],
+    "PARLAY":   ["ALL legs must win — one loss = full parlay lost",
+                 "Correlated parlays (e.g. same-game legs) may be rejected",
+                 "Books cap max payout — verify limit before large stake"],
+    "POLITICS": ["Polymarket requires USDC/crypto wallet to collect winnings",
+                 "Read resolution criteria carefully — can resolve unexpectedly",
+                 "No regulatory protection — decentralized smart contract"],
+    "DEFAULT":  ["Confirm game start time and active status before wagering",
+                 "Sharp line movement against your bet is a major red flag",
+                 "Check max payout limits at your book — varies significantly"],
+}
+
+# ── Internet intel scrub (injuries / postponements / line moves) ───────────────
+_INTEL_CACHE: dict = {}
+
+def _scrub_game_intel(game: str, sport: str) -> dict:
+    """
+    Search for injury/postponement/line-movement news before accepting a bet.
+    Cached per session so each game is only searched once.
+    Returns dict with red_flags (auto-reject), warnings (caution), notes (headlines).
+    """
+    cache_key = f"{sport}:{game[:50]}"
+    if cache_key in _INTEL_CACHE:
+        return _INTEL_CACHE[cache_key]
+
+    intel: dict = {"red_flags": [], "warnings": [], "notes": [], "scrubbed": False}
+
+    try:
+        from duckduckgo_search import DDGS
+        query = f"{game} injury lineup news today"
+        with DDGS() as ddgs:
+            results = list(ddgs.text(query, max_results=6, timelimit="d"))
+        intel["scrubbed"] = True
+        full_text = " ".join(
+            r.get("title", "").lower() + " " + r.get("body", "").lower()
+            for r in results
+        )
+
+        # CRITICAL — discard the bet if any of these found
+        for kw, msg in [
+            ("postponed",       "Game reported POSTPONED"),
+            ("cancelled",       "Game reported CANCELLED"),
+            ("called off",      "Game called off"),
+            ("game off",        "Game called off"),
+            ("will not play",   "Key player confirmed NOT PLAYING"),
+        ]:
+            if kw in full_text and msg not in intel["red_flags"]:
+                intel["red_flags"].append(msg)
+
+        # WARNINGS — flag but still show bet
+        for kw, msg in [
+            ("ruled out",           "Player RULED OUT — lineup change risk"),
+            ("out tonight",         "Player OUT tonight"),
+            ("out sunday",          "Player OUT this game"),
+            ("out saturday",        "Player OUT this game"),
+            ("doubtful",            "Player listed as DOUBTFUL"),
+            ("questionable",        "Player QUESTIONABLE — uncertainty"),
+            ("did not practice",    "Player missed practice — may be out"),
+            ("limited in practice", "Player limited in practice"),
+            ("weather delay",       "Weather delay possible"),
+            ("severe weather",      "Severe weather risk"),
+            ("freezing",            "Freezing conditions — impacts outdoor game"),
+            ("sharp action",        "Sharp money reported on opposite side"),
+            ("steam move",          "Steam move detected — market shifting"),
+            ("reverse line",        "Reverse line movement — public vs sharp split"),
+            ("line move",           "Significant line movement detected"),
+            ("late scratch",        "Late scratch risk reported"),
+            ("suspension",          "Player suspension reported"),
+            ("trade",               "Recent trade may affect team dynamic"),
+        ]:
+            if kw in full_text and msg not in intel["warnings"]:
+                intel["warnings"].append(msg)
+
+        intel["notes"] = [r.get("title", "")[:90] for r in results[:3] if r.get("title")]
+
+    except Exception as e:
+        intel["notes"].append(f"Intel scrub unavailable ({type(e).__name__})")
+
+    _INTEL_CACHE[cache_key] = intel
+    return intel
+
+
+def _get_sport_rules(sport: str) -> list[str]:
+    """Return underhook/house rules relevant to this sport."""
+    sport_upper = sport.upper()
+    for key in SPORTSBOOK_RULES:
+        if key in sport_upper:
+            return SPORTSBOOK_RULES[key]
+    return SPORTSBOOK_RULES["DEFAULT"]
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SHARED UTILS
@@ -244,6 +357,10 @@ class BetSignal:
     confidence: str
     note: str
     commence: str
+    red_flags: list = field(default_factory=list)   # auto-reject triggers
+    warnings:  list = field(default_factory=list)   # caution flags
+    rules:     list = field(default_factory=list)   # sport house rules
+    scrubbed:  bool = False                          # intel check ran
 
 def _get_odds_data(sport: str) -> list:
     if not ODDS_KEY:
@@ -378,25 +495,37 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
     home_true = avg_home_p / total
     away_true = avg_away_p / total
 
+    # Scrub the internet once per game (cached) before building signals
+    game_str   = f"{away} @ {home}"
+    sport_name = sport.split("_")[0].upper()
+    intel      = _scrub_game_intel(game_str, sport_name)
+    rules      = _get_sport_rules(sport_name)
+
+    # Hard-reject the entire game if a critical issue is found
+    if intel["red_flags"]:
+        print(f"  [REJECT] {game_str} — {intel['red_flags']}")
+        return []
+
     for team, best_book, best_odds, true_p in [
         (home, best_home[0], best_home[1], home_true),
         (away, best_away[0], best_away[1], away_true),
     ]:
         book_implied = american_to_prob(best_odds)
-        # EV: if our model (devigged consensus) says true_p but book says book_implied
-        # Edge = how much better our line is vs vig-inclusive price
         edge = (true_p - book_implied) * 100
 
         if edge < MIN_BET_EDGE_PCT:
-            continue  # not enough edge after vig
+            continue
 
         ev = (true_p * (100 / book_implied if best_odds > 0 else 100/(book_implied))) - 100
-
         confidence = "HIGH" if true_p > 0.68 else "MEDIUM" if true_p > 0.55 else "LOW"
 
+        # Downgrade confidence if warnings exist
+        if intel["warnings"] and confidence == "HIGH":
+            confidence = "MEDIUM"
+
         signals.append(BetSignal(
-            sport=sport.split("_")[0].upper(),
-            game=f"{away} @ {home}",
+            sport=sport_name,
+            game=game_str,
             bet_on=team,
             book=best_book,
             odds=best_odds,
@@ -406,13 +535,17 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             expected_value=round(ev, 2),
             confidence=confidence,
             note=f"Best line: {best_book} | devigged edge",
-            commence=commence
+            commence=commence,
+            red_flags=intel["red_flags"],
+            warnings=intel["warnings"],
+            rules=rules,
+            scrubbed=intel["scrubbed"],
         ))
 
     return signals
 
 def get_betting_signals() -> list[BetSignal]:
-    print("  Scanning sports odds...")
+    print("  Scanning sports odds + scrubbing intel...")
     all_signals: list[BetSignal] = []
 
     if not ODDS_KEY:
@@ -425,10 +558,20 @@ def get_betting_signals() -> list[BetSignal]:
                 all_signals.extend(_analyze_game(game, sport))
 
     # Always include politics (no key needed)
+    # Politics bets get Polymarket-specific rules attached
     politics = _get_polymarket_politics()
+    for b in politics:
+        b.rules = _get_sport_rules("POLITICS")
+        b.scrubbed = True  # Polymarket is self-reporting market prices
     all_signals.extend(politics)
 
-    return sorted(all_signals, key=lambda x: (x.our_prob, x.edge_pct), reverse=True)
+    # Final filter: drop any signal with unresolved critical flags
+    clean = [b for b in all_signals if not b.red_flags]
+    rejected = len(all_signals) - len(clean)
+    if rejected:
+        print(f"  [SCRUB] Rejected {rejected} bet(s) due to critical news flags")
+
+    return sorted(clean, key=lambda x: (x.our_prob, x.edge_pct), reverse=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -627,11 +770,11 @@ def get_action_plan(stocks: list, cryptos: list, bets: list,
             "platform": b.book,
         })
 
-    # ── Power Plays: $100-$200 in, $30K-$60K potential ───────────────────────
-    # Find highest-odds bets (long shots with positive EV or high upside)
-    # Sort all bets by potential payout on $150 wager descending
+    # ── Power Plays: $100-$200 in, $500+ payout — clean bets only ────────────
+    # Only consider bets that passed the full scrub with zero critical flags
+    # and zero warnings (Power Plays must be completely clean)
     power_candidates = sorted(
-        [b for b in bets if b.odds > 0],  # positive odds only = underdog/longshot
+        [b for b in bets if b.odds > 0 and not b.red_flags and not b.warnings],
         key=lambda b: b.odds,
         reverse=True
     )
@@ -643,9 +786,10 @@ def get_action_plan(stocks: list, cryptos: list, bets: list,
         if pp["payout"] >= 500:
             plays["power_plays"].append(pp)
 
-    # If no high-odds bets, build a conceptual parlay from top 2 bets
-    if not plays["power_plays"] and len(qualifying_b) >= 2:
-        b1, b2 = qualifying_b[0], qualifying_b[1]
+    # Parlay fallback — only from clean bets (no flags, no warnings)
+    clean_b = [b for b in qualifying_b if not b.red_flags and not b.warnings]
+    if not plays["power_plays"] and len(clean_b) >= 2:
+        b1, b2 = clean_b[0], clean_b[1]
         d1 = b1.odds / 100 + 1 if b1.odds > 0 else 100 / abs(b1.odds) + 1
         d2 = b2.odds / 100 + 1 if b2.odds > 0 else 100 / abs(b2.odds) + 1
         parlay_decimal = d1 * d2
