@@ -17,6 +17,269 @@ from config import (
 
 HEADERS = {"User-Agent": "EdgeEngine/1.0"}
 
+# ══════════════════════════════════════════════════════════════════════════════
+# ESPN TEAM STATS — builds our OWN probability model independent of the books
+# ══════════════════════════════════════════════════════════════════════════════
+
+ESPN_LEAGUE_MAP = {
+    "NFL":     ("football",   "nfl"),
+    "NBA":     ("basketball", "nba"),
+    "MLB":     ("baseball",   "mlb"),
+    "NHL":     ("hockey",     "nhl"),
+    "MLS":     ("soccer",     "usa.1"),
+    "SOCCER":  ("soccer",     "usa.1"),
+}
+# Sports without team stats — model falls back to book consensus
+_NO_TEAM_STATS = {"MMA", "TENNIS", "BOXING", "GOLF", "POLITICS"}
+
+_STANDINGS_CACHE: dict = {}
+
+def _get_espn_standings(sport_name: str) -> dict:
+    """
+    Fetch win%, points-for, points-against from ESPN standings.
+    Returns {normalized_name: {win_pct, ppg, opp_ppg}}.
+    Cached per session (only one HTTP call per sport per refresh cycle).
+    """
+    key = sport_name.upper()
+    if key in _STANDINGS_CACHE:
+        return _STANDINGS_CACHE[key]
+
+    league_info = ESPN_LEAGUE_MAP.get(key)
+    if not league_info:
+        _STANDINGS_CACHE[key] = {}
+        return {}
+
+    sport_path, league = league_info
+    url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_path}/{league}/standings"
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=10)
+        if r.status_code != 200:
+            _STANDINGS_CACHE[key] = {}
+            return {}
+        data = r.json()
+
+        # ESPN standings nests entries differently by season — walk all shapes
+        entries = []
+        def _collect(node):
+            if isinstance(node, list):
+                for item in node:
+                    _collect(item)
+            elif isinstance(node, dict):
+                if "entries" in node:
+                    entries.extend(node["entries"])
+                else:
+                    for v in node.values():
+                        _collect(v)
+        _collect(data.get("standings", data))
+
+        teams = {}
+        for entry in entries:
+            team = entry.get("team", {})
+            name = (team.get("displayName") or team.get("name") or "").strip()
+            if not name:
+                continue
+            stats_list = entry.get("stats", [])
+            sm = {s.get("name", "").lower(): (s.get("value") or 0) for s in stats_list}
+
+            win_pct = (sm.get("winpercent") or sm.get("pct") or sm.get("win%") or 0)
+            wins    = sm.get("wins", 0)
+            losses  = sm.get("losses", 0)
+            if win_pct == 0 and (wins + losses) > 0:
+                win_pct = wins / (wins + losses)
+
+            ppg     = (sm.get("pointsfor") or sm.get("avgpointsfor") or
+                       sm.get("points") or sm.get("goalsfor") or 0)
+            opp_ppg = (sm.get("pointsagainst") or sm.get("avgpointsagainst") or
+                       sm.get("goalsagainst") or 0)
+
+            teams[name.lower()] = {
+                "name": name, "win_pct": float(win_pct),
+                "ppg": float(ppg), "opp_ppg": float(opp_ppg),
+                "games": int(wins + losses),
+            }
+
+        _STANDINGS_CACHE[key] = teams
+        print(f"  ESPN standings: {sport_name} — {len(teams)} teams loaded")
+        return teams
+    except Exception as e:
+        print(f"  [!] ESPN standings ({sport_name}): {e}")
+        _STANDINGS_CACHE[key] = {}
+        return {}
+
+
+def _match_team(name: str, standings: dict) -> dict | None:
+    """Fuzzy-match Odds API team name to ESPN standings entry."""
+    if not standings or not name:
+        return None
+    nl = name.lower()
+    if nl in standings:
+        return standings[nl]
+    # Partial word overlap
+    nw = set(nl.split()) - {"at", "the", "fc", "sc", "city", "united", "club", "de", "af"}
+    for key, val in standings.items():
+        kw = set(key.split()) - {"at", "the", "fc", "sc", "city", "united", "club", "de", "af"}
+        if nw and kw and len(nw & kw) >= max(1, min(len(nw), len(kw)) - 1):
+            return val
+    # difflib last resort
+    try:
+        from difflib import get_close_matches
+        m = get_close_matches(nl, standings.keys(), n=1, cutoff=0.55)
+        if m:
+            return standings[m[0]]
+    except Exception:
+        pass
+    return None
+
+
+# Home-field advantage per sport (historical average)
+_HOME_ADV = {"NBA": 0.040, "NFL": 0.035, "MLB": 0.038,
+             "NHL": 0.032, "MLS": 0.050, "SOCCER": 0.050}
+
+
+def _predict_game(home: str, away: str, sport_name: str) -> tuple[float, float, list[str]]:
+    """
+    Build our independent probability estimate using ESPN team stats.
+    Returns (home_prob, away_prob, factors_list).
+    Falls back to (0.5, 0.5, [...]) when data is unavailable.
+    """
+    sn = sport_name.upper()
+    if sn in _NO_TEAM_STATS:
+        return 0.5, 0.5, ["No team stats for this sport — using book consensus only"]
+
+    standings = _get_espn_standings(sn)
+    hd = _match_team(home, standings)
+    ad = _match_team(away, standings)
+    factors: list[str] = []
+
+    if not hd or not ad:
+        return 0.5, 0.5, [f"ESPN data unavailable for {home} or {away}"]
+
+    # Win-rate base probability
+    hw, aw = hd["win_pct"], ad["win_pct"]
+    total  = hw + aw
+    home_base = (hw / total) if total > 0 else 0.5
+    factors.append(f"Win%: {home} {hw*100:.0f}% vs {away} {aw*100:.0f}%")
+
+    # Point-differential adjustment (capped at ±10%)
+    if hd["ppg"] > 0 and ad["ppg"] > 0:
+        h_diff  = hd["ppg"] - hd["opp_ppg"]
+        a_diff  = ad["ppg"] - ad["opp_ppg"]
+        gap     = h_diff - a_diff
+        adj     = float(np.clip(gap / 30.0, -0.10, 0.10)) * 0.4
+        home_base = float(np.clip(home_base + adj, 0.20, 0.80))
+        factors.append(f"Scoring edge: {home} {h_diff:+.1f} vs {away} {a_diff:+.1f}")
+
+    # Home-field advantage
+    ha = _HOME_ADV.get(sn, 0.03)
+    home_prob = float(np.clip(home_base + ha, 0.15, 0.85))
+    away_prob = 1.0 - home_prob
+    factors.append(f"Home advantage: +{ha*100:.0f}% applied to {home}")
+
+    return home_prob, away_prob, factors
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# FEAR & GREED — crypto market sentiment (alternative.me, free, no key)
+# ══════════════════════════════════════════════════════════════════════════════
+
+_FNG_CACHE: dict = {}
+
+def _get_fear_greed() -> tuple[int, str]:
+    """Returns (value 0-100, label). Cached per session."""
+    global _FNG_CACHE
+    if _FNG_CACHE:
+        return _FNG_CACHE["v"], _FNG_CACHE["l"]
+    try:
+        r = requests.get("https://api.alternative.me/fng/", headers=HEADERS, timeout=6)
+        d = r.json()["data"][0]
+        v, l = int(d["value"]), d["value_classification"]
+        _FNG_CACHE = {"v": v, "l": l}
+        print(f"  Fear & Greed: {v} ({l})")
+        return v, l
+    except Exception:
+        _FNG_CACHE = {"v": 50, "l": "Neutral"}
+        return 50, "Neutral"
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# FUNDAMENTAL STOCK SCORING  (yfinance .info — only for qualifying stocks)
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _fundamental_score(ticker: str) -> tuple[float, str]:
+    """
+    Score 0-100 from P/E, revenue growth, short float, analyst consensus.
+    Only called for stocks that clear the technical threshold — limits API calls.
+    """
+    try:
+        info  = yf.Ticker(ticker).info
+        score = 50.0
+        notes: list[str] = []
+
+        # Forward P/E — lower = better
+        fpe = info.get("forwardPE") or 0
+        if fpe > 0:
+            if fpe < 15:   score += 15; notes.append(f"P/E {fpe:.0f} cheap")
+            elif fpe < 25: score += 8
+            elif fpe < 40: score -= 5
+            else:          score -= 15; notes.append(f"P/E {fpe:.0f} rich")
+
+        # Revenue growth YoY
+        rg = info.get("revenueGrowth") or 0
+        if rg:
+            if rg > 0.30:  score += 15; notes.append(f"rev +{rg*100:.0f}%")
+            elif rg > 0.15: score += 8
+            elif rg < 0:   score -= 10; notes.append("rev declining")
+
+        # Short float — high = squeeze risk but also weakness signal
+        sf = info.get("shortPercentOfFloat") or 0
+        if sf:
+            if sf > 0.30:   score -= 12; notes.append(f"{sf*100:.0f}% shorted")
+            elif sf > 0.20: score -= 6
+            elif sf < 0.05: score += 5
+
+        # Analyst consensus (1=strong buy → 5=strong sell)
+        rec = info.get("recommendationMean") or 0
+        if rec:
+            if rec < 1.8:  score += 12; notes.append("analyst: strong buy")
+            elif rec < 2.5: score += 5; notes.append("analyst: buy")
+            elif rec > 3.5: score -= 10; notes.append("analyst: sell")
+
+        # Profit margin
+        pm = info.get("profitMargins") or 0
+        if pm:
+            if pm > 0.20:  score += 8; notes.append(f"{pm*100:.0f}% margin")
+            elif pm < 0:   score -= 8; notes.append("unprofitable")
+
+        return float(np.clip(score, 0, 100)), " | ".join(notes)
+    except Exception:
+        return 50.0, ""
+
+
+def _earnings_proximity(ticker: str) -> tuple[int, str]:
+    """Returns (days_until_earnings, warning_note). -1 if unknown."""
+    try:
+        cal = yf.Ticker(ticker).calendar
+        if cal is None:
+            return -1, ""
+        # calendar can be a dict or DataFrame depending on yfinance version
+        if hasattr(cal, "get"):
+            dates = cal.get("Earnings Date") or cal.get("earningsDate") or []
+        elif hasattr(cal, "columns") and not cal.empty:
+            col = [c for c in cal.columns if "earnings" in str(c).lower()]
+            dates = cal[col[0]].dropna().tolist() if col else []
+        else:
+            return -1, ""
+        if not len(dates):
+            return -1, ""
+        next_dt = pd.Timestamp(dates[0] if hasattr(dates, "__getitem__") else list(dates)[0])
+        days = int((next_dt - pd.Timestamp.now()).days)
+        if 0 <= days <= 5:   return days, f"EARNINGS IN {days}D — high volatility risk"
+        if 6 <= days <= 14:  return days, f"earnings ~{days}d"
+        return days, ""
+    except Exception:
+        return -1, ""
+
+
 # ── Sportsbook underhook / house rules (voids / gotchas per sport) ─────────────
 SPORTSBOOK_RULES: dict[str, list[str]] = {
     "NFL":      ["Game must complete 55 min for moneyline to grade",
@@ -243,13 +506,30 @@ def _wsb_score_quick(df) -> float:
 
 def get_stock_signals() -> list[StockSignal]:
     results = []
-    print("  Scanning stocks...")
+    print("  Scanning stocks + fundamentals...")
     for ticker in STOCKS:
         try:
             df = yf.Ticker(ticker).history(period="3mo")
             if df.empty or len(df) < 10:
                 continue
-            score, note = _stock_score(df)
+            tech_score, tech_note = _stock_score(df)
+
+            # Only fetch fundamentals for stocks clearing technical baseline
+            if tech_score >= 50:
+                fund_score, fund_note = _fundamental_score(ticker)
+                earn_days, earn_note  = _earnings_proximity(ticker)
+            else:
+                fund_score, fund_note, earn_days, earn_note = 50.0, "", -1, ""
+
+            # Blend: 65% technical, 35% fundamental
+            score = round(tech_score * 0.65 + fund_score * 0.35, 1)
+
+            # Earnings proximity penalty — don't buy into unknown earnings
+            if 0 <= earn_days <= 5:
+                score = max(score - 25, 0)
+
+            notes = " | ".join(n for n in [tech_note, fund_note, earn_note] if n)
+
             price = float(df["Close"].iloc[-1])
             prev  = float(df["Close"].iloc[-2])
             rsi_v = _rsi(df["Close"])
@@ -257,7 +537,7 @@ def get_stock_signals() -> list[StockSignal]:
                      "BUY"        if score >= 60 else
                      "WATCH"      if score >= 45 else "SKIP")
             results.append(StockSignal(ticker, score, price,
-                round((price/prev-1)*100, 2), round(rsi_v,1), trend, note))
+                round((price/prev-1)*100, 2), round(rsi_v, 1), trend, notes))
         except Exception:
             pass
     return sorted(results, key=lambda x: x.score, reverse=True)
@@ -364,6 +644,8 @@ def _fetch_coinpaprika() -> list[dict]:
         return []
 
 
+_FNG_VALUE: int = 50  # module-level so _score_coin can read it without calling the API each time
+
 def _score_coin(c: dict) -> CryptoSignal:
     h1, h24, d7 = c["h1"], c["h24"], c["d7"]
     vol, mc     = c["vol"], max(c["mc"], 1)
@@ -372,6 +654,15 @@ def _score_coin(c: dict) -> CryptoSignal:
     vol_ratio = vol / mc
     vol_score = float(np.clip(vol_ratio * 500, 0, 40))
     score     = float(np.clip(mom * 0.65 + vol_score * 0.35, 0, 100))
+
+    # Fear & Greed adjustment
+    # Extreme fear (0-25): buy dips — boost strong setups, opportunity signal
+    # Extreme greed (75-100): market overextended — reduce confidence
+    fng = _FNG_VALUE
+    if fng <= 25 and score >= 55:
+        score = min(score + 6, 100)  # fear = discount price, upside more likely
+    elif fng >= 80:
+        score = max(score - 6, 0)    # greed = elevated risk of reversal
 
     trend = ("STRONG BUY" if score >= 75 else
              "BUY"        if score >= 60 else
@@ -382,6 +673,8 @@ def _score_coin(c: dict) -> CryptoSignal:
     if h24 >  3:  notes.append(f"24h +{h24:.1f}%")
     if h24 < -5:  notes.append(f"24h {h24:.1f}% dip")
     if vol_ratio > 0.10: notes.append("high volume")
+    if fng <= 25: notes.append(f"F&G: {fng} FEAR")
+    if fng >= 75: notes.append(f"F&G: {fng} GREED")
     if c["source"] == "coinpaprika": notes.append("via CoinPaprika")
 
     return CryptoSignal(
@@ -415,6 +708,11 @@ def get_crypto_signals() -> list[CryptoSignal]:
 
     print(f"  Crypto: {len(cg_data)} CoinGecko + {len(cp_data)} CoinPaprika = {len(combined)} total")
 
+    # Fetch Fear & Greed once before scoring all coins
+    global _FNG_VALUE
+    _FNG_VALUE, fng_label = _get_fear_greed()
+    print(f"  Fear & Greed: {_FNG_VALUE} ({fng_label})")
+
     results = [_score_coin(c) for c in combined if c["price"] > 0]
     return sorted(results, key=lambda x: x.score, reverse=True)
 
@@ -441,6 +739,9 @@ class BetSignal:
     warnings:  list = field(default_factory=list)   # caution flags
     rules:     list = field(default_factory=list)   # sport house rules
     scrubbed:  bool = False                          # intel check ran
+    model_prob:    float = 0.0                       # our ESPN-based probability
+    model_factors: list  = field(default_factory=list)  # what drove our model
+    model_vs_book: float = 0.0                       # our prob minus book consensus
 
 def _get_odds_data(sport: str) -> list:
     if not ODDS_KEY:
@@ -586,22 +887,39 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
         print(f"  [REJECT] {game_str} — {intel['red_flags']}")
         return []
 
-    for team, best_book, best_odds, true_p in [
-        (home, best_home[0], best_home[1], home_true),
-        (away, best_away[0], best_away[1], away_true),
+    # Build our own ESPN-based probability model
+    espn_home_p, espn_away_p, model_factors = _predict_game(home, away, sport_name)
+    has_model = espn_home_p != 0.5 or (len(model_factors) > 0 and "unavailable" not in model_factors[0])
+
+    # Blend: 55% our model + 45% devigged book consensus
+    # If ESPN data unavailable, fall back 100% to book consensus
+    if has_model:
+        blended_home = float(np.clip(espn_home_p * 0.55 + home_true * 0.45, 0.05, 0.95))
+        blended_away = float(np.clip(espn_away_p * 0.55 + away_true * 0.45, 0.05, 0.95))
+    else:
+        blended_home = home_true
+        blended_away = away_true
+
+    for team, best_book, best_odds, book_true, blended_true in [
+        (home, best_home[0], best_home[1], home_true, blended_home),
+        (away, best_away[0], best_away[1], away_true, blended_away),
     ]:
         book_implied = american_to_prob(best_odds)
-        edge = (true_p - book_implied) * 100
+        # Edge = blended model probability vs what the best available line implies
+        edge = (blended_true - book_implied) * 100
 
         if edge < MIN_BET_EDGE_PCT:
             continue
 
-        ev = (true_p * (100 / book_implied if best_odds > 0 else 100/(book_implied))) - 100
-        confidence = "HIGH" if true_p > 0.68 else "MEDIUM" if true_p > 0.55 else "LOW"
+        ev = (blended_true * (100 / book_implied if best_odds > 0 else 100 / book_implied)) - 100
+        confidence = "HIGH" if blended_true > 0.68 else "MEDIUM" if blended_true > 0.55 else "LOW"
 
         # Downgrade confidence if warnings exist
         if intel["warnings"] and confidence == "HIGH":
             confidence = "MEDIUM"
+
+        # model_vs_book: positive = our model likes this team MORE than books do
+        m_vs_b = round((blended_true - book_true) * 100, 1)
 
         signals.append(BetSignal(
             sport=sport_name,
@@ -610,16 +928,19 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             book=best_book,
             odds=best_odds,
             implied_prob=round(book_implied, 3),
-            our_prob=round(true_p, 3),
+            our_prob=round(blended_true, 3),
             edge_pct=round(edge, 2),
             expected_value=round(ev, 2),
             confidence=confidence,
-            note=f"Best line: {best_book} | devigged edge",
+            note=f"Best line: {best_book} | blended model",
             commence=commence,
             red_flags=intel["red_flags"],
             warnings=intel["warnings"],
             rules=rules,
             scrubbed=intel["scrubbed"],
+            model_prob=round(blended_true, 3),
+            model_factors=model_factors,
+            model_vs_book=m_vs_b,
         ))
 
     return signals

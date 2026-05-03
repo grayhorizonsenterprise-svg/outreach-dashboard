@@ -563,10 +563,24 @@ function renderBets(rows) {
             <div style="padding:4px 0">${r.rules.map(rule =>
               `<div style="color:var(--muted);font-size:10px;padding:1px 0">&#8226; ${rule}</div>`).join('')}</div>
            </details>` : '';
+      // Model vs Books indicator
+      const mvb = r.model_vs_book || 0;
+      const modelHtml = r.model_prob
+        ? `<div style="margin-top:4px;font-size:10px">
+            <span style="color:var(--muted)">Model: </span>
+            <span style="color:var(--cyan);font-weight:700">${r.model_prob}%</span>
+            ${mvb !== 0 ? `<span style="color:${mvb > 0 ? 'var(--green)' : 'var(--red)'};margin-left:4px">(${mvb > 0 ? '+' : ''}${mvb}% vs books)</span>` : ''}
+          </div>` : '';
+      const factorsHtml = (r.model_factors && r.model_factors.length)
+        ? `<details style="margin-top:2px"><summary style="color:var(--muted);font-size:10px;cursor:pointer">Model factors</summary>
+            <div style="padding:4px 0">${r.model_factors.map(f =>
+              `<div style="color:var(--muted);font-size:10px;padding:1px 0">&#8594; ${f}</div>`).join('')}</div>
+           </details>` : '';
       html += `<tr>
         <td style="color:var(--cyan)">${r.sport}</td>
         <td>
           <strong>${r.bet_on}</strong>
+          ${modelHtml}${factorsHtml}
           ${warnHtml}${rulesHtml}
         </td>
         <td style="color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis">${r.game}</td>
