@@ -913,7 +913,7 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
         edge = (our_true - book_implied) * 100
 
         # Micro-bet: long-odds underdog with genuine model probability
-        is_micro = (best_odds >= 300 and our_true >= 0.18)
+        is_micro = (best_odds >= 250 and our_true >= 0.15)
         if edge < MIN_BET_EDGE_PCT and not is_micro:
             continue
 

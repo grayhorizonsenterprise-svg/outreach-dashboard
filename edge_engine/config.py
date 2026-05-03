@@ -30,7 +30,7 @@ COINGECKO_KEY = os.getenv("COINGECKO_KEY", "")
 # ── Thresholds ─────────────────────────────────────────────────────────────────
 PROFIT_ALERT_USD  = 1000
 BIWEEKLY_DAYS     = 14
-MIN_BET_EDGE_PCT  = 3.0
+MIN_BET_EDGE_PCT  = 1.5
 MIN_SIGNAL_SCORE  = 65
 
 # ══════════════════════════════════════════════════════════════════════════════
