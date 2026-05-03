@@ -14,6 +14,7 @@ from config import (
     STOCKS, CRYPTOS, SPORTS, ODDS_KEY, QUIVER_KEY,
     MIN_BET_EDGE_PCT, MIN_SIGNAL_SCORE, COINGECKO_KEY
 )
+import scout as _scout
 
 HEADERS = {"User-Agent": "EdgeEngine/1.0"}
 
@@ -887,18 +888,23 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
         print(f"  [REJECT] {game_str} — {intel['red_flags']}")
         return []
 
-    # Build our own ESPN-based probability model
-    espn_home_p, espn_away_p, model_factors = _predict_game(home, away, sport_name)
-    has_model = espn_home_p != 0.5 or (len(model_factors) > 0 and "unavailable" not in model_factors[0])
+    # ── Full scout ensemble (rest + efficiency + line movement + weather + Pythagorean)
+    venue = game.get("venue", "")
+    scout_result = _scout.scout_game(
+        home=home, away=away, sport=sport_name, venue=venue,
+        home_odds=best_home[1], away_odds=best_away[1],
+        book_home_prob=home_true,
+    )
+    scout_home_p = scout_result.p_ensemble
+    scout_away_p = 1.0 - scout_home_p
 
-    # Blend: 55% our model + 45% devigged book consensus
-    # If ESPN data unavailable, fall back 100% to book consensus
-    if has_model:
-        blended_home = float(np.clip(espn_home_p * 0.55 + home_true * 0.45, 0.05, 0.95))
-        blended_away = float(np.clip(espn_away_p * 0.55 + away_true * 0.45, 0.05, 0.95))
-    else:
-        blended_home = home_true
-        blended_away = away_true
+    # Also run legacy ESPN model for backward compat factor list
+    espn_home_p, espn_away_p, espn_factors = _predict_game(home, away, sport_name)
+    model_factors = scout_result.factors + espn_factors + intel.get("notes", [])
+
+    # Final blend: 60% full scout + 40% devigged book consensus
+    blended_home = float(np.clip(scout_home_p * 0.60 + home_true * 0.40, 0.05, 0.95))
+    blended_away = float(np.clip(scout_away_p * 0.60 + away_true * 0.40, 0.05, 0.95))
 
     for team, best_book, best_odds, book_true, blended_true in [
         (home, best_home[0], best_home[1], home_true, blended_home),
@@ -912,14 +918,39 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             continue
 
         ev = (blended_true * (100 / book_implied if best_odds > 0 else 100 / book_implied)) - 100
-        confidence = "HIGH" if blended_true > 0.68 else "MEDIUM" if blended_true > 0.55 else "LOW"
+        # Use scout confidence if available and it's better
+        sc_conf = scout_result.confidence
+        raw_conf = "HIGH" if blended_true > 0.68 else "MEDIUM" if blended_true > 0.55 else "LOW"
+        conf_rank = {"HIGH": 2, "MEDIUM": 1, "LOW": 0}
+        confidence = sc_conf if conf_rank[sc_conf] >= conf_rank[raw_conf] else raw_conf
 
-        # Downgrade confidence if warnings exist
-        if intel["warnings"] and confidence == "HIGH":
+        # Downgrade on warnings
+        if (intel["warnings"] or scout_result.warnings) and confidence == "HIGH":
             confidence = "MEDIUM"
 
-        # model_vs_book: positive = our model likes this team MORE than books do
         m_vs_b = round((blended_true - book_true) * 100, 1)
+
+        # Vegas Script data — patterns suggesting a predetermined game flow
+        is_pick_home = (team == home)
+        scout_agrees = (
+            (is_pick_home and scout_result.pick == "HOME") or
+            (not is_pick_home and scout_result.pick == "AWAY")
+        )
+        vegas_script = {
+            "signals_agree":   scout_result.signals_agree,
+            "rest_note":       f"{scout_result.home_rest}d/{scout_result.away_rest}d",
+            "line_move":       scout_result.line_move,
+            "wind_mph":        scout_result.wind_mph,
+            "scout_pick":      scout_result.pick_team,
+            "scout_pct":       scout_result.pick_pct,
+            "scout_agrees":    scout_agrees,
+            "p_efficiency":    round(scout_result.p_efficiency * 100, 1),
+            "p_pythagorean":   round(scout_result.p_pythagorean * 100, 1),
+            "p_rest":          round(scout_result.p_rest * 100, 1),
+            "p_line_move":     round(scout_result.p_line_move * 100, 1),
+            "scout_warnings":  scout_result.warnings,
+            "factors":         scout_result.factors[:5],
+        }
 
         signals.append(BetSignal(
             sport=sport_name,
@@ -932,21 +963,22 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             edge_pct=round(edge, 2),
             expected_value=round(ev, 2),
             confidence=confidence,
-            note=f"Best line: {best_book} | blended model",
+            note=f"Best line: {best_book} | ensemble model ({scout_result.signals_agree} signals)",
             commence=commence,
             red_flags=intel["red_flags"],
-            warnings=intel["warnings"],
+            warnings=list(set(intel["warnings"] + scout_result.warnings)),
             rules=rules,
             scrubbed=intel["scrubbed"],
             model_prob=round(blended_true, 3),
-            model_factors=model_factors,
+            model_factors=model_factors[:6],
             model_vs_book=m_vs_b,
         ))
 
     return signals
 
 def get_betting_signals() -> list[BetSignal]:
-    print("  Scanning sports odds + scrubbing intel...")
+    print("  Scanning sports odds + full scout ensemble...")
+    _scout.clear_session_caches()  # reset per-game caches; line history persists
     all_signals: list[BetSignal] = []
 
     if not ODDS_KEY:
@@ -973,6 +1005,39 @@ def get_betting_signals() -> list[BetSignal]:
         print(f"  [SCRUB] Rejected {rejected} bet(s) due to critical news flags")
 
     return sorted(clean, key=lambda x: (x.our_prob, x.edge_pct), reverse=True)
+
+
+def get_scout_picks() -> list[dict]:
+    """
+    Return tonight's HIGH/MEDIUM confidence scout picks as plain dicts
+    for the dashboard to render in the Vegas Script / Picks frame.
+    """
+    picks = _scout.get_best_picks(min_confidence="MEDIUM", min_pct=58.0)
+    out = []
+    for p in picks:
+        out.append({
+            "game":          p.game,
+            "pick_team":     p.pick_team,
+            "pick_pct":      p.pick_pct,
+            "confidence":    p.confidence,
+            "signals_agree": p.signals_agree,
+            "home_team":     p.home_team,
+            "away_team":     p.away_team,
+            "sport":         p.sport,
+            "home_rest":     p.home_rest,
+            "away_rest":     p.away_rest,
+            "line_move":     p.line_move,
+            "wind_mph":      p.wind_mph,
+            "p_efficiency":  round(p.p_efficiency * 100, 1),
+            "p_pythagorean": round(p.p_pythagorean * 100, 1),
+            "p_rest":        round(p.p_rest * 100, 1),
+            "p_line_move":   round(p.p_line_move * 100, 1),
+            "p_ensemble":    round(p.p_ensemble * 100, 1),
+            "factors":       p.factors,
+            "warnings":      p.warnings,
+            "ts":            p.ts,
+        })
+    return out
 
 
 # ══════════════════════════════════════════════════════════════════════════════

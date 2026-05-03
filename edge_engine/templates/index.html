@@ -340,6 +340,9 @@
   <div class="tab" onclick="switchTab('crypto')">Crypto <span class="tab-badge" id="tab-crypto-count">--</span></div>
   <div class="tab" onclick="switchTab('bets')">Bets <span class="tab-badge" id="tab-bets-count">--</span></div>
   <div class="tab" onclick="switchTab('warnings')">Warnings <span class="tab-badge" id="tab-warnings-count" style="background:#450a0a;color:#ef4444;">--</span></div>
+  <div class="tab" onclick="switchTab('scout')" style="border-bottom-color:transparent">
+    Tonight's Picks <span class="tab-badge" id="tab-scout-count" style="background:#3b0764;color:#c084fc;">--</span>
+  </div>
 </div>
 
 <!-- ── Content ── -->
@@ -399,6 +402,11 @@
     <div id="warnings-content"><div class="loading-bar pulse">Loading warnings...</div></div>
   </div>
 
+  <!-- TONIGHT'S PICKS / VEGAS SCRIPT TAB -->
+  <div class="panel-group" id="panel-scout">
+    <div id="scout-content"><div class="loading-bar pulse">Loading picks...</div></div>
+  </div>
+
 </div>
 
 <!-- ── Ticker Detail Modal ── -->
@@ -417,11 +425,15 @@ let activeTab = 'stocks';
 function switchTab(name) {
   activeTab = name;
   document.querySelectorAll('.tab').forEach((t,i) => {
-    const names = ['stocks','spacex','crypto','bets','warnings'];
+    const names = ['stocks','spacex','crypto','bets','warnings','scout'];
     t.classList.toggle('active', names[i] === name);
   });
   document.querySelectorAll('.panel-group').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
+  // Lazy-load scout picks on first open
+  if (name === 'scout' && currentData && currentData.scout_picks) {
+    renderScout(currentData.scout_picks);
+  }
 }
 
 // ── Score pill ────────────────────────────────────────────────────────────────
@@ -828,6 +840,110 @@ function renderActionPlan(plan) {
   grid.innerHTML = html;
 }
 
+// ── Tonight's Picks / Vegas Script renderer ───────────────────────────────────
+function renderScout(picks) {
+  const el = document.getElementById('scout-content');
+  if (!picks || !picks.length) {
+    el.innerHTML = `
+      <div style="color:var(--muted);padding:40px;text-align:center;font-size:13px">
+        No high-confidence picks found yet.<br>
+        <span style="font-size:11px">Scout refreshes every 20 min during game hours. Line history builds up over the day — confidence increases as more cycles run.</span>
+      </div>`;
+    return;
+  }
+
+  const confColor = {'HIGH':'var(--green)','MEDIUM':'var(--cyan)','LOW':'var(--muted)'};
+  const confBg    = {'HIGH':'#064e3b','MEDIUM':'#0c2a36','LOW':'#1f2937'};
+
+  let html = `
+    <div style="color:var(--muted);font-size:11px;margin-bottom:16px;line-height:1.7">
+      <strong style="color:var(--purple)">Vegas Script Analysis</strong> — every game has a statistical fingerprint.
+      This model runs Pythagorean win%, team efficiency matchup, rest advantage, line movement tracking,
+      and weather to find where the book's line diverges from true probability.
+      <br><span style="color:var(--yellow)">HIGH confidence = 3+ independent models agree. Bet size up on these only.</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px">`;
+
+  picks.forEach(p => {
+    const cc = confColor[p.confidence] || 'var(--muted)';
+    const cb = confBg[p.confidence]    || '#1f2937';
+    const signals = p.signals_agree || 0;
+    const barW = Math.min(p.pick_pct, 100);
+
+    const modelRows = [
+      {label:'Efficiency', val:p.p_efficiency},
+      {label:'Pythagorean', val:p.p_pythagorean},
+      {label:'Rest Edge', val:p.p_rest},
+      {label:'Line Move', val:p.p_line_move},
+      {label:'Ensemble', val:p.p_ensemble},
+    ].map(m => {
+      const mv = +m.val || 50;
+      const c  = mv >= 65 ? 'var(--green)' : mv >= 55 ? 'var(--cyan)' : mv <= 45 ? 'var(--red)' : 'var(--muted)';
+      return `<div style="display:flex;justify-content:space-between;font-size:10px;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.04)">
+        <span style="color:var(--muted)">${m.label}</span>
+        <span style="color:${c};font-weight:700">${mv}%</span>
+      </div>`;
+    }).join('');
+
+    const warnHtml = (p.warnings && p.warnings.length)
+      ? p.warnings.map(w => `<div style="color:var(--orange);font-size:10px;margin-top:3px">&#9888; ${w}</div>`).join('')
+      : '';
+
+    const factorHtml = (p.factors && p.factors.length)
+      ? `<details style="margin-top:8px"><summary style="color:var(--muted);font-size:10px;cursor:pointer">All factors (${p.factors.length})</summary>
+          <div style="padding-top:4px">${p.factors.map(f =>
+            `<div style="color:var(--muted);font-size:10px;padding:1px 0">&#8594; ${f}</div>`).join('')}</div>
+         </details>` : '';
+
+    const restNote = (p.home_rest >= 0 && p.away_rest >= 0)
+      ? `Home ${p.home_rest}d rest | Away ${p.away_rest}d rest` : '';
+    const lineMoveNote = p.line_move !== 0
+      ? `<span style="color:${p.line_move>0?'var(--green)':'var(--red)'}">Line ${p.line_move>0?'+':''}${p.line_move}pts</span>` : '';
+    const windNote = p.wind_mph >= 15
+      ? `<span style="color:var(--yellow)">Wind ${p.wind_mph}mph</span>` : '';
+
+    html += `
+    <div style="background:${cb};border:1px solid ${cc};border-radius:12px;padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div style="font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${cc};margin-bottom:4px">
+            ${p.sport} &bull; ${signals} SIGNALS AGREE
+          </div>
+          <div style="font-size:11px;color:var(--muted)">${p.away_team} @ ${p.home_team}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:9px;color:var(--muted);text-transform:uppercase">Confidence</div>
+          <div style="font-size:13px;font-weight:800;color:${cc}">${p.confidence}</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,0.35);border-radius:8px;padding:12px;margin-bottom:10px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">BET ON</div>
+        <div style="font-size:22px;font-weight:800;color:#fff">${p.pick_team}</div>
+        <div style="margin-top:6px;background:rgba(0,0,0,0.4);border-radius:4px;height:6px;overflow:hidden">
+          <div style="height:100%;width:${barW}%;background:${cc};transition:width 0.5s"></div>
+        </div>
+        <div style="color:${cc};font-size:13px;font-weight:700;margin-top:4px">${p.pick_pct}% win probability</div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Model Breakdown</div>
+      ${modelRows}
+
+      <div style="margin-top:8px;font-size:10px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap">
+        ${restNote ? `<span>${restNote}</span>` : ''}
+        ${lineMoveNote}
+        ${windNote}
+      </div>
+      ${warnHtml}
+      ${factorHtml}
+      <div style="margin-top:8px;font-size:9px;color:var(--muted)">Last updated: ${p.ts || '--'}</div>
+    </div>`;
+  });
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
 function renderAll(data) {
   currentData = data;
   try { if (data.action_plan) renderActionPlan(data.action_plan); } catch(e) { console.warn('Action plan:', e); }
@@ -870,6 +986,12 @@ function renderAll(data) {
   document.getElementById('tab-crypto-count').textContent = (data.crypto || []).length;
   document.getElementById('tab-bets-count').textContent = (data.bets || []).length;
   document.getElementById('tab-warnings-count').textContent = warnCount;
+  const scoutCount = (data.scout_picks || []).length;
+  document.getElementById('tab-scout-count').textContent = scoutCount || '--';
+  if (scoutCount) {
+    document.getElementById('tab-scout-count').style.background = '#3b0764';
+    document.getElementById('tab-scout-count').style.color = '#c084fc';
+  }
 
   // Render tabs
   renderStocks(data.stocks, 'stocks-content', false);
@@ -877,6 +999,7 @@ function renderAll(data) {
   renderCrypto(data.crypto);
   renderBets(data.bets);
   renderWarnings(data.warnings);
+  if (activeTab === 'scout') renderScout(data.scout_picks || []);
 }
 
 // ── Ticker modal ──────────────────────────────────────────────────────────────

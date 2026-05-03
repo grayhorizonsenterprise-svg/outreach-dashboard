@@ -28,7 +28,7 @@ from config import (
 from signals import (
     get_stock_signals, get_crypto_signals,
     get_betting_signals, get_congress_buys, StockSignal,
-    get_action_plan
+    get_action_plan, get_scout_picks
 )
 from patterns import detect_patterns, bad_stock_warnings
 
@@ -44,6 +44,7 @@ CACHE: dict = {
     "warnings": [],
     "regime": "UNKNOWN",
     "action_plan": {},
+    "scout_picks": [],      # tonight's high-confidence picks from full ensemble
     "loading": True,
 }
 CACHE_LOCK = threading.Lock()
@@ -201,6 +202,8 @@ def refresh_cache():
         regime      = market_regime_check()
         action_plan = get_action_plan(all_signals, crypto_sigs, bet_sigs, bankroll=100.0)
 
+        scout_picks = get_scout_picks()
+
         with CACHE_LOCK:
             CACHE.update({
                 "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -211,6 +214,7 @@ def refresh_cache():
                 "warnings":    all_warnings,
                 "regime":      regime,
                 "action_plan": action_plan,
+                "scout_picks": scout_picks,
                 "loading":     False,
             })
         print(f"[{datetime.now().strftime('%H:%M:%S')}] Cache refreshed. "
@@ -222,11 +226,40 @@ def refresh_cache():
             CACHE["loading"] = False
 
 
+def _bet_scout_refresh():
+    """
+    Lightweight bet-only refresh — every 20 minutes during 7am-10pm.
+    Only re-fetches betting signals and scout picks; leaves stocks/crypto untouched.
+    Captures line movement between cycles (that's where the edge builds up).
+    """
+    while True:
+        time.sleep(1200)  # 20 minutes
+        now = datetime.now()
+        if 7 <= now.hour < 22:  # daytime only
+            print(f"[{now.strftime('%H:%M:%S')}] Scout refresh (20-min cycle)...")
+            try:
+                bet_sigs    = get_betting_signals()
+                bet_rows    = build_bet_rows(bet_sigs)
+                scout_picks = get_scout_picks()
+                with CACHE_LOCK:
+                    CACHE["bets"]        = bet_rows
+                    CACHE["scout_picks"] = scout_picks
+                    # Update action plan bets portion
+                    if CACHE.get("action_plan"):
+                        from signals import get_action_plan as _gap
+                        # lightweight: reuse cached stock/crypto signals
+                        pass
+                print(f"[{now.strftime('%H:%M:%S')}] Scout done: {len(bet_rows)} bets | "
+                      f"{len(scout_picks)} picks")
+            except Exception as e:
+                print(f"[SCOUT ERROR] {e}")
+
+
 def background_refresh():
-    """Background thread — refreshes every 15 minutes."""
+    """Background thread — full refresh every 30 minutes."""
     refresh_cache()
     while True:
-        time.sleep(900)  # 15 minutes
+        time.sleep(1800)  # 30 minutes
         refresh_cache()
 
 
@@ -237,6 +270,7 @@ def _ensure_started():
     if not _started:
         _started = True
         threading.Thread(target=background_refresh, daemon=True).start()
+        threading.Thread(target=_bet_scout_refresh, daemon=True).start()
 
 with app.app_context():
     _ensure_started()
@@ -269,6 +303,13 @@ def api_data():
 def api_refresh():
     threading.Thread(target=refresh_cache, daemon=True).start()
     return jsonify({"status": "refreshing"})
+
+@app.route("/api/scout")
+def api_scout():
+    """Tonight's high-confidence picks from the full ensemble model."""
+    with CACHE_LOCK:
+        return jsonify({"picks": CACHE.get("scout_picks", []),
+                        "last_updated": CACHE.get("last_updated")})
 
 @app.route("/api/ticker/<ticker>")
 def api_ticker(ticker: str):
