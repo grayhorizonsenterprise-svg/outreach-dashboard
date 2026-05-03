@@ -1079,6 +1079,34 @@ def _get_espn_scoreboard(sport_path: str, league: str) -> list[dict]:
                 continue
             home = next((t for t in teams if t["home"]), teams[0])
             away = next((t for t in teams if not t["home"]), teams[1])
+
+            # Extract inline odds (ESPN includes consensus lines when available)
+            ev_odds: dict = {}
+            comp_odds = comp.get("odds") or []
+            if comp_odds:
+                o = comp_odds[0]
+                ht = o.get("homeTeamOdds") or {}
+                at = o.get("awayTeamOdds") or {}
+                spread_raw = o.get("spread", "")
+                fav = o.get("homeTeamFavorite")
+                spread_str = ""
+                if spread_raw != "":
+                    try:
+                        s = float(spread_raw)
+                        # spread is from home perspective
+                        spread_str = (f"{home['abbr']} {-s:+.1f}" if fav else
+                                      f"{away['abbr']} {s:+.1f}")
+                    except (ValueError, TypeError):
+                        spread_str = str(spread_raw)
+
+                ev_odds = {
+                    "home_ml":    ht.get("moneyLine", ""),
+                    "away_ml":    at.get("moneyLine", ""),
+                    "spread":     spread_str,
+                    "over_under": o.get("overUnder", ""),
+                    "provider":   (o.get("provider") or {}).get("name", "consensus"),
+                }
+
             games.append({
                 "state":  state,
                 "detail": detail,
@@ -1086,6 +1114,7 @@ def _get_espn_scoreboard(sport_path: str, league: str) -> list[dict]:
                 "home":   home,
                 "away":   away,
                 "venue":  comp.get("venue", {}).get("fullName", ""),
+                "odds":   ev_odds,
             })
         return games
     except Exception as e:

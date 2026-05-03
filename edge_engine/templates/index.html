@@ -547,50 +547,112 @@ function fmtK(n) {
   return '$' + n;
 }
 
-// ── Render ESPN live scores ───────────────────────────────────────────────────
-function renderScores(scores) {
+// ── Render ESPN live scores with odds + our picks ─────────────────────────────
+function renderScores(scores, bets) {
   const el = document.getElementById('scores-content');
   if (!el) return;
   if (!scores || !Object.keys(scores).length) { el.innerHTML = ''; return; }
 
+  // Build lookup: any word from team name → bet signal
+  const betMap = {};
+  (bets || []).forEach(b => {
+    if (b.sport === 'POLITICS') return;
+    const words = b.bet_on.toLowerCase().split(/\s+/);
+    words.forEach(w => { if (w.length > 3) betMap[w] = b; });
+    // Also index by game string
+    betMap[b.game.toLowerCase().slice(0, 20)] = b;
+  });
+  function matchBet(game) {
+    const hay = (game.home.name + ' ' + game.away.name).toLowerCase();
+    for (const [k, b] of Object.entries(betMap)) {
+      if (hay.includes(k)) return b;
+    }
+    return null;
+  }
+  function fmtML(ml) {
+    if (ml === '' || ml === null || ml === undefined) return '';
+    const n = parseInt(ml);
+    if (isNaN(n)) return '';
+    return n > 0 ? `+${n}` : `${n}`;
+  }
+
   let html = `<div class="section-title" style="margin-bottom:14px">
-    <div class="dot" style="background:var(--cyan)"></div> Today's Games — Live Scores
-    <span style="font-size:10px;color:var(--muted);margin-left:8px;font-weight:400">ESPN (free, no API key)</span>
+    <div class="dot" style="background:var(--cyan)"></div> Today's Games — Scores &amp; Odds
+    <span style="font-size:10px;color:var(--muted);margin-left:8px;font-weight:400">ESPN live data &bull; odds when available &bull; our picks highlighted</span>
   </div>`;
+
+  // Summary bet callout first if any sports bets exist
+  const sportsBets = (bets || []).filter(b => b.sport !== 'POLITICS');
+  if (!sportsBets.length) {
+    html += `<div style="background:#111827;border:1px solid #f59e0b;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:12px">
+      <span style="color:#f59e0b;font-weight:700">&#9888; No sportsbook odds loaded</span>
+      <span style="color:var(--muted);margin-left:8px">Add <code style="color:var(--cyan)">ODDS_API_KEY</code> to Railway env vars (free at the-odds-api.com — 500 req/month) to see live betting lines &amp; our picks on every game below.</span>
+    </div>`;
+  }
 
   Object.entries(scores).forEach(([league, games]) => {
     if (!games || !games.length) return;
     const live     = games.filter(g => g.state === 'in');
     const upcoming = games.filter(g => g.state === 'pre');
     const final    = games.filter(g => g.state === 'post');
-    const shown    = [...live, ...upcoming, ...final].slice(0, 8);
+    const shown    = [...live, ...upcoming, ...final].slice(0, 10);
 
-    html += `<div style="margin-bottom:18px">
+    html += `<div style="margin-bottom:20px">
       <div style="color:var(--cyan);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">
         ${league}
         <span style="color:var(--muted);font-weight:400;margin-left:4px">(${games.length} games)</span>
         ${live.length ? `<span style="color:var(--green);background:#022c22;padding:2px 8px;border-radius:4px;margin-left:8px;font-size:10px">&#9679; ${live.length} LIVE</span>` : ''}
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">`;
+      <div style="display:flex;flex-wrap:wrap;gap:10px">`;
 
     shown.forEach(g => {
       const isLive  = g.state === 'in';
       const isFinal = g.state === 'post';
-      const bdr     = isLive ? 'var(--green)' : '#1f2937';
-      html += `<div style="background:#0d1117;border:1px solid ${bdr};border-radius:8px;padding:10px 14px;min-width:160px;flex:1;max-width:220px">
-        <div style="font-size:9px;color:${isLive ? 'var(--green)' : 'var(--muted)'};font-weight:700;margin-bottom:5px;letter-spacing:.5px">
-          ${isLive ? '&#9679; LIVE &mdash; ' + g.detail : isFinal ? 'FINAL' : (g.date || '').slice(11) + ' ET'}
+      const betSig  = matchBet(g);
+      const hasBet  = !!betSig;
+      const bdr     = hasBet ? 'var(--green)' : isLive ? '#16a34a' : '#1f2937';
+      const o       = g.odds || {};
+      const homeML  = fmtML(o.home_ml);
+      const awayML  = fmtML(o.away_ml);
+      const hasOdds = homeML || awayML || o.spread || o.over_under;
+
+      html += `<div style="background:#0d1117;border:1px solid ${bdr};border-radius:10px;padding:12px 14px;min-width:180px;flex:1;max-width:240px">
+        <!-- Status row -->
+        <div style="font-size:9px;color:${isLive ? 'var(--green)' : 'var(--muted)'};font-weight:700;letter-spacing:.5px;margin-bottom:6px">
+          ${isLive ? `&#9679; LIVE &mdash; ${g.detail}` : isFinal ? 'FINAL' : `${(g.date||'').slice(11)} ET`}
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-          <span style="font-weight:${g.away.winner ? '700' : '400'};color:${g.away.winner ? 'var(--green)' : 'inherit'}">${g.away.abbr || g.away.name}</span>
-          ${(isLive || isFinal) ? `<span style="font-size:16px;font-weight:700;color:${g.away.winner ? 'var(--green)' : 'inherit'}">${g.away.score || '0'}</span>` :
-            (g.away.record ? `<span style="color:var(--muted);font-size:10px">${g.away.record}</span>` : '')}
+
+        <!-- Teams + scores -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+          <div>
+            <span style="font-weight:${g.away.winner ? '700' : '400'};color:${g.away.winner ? 'var(--green)' : 'inherit'}">${g.away.abbr||g.away.name}</span>
+            ${g.away.record ? `<span style="color:var(--muted);font-size:9px;margin-left:4px">${g.away.record}</span>` : ''}
+          </div>
+          ${(isLive||isFinal) ? `<span style="font-size:18px;font-weight:700;color:${g.away.winner?'var(--green)':'inherit'}">${g.away.score||'0'}</span>`
+            : (awayML ? `<span style="color:${parseInt(awayML)>0?'var(--green)':'var(--muted)'};font-size:12px;font-weight:600">${awayML}</span>` : '')}
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-weight:${g.home.winner ? '700' : '400'};color:${g.home.winner ? 'var(--green)' : 'inherit'}">${g.home.abbr || g.home.name}</span>
-          ${(isLive || isFinal) ? `<span style="font-size:16px;font-weight:700;color:${g.home.winner ? 'var(--green)' : 'inherit'}">${g.home.score || '0'}</span>` :
-            (g.home.record ? `<span style="color:var(--muted);font-size:10px">${g.home.record}</span>` : '')}
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div>
+            <span style="font-weight:${g.home.winner ? '700' : '400'};color:${g.home.winner ? 'var(--green)' : 'inherit'}">${g.home.abbr||g.home.name}</span>
+            ${g.home.record ? `<span style="color:var(--muted);font-size:9px;margin-left:4px">${g.home.record}</span>` : ''}
+          </div>
+          ${(isLive||isFinal) ? `<span style="font-size:18px;font-weight:700;color:${g.home.winner?'var(--green)':'inherit'}">${g.home.score||'0'}</span>`
+            : (homeML ? `<span style="color:${parseInt(homeML)>0?'var(--green)':'var(--muted)'};font-size:12px;font-weight:600">${homeML}</span>` : '')}
         </div>
+
+        <!-- Odds row -->
+        ${hasOdds ? `<div style="font-size:10px;color:var(--muted);border-top:1px solid #1f2937;padding-top:5px;margin-top:2px;display:flex;gap:10px;flex-wrap:wrap">
+          ${o.spread ? `<span>Spread: <strong style="color:var(--cyan)">${o.spread}</strong></span>` : ''}
+          ${o.over_under ? `<span>O/U: <strong style="color:var(--cyan)">${o.over_under}</strong></span>` : ''}
+        </div>` : ''}
+
+        <!-- Our pick badge -->
+        ${hasBet ? `<div style="background:#022c22;border:1px solid var(--green);border-radius:6px;padding:5px 8px;margin-top:7px;font-size:10px">
+          <div style="color:var(--green);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.5px">&#10003; OUR PICK</div>
+          <div style="font-weight:600">${betSig.bet_on}</div>
+          <div style="color:var(--muted)">${betSig.odds_str} &bull; Model: ${betSig.win_pct}% &bull; ${betSig.conf}</div>
+          <div style="color:var(--yellow);margin-top:3px;font-size:9px">$5K win &rarr; stake ${fmtK(stakeToWin(betSig.odds,5000))}</div>
+        </div>` : ''}
       </div>`;
     });
     html += `</div></div>`;
@@ -1200,7 +1262,7 @@ function renderAll(data) {
   renderStocks(data.stocks, 'stocks-content', false);
   renderStocks(data.spacex, 'spacex-content', true);
   renderCrypto(data.crypto);
-  renderScores(data.live_scores || {});
+  renderScores(data.live_scores || {}, data.bets || []);
   renderMicroBets(data.bets || []);
   renderParlays(data.parlays || []);
   renderBets(data.bets);
