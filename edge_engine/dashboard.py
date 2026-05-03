@@ -1,6 +1,7 @@
 """
 dashboard.py — Web dashboard for the Edge Engine.
 Serves a live investing dashboard at http://localhost:5050
+v2026.05.03
 
 Run:  python dashboard.py
 Then open your browser to http://localhost:5050
