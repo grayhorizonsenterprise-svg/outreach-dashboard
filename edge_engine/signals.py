@@ -899,39 +899,34 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
     scout_home_p = scout_result.p_ensemble
     scout_away_p = 1.0 - scout_home_p
 
-    # Also run legacy ESPN model for backward compat factor list
-    espn_home_p, espn_away_p, espn_factors = _predict_game(home, away, sport_name)
-    model_factors = scout_result.factors + espn_factors + intel.get("notes", [])
+    # Our model is 100% independent — books provide the LINE, never the probability
+    model_factors = scout_result.factors + intel.get("notes", [])
+    our_home = float(np.clip(scout_home_p, 0.05, 0.95))
+    our_away = 1.0 - our_home
 
-    # Final blend: 60% full scout + 40% devigged book consensus
-    blended_home = float(np.clip(scout_home_p * 0.60 + home_true * 0.40, 0.05, 0.95))
-    blended_away = float(np.clip(scout_away_p * 0.60 + away_true * 0.40, 0.05, 0.95))
-
-    for team, best_book, best_odds, book_true, blended_true in [
-        (home, best_home[0], best_home[1], home_true, blended_home),
-        (away, best_away[0], best_away[1], away_true, blended_away),
+    for team, best_book, best_odds, book_true, our_true in [
+        (home, best_home[0], best_home[1], home_true, our_home),
+        (away, best_away[0], best_away[1], away_true, our_away),
     ]:
         book_implied = american_to_prob(best_odds)
-        # Edge = blended model probability vs what the best available line implies
-        edge = (blended_true - book_implied) * 100
+        # Edge = OUR independent model probability minus what the book implies
+        edge = (our_true - book_implied) * 100
 
-        # Micro-bet: long-odds underdog with genuine probability — lower edge threshold
-        is_micro = (best_odds >= 300 and blended_true >= 0.18)
+        # Micro-bet: long-odds underdog with genuine model probability
+        is_micro = (best_odds >= 300 and our_true >= 0.18)
         if edge < MIN_BET_EDGE_PCT and not is_micro:
             continue
 
-        ev = (blended_true * (100 / book_implied if best_odds > 0 else 100 / book_implied)) - 100
-        # Use scout confidence if available and it's better
-        sc_conf = scout_result.confidence
-        raw_conf = "HIGH" if blended_true > 0.68 else "MEDIUM" if blended_true > 0.55 else "LOW"
-        conf_rank = {"HIGH": 2, "MEDIUM": 1, "LOW": 0}
-        confidence = sc_conf if conf_rank[sc_conf] >= conf_rank[raw_conf] else raw_conf
+        decimal = (best_odds / 100 + 1) if best_odds > 0 else (100 / abs(best_odds) + 1)
+        ev = (our_true * (decimal - 1) * 100) - ((1 - our_true) * 100)
+        confidence = scout_result.confidence
 
-        # Downgrade on warnings
+        # Downgrade confidence if intel or injuries found warnings
         if (intel["warnings"] or scout_result.warnings) and confidence == "HIGH":
             confidence = "MEDIUM"
 
-        m_vs_b = round((blended_true - book_true) * 100, 1)
+        # model_vs_book shows how much our research diverges from the market
+        m_vs_b = round((our_true - book_true) * 100, 1)
 
         # Vegas Script data — patterns suggesting a predetermined game flow
         is_pick_home = (team == home)
@@ -955,7 +950,8 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             "factors":         scout_result.factors[:5],
         }
 
-        micro_note = " | MICRO BET — long-odds value" if is_micro else ""
+        micro_note = " | MICRO BET — long-odds underdog edge" if is_micro else ""
+        inj_note = f" | {len(scout_result.warnings)} injury alerts" if scout_result.warnings else ""
         signals.append(BetSignal(
             sport=sport_name,
             game=game_str,
@@ -963,18 +959,18 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             book=best_book,
             odds=best_odds,
             implied_prob=round(book_implied, 3),
-            our_prob=round(blended_true, 3),
+            our_prob=round(our_true, 3),
             edge_pct=round(edge, 2),
             expected_value=round(ev, 2),
             confidence=confidence,
-            note=f"Best line: {best_book} | ensemble model ({scout_result.signals_agree} signals){micro_note}",
+            note=f"{scout_result.signals_agree}/4 signals agree | book gap {m_vs_b:+.1f}%{micro_note}{inj_note}",
             commence=commence,
             red_flags=intel["red_flags"],
             warnings=list(set(intel["warnings"] + scout_result.warnings)),
             rules=rules,
             scrubbed=intel["scrubbed"],
-            model_prob=round(blended_true, 3),
-            model_factors=model_factors[:6],
+            model_prob=round(our_true, 3),
+            model_factors=model_factors[:8],
             model_vs_book=m_vs_b,
             micro_bet=is_micro,
         ))

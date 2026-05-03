@@ -77,19 +77,22 @@ class ScoutResult:
     away_team:   str
     sport:       str
 
-    # Probability from each independent model
+    # Probability from each INDEPENDENT model layer (books never touch these)
     p_efficiency:   float = 0.50   # off/def rating matchup
-    p_pythagorean:  float = 0.50   # point-differential model
-    p_rest:         float = 0.50   # rest advantage
-    p_weather:      float = 0.50   # weather impact
-    p_line_move:    float = 0.50   # line movement signal
-    p_ensemble:     float = 0.50   # final weighted blend for HOME team
+    p_pythagorean:  float = 0.50   # point-differential model (Pythagorean expectation)
+    p_form:         float = 0.50   # recent form — last 7-10 games, exponentially weighted
+    p_rest:         float = 0.50   # rest/fatigue advantage
+    p_weather:      float = 0.50   # weather impact (outdoor sports)
+    p_line_move:    float = 0.50   # sharp line movement signal (modifier, not primary)
+    p_ensemble:     float = 0.50   # final weighted model — 100% ours, no book blending
 
+    injury_adj:    float = 0.0     # direct probability adjustment from injury reports
     confidence:    str  = "LOW"    # HIGH / MEDIUM / LOW
     signals_agree: int  = 0        # count of independent signals pointing same way
     pick:          str  = ""       # "HOME" or "AWAY"
     pick_team:     str  = ""       # actual team name to bet
     pick_pct:      float = 0.0     # final win probability for the pick
+    book_implied:  float = 0.50    # book's implied probability (for edge display only)
 
     home_rest: int   = -1
     away_rest: int   = -1
@@ -227,6 +230,150 @@ def _load_standings(sport: str) -> dict:
         }
     _STANDINGS[sport] = result
     return result
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# RECENT FORM  — last N games, exponentially weighted (more predictive than season avg)
+# ══════════════════════════════════════════════════════════════════════════════
+
+_FORM_CACHE: dict = {}
+
+def _get_recent_form(team: str, sport: str, n: int = 10) -> tuple[float, str]:
+    """
+    Pull last N game results from ESPN schedule.
+    Exponential decay weighting: most recent game weights 1.0, drops ~50% every 5 games.
+    Returns (weighted_win_pct 0-1, description).
+    """
+    key = f"{sport}:{team}:form"
+    global _FORM_CACHE
+    if key in _FORM_CACHE:
+        return _FORM_CACHE[key]
+
+    team_id = _get_team_id(team, sport)
+    lm = ESPN_MAP.get(sport)
+    if not team_id or not lm:
+        _FORM_CACHE[key] = (0.5, "form unavailable")
+        return 0.5, "form unavailable"
+
+    sp, lg = lm
+    data = _espn_get(
+        f"https://site.api.espn.com/apis/site/v2/sports/{sp}/{lg}/teams/{team_id}/schedule"
+    )
+    today = date.today()
+    results = []
+
+    events = sorted(
+        data.get("events", []),
+        key=lambda e: e.get("date", ""),
+        reverse=True,   # most recent first
+    )
+    for ev in events:
+        ds = (ev.get("date") or "")[:10]
+        try:
+            gd = datetime.strptime(ds, "%Y-%m-%d").date()
+            if gd >= today:
+                continue  # future game
+        except Exception:
+            continue
+
+        comps = ev.get("competitions", [{}])
+        if not comps:
+            continue
+        for c in comps[0].get("competitors", []):
+            tid = c.get("id") or c.get("team", {}).get("id", "")
+            if str(tid) == str(team_id):
+                won = c.get("winner", False)
+                results.append(1 if won else 0)
+                break
+
+        if len(results) >= n:
+            break
+
+    if not results:
+        _FORM_CACHE[key] = (0.5, "no recent games")
+        return 0.5, "no recent games"
+
+    # Exponential decay: game i (0=most recent) gets weight 2^(-i/5)
+    weights = [2.0 ** (-i / 5.0) for i in range(len(results))]
+    ww = sum(w * r for w, r in zip(weights, results))
+    tw = sum(weights)
+    form_pct = float(np.clip(ww / tw, 0.10, 0.90))
+
+    # Streak component
+    streak = 0
+    for r in results:
+        if r == results[0]:
+            streak += 1
+        else:
+            break
+    streak_note = f"W{streak}" if results[0] == 1 else f"L{streak}"
+
+    desc = f"{sum(results)}W-{len(results)-sum(results)}L (L{len(results)}) {streak_note}"
+    _FORM_CACHE[key] = (form_pct, desc)
+    return form_pct, desc
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# INJURY INTELLIGENCE  — ESPN public injury API (free, no key)
+# ══════════════════════════════════════════════════════════════════════════════
+
+_INJ_CACHE: dict = {}
+
+# Position impact weights — how much a missing player at this position hurts
+_POS_IMPACT = {
+    # NBA
+    "PG": 0.030, "SG": 0.022, "SF": 0.022, "PF": 0.018, "C": 0.018,
+    # NFL — QB is massive
+    "QB": 0.055, "WR": 0.018, "RB": 0.016, "TE": 0.014, "OL": 0.010,
+    "DE": 0.014, "DT": 0.012, "LB": 0.012, "CB": 0.014, "S": 0.012,
+    # MLB
+    "SP": 0.030, "RP": 0.010, "C": 0.012, "1B": 0.010, "SS": 0.014,
+    # NHL
+    "G": 0.035, "D": 0.018, "LW": 0.014, "RW": 0.014, "C": 0.016,
+}
+
+def _injury_impact(team: str, sport: str) -> tuple[float, list[str]]:
+    """
+    ESPN public injury report → estimate probability penalty for missing players.
+    Returns (prob_adj ≤ 0, notes_list).  Negative = team is hurt; only hurts, never helps.
+    """
+    key = f"{sport}:{team}:inj"
+    global _INJ_CACHE
+    if key in _INJ_CACHE:
+        return _INJ_CACHE[key]
+
+    team_id = _get_team_id(team, sport)
+    lm = ESPN_MAP.get(sport)
+    if not team_id or not lm:
+        _INJ_CACHE[key] = (0.0, [])
+        return 0.0, []
+
+    sp, lg = lm
+    data = _espn_get(
+        f"https://site.api.espn.com/apis/site/v2/sports/{sp}/{lg}/teams/{team_id}/injuries"
+    )
+    adj = 0.0
+    notes: list[str] = []
+
+    for inj in (data.get("injuries") or []):
+        status = (inj.get("status") or "").lower()
+        athlete = inj.get("athlete") or {}
+        name = athlete.get("displayName", "?")
+        pos  = (athlete.get("position") or {}).get("abbreviation", "")
+        impact = _POS_IMPACT.get(pos, 0.010)
+
+        if "out" in status:
+            adj -= impact
+            notes.append(f"{name} ({pos}) OUT")
+        elif "doubtful" in status:
+            adj -= impact * 0.80
+            notes.append(f"{name} ({pos}) DOUBTFUL")
+        elif "questionable" in status:
+            adj -= impact * 0.35
+
+    adj = float(np.clip(adj, -0.18, 0.0))
+    _INJ_CACHE[key] = (adj, notes[:4])  # cap at 4 notable injuries
+    return adj, notes[:4]
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -523,18 +670,22 @@ def scout_game(home: str, away: str, sport: str, venue: str,
                home_odds: int, away_odds: int,
                book_home_prob: float) -> ScoutResult:
     """
-    Full ensemble prediction for a single game.
-    Call this once per game per 20-minute cycle — all internal calls are cached.
+    Full independent ensemble prediction.
+    Book odds are accepted ONLY to track line movement and display edge.
+    They are NEVER blended into our probability — that would be mirroring the books.
     """
     sn = sport.upper()
     game_key = f"{sn}:{away}@{home}"
     result = ScoutResult(
         game=game_key, home_team=home, away_team=away, sport=sn,
+        book_implied=round(book_home_prob, 3),
         ts=datetime.now().strftime("%H:%M")
     )
     factors, warnings = [], []
 
-    # ── 1. Load standings & compute Pythagorean ───────────────────────────────
+    # ── 1. Pythagorean expectation ────────────────────────────────────────────
+    # Point differential predicts future wins better than actual W-L record.
+    # Removes luck from close-game outcomes. Most analytically validated model.
     standings = _load_standings(sn)
     from difflib import get_close_matches
 
@@ -557,24 +708,49 @@ def scout_game(home: str, away: str, sport: str, venue: str,
         home_pyth = _pythag_win_pct(hd["ppg"], hd["opp_ppg"], sn)
         away_pyth = _pythag_win_pct(ad["ppg"], ad["opp_ppg"], sn)
         total_pyth = home_pyth + away_pyth
-        p_pyth = float(np.clip(home_pyth / total_pyth if total_pyth > 0 else 0.5,
-                               0.15, 0.85))
+        p_pyth = float(np.clip(home_pyth / total_pyth if total_pyth > 0 else 0.5, 0.15, 0.85))
         result.p_pythagorean = p_pyth
-        factors.append(f"Pyth W%: {home} {home_pyth*100:.0f}% vs {away} {away_pyth*100:.0f}%")
+        factors.append(f"Pythagorean: {home} {home_pyth*100:.0f}% vs {away} {away_pyth*100:.0f}% (pt-diff model)")
     else:
         result.p_pythagorean = 0.5
 
-    # ── 2. Team efficiency (ESPN stats API) ───────────────────────────────────
+    # ── 2. Team efficiency (off/def rating matchup) ───────────────────────────
+    # Projected score from home offense vs away defense, and vice versa.
+    # Catches teams with lopsided offensive/defensive profiles that raw W% misses.
     home_id = _get_team_id(home, sn)
     away_id = _get_team_id(away, sn)
     if home_id and away_id:
         p_eff, eff_note = _efficiency_prob(home_id, away_id, sn)
         result.p_efficiency = p_eff
-        factors.append(f"Efficiency: {eff_note}")
+        factors.append(f"Efficiency matchup: {eff_note}")
     else:
         result.p_efficiency = 0.5
 
-    # ── 3. Rest advantage ─────────────────────────────────────────────────────
+    # ── 3. Recent form (last 7-10 games, exponentially weighted) ─────────────
+    # Season averages lag. Recent form (last 2-3 weeks) predicts tonight better.
+    # Exponential decay: last game counts ~2x the game from 5 games ago.
+    h_form, h_form_desc = _get_recent_form(home, sn, n=10)
+    a_form, a_form_desc = _get_recent_form(away, sn, n=10)
+    total_form = h_form + a_form
+    p_form = float(np.clip(h_form / total_form if total_form > 0 else 0.5, 0.15, 0.85))
+    result.p_form = p_form
+    factors.append(f"Recent form: {home} {h_form_desc} | {away} {a_form_desc}")
+
+    # ── 4. Injury intelligence (ESPN public API) ──────────────────────────────
+    # Missing a QB costs ~5.5% probability. Missing a starting C costs ~3.5%.
+    # Position-weighted so we don't overreact to backup injuries.
+    h_inj_adj, h_inj_notes = _injury_impact(home, sn)
+    a_inj_adj, a_inj_notes = _injury_impact(away, sn)
+    inj_net = h_inj_adj - a_inj_adj   # positive = away more injured → home benefits
+    result.injury_adj = round(inj_net, 3)
+    if h_inj_notes:
+        warnings.extend([f"{home}: {n}" for n in h_inj_notes])
+        factors.append(f"Injuries {home}: {', '.join(h_inj_notes[:2])}")
+    if a_inj_notes:
+        warnings.extend([f"{away}: {n}" for n in a_inj_notes])
+        factors.append(f"Injuries {away}: {', '.join(a_inj_notes[:2])}")
+
+    # ── 5. Rest/fatigue advantage ─────────────────────────────────────────────
     home_rest = _rest_days(home, sn)
     away_rest = _rest_days(away, sn)
     result.home_rest = home_rest
@@ -583,66 +759,97 @@ def scout_game(home: str, away: str, sport: str, venue: str,
     result.p_rest = float(np.clip(0.5 + rest_adj, 0.25, 0.75))
     if rest_note:
         factors.append(rest_note)
-    if home_rest == 1 or away_rest == 1:
-        warnings.append(f"Back-to-back: {home if home_rest == 1 else away}")
+    if home_rest == 1:
+        warnings.append(f"{home} playing back-to-back — cover rate drops to 44%")
+    if away_rest == 1:
+        warnings.append(f"{away} playing back-to-back — exploitable fatigue")
 
-    # ── 4. Weather ────────────────────────────────────────────────────────────
+    # ── 6. Weather (outdoor sports only) ─────────────────────────────────────
     if sn in OUTDOOR_SPORTS and venue:
         w_adj, wind, w_note = _weather_prob_adj(venue, sn)
-        result.p_weather   = float(np.clip(0.5 + w_adj, 0.25, 0.75))
-        result.wind_mph    = wind
+        result.p_weather = float(np.clip(0.5 + w_adj, 0.30, 0.70))
+        result.wind_mph  = wind
         if w_note:
             factors.append(w_note)
         if wind >= 15:
-            warnings.append(f"Wind {wind:.0f}mph — outdoor game conditions")
+            warnings.append(f"Wind {wind:.0f}mph — outdoor, defense-friendly game")
     else:
         result.p_weather = 0.5
 
-    # ── 5. Home-field advantage ───────────────────────────────────────────────
-    ha = HOME_ADV.get(sn, 0.03)
-    # (baked into the final ensemble below, not a separate model)
+    # ── 7. Home-field advantage (sport-calibrated) ────────────────────────────
+    ha = HOME_ADV.get(sn, 0.030)
+    p_home = float(np.clip(0.5 + ha, 0.50, 0.60))
 
-    # ── 6. Line movement ─────────────────────────────────────────────────────
+    # ── 8. Line movement (sharp money signal — MODIFIER only) ────────────────
+    # Sharp bettors are informed — their line moves correlate with outcomes.
+    # Used as a confidence modifier, NOT as a primary model input.
+    # This keeps our model independent while still respecting informed market signals.
     p_lm, line_move, lm_note = _line_move_signal(game_key, home_odds, away_odds)
     result.p_line_move = p_lm
     result.line_move   = line_move
-    factors.append(f"Line move: {lm_note}")
+    factors.append(f"Sharp money: {lm_note}")
 
-    # ── Ensemble blend ────────────────────────────────────────────────────────
-    # Weights: line_move 30, efficiency 25, pythagorean 20, rest 15, weather 5, home 5
-    W = [0.30, 0.25, 0.20, 0.15, 0.05, 0.05]
-    P = [result.p_line_move, result.p_efficiency, result.p_pythagorean,
-         result.p_rest, result.p_weather, min(0.5 + ha, 0.65)]
+    # ── Pure model ensemble (NO book blending) ────────────────────────────────
+    # Weights derived from sports analytics literature on predictive accuracy:
+    #   Pythagorean 30% — most validated formula (removes lucky W-L record)
+    #   Efficiency   20% — catches mismatches raw W% misses
+    #   Recent form  20% — season averages lag; last 2-3 weeks is better
+    #   Rest         15% — fatigue is real and consistent
+    #   Weather       5% — outdoor sports only, genuine impact
+    #   Home field    5% — small but consistent historical edge
+    #   Line move    5%  — sharp money modifier (low weight to keep model independent)
+    W = [0.30, 0.20, 0.20, 0.15, 0.05, 0.05, 0.05]
+    P = [result.p_pythagorean, result.p_efficiency, result.p_form,
+         result.p_rest, result.p_weather, p_home, result.p_line_move]
     p_ensemble = float(np.clip(sum(w * p for w, p in zip(W, P)), 0.10, 0.90))
 
-    # Blend with book consensus (books are very efficient — never ignore them entirely)
-    p_final = float(np.clip(p_ensemble * 0.65 + book_home_prob * 0.35, 0.10, 0.90))
+    # Apply injury adjustment directly (not part of ensemble weights — it's a direct impact)
+    p_final = float(np.clip(p_ensemble + inj_net, 0.08, 0.92))
     result.p_ensemble = p_final
 
-    # ── Pick & confidence ─────────────────────────────────────────────────────
+    # ── Confidence: count how many independent signals agree ──────────────────
     if p_final >= 0.50:
         result.pick = "HOME"; result.pick_team = home
         result.pick_pct = round(p_final * 100, 1)
+        thresh_agree = 0.52
+        agree = sum(1 for p in [result.p_pythagorean, result.p_efficiency,
+                                  result.p_form, result.p_rest] if p > thresh_agree)
     else:
         result.pick = "AWAY"; result.pick_team = away
         result.pick_pct = round((1 - p_final) * 100, 1)
+        thresh_agree = 0.48
+        agree = sum(1 for p in [result.p_pythagorean, result.p_efficiency,
+                                  result.p_form, result.p_rest] if p < thresh_agree)
 
-    # Count independent signals that agree with the pick
-    thresh = 0.52
-    models = [result.p_line_move, result.p_efficiency,
-              result.p_pythagorean, result.p_rest]
-    if result.pick == "HOME":
-        agree = sum(1 for p in models if p > thresh)
-    else:
-        agree = sum(1 for p in models if p < (1 - thresh))
+    # Line movement agreement boosts confidence; disagreement is a warning
+    lm_agrees = (result.pick == "HOME" and p_lm > 0.52) or \
+                (result.pick == "AWAY" and p_lm < 0.48)
+    lm_disagrees = (result.pick == "HOME" and p_lm < 0.45) or \
+                   (result.pick == "AWAY" and p_lm > 0.55)
+
+    if lm_agrees:
+        agree += 1  # sharp money confirms our independent pick
+        factors.append("Sharp money AGREES with model pick")
+    if lm_disagrees:
+        warnings.append("Sharp money DIVERGES from model — reduce stake size")
+
     result.signals_agree = agree
 
-    if agree >= 3 and result.pick_pct >= 65:
+    # HIGH: 3+ signals agree, pick_pct >= 64%
+    # MEDIUM: 2+ signals agree, pick_pct >= 59%
+    if agree >= 3 and result.pick_pct >= 64:
         result.confidence = "HIGH"
-    elif agree >= 2 and result.pick_pct >= 60:
+    elif agree >= 2 and result.pick_pct >= 59:
         result.confidence = "MEDIUM"
     else:
         result.confidence = "LOW"
+
+    # Extra warning if our model strongly disagrees with the book
+    model_vs_book_gap = abs(p_final - book_home_prob) * 100
+    if model_vs_book_gap >= 15:
+        factors.append(f"Model vs book gap: {model_vs_book_gap:.0f}% — strong divergence = potential edge")
+    elif model_vs_book_gap >= 8:
+        factors.append(f"Model vs book gap: {model_vs_book_gap:.0f}% — meaningful divergence")
 
     result.factors  = factors
     result.warnings = warnings
@@ -661,14 +868,16 @@ def get_scout_cache() -> dict:
 
 def clear_session_caches():
     """Call at the start of each refresh cycle to clear staleable data."""
-    global _TEAM_STATS, _REST, _WEATHER, _STANDINGS, _TEAM_IDS
+    global _TEAM_STATS, _REST, _WEATHER, _STANDINGS, _TEAM_IDS, _FORM_CACHE, _INJ_CACHE
     _TEAM_STATS.clear()
     _REST.clear()
     _WEATHER.clear()
     _STANDINGS.clear()
     _TEAM_IDS.clear()
+    _FORM_CACHE.clear()
+    _INJ_CACHE.clear()
     # NOTE: Do NOT clear _LINE_HISTORY or _SCOUT_CACHE —
-    # line history needs to persist across cycles to track movement
+    # line history must persist across cycles to track movement
 
 
 def get_best_picks(min_confidence: str = "MEDIUM",
