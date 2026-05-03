@@ -52,6 +52,12 @@ CACHE: dict = {
 }
 CACHE_LOCK = threading.Lock()
 
+# ── Odds API rate limiter — fetch at most twice a day (8am + 6pm) ─────────────
+# Free tier = 500 requests/month. 7 sports × 2/day × 30 days = 420 calls/month.
+_last_odds_fetch: datetime | None = None
+_raw_bet_sigs: list = []   # preserved between stock/crypto refreshes
+_ODDS_FETCH_HOURS = {8, 18}  # 8am and 6pm local server time
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 # DATA BUILDERS
@@ -188,18 +194,31 @@ def market_regime_check() -> str:
         return "UNKNOWN"
 
 
+def _should_fetch_odds() -> bool:
+    """True only on first load or at 8am/6pm — keeps usage under 500 req/month."""
+    global _last_odds_fetch
+    now = datetime.now()
+    if _last_odds_fetch is None:
+        return True
+    age_hours = (now - _last_odds_fetch).total_seconds() / 3600
+    # Refresh if we're in a designated hour AND haven't fetched in the last hour
+    if now.hour in _ODDS_FETCH_HOURS and age_hours >= 1:
+        return True
+    return False
+
+
 def refresh_cache():
-    """Full data refresh — runs on startup and every 15 minutes."""
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] Refreshing cache...")
+    """Full data refresh — stocks/crypto every 30 min; odds only at 8am + 6pm."""
+    global _last_odds_fetch, _raw_bet_sigs
+    now_str = datetime.now().strftime('%H:%M:%S')
+    print(f"[{now_str}] Refreshing cache...")
     try:
         congress = get_congress_buys()
         all_signals = get_stock_signals()
 
-        # Build per-category rows
         spacex_rows = build_stock_rows(all_signals, congress, CATEGORIES["SpaceX Ecosystem"])
         stock_rows  = build_stock_rows(all_signals, congress)
 
-        # Warnings-only view
         all_warnings = []
         for row in stock_rows:
             if row["has_warning"]:
@@ -211,15 +230,24 @@ def refresh_cache():
                 })
 
         crypto_sigs = get_crypto_signals()
-        bet_sigs    = get_betting_signals()
-        crypto_rows = build_crypto_rows(crypto_sigs)
-        bet_rows    = build_bet_rows(bet_sigs)
+
+        # Odds API — rate-limited to 2x/day to stay under 500 req/month free tier
+        if _should_fetch_odds():
+            print(f"[{now_str}] Fetching fresh odds from API...")
+            _raw_bet_sigs   = get_betting_signals()
+            _last_odds_fetch = datetime.now()
+        else:
+            next_hour = min((h for h in sorted(_ODDS_FETCH_HOURS) if h > datetime.now().hour), default=min(_ODDS_FETCH_HOURS))
+            print(f"[{now_str}] Reusing cached odds (next fetch at {next_hour}:00)")
+
+        bet_rows    = build_bet_rows(_raw_bet_sigs)
         regime      = market_regime_check()
-        action_plan = get_action_plan(all_signals, crypto_sigs, bet_sigs, bankroll=100.0)
+        action_plan = get_action_plan(all_signals, crypto_sigs, _raw_bet_sigs, bankroll=100.0)
+        crypto_rows = build_crypto_rows(crypto_sigs)
 
         scout_picks = get_scout_picks()
         live_scores = get_live_scores()
-        parlays     = get_smart_parlays(bet_sigs)
+        parlays     = get_smart_parlays(_raw_bet_sigs)
 
         with CACHE_LOCK:
             CACHE.update({
@@ -247,33 +275,25 @@ def refresh_cache():
 
 def _bet_scout_refresh():
     """
-    Lightweight bet-only refresh — every 20 minutes during 7am-10pm.
-    Only re-fetches betting signals and scout picks; leaves stocks/crypto untouched.
-    Captures line movement between cycles (that's where the edge builds up).
+    Lightweight ESPN-only refresh — every 20 minutes during 7am-10pm.
+    Updates live scores and scout picks using CACHED odds (no Odds API calls).
+    Odds API is only called twice daily in refresh_cache() to preserve quota.
     """
     while True:
         time.sleep(1200)  # 20 minutes
         now = datetime.now()
         if 7 <= now.hour < 22:  # daytime only
-            print(f"[{now.strftime('%H:%M:%S')}] Scout refresh (20-min cycle)...")
+            print(f"[{now.strftime('%H:%M:%S')}] ESPN refresh (scores + scout, no odds call)...")
             try:
-                bet_sigs    = get_betting_signals()
-                bet_rows    = build_bet_rows(bet_sigs)
                 scout_picks = get_scout_picks()
                 live_scores = get_live_scores()
-                parlays     = get_smart_parlays(bet_sigs)
+                # Rebuild parlays from cached odds signals — no new API call
+                parlays = get_smart_parlays(_raw_bet_sigs)
                 with CACHE_LOCK:
-                    CACHE["bets"]        = bet_rows
                     CACHE["scout_picks"] = scout_picks
                     CACHE["live_scores"] = live_scores
                     CACHE["parlays"]     = parlays
-                    # Update action plan bets portion
-                    if CACHE.get("action_plan"):
-                        from signals import get_action_plan as _gap
-                        # lightweight: reuse cached stock/crypto signals
-                        pass
-                print(f"[{now.strftime('%H:%M:%S')}] Scout done: {len(bet_rows)} bets | "
-                      f"{len(scout_picks)} picks")
+                print(f"[{now.strftime('%H:%M:%S')}] ESPN done: {len(scout_picks)} picks | scores updated")
             except Exception as e:
                 print(f"[SCOUT ERROR] {e}")
 
