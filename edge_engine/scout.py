@@ -880,6 +880,50 @@ def clear_session_caches():
     # line history must persist across cycles to track movement
 
 
+# ── Keywords that signal a meaningful roster/situation change ─────────────────
+_NEWS_KEYWORDS = {
+    "injur", "scratch", "suspend", "questionable", "ruled out", "doubtful",
+    "placed on", "day-to-day", "inactive", "concussion", "knee", "ankle",
+    "hamstring", "shoulder", "wrist", "illness", "flu", "not play",
+    "benched", "limited", "will miss", "out for", "starting lineup",
+}
+
+
+def get_game_news(home: str, away: str, sport: str) -> list[str]:
+    """
+    ESPN team news for both squads — free endpoint, no key needed.
+    Returns headline strings that contain impact keywords (injury, suspension, etc).
+    Called every 20 min to catch late scratches before the next odds refresh.
+    """
+    lm = ESPN_MAP.get(sport.upper())
+    if not lm:
+        return []
+    sp, lg = lm
+    alerts = []
+    for team, side in [(home, "HOME"), (away, "AWAY")]:
+        team_id = _get_team_id(team, sport.upper())
+        if not team_id:
+            continue
+        data = _espn_get(
+            f"https://site.api.espn.com/apis/site/v2/sports/{sp}/{lg}/teams/{team_id}/news?limit=8"
+        )
+        for art in data.get("articles", [])[:8]:
+            text = (art.get("headline", "") + " " + art.get("description", "")).lower()
+            if any(kw in text for kw in _NEWS_KEYWORDS):
+                alerts.append(f"[{side}] {art.get('headline','')[:90]}")
+                if len(alerts) >= 4:
+                    break
+        if len(alerts) >= 4:
+            break
+    return alerts
+
+
+def refresh_injury_cache():
+    """Clear only the injury cache — call before rescore to get fresh data."""
+    global _INJ_CACHE
+    _INJ_CACHE.clear()
+
+
 def get_best_picks(min_confidence: str = "MEDIUM",
                    min_pct: float = 60.0) -> list[ScoutResult]:
     """

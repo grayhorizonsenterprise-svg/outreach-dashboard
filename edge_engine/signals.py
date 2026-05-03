@@ -1467,3 +1467,93 @@ def get_action_plan(stocks: list, cryptos: list, bets: list,
         "generated": datetime.now().strftime("%Y-%m-%d %H:%M"),
     }
     return plays
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# INTRA-DAY RESCORE — refresh win% with fresh injuries + news, no Odds API call
+# ══════════════════════════════════════════════════════════════════════════════
+
+def rescore_bets(cached_sigs: list) -> list:
+    """
+    Re-evaluate cached BetSignal objects using fresh ESPN data (free, no key).
+    Clears injury cache so late scratches + game-day decisions are picked up.
+    Also pulls ESPN news headlines for roster/situation keywords.
+    Called every 20 min by the scout refresh thread — never touches Odds API.
+    """
+    if not cached_sigs:
+        return cached_sigs
+
+    import dataclasses
+    from scout import _injury_impact, get_game_news, refresh_injury_cache
+
+    # Fresh injury data — clear stale cache, re-pull from ESPN
+    refresh_injury_cache()
+
+    updated = []
+    for sig in cached_sigs:
+        try:
+            sn = sig.sport.upper()
+            # Sports where injury/news model doesn't apply
+            if sn in ("POLITICS", "MMA", "TENNIS", "BOXING", "GOLF"):
+                updated.append(sig)
+                continue
+
+            # Parse "Away @ Home" format
+            if " @ " not in sig.game:
+                updated.append(sig)
+                continue
+            away_str, home_str = [t.strip() for t in sig.game.split(" @ ", 1)]
+
+            # Fresh injury adjustment
+            h_inj, h_warns = _injury_impact(home_str, sn)
+            a_inj, a_warns = _injury_impact(away_str, sn)
+            inj_net = h_inj - a_inj  # positive = away more injured → benefits home
+
+            # model_prob is always home-team probability
+            base_home = sig.model_prob
+            new_home  = float(np.clip(base_home + inj_net, 0.08, 0.92))
+
+            # Determine which side we're betting (home or away)
+            home_words = set(home_str.lower().split())
+            bet_words  = set(sig.bet_on.lower().split())
+            is_home_bet = bool(home_words & bet_words)
+            new_prob = new_home if is_home_bet else (1.0 - new_home)
+
+            # Recompute edge vs book implied probability
+            o = sig.odds
+            decimal   = (o / 100 + 1) if o > 0 else (100 / abs(o) + 1)
+            book_impl = 1.0 / max(decimal, 1.001)
+            new_edge  = round((new_prob - book_impl) * 100, 2)
+
+            # ESPN news — catch late scratches, suspensions, lineup changes
+            news_alerts = get_game_news(home_str, away_str, sn)
+
+            # Merge all warnings
+            all_warns = list(sig.warnings or [])
+            for w in (h_warns + [f"AWAY: {w}" for w in a_warns] + news_alerts):
+                if w not in all_warns:
+                    all_warns.append(w)
+
+            # Reclassify bet type with updated probability
+            is_micro = sig.odds >= 250
+            if new_prob >= 0.65:
+                new_type = "SAFE"
+            elif is_micro:
+                new_type = "LONGSHOT"
+            else:
+                new_type = "VALUE"
+
+            updated.append(dataclasses.replace(
+                sig,
+                our_prob=new_prob,
+                edge_pct=new_edge,
+                warnings=all_warns[:8],
+                bet_type=new_type,
+            ))
+        except Exception:
+            updated.append(sig)
+
+    changed = sum(1 for a, b in zip(cached_sigs, updated) if round(a.our_prob, 3) != round(b.our_prob, 3))
+    if changed:
+        print(f"  [rescore] {changed} bets updated from fresh injury/news data")
+    return updated

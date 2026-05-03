@@ -29,7 +29,8 @@ from config import (
 from signals import (
     get_stock_signals, get_crypto_signals,
     get_betting_signals, get_congress_buys, StockSignal,
-    get_action_plan, get_scout_picks, get_live_scores, get_smart_parlays
+    get_action_plan, get_scout_picks, get_live_scores, get_smart_parlays,
+    rescore_bets,
 )
 from patterns import detect_patterns, bad_stock_warnings
 
@@ -283,17 +284,22 @@ def _bet_scout_refresh():
         time.sleep(1200)  # 20 minutes
         now = datetime.now()
         if 7 <= now.hour < 22:  # daytime only
-            print(f"[{now.strftime('%H:%M:%S')}] ESPN refresh (scores + scout, no odds call)...")
+            print(f"[{now.strftime('%H:%M:%S')}] Scout refresh: injuries + news + scores (no odds API call)...")
             try:
-                scout_picks = get_scout_picks()
-                live_scores = get_live_scores()
-                # Rebuild parlays from cached odds signals — no new API call
-                parlays = get_smart_parlays(_raw_bet_sigs)
+                # Re-score cached bets with fresh ESPN injury reports + news headlines
+                # Catches late scratches, game-day decisions, suspensions between odds fetches
+                rescored     = rescore_bets(_raw_bet_sigs)
+                bet_rows     = build_bet_rows(rescored)
+                scout_picks  = get_scout_picks()
+                live_scores  = get_live_scores()
+                parlays      = get_smart_parlays(rescored)
                 with CACHE_LOCK:
+                    CACHE["bets"]        = bet_rows
                     CACHE["scout_picks"] = scout_picks
                     CACHE["live_scores"] = live_scores
                     CACHE["parlays"]     = parlays
-                print(f"[{now.strftime('%H:%M:%S')}] ESPN done: {len(scout_picks)} picks | scores updated")
+                print(f"[{now.strftime('%H:%M:%S')}] Scout done: {len(bet_rows)} bets rescored | "
+                      f"{len(scout_picks)} picks | scores updated")
             except Exception as e:
                 print(f"[SCOUT ERROR] {e}")
 
