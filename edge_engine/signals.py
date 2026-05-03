@@ -743,6 +743,7 @@ class BetSignal:
     model_prob:    float = 0.0                       # our ESPN-based probability
     model_factors: list  = field(default_factory=list)  # what drove our model
     model_vs_book: float = 0.0                       # our prob minus book consensus
+    micro_bet: bool = False                          # long-odds value underdog (+300 to +2000)
 
 def _get_odds_data(sport: str) -> list:
     if not ODDS_KEY:
@@ -914,7 +915,9 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
         # Edge = blended model probability vs what the best available line implies
         edge = (blended_true - book_implied) * 100
 
-        if edge < MIN_BET_EDGE_PCT:
+        # Micro-bet: long-odds underdog with genuine probability — lower edge threshold
+        is_micro = (best_odds >= 300 and blended_true >= 0.18)
+        if edge < MIN_BET_EDGE_PCT and not is_micro:
             continue
 
         ev = (blended_true * (100 / book_implied if best_odds > 0 else 100 / book_implied)) - 100
@@ -952,6 +955,7 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             "factors":         scout_result.factors[:5],
         }
 
+        micro_note = " | MICRO BET — long-odds value" if is_micro else ""
         signals.append(BetSignal(
             sport=sport_name,
             game=game_str,
@@ -963,7 +967,7 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             edge_pct=round(edge, 2),
             expected_value=round(ev, 2),
             confidence=confidence,
-            note=f"Best line: {best_book} | ensemble model ({scout_result.signals_agree} signals)",
+            note=f"Best line: {best_book} | ensemble model ({scout_result.signals_agree} signals){micro_note}",
             commence=commence,
             red_flags=intel["red_flags"],
             warnings=list(set(intel["warnings"] + scout_result.warnings)),
@@ -972,6 +976,7 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             model_prob=round(blended_true, 3),
             model_factors=model_factors[:6],
             model_vs_book=m_vs_b,
+            micro_bet=is_micro,
         ))
 
     return signals
@@ -1038,6 +1043,123 @@ def get_scout_picks() -> list[dict]:
             "ts":            p.ts,
         })
     return out
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ESPN LIVE SCORES  (free, no key, always available)
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _get_espn_scoreboard(sport_path: str, league: str) -> list[dict]:
+    url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_path}/{league}/scoreboard"
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=8)
+        if r.status_code != 200:
+            return []
+        games = []
+        for ev in r.json().get("events", []):
+            comps = ev.get("competitions", [{}])
+            if not comps:
+                continue
+            comp = comps[0]
+            status = ev.get("status", {})
+            state  = status.get("type", {}).get("state", "pre")   # pre/in/post
+            detail = status.get("type", {}).get("shortDetail", "")
+
+            teams = []
+            for c in comp.get("competitors", []):
+                teams.append({
+                    "name":   c.get("team", {}).get("displayName", ""),
+                    "abbr":   c.get("team", {}).get("abbreviation", ""),
+                    "score":  c.get("score", "0"),
+                    "home":   c.get("homeAway") == "home",
+                    "winner": c.get("winner", False),
+                    "record": (c.get("records") or [{}])[0].get("summary", ""),
+                })
+            if len(teams) < 2:
+                continue
+            home = next((t for t in teams if t["home"]), teams[0])
+            away = next((t for t in teams if not t["home"]), teams[1])
+            games.append({
+                "state":  state,
+                "detail": detail,
+                "date":   ev.get("date", "")[:16].replace("T", " "),
+                "home":   home,
+                "away":   away,
+                "venue":  comp.get("venue", {}).get("fullName", ""),
+            })
+        return games
+    except Exception as e:
+        print(f"  [!] ESPN scoreboard ({league}): {e}")
+        return []
+
+
+def get_live_scores() -> dict:
+    """Get live + today's scores for all major sports. Free, no key needed."""
+    leagues = [
+        ("NBA", "basketball", "nba"),
+        ("MLB", "baseball",   "mlb"),
+        ("NFL", "football",   "nfl"),
+        ("NHL", "hockey",     "nhl"),
+        ("MLS", "soccer",     "usa.1"),
+    ]
+    results = {}
+    for name, sp, lg in leagues:
+        games = _get_espn_scoreboard(sp, lg)
+        if games:
+            results[name] = games
+            print(f"  ESPN scores: {name} — {len(games)} games")
+    return results
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SMART PARLAYS  — combine HIGH confidence picks into big-payout tickets
+# ══════════════════════════════════════════════════════════════════════════════
+
+def get_smart_parlays(signals: list) -> list[dict]:
+    """
+    Build 2 and 3-leg parlays from HIGH confidence, positive-EV sports picks.
+    Only uses different games per parlay. Returns top 5 by EV.
+    """
+    from itertools import combinations
+
+    top = [s for s in signals
+           if s.confidence == "HIGH"
+           and s.expected_value > 0
+           and s.sport not in ("POLITICS",)
+           and not s.micro_bet][:8]
+
+    if len(top) < 2:
+        return []
+
+    parlays = []
+    for n_legs in (2, 3):
+        for combo in list(combinations(top, n_legs))[:15]:
+            if len({c.game for c in combo}) < n_legs:
+                continue  # legs from same game
+
+            combined_prob = 1.0
+            combined_decimal = 1.0
+            for c in combo:
+                combined_prob *= c.our_prob
+                o = c.odds
+                combined_decimal *= ((1 + o / 100) if o > 0 else (1 + 100 / abs(o)))
+
+            combined_american = round((combined_decimal - 1) * 100)
+            ev = round(combined_prob * (combined_decimal - 1) * 100 - (1 - combined_prob) * 100, 2)
+            if ev < 0:
+                continue
+
+            parlays.append({
+                "legs": [{"bet_on": c.bet_on, "game": c.game, "odds": c.odds,
+                          "sport": c.sport, "prob": round(c.our_prob * 100, 1)} for c in combo],
+                "combined_prob":    round(combined_prob * 100, 1),
+                "combined_odds":    f"+{combined_american}",
+                "combined_decimal": round(combined_decimal, 2),
+                "ev_per_100":       ev,
+                "n_legs":           n_legs,
+            })
+
+    return sorted(parlays, key=lambda x: x["ev_per_100"], reverse=True)[:6]
 
 
 # ══════════════════════════════════════════════════════════════════════════════

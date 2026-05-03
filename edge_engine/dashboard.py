@@ -28,7 +28,7 @@ from config import (
 from signals import (
     get_stock_signals, get_crypto_signals,
     get_betting_signals, get_congress_buys, StockSignal,
-    get_action_plan, get_scout_picks
+    get_action_plan, get_scout_picks, get_live_scores, get_smart_parlays
 )
 from patterns import detect_patterns, bad_stock_warnings
 
@@ -45,6 +45,8 @@ CACHE: dict = {
     "regime": "UNKNOWN",
     "action_plan": {},
     "scout_picks": [],      # tonight's high-confidence picks from full ensemble
+    "live_scores": {},      # ESPN live + upcoming game scores (free, no key)
+    "parlays": [],          # auto-built smart parlays from HIGH conf picks
     "loading": True,
 }
 CACHE_LOCK = threading.Lock()
@@ -153,6 +155,7 @@ def build_bet_rows(signals) -> list[dict]:
             "model_prob":    round(s.model_prob * 100, 1),
             "model_factors": s.model_factors,
             "model_vs_book": s.model_vs_book,
+            "micro_bet":     getattr(s, "micro_bet", False),
         })
     return rows
 
@@ -203,6 +206,8 @@ def refresh_cache():
         action_plan = get_action_plan(all_signals, crypto_sigs, bet_sigs, bankroll=100.0)
 
         scout_picks = get_scout_picks()
+        live_scores = get_live_scores()
+        parlays     = get_smart_parlays(bet_sigs)
 
         with CACHE_LOCK:
             CACHE.update({
@@ -215,6 +220,8 @@ def refresh_cache():
                 "regime":      regime,
                 "action_plan": action_plan,
                 "scout_picks": scout_picks,
+                "live_scores": live_scores,
+                "parlays":     parlays,
                 "loading":     False,
             })
         print(f"[{datetime.now().strftime('%H:%M:%S')}] Cache refreshed. "
@@ -241,9 +248,13 @@ def _bet_scout_refresh():
                 bet_sigs    = get_betting_signals()
                 bet_rows    = build_bet_rows(bet_sigs)
                 scout_picks = get_scout_picks()
+                live_scores = get_live_scores()
+                parlays     = get_smart_parlays(bet_sigs)
                 with CACHE_LOCK:
                     CACHE["bets"]        = bet_rows
                     CACHE["scout_picks"] = scout_picks
+                    CACHE["live_scores"] = live_scores
+                    CACHE["parlays"]     = parlays
                     # Update action plan bets portion
                     if CACHE.get("action_plan"):
                         from signals import get_action_plan as _gap
@@ -309,6 +320,20 @@ def api_scout():
     """Tonight's high-confidence picks from the full ensemble model."""
     with CACHE_LOCK:
         return jsonify({"picks": CACHE.get("scout_picks", []),
+                        "last_updated": CACHE.get("last_updated")})
+
+@app.route("/api/scores")
+def api_scores():
+    """ESPN live + upcoming game scores across all major sports."""
+    with CACHE_LOCK:
+        return jsonify({"scores": CACHE.get("live_scores", {}),
+                        "last_updated": CACHE.get("last_updated")})
+
+@app.route("/api/parlays")
+def api_parlays():
+    """Auto-built smart parlays from HIGH confidence picks."""
+    with CACHE_LOCK:
+        return jsonify({"parlays": CACHE.get("parlays", []),
                         "last_updated": CACHE.get("last_updated")})
 
 @app.route("/api/ticker/<ticker>")

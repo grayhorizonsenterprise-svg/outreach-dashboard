@@ -394,6 +394,9 @@
 
   <!-- BETS TAB -->
   <div class="panel-group" id="panel-bets">
+    <div id="scores-content"></div>
+    <div id="micro-bets-content"></div>
+    <div id="parlays-content"></div>
     <div id="bets-content"><div class="loading-bar pulse">Loading betting signals...</div></div>
   </div>
 
@@ -544,6 +547,161 @@ function fmtK(n) {
   return '$' + n;
 }
 
+// ── Render ESPN live scores ───────────────────────────────────────────────────
+function renderScores(scores) {
+  const el = document.getElementById('scores-content');
+  if (!el) return;
+  if (!scores || !Object.keys(scores).length) { el.innerHTML = ''; return; }
+
+  let html = `<div class="section-title" style="margin-bottom:14px">
+    <div class="dot" style="background:var(--cyan)"></div> Today's Games — Live Scores
+    <span style="font-size:10px;color:var(--muted);margin-left:8px;font-weight:400">ESPN (free, no API key)</span>
+  </div>`;
+
+  Object.entries(scores).forEach(([league, games]) => {
+    if (!games || !games.length) return;
+    const live     = games.filter(g => g.state === 'in');
+    const upcoming = games.filter(g => g.state === 'pre');
+    const final    = games.filter(g => g.state === 'post');
+    const shown    = [...live, ...upcoming, ...final].slice(0, 8);
+
+    html += `<div style="margin-bottom:18px">
+      <div style="color:var(--cyan);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">
+        ${league}
+        <span style="color:var(--muted);font-weight:400;margin-left:4px">(${games.length} games)</span>
+        ${live.length ? `<span style="color:var(--green);background:#022c22;padding:2px 8px;border-radius:4px;margin-left:8px;font-size:10px">&#9679; ${live.length} LIVE</span>` : ''}
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">`;
+
+    shown.forEach(g => {
+      const isLive  = g.state === 'in';
+      const isFinal = g.state === 'post';
+      const bdr     = isLive ? 'var(--green)' : '#1f2937';
+      html += `<div style="background:#0d1117;border:1px solid ${bdr};border-radius:8px;padding:10px 14px;min-width:160px;flex:1;max-width:220px">
+        <div style="font-size:9px;color:${isLive ? 'var(--green)' : 'var(--muted)'};font-weight:700;margin-bottom:5px;letter-spacing:.5px">
+          ${isLive ? '&#9679; LIVE &mdash; ' + g.detail : isFinal ? 'FINAL' : (g.date || '').slice(11) + ' ET'}
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-weight:${g.away.winner ? '700' : '400'};color:${g.away.winner ? 'var(--green)' : 'inherit'}">${g.away.abbr || g.away.name}</span>
+          ${(isLive || isFinal) ? `<span style="font-size:16px;font-weight:700;color:${g.away.winner ? 'var(--green)' : 'inherit'}">${g.away.score || '0'}</span>` :
+            (g.away.record ? `<span style="color:var(--muted);font-size:10px">${g.away.record}</span>` : '')}
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-weight:${g.home.winner ? '700' : '400'};color:${g.home.winner ? 'var(--green)' : 'inherit'}">${g.home.abbr || g.home.name}</span>
+          ${(isLive || isFinal) ? `<span style="font-size:16px;font-weight:700;color:${g.home.winner ? 'var(--green)' : 'inherit'}">${g.home.score || '0'}</span>` :
+            (g.home.record ? `<span style="color:var(--muted);font-size:10px">${g.home.record}</span>` : '')}
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+// ── Render micro bets (long-odds value underdogs) ─────────────────────────────
+function renderMicroBets(rows) {
+  const el = document.getElementById('micro-bets-content');
+  if (!el) return;
+  const micros = (rows || []).filter(r => r.micro_bet);
+  if (!micros.length) { el.innerHTML = ''; return; }
+
+  let html = `<div class="section-title" style="margin-top:24px;margin-bottom:8px">
+    <div class="dot" style="background:#f59e0b"></div> Micro Bets — Long Odds Value Plays
+    <span style="font-size:10px;color:var(--muted);margin-left:8px;font-weight:400">+300 to +2000 | Small stake, big payout | Model finds hidden edge</span>
+  </div>
+  <p style="color:var(--muted);font-size:11px;margin-bottom:12px">
+    Our ensemble gives these underdogs a higher true probability than the books price in.
+    $20-$100 stake can return $500-$2K+. High risk — only use 1-2% of bankroll per play.
+  </p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:24px">`;
+
+  micros.forEach(r => {
+    html += `<div style="background:#111827;border:1px solid #f59e0b;border-radius:10px;padding:14px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div>
+          <div style="color:#f59e0b;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">&#128640; MICRO BET &mdash; ${r.sport}</div>
+          <div style="font-weight:700;font-size:14px;margin-top:2px">${r.bet_on}</div>
+          <div style="color:var(--muted);font-size:10px">${r.game}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:22px;font-weight:700;color:#f59e0b">${r.odds_str}</div>
+          <div style="font-size:10px;color:var(--muted)">${r.book}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:11px;margin-bottom:10px">
+        <div style="text-align:center;background:#0d1117;padding:5px;border-radius:6px">
+          <div style="color:var(--muted);font-size:9px">MODEL</div>
+          <div style="color:var(--green);font-weight:700">${r.win_pct}%</div>
+        </div>
+        <div style="text-align:center;background:#0d1117;padding:5px;border-radius:6px">
+          <div style="color:var(--muted);font-size:9px">BOOK</div>
+          <div style="color:var(--orange);font-weight:700">${r.model_vs_book > 0 ? '+' : ''}${r.model_vs_book}%</div>
+        </div>
+        <div style="text-align:center;background:#0d1117;padding:5px;border-radius:6px">
+          <div style="color:var(--muted);font-size:9px">CONF</div>
+          <div style="color:var(--cyan);font-weight:700">${r.conf}</div>
+        </div>
+      </div>
+      <div style="font-size:10px;border-top:1px solid #1f2937;padding-top:8px">
+        <div style="color:var(--yellow);font-weight:700;margin-bottom:4px">Stake to Win:</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <span style="color:var(--muted)">$500 &rarr; <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,500))}</strong></span>
+          <span style="color:var(--muted)">$1K &rarr; <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,1000))}</strong></span>
+          <span style="color:var(--muted)">$5K &rarr; <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,5000))}</strong></span>
+          <span style="color:var(--muted)">$10K &rarr; <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,10000))}</strong></span>
+        </div>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ── Render smart parlays ──────────────────────────────────────────────────────
+function renderParlays(parlays) {
+  const el = document.getElementById('parlays-content');
+  if (!el) return;
+  if (!parlays || !parlays.length) { el.innerHTML = ''; return; }
+
+  let html = `<div class="section-title" style="margin-top:24px;margin-bottom:8px">
+    <div class="dot" style="background:#a78bfa"></div> Smart Parlays — Auto-Built Big Payout Combos
+    <span style="font-size:10px;color:var(--muted);margin-left:8px;font-weight:400">Positive EV | HIGH confidence legs | Different games only</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:28px">`;
+
+  parlays.forEach(p => {
+    const stk5k  = fmtK(Math.round(5000  / Math.max(0.01, p.combined_decimal - 1)));
+    const stk10k = fmtK(Math.round(10000 / Math.max(0.01, p.combined_decimal - 1)));
+    const stk50k = fmtK(Math.round(50000 / Math.max(0.01, p.combined_decimal - 1)));
+    html += `<div style="background:#111827;border:1px solid #7c3aed;border-radius:10px;padding:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div>
+          <div style="color:#a78bfa;font-size:10px;font-weight:700;text-transform:uppercase">${p.n_legs}-LEG PARLAY</div>
+          <div style="color:var(--muted);font-size:10px">Combined: ${p.combined_prob}% | EV +$${p.ev_per_100.toFixed(2)}/100</div>
+        </div>
+        <div style="color:var(--green);font-weight:700;font-size:22px">${p.combined_odds}</div>
+      </div>`;
+
+    p.legs.forEach((leg, i) => {
+      html += `<div style="padding:6px 0;${i < p.legs.length - 1 ? 'border-bottom:1px solid #1f2937' : ''}">
+        <div style="font-size:11px;font-weight:600">${leg.bet_on}</div>
+        <div style="color:var(--muted);font-size:10px">${leg.sport} &bull; ${leg.odds > 0 ? '+' : ''}${leg.odds} &bull; Model ${leg.prob}%</div>
+      </div>`;
+    });
+
+    html += `<div style="margin-top:10px;padding-top:8px;border-top:1px solid #1f2937;font-size:10px">
+        <span style="color:var(--yellow);font-weight:700">To Hit Target: </span>
+        <span style="color:var(--muted)">$5K &rarr; <strong style="color:var(--green)">${stk5k}</strong></span>
+        <span style="color:var(--muted);margin-left:8px">$10K &rarr; <strong style="color:var(--green)">${stk10k}</strong></span>
+        <span style="color:var(--muted);margin-left:8px">$50K &rarr; <strong style="color:var(--green)">${stk50k}</strong></span>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
 // ── Render bets table ─────────────────────────────────────────────────────────
 function renderBets(rows) {
   const el = document.getElementById('bets-content');
@@ -556,8 +714,8 @@ function renderBets(rows) {
     return;
   }
 
-  // Sort by win probability desc
-  const sports = rows.filter(r => r.sport !== 'POLITICS');
+  // Sort by win probability desc; micro bets rendered separately above
+  const sports   = rows.filter(r => r.sport !== 'POLITICS' && !r.micro_bet);
   const politics = rows.filter(r => r.sport === 'POLITICS');
 
   let html = '';
@@ -1042,6 +1200,9 @@ function renderAll(data) {
   renderStocks(data.stocks, 'stocks-content', false);
   renderStocks(data.spacex, 'spacex-content', true);
   renderCrypto(data.crypto);
+  renderScores(data.live_scores || {});
+  renderMicroBets(data.bets || []);
+  renderParlays(data.parlays || []);
   renderBets(data.bets);
   renderWarnings(data.warnings);
   if (activeTab === 'scout') renderScout(data.scout_picks || []);
