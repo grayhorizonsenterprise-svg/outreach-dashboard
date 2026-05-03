@@ -136,6 +136,10 @@ def build_crypto_rows(signals) -> list[dict]:
 def build_bet_rows(signals) -> list[dict]:
     rows = []
     for s in signals:
+        o = s.odds
+        decimal = (o / 100 + 1) if o > 0 else (100 / abs(o) + 1)
+        def _pay(stake, d=decimal): return round(stake * (d - 1), 2)
+        def _stk(target, d=decimal): return round(target / max(d - 1, 0.01), 2)
         rows.append({
             "sport":         s.sport,
             "game":          s.game,
@@ -156,6 +160,13 @@ def build_bet_rows(signals) -> list[dict]:
             "model_factors": s.model_factors,
             "model_vs_book": s.model_vs_book,
             "micro_bet":     getattr(s, "micro_bet", False),
+            "bet_type":      getattr(s, "bet_type", "VALUE"),
+            "decimal":       round(decimal, 3),
+            "pay20":  _pay(20),   "pay50":  _pay(50),
+            "pay100": _pay(100),  "pay200": _pay(200),
+            "stk500":  _stk(500),   "stk1k":   _stk(1000),
+            "stk5k":   _stk(5000),  "stk10k":  _stk(10000),
+            "stk50k":  _stk(50000), "stk100k": _stk(100000),
         })
     return rows
 

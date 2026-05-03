@@ -764,90 +764,132 @@ function renderParlays(parlays) {
   el.innerHTML = html;
 }
 
-// ── Render bets table ─────────────────────────────────────────────────────────
+// ── Bet card builder ─────────────────────────────────────────────────────────
+function betCard(r) {
+  const typeColor  = r.bet_type === 'SAFE' ? 'var(--green)' : r.bet_type === 'LONGSHOT' ? '#f59e0b' : 'var(--cyan)';
+  const typeLabel  = r.bet_type === 'SAFE' ? '🛡 SAFE BET' : r.bet_type === 'LONGSHOT' ? '🚀 LONGSHOT' : '⚡ VALUE PLAY';
+  const edgeColor  = r.edge > 3 ? 'var(--green)' : r.edge > 0 ? 'var(--yellow)' : 'var(--muted)';
+  const mvb        = r.model_vs_book || 0;
+  const warnHtml   = (r.warnings || []).slice(0,2).map(w =>
+    `<div style="color:var(--orange);font-size:9px;margin-top:2px">&#9888; ${w}</div>`).join('');
+  const facHtml    = (r.model_factors || []).slice(0,3).map(f =>
+    `<div style="color:var(--muted);font-size:9px;margin-top:1px">&#8594; ${f}</div>`).join('');
+
+  // Forward payout table: bet X → win Y
+  const fwd = [
+    ['$20',  r.pay20],  ['$50',  r.pay50],
+    ['$100', r.pay100], ['$200', r.pay200],
+  ].map(([s,p]) =>
+    `<div style="text-align:center;background:#0d1117;padding:6px 8px;border-radius:6px;flex:1">
+      <div style="color:var(--muted);font-size:9px">BET ${s}</div>
+      <div style="color:var(--green);font-weight:700;font-size:13px">+$${(+p||0).toFixed(0)}</div>
+    </div>`
+  ).join('');
+
+  // Reverse stake table: win X → put in Y
+  const rev = [
+    ['$1K',  r.stk1k],  ['$5K',  r.stk5k],
+    ['$10K', r.stk10k], ['$50K', r.stk50k],
+  ].map(([t,s]) =>
+    `<div style="text-align:center;background:#0d1117;padding:6px 8px;border-radius:6px;flex:1">
+      <div style="color:var(--muted);font-size:9px">WIN ${t}</div>
+      <div style="color:var(--yellow);font-weight:700;font-size:13px">${fmtK(+(s||0).toFixed(0))}</div>
+    </div>`
+  ).join('');
+
+  return `<div style="background:#111827;border:1px solid ${typeColor};border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px">
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div style="color:${typeColor};font-size:10px;font-weight:700;letter-spacing:.5px">${typeLabel} &bull; ${r.sport}</div>
+        <div style="font-size:15px;font-weight:700;margin-top:2px">${r.bet_on}</div>
+        <div style="color:var(--muted);font-size:10px">${r.game} &bull; ${r.commence}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:22px;font-weight:700;color:${typeColor}">${r.odds_str}</div>
+        <div style="font-size:10px;color:var(--muted)">${r.book}</div>
+      </div>
+    </div>
+    <!-- Stats row -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <div style="background:#0d1117;padding:4px 10px;border-radius:6px;font-size:11px">
+        <span style="color:var(--muted)">Model </span><strong style="color:${typeColor}">${r.win_pct}%</strong>
+      </div>
+      <div style="background:#0d1117;padding:4px 10px;border-radius:6px;font-size:11px">
+        <span style="color:var(--muted)">Edge </span><strong style="color:${edgeColor}">${r.edge > 0 ? '+' : ''}${(+r.edge||0).toFixed(1)}%</strong>
+      </div>
+      <div style="background:#0d1117;padding:4px 10px;border-radius:6px;font-size:11px">
+        <span style="color:var(--muted)">vs Book </span><strong style="color:${mvb > 0 ? 'var(--green)' : 'var(--muted)'}">${mvb > 0 ? '+' : ''}${mvb}%</strong>
+      </div>
+      <div style="background:#0d1117;padding:4px 10px;border-radius:6px;font-size:11px">
+        <span class="trend trend-${r.conf==='HIGH'?'sb':r.conf==='MEDIUM'?'b':'w'}">${r.conf}</span>
+      </div>
+    </div>
+    <!-- Forward payouts -->
+    <div>
+      <div style="color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">If you bet &rarr; you win</div>
+      <div style="display:flex;gap:4px">${fwd}</div>
+    </div>
+    <!-- Reverse stakes -->
+    <div>
+      <div style="color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">To win this much &rarr; stake</div>
+      <div style="display:flex;gap:4px">${rev}</div>
+    </div>
+    <!-- Intelligence -->
+    ${facHtml || warnHtml ? `<div style="border-top:1px solid #1f2937;padding-top:6px">${facHtml}${warnHtml}</div>` : ''}
+  </div>`;
+}
+
+// ── Render bets (3 sections: Safe / Value / Longshot) ─────────────────────────
 function renderBets(rows) {
   const el = document.getElementById('bets-content');
   if (!rows || !rows.length) {
     el.innerHTML = `<div class="loading-bar">
-      No bet signals found.<br>
-      <small style="color:var(--muted)">Add ODDS_API_KEY to .env for live sportsbook data (the-odds-api.com — free).<br>
-      Polymarket politics bets appear here automatically.</small>
+      No bets loaded yet — refreshing...<br>
+      <small style="color:var(--muted)">Sports bets populate after first data cycle (~90s after deploy).</small>
     </div>`;
     return;
   }
 
-  // Sort by win probability desc; micro bets rendered separately above
   const sports   = rows.filter(r => r.sport !== 'POLITICS' && !r.micro_bet);
   const politics = rows.filter(r => r.sport === 'POLITICS');
 
   let html = '';
 
   if (sports.length) {
-    html += `<div class="section-title"><div class="dot"></div> Sports Bets — Best Value Across All Books</div>
-    <p style="color:var(--muted);font-size:11px;margin-bottom:12px">
-      EDGE = how much your actual odds beat the true probability after vig removal.
-      Only bet where EV is green (positive). Max 5% of bankroll per bet.
-    </p>
-    <div class="table-wrap"><table>
-    <thead><tr>
-      <th>SPORT</th><th>BET ON</th><th>GAME</th><th>DATE</th>
-      <th>BOOK</th><th>ODDS</th><th>WIN%</th><th>EDGE</th><th>EV/$100</th><th>CONF</th>
-    </tr></thead><tbody>`;
-    sports.forEach(r => {
-      const evCls = r.ev > 0 ? 'ev-pos' : 'ev-neg';
-      const scrubIcon = r.scrubbed
-        ? `<span title="Intel scrubbed — news/injury checked" style="color:var(--green);font-size:10px">&#10003; SCRUBBED</span>`
-        : `<span title="Intel not yet verified" style="color:var(--muted);font-size:10px">--</span>`;
-      const warnHtml = (r.warnings && r.warnings.length)
-        ? `<div style="margin-top:4px">${r.warnings.map(w =>
-            `<div style="color:var(--orange);font-size:10px">&#9888; ${w}</div>`).join('')}</div>` : '';
-      const rulesHtml = (r.rules && r.rules.length)
-        ? `<details style="margin-top:4px"><summary style="color:var(--muted);font-size:10px;cursor:pointer">House Rules (${r.rules.length})</summary>
-            <div style="padding:4px 0">${r.rules.map(rule =>
-              `<div style="color:var(--muted);font-size:10px;padding:1px 0">&#8226; ${rule}</div>`).join('')}</div>
-           </details>` : '';
-      // Model vs Books indicator
-      const mvb = r.model_vs_book || 0;
-      const modelHtml = r.model_prob
-        ? `<div style="margin-top:4px;font-size:10px">
-            <span style="color:var(--muted)">Model: </span>
-            <span style="color:var(--cyan);font-weight:700">${r.model_prob}%</span>
-            ${mvb !== 0 ? `<span style="color:${mvb > 0 ? 'var(--green)' : 'var(--red)'};margin-left:4px">(${mvb > 0 ? '+' : ''}${mvb}% vs books)</span>` : ''}
-          </div>` : '';
-      const factorsHtml = (r.model_factors && r.model_factors.length)
-        ? `<details style="margin-top:2px"><summary style="color:var(--muted);font-size:10px;cursor:pointer">Model factors</summary>
-            <div style="padding:4px 0">${r.model_factors.map(f =>
-              `<div style="color:var(--muted);font-size:10px;padding:1px 0">&#8594; ${f}</div>`).join('')}</div>
-           </details>` : '';
-      const stakeHtml = `<div style="margin-top:6px;padding:5px 0 0;border-top:1px solid #1f2937;font-size:10px">
-        <span style="color:var(--yellow);font-weight:700;text-transform:uppercase;letter-spacing:.5px">To Win:</span>
-        <span style="margin-left:6px;color:var(--muted)">$5K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,5000))}</strong></span>
-        <span style="margin-left:8px;color:var(--muted)">$10K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,10000))}</strong></span>
-        <span style="margin-left:8px;color:var(--muted)">$50K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,50000))}</strong></span>
-        <span style="margin-left:8px;color:var(--muted)">$100K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,100000))}</strong></span>
+    const safe      = sports.filter(r => r.bet_type === 'SAFE').sort((a,b) => b.win_pct - a.win_pct);
+    const value     = sports.filter(r => r.bet_type === 'VALUE').sort((a,b) => b.edge - a.edge);
+    const longshots = sports.filter(r => r.bet_type === 'LONGSHOT').sort((a,b) => b.odds - a.odds);
+
+    if (safe.length) {
+      html += `<div class="section-title" style="margin-bottom:10px">
+        <div class="dot" style="background:var(--green)"></div> Safe Bets — High Probability Picks
+        <span style="color:var(--muted);font-size:10px;margin-left:8px">65%+ model win rate &bull; smaller payout, higher certainty</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-bottom:24px">
+        ${safe.map(betCard).join('')}
       </div>`;
-      html += `<tr>
-        <td style="color:var(--cyan)">${r.sport}</td>
-        <td>
-          <strong>${r.bet_on}</strong>
-          ${modelHtml}${factorsHtml}
-          ${warnHtml}${rulesHtml}
-          ${stakeHtml}
-        </td>
-        <td style="color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis">${r.game}</td>
-        <td style="color:var(--muted)">${r.commence}</td>
-        <td>${r.book}</td>
-        <td class="bet-color-${r.color}">${r.odds_str}</td>
-        <td class="bet-color-${r.color}">${r.win_pct}%</td>
-        <td style="color:var(--green)">+${r.edge.toFixed(1)}%</td>
-        <td class="${evCls}">$${r.ev > 0 ? '+' : ''}${r.ev.toFixed(2)}</td>
-        <td>
-          <span class="trend trend-${r.conf==='HIGH'?'sb':r.conf==='MEDIUM'?'b':'w'}">${r.conf}</span>
-          <div style="margin-top:3px">${scrubIcon}</div>
-        </td>
-      </tr>`;
-    });
-    html += '</tbody></table></div>';
+    }
+
+    if (value.length) {
+      html += `<div class="section-title" style="margin-bottom:10px">
+        <div class="dot" style="background:var(--cyan)"></div> Value Plays — Model Beats the Books
+        <span style="color:var(--muted);font-size:10px;margin-left:8px">our probability exceeds book's implied &bull; best EV picks</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-bottom:24px">
+        ${value.map(betCard).join('')}
+      </div>`;
+    }
+
+    if (longshots.length) {
+      html += `<div class="section-title" style="margin-bottom:10px">
+        <div class="dot" style="background:#f59e0b"></div> Longshots — Bet Less, Win Outlandish
+        <span style="color:var(--muted);font-size:10px;margin-left:8px">+250 or higher &bull; small stake, massive payout potential</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-bottom:24px">
+        ${longshots.map(betCard).join('')}
+      </div>`;
+    }
   }
 
   if (politics.length) {

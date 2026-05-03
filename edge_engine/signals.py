@@ -743,7 +743,8 @@ class BetSignal:
     model_prob:    float = 0.0                       # our ESPN-based probability
     model_factors: list  = field(default_factory=list)  # what drove our model
     model_vs_book: float = 0.0                       # our prob minus book consensus
-    micro_bet: bool = False                          # long-odds value underdog (+300 to +2000)
+    micro_bet: bool = False                          # long-odds value underdog (+250 to +2000)
+    bet_type:  str  = "VALUE"                        # SAFE | VALUE | LONGSHOT
 
 def _get_odds_data(sport: str) -> list:
     if not ODDS_KEY:
@@ -912,21 +913,45 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
         # Edge = OUR independent model probability minus what the book implies
         edge = (our_true - book_implied) * 100
 
-        # Micro-bet: long-odds underdog with genuine model probability
-        is_micro = (best_odds >= 250 and our_true >= 0.15)
-        if edge < MIN_BET_EDGE_PCT and not is_micro:
-            continue
-
         decimal = (best_odds / 100 + 1) if best_odds > 0 else (100 / abs(best_odds) + 1)
         ev = (our_true * (decimal - 1) * 100) - ((1 - our_true) * 100)
-        confidence = scout_result.confidence
 
-        # Downgrade confidence if intel or injuries found warnings
+        # Classify the bet type
+        is_micro = best_odds >= 250
+        if our_true >= 0.65:
+            bet_type = "SAFE"
+        elif is_micro:
+            bet_type = "LONGSHOT"
+        else:
+            bet_type = "VALUE"
+
+        # Skip only if we have no real model data AND no edge AND not a longshot
+        no_data = (abs(our_true - 0.5) < 0.02)  # model returned ~0.5 on everything
+        if no_data and edge < 0 and not is_micro:
+            continue
+
+        confidence = scout_result.confidence
         if (intel["warnings"] or scout_result.warnings) and confidence == "HIGH":
             confidence = "MEDIUM"
 
-        # model_vs_book shows how much our research diverges from the market
         m_vs_b = round((our_true - book_true) * 100, 1)
+
+        # Forward payout table: bet $X → win $Y
+        payouts = {
+            "20":  round(20  * (decimal - 1), 2),
+            "50":  round(50  * (decimal - 1), 2),
+            "100": round(100 * (decimal - 1), 2),
+            "200": round(200 * (decimal - 1), 2),
+        }
+        # Reverse stake table: to WIN $X, put in $Y
+        def _stake(target): return round(target / (decimal - 1), 2)
+        stakes = {
+            "500":    _stake(500),
+            "1000":   _stake(1000),
+            "5000":   _stake(5000),
+            "10000":  _stake(10000),
+            "50000":  _stake(50000),
+        }
 
         # Vegas Script data — patterns suggesting a predetermined game flow
         is_pick_home = (team == home)
@@ -950,8 +975,6 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             "factors":         scout_result.factors[:5],
         }
 
-        micro_note = " | MICRO BET — long-odds underdog edge" if is_micro else ""
-        inj_note = f" | {len(scout_result.warnings)} injury alerts" if scout_result.warnings else ""
         signals.append(BetSignal(
             sport=sport_name,
             game=game_str,
@@ -963,7 +986,7 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             edge_pct=round(edge, 2),
             expected_value=round(ev, 2),
             confidence=confidence,
-            note=f"{scout_result.signals_agree}/4 signals agree | book gap {m_vs_b:+.1f}%{micro_note}{inj_note}",
+            note=f"{scout_result.signals_agree}/4 signals agree | book gap {m_vs_b:+.1f}%",
             commence=commence,
             red_flags=intel["red_flags"],
             warnings=list(set(intel["warnings"] + scout_result.warnings)),
@@ -973,6 +996,7 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
             model_factors=model_factors[:8],
             model_vs_book=m_vs_b,
             micro_bet=is_micro,
+            bet_type=bet_type,
         ))
 
     return signals
