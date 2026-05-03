@@ -533,6 +533,17 @@ function renderCrypto(rows) {
   document.getElementById('crypto-content').innerHTML = html;
 }
 
+// ── Reverse payout helpers ────────────────────────────────────────────────────
+function stakeToWin(odds, target) {
+  const mult = odds > 0 ? (odds / 100) : (100 / Math.abs(odds));
+  return Math.round(target / mult);
+}
+function fmtK(n) {
+  if (n >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
+  if (n >= 1000)    return '$' + Math.round(n / 1000) + 'K';
+  return '$' + n;
+}
+
 // ── Render bets table ─────────────────────────────────────────────────────────
 function renderBets(rows) {
   const el = document.getElementById('bets-content');
@@ -588,12 +599,20 @@ function renderBets(rows) {
             <div style="padding:4px 0">${r.model_factors.map(f =>
               `<div style="color:var(--muted);font-size:10px;padding:1px 0">&#8594; ${f}</div>`).join('')}</div>
            </details>` : '';
+      const stakeHtml = `<div style="margin-top:6px;padding:5px 0 0;border-top:1px solid #1f2937;font-size:10px">
+        <span style="color:var(--yellow);font-weight:700;text-transform:uppercase;letter-spacing:.5px">To Win:</span>
+        <span style="margin-left:6px;color:var(--muted)">$5K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,5000))}</strong></span>
+        <span style="margin-left:8px;color:var(--muted)">$10K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,10000))}</strong></span>
+        <span style="margin-left:8px;color:var(--muted)">$50K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,50000))}</strong></span>
+        <span style="margin-left:8px;color:var(--muted)">$100K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,100000))}</strong></span>
+      </div>`;
       html += `<tr>
         <td style="color:var(--cyan)">${r.sport}</td>
         <td>
           <strong>${r.bet_on}</strong>
           ${modelHtml}${factorsHtml}
           ${warnHtml}${rulesHtml}
+          ${stakeHtml}
         </td>
         <td style="color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis">${r.game}</td>
         <td style="color:var(--muted)">${r.commence}</td>
@@ -622,9 +641,16 @@ function renderBets(rows) {
       <th>WIN%</th><th>ODDS</th><th>CONFIDENCE</th><th>MARKET QUESTION</th>
     </tr></thead><tbody>`;
     politics.forEach(r => {
+      const polStake = `<div style="margin-top:5px;font-size:10px;color:var(--muted)">
+        <span style="color:var(--yellow);font-weight:700">To Win:</span>
+        <span style="margin-left:4px">$5K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,5000))}</strong></span>
+        <span style="margin-left:6px">$10K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,10000))}</strong></span>
+        <span style="margin-left:6px">$50K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,50000))}</strong></span>
+        <span style="margin-left:6px">$100K <strong style="color:var(--green)">${fmtK(stakeToWin(r.odds,100000))}</strong></span>
+      </div>`;
       html += `<tr>
         <td class="bet-color-${r.color}">${r.win_pct}%</td>
-        <td>${r.odds_str}</td>
+        <td>${r.odds_str}${polStake}</td>
         <td><span class="trend trend-${r.conf==='HIGH'?'sb':r.conf==='MEDIUM'?'b':'w'}">${r.conf}</span></td>
         <td style="max-width:300px">${r.game}</td>
       </tr>`;
@@ -633,11 +659,10 @@ function renderBets(rows) {
 
     // Best bet callout
     const best = [...rows].sort((a,b) => b.win_pct - a.win_pct)[0];
-    const payout = best.odds < 0 ? (100 / Math.abs(best.odds)) : (best.odds / 100);
     html += `
     <div style="background:#111827;border:1px solid var(--green);border-radius:10px;padding:16px;margin-top:20px">
       <div style="color:var(--green);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">
-        RECOMMENDED BET — Highest Win Probability, Minimum $ In
+        TOP PLAY — Highest Win Probability Pick
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px">
         <div><div style="color:var(--muted);font-size:10px">PICK</div><div style="font-weight:700">${best.bet_on}</div></div>
@@ -646,10 +671,30 @@ function renderBets(rows) {
         <div><div style="color:var(--muted);font-size:10px">WIN PROB</div><div style="color:var(--green)">${best.win_pct}%</div></div>
         <div><div style="color:var(--muted);font-size:10px">EDGE</div><div style="color:var(--green)">+${best.edge.toFixed(1)}%</div></div>
       </div>
-      <div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap">
-        <span style="color:var(--muted)">$10 → wins $${(10*payout).toFixed(2)}</span>
-        <span style="color:var(--muted)">$25 → wins $${(25*payout).toFixed(2)}</span>
-        <span style="color:var(--muted)">$50 → wins $${(50*payout).toFixed(2)}</span>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #1f2937">
+        <div style="color:var(--yellow);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Stake Needed to Hit Your Target</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+          <div style="background:#0d1117;border:1px solid #1f2937;border-radius:8px;padding:10px;text-align:center">
+            <div style="color:var(--muted);font-size:10px">WIN $5,000</div>
+            <div style="color:var(--green);font-weight:700;font-size:18px">${fmtK(stakeToWin(best.odds,5000))}</div>
+            <div style="color:var(--muted);font-size:9px">stake required</div>
+          </div>
+          <div style="background:#0d1117;border:1px solid #1f2937;border-radius:8px;padding:10px;text-align:center">
+            <div style="color:var(--muted);font-size:10px">WIN $10,000</div>
+            <div style="color:var(--green);font-weight:700;font-size:18px">${fmtK(stakeToWin(best.odds,10000))}</div>
+            <div style="color:var(--muted);font-size:9px">stake required</div>
+          </div>
+          <div style="background:#0d1117;border:1px solid #1f2937;border-radius:8px;padding:10px;text-align:center">
+            <div style="color:var(--muted);font-size:10px">WIN $50,000</div>
+            <div style="color:var(--green);font-weight:700;font-size:18px">${fmtK(stakeToWin(best.odds,50000))}</div>
+            <div style="color:var(--muted);font-size:9px">stake required</div>
+          </div>
+          <div style="background:#0d1117;border:1px solid #1f2937;border-radius:8px;padding:10px;text-align:center">
+            <div style="color:var(--muted);font-size:10px">WIN $100,000</div>
+            <div style="color:var(--green);font-weight:700;font-size:18px">${fmtK(stakeToWin(best.odds,100000))}</div>
+            <div style="color:var(--muted);font-size:9px">stake required</div>
+          </div>
+        </div>
       </div>
     </div>`;
   }
