@@ -416,27 +416,24 @@
     .hero-stat-lbl { font-size:9px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-top:3px; text-align:center; }
     @media(max-width:600px){ .hero-stats { grid-template-columns:repeat(2,1fr); } .hero-stat:nth-child(2) { border-right:none; } .hero-stat:nth-child(1),.hero-stat:nth-child(2) { border-bottom:1px solid var(--border); } }
 
-    /* ── Computing power showcase ── */
-    .infra-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:1160px; margin:48px auto 0; padding:0 48px; }
-    .infra-card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:24px 20px; position:relative; overflow:hidden; }
-    .infra-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
-    .infra-card.ai::before   { background:linear-gradient(90deg, #7c3aed, #a78bfa); }
-    .infra-card.data::before { background:linear-gradient(90deg, #16a34a, #4ade80); }
-    .infra-card.voice::before{ background:linear-gradient(90deg, var(--blue), var(--cyan)); }
-    .infra-card-icon { font-size:28px; margin-bottom:12px; line-height:1; }
-    .infra-card-title { font-size:13px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; margin-bottom:10px; }
-    .infra-card.ai .infra-card-title   { color:#a78bfa; }
-    .infra-card.data .infra-card-title { color:#4ade80; }
-    .infra-card.voice .infra-card-title{ color:var(--cyan); }
-    .infra-spec { display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.05); font-size:12px; }
-    .infra-spec:last-child { border-bottom:none; }
-    .infra-spec-label { color:var(--muted); font-weight:500; }
-    .infra-spec-val { font-weight:700; color:var(--text); font-size:11px; text-align:right; }
-    .infra-badge { display:inline-flex; align-items:center; gap:4px; font-size:9px; font-weight:700; padding:2px 7px; border-radius:4px; letter-spacing:.06em; }
-    .infra-badge.live  { background:rgba(34,211,238,.1); color:var(--cyan); border:1px solid rgba(34,211,238,.25); }
-    .infra-badge.prod  { background:rgba(22,163,74,.1); color:#4ade80; border:1px solid rgba(22,163,74,.25); }
-    .infra-badge.cloud { background:rgba(79,156,255,.1); color:var(--blue); border:1px solid rgba(79,156,255,.25); }
-    @media(max-width:768px){ .infra-grid { grid-template-columns:1fr; padding:0 16px; } }
+    /* ── System In Action ── */
+    .sia-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:1160px; margin:48px auto 0; padding:0 48px; }
+    .sia-card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:28px 24px; position:relative; overflow:hidden; }
+    .sia-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+    .sia-card:nth-child(1)::before { background:linear-gradient(90deg, var(--blue), var(--cyan)); }
+    .sia-card:nth-child(2)::before { background:linear-gradient(90deg, #16a34a, #4ade80); }
+    .sia-card:nth-child(3)::before { background:linear-gradient(90deg, #7c3aed, #a78bfa); }
+    .sia-card-title { font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; margin-bottom:18px; }
+    .sia-card:nth-child(1) .sia-card-title { color:var(--blue); }
+    .sia-card:nth-child(2) .sia-card-title { color:#4ade80; }
+    .sia-card:nth-child(3) .sia-card-title { color:#a78bfa; }
+    .sia-item { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.05); font-size:14px; font-weight:500; color:var(--text); }
+    .sia-item:last-child { border-bottom:none; }
+    .sia-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .sia-card:nth-child(1) .sia-dot { background:var(--blue); box-shadow:0 0 5px var(--blue); }
+    .sia-card:nth-child(2) .sia-dot { background:#4ade80; box-shadow:0 0 5px #4ade80; }
+    .sia-card:nth-child(3) .sia-dot { background:#a78bfa; box-shadow:0 0 5px #a78bfa; }
+    @media(max-width:768px){ .sia-grid { grid-template-columns:1fr; padding:0 16px; } }
 
     /* ── vchat signal + latency ── */
     .vchat-signal { display:flex; align-items:flex-end; gap:2px; height:13px; }
@@ -646,6 +643,7 @@
 
   <!-- System status bar -->
   <div class="sys-status-bar" role="status" aria-label="System status">
+    <div class="sys-status-item" style="font-weight:800;color:var(--cyan);border-right:1px solid rgba(34,211,238,.2);padding-right:16px;margin-right:4px;"><span class="sys-dot green"></span>Live System &mdash; Capturing &amp; Converting Requests</div>
     <div class="sys-status-item"><span class="sys-dot green"></span>AI Engine Online</div>
     <div class="sys-status-item"><span class="sys-dot green"></span>Voice Server Active</div>
     <div class="sys-status-item"><span class="sys-dot blue"></span>5 Systems Running</div>
@@ -654,22 +652,54 @@
     <div class="sys-status-item" id="sys-latency-item" style="display:none"><span class="sys-dot blue"></span><span id="sys-latency-val">--</span>ms Avg Response</div>
   </div>
 
-  <section class="hero" aria-label="Hero">
-    <div class="eyebrow">AI-Powered Automation</div>
-    <h1><span class="grad">Capture. Follow Up.<br>Close.</span> Automatically.</h1>
-    <p class="hero-sub">Automation systems built for service businesses that can't afford to miss leads or delay response time.</p>
-    <div class="btn-row">
-      <button class="btn btn-p" type="button" onclick="runSim()">&#9654; Run Simulation</button>
-      <a class="btn btn-s" href="#industries">See How Workflows Operate</a>
-      <button class="btn btn-watch" type="button" onclick="startVoice()" id="voice-btn">&#127897;&#65039; Speak Your Request</button>
-      <button class="btn" type="button" onclick="openVoiceDemo()" style="background:#7c3aed;color:#fff;border:2px solid #6d28d9;font-size:15px;font-weight:800;letter-spacing:.03em;text-shadow:0 1px 2px rgba(0,0,0,.3);box-shadow:0 0 0 3px rgba(124,58,237,.25),0 4px 14px rgba(0,0,0,.4);">&#128222; Live AI Demo Call</button>
+  <!-- B) ROI Bar — always visible -->
+  <div id="roi-bar" style="position:sticky;top:94px;z-index:98;background:rgba(7,20,38,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:7px 48px;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;">
+      <div class="roi-cell"><span class="roi-lbl">Missed Deals Today</span><span class="roi-val" id="roi-missed" style="color:#ff9b9b;">3</span></div>
+      <span class="roi-sep">|</span>
+      <div class="roi-cell"><span class="roi-lbl">Avg Deal Value</span><span class="roi-val">$450</span></div>
+      <span class="roi-sep">|</span>
+      <div class="roi-cell"><span class="roi-lbl">Revenue Left on Table</span><span class="roi-val" style="color:#ff9b9b;">$1,350</span></div>
+      <span class="roi-sep">|</span>
+      <div class="roi-cell"><span class="roi-lbl">Revenue Recovered</span><span id="roi-recovered" style="font-size:13px;font-weight:900;color:#9ff0bf;font-variant-numeric:tabular-nums;" data-raw="0">$0</span></div>
+      <span class="roi-sep">|</span>
+      <button onclick="gheTriggerCapture(function(){document.getElementById('book-demo').scrollIntoView({behavior:'smooth'})})" style="padding:5px 16px;font-size:12px;font-weight:800;font-family:inherit;border-radius:6px;border:1px solid rgba(79,156,255,.4);background:rgba(79,156,255,.1);color:var(--blue);cursor:pointer;white-space:nowrap;transition:background .15s;" onmouseover="this.style.background='rgba(79,156,255,.2)'" onmouseout="this.style.background='rgba(79,156,255,.1)'">Stop Losing Deals &rarr;</button>
     </div>
-    <!-- Live system stats ticker -->
+  </div>
+  <style>
+    .roi-cell { display:flex;align-items:center;gap:6px; }
+    .roi-lbl  { font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap; }
+    .roi-val  { font-size:13px;font-weight:900;color:var(--text);font-variant-numeric:tabular-nums; }
+    .roi-sep  { color:var(--border);font-size:16px;line-height:1; }
+    @media(max-width:768px){ #roi-bar{padding:7px 16px;top:90px;} .roi-sep{display:none;} #roi-bar>div{gap:12px;} }
+    /* Pipeline stage track */
+    .iad-track{display:flex;align-items:center;gap:0;width:100%;min-width:180px;}
+    .iad-tdot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);flex-shrink:0;transition:background .4s,box-shadow .4s,border-color .4s;}
+    .iad-tdot.iad-active{background:var(--cyan);box-shadow:0 0 7px var(--cyan);border-color:var(--cyan);}
+    .iad-tdot.iad-done{background:var(--blue);border-color:var(--blue);}
+    .iad-tline{flex:1;height:2px;background:rgba(255,255,255,.07);min-width:12px;transition:background .4s;}
+    .iad-tline.iad-done{background:rgba(79,156,255,.5);}
+    @keyframes dealClose{0%{background:rgba(34,211,238,.04)}60%{background:rgba(34,211,238,.12)}100%{background:transparent}}
+    .deal-closed-row{animation:dealClose 1.2s ease-out;}
+  </style>
+
+  <section class="hero" aria-label="Hero">
+    <div class="eyebrow">For Service Businesses</div>
+    <h1>Recover Lost Deals<br><span class="grad">Automatically</span></h1>
+    <p class="hero-sub">Every missed call, slow response, or dropped request is captured and converted automatically.</p>
+    <p style="font-size:16px;font-weight:800;color:#ffd28a;margin-bottom:28px;max-width:520px;line-height:1.6;">Missing just 2 deals per day&nbsp;=&nbsp;thousands lost every week.<br>This recovers them immediately.</p>
+    <div class="btn-row">
+      <button class="btn btn-p" type="button" onclick="gheTriggerCapture(function(){document.getElementById('book-demo').scrollIntoView({behavior:'smooth'})})">Install This For Your Team &rarr;</button>
+      <button class="btn btn-s" type="button" onclick="runSim()">&#9654; See a Deal Get Recovered</button>
+      <button class="btn btn-watch" type="button" onclick="openVoiceDemo()">&#128222; Live Demo Call</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px;margin-bottom:0;">Ready in 1&ndash;2 days &bull; See it working before you pay anything</p>
+    <!-- Revenue stats ticker -->
     <div class="hero-stats" aria-hidden="true">
-      <div class="hero-stat"><span class="hero-stat-val" id="hs-calls">0</span><span class="hero-stat-lbl">Calls Handled</span></div>
-      <div class="hero-stat"><span class="hero-stat-val" id="hs-resp">0</span><span class="hero-stat-lbl">ms Avg AI Reply</span></div>
+      <div class="hero-stat"><span class="hero-stat-val" id="hs-calls">0</span><span class="hero-stat-lbl">Deals Recovered</span></div>
+      <div class="hero-stat"><span class="hero-stat-val" id="hs-resp">0</span><span class="hero-stat-lbl">sec First Response</span></div>
       <div class="hero-stat"><span class="hero-stat-val" id="hs-up">99.9</span><span class="hero-stat-lbl">% Uptime</span></div>
-      <div class="hero-stat"><span class="hero-stat-val" id="hs-sys">5</span><span class="hero-stat-lbl">Systems Live</span></div>
+      <div class="hero-stat"><span class="hero-stat-val" id="hs-sys">5</span><span class="hero-stat-lbl">Industries Served</span></div>
     </div>
     <div id="voice-status" style="margin-top:12px;font-size:13px;font-weight:600;color:var(--cyan);min-height:18px;text-align:center;"></div>
     <!-- Safari / Firefox text fallback — shown when Web Speech API is unavailable -->
@@ -699,66 +729,280 @@
   <div style="max-width:1160px;margin:48px auto 0;padding:0 48px;">
     <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 18px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.1);border-radius:10px;margin-bottom:0;">
       <span style="font-size:15px;line-height:1;flex-shrink:0;margin-top:1px;">&#9432;</span>
-      <p style="font-size:13px;color:var(--muted);line-height:1.65;margin:0;"><strong style="color:var(--text);">This is a live example of the systems we build.</strong> Every workflow, dashboard, and AI demo on this page is a working prototype of what Gray Horizons Enterprise deploys for clients &mdash; not mockups, not slides. What you interact with here is a real, production-ready system built specifically for your industry.</p>
+      <p style="font-size:13px;color:var(--muted);line-height:1.65;margin:0;"><strong style="color:var(--text);">Everything on this page is live and functional.</strong> The pipeline you see running, the deals being recovered, the follow-ups firing &mdash; this is exactly what we install for your business. Not a demo. Not slides. A working revenue recovery system, running right now, built for your industry.</p>
     </div>
   </div>
 
-  <!-- Infrastructure showcase -->
-  <div class="infra-grid" data-reveal>
-    <div class="infra-card ai">
-      <div class="infra-card-icon">&#129504;</div>
-      <div class="infra-card-title">AI Engine</div>
-      <div class="infra-spec"><span class="infra-spec-label">Model</span><span class="infra-spec-val">Claude Haiku 4.5 <span class="infra-badge live">LIVE</span></span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Context window</span><span class="infra-spec-val">200,000 tokens</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Avg response</span><span class="infra-spec-val">&lt; 1.5 seconds</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Multi-turn memory</span><span class="infra-spec-val">Per session &#10003;</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Niche prompts</span><span class="infra-spec-val">5 industries</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Session cap</span><span class="infra-spec-val">40 turns / call</span></div>
+  <!-- Revenue Recovery: How It Works -->
+  <div style="max-width:1160px;margin:48px auto 0;padding:0 48px;text-align:center;" data-reveal>
+    <p class="sec-label" style="margin-bottom:8px">How Revenue Gets Recovered</p>
+    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;margin-bottom:0;">Every Missed Deal Gets a Second Chance</h2>
+  </div>
+  <div class="sia-grid" data-reveal>
+    <div class="sia-card">
+      <div class="sia-card-title">Missed Deal Captured</div>
+      <div class="sia-item"><div class="sia-dot"></div>Missed call intercepted</div>
+      <div class="sia-item"><div class="sia-dot"></div>Unanswered text logged</div>
+      <div class="sia-item"><div class="sia-dot"></div>Dropped web lead saved</div>
     </div>
-    <div class="infra-card data">
-      <div class="infra-card-icon">&#128202;</div>
-      <div class="infra-card-title">Data Layer</div>
-      <div class="infra-spec"><span class="infra-spec-label">Storage</span><span class="infra-spec-val">Google Sheets <span class="infra-badge prod">PROD</span></span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Automation</span><span class="infra-spec-val">Google Apps Script</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Email dispatch</span><span class="infra-spec-val">Auto on submit &#10003;</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">JSONP pipeline</span><span class="infra-spec-val">XSS-safe &#10003;</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Beacon fallback</span><span class="infra-spec-val">sendBeacon &#10003;</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Auto-purge</span><span class="infra-spec-val">2hr rolling window</span></div>
+    <div class="sia-card">
+      <div class="sia-card-title">Contacted &amp; Followed Up</div>
+      <div class="sia-item"><div class="sia-dot"></div>Response sent in &lt;2 sec</div>
+      <div class="sia-item"><div class="sia-dot"></div>Follow-up sequence started</div>
+      <div class="sia-item"><div class="sia-dot"></div>Deal moved through pipeline</div>
     </div>
-    <div class="infra-card voice">
-      <div class="infra-card-icon">&#127897;&#65039;</div>
-      <div class="infra-card-title">Voice Layer</div>
-      <div class="infra-spec"><span class="infra-spec-label">Hosting</span><span class="infra-spec-val">Railway Cloud <span class="infra-badge cloud">CLOUD</span></span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Runtime</span><span class="infra-spec-val">Node 18 + Express</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">STT engine</span><span class="infra-spec-val">Web Speech API</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">TTS engine</span><span class="infra-spec-val">SpeechSynthesis + Google</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">CORS policy</span><span class="infra-spec-val">Origin-gated &#10003;</span></div>
-      <div class="infra-spec"><span class="infra-spec-label">Auto-retry</span><span class="infra-spec-val">3 attempts + fallback</span></div>
+    <div class="sia-card">
+      <div class="sia-card-title">Revenue Recovered</div>
+      <div class="sia-item"><div class="sia-dot"></div>Deal closes automatically</div>
+      <div class="sia-item"><div class="sia-dot"></div>Revenue tracked in real time</div>
+      <div class="sia-item"><div class="sia-dot"></div>Nothing left on the table</div>
     </div>
   </div>
+
+  <!-- ── Live Deal Recovery Pipeline ── -->
+  <div style="max-width:1160px;margin:80px auto 0;padding:0 48px;" data-reveal>
+    <p class="sec-label" style="text-align:center;margin-bottom:8px">Live Revenue Recovery</p>
+    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:8px;">Watch Missed Deals Get Recovered in Real Time</h2>
+    <p style="text-align:center;color:var(--muted);font-size:15px;margin-bottom:28px;max-width:580px;margin-left:auto;margin-right:auto;">Every missed call, unanswered text, or dropped web lead enters this pipeline and gets worked to close &mdash; automatically.</p>
+
+    <!-- Deal metrics bar -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:24px;">
+      <div style="background:rgba(255,92,92,.05);border:1px solid rgba(255,92,92,.25);padding:10px 18px;border-radius:10px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;"><span style="width:7px;height:7px;border-radius:50%;background:#ff9b9b;box-shadow:0 0 5px #ff9b9b;animation:pulse 2s ease-in-out infinite;flex-shrink:0;"></span>Deals Captured: <span id="iad-count" style="color:#ff9b9b;font-size:15px;">0</span></div>
+      <div style="background:rgba(34,211,238,.05);border:1px solid rgba(34,211,238,.2);padding:10px 18px;border-radius:10px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 5px var(--cyan);flex-shrink:0;"></span>Missed Deals Prevented: <span id="iad-instant" style="color:var(--cyan);font-size:15px;">0</span></div>
+      <div style="background:rgba(159,240,191,.06);border:1px solid rgba(159,240,191,.25);padding:10px 18px;border-radius:10px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;color:#9ff0bf;">Revenue Recovered: $<span id="iad-value" style="font-size:15px;">0</span></div>
+    </div>
+
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:relative;">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#ff9b9b,var(--blue),var(--cyan),#9ff0bf);"></div>
+
+      <!-- Controls -->
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:rgba(79,156,255,.02);">
+        <div style="display:flex;align-items:center;gap:7px;margin-right:6px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#ff9b9b;box-shadow:0 0 6px #ff9b9b;animation:pulse 1.4s ease-in-out infinite;flex-shrink:0;"></span>
+          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Deal Recovery Simulator</span>
+        </div>
+        <select id="iad-niche-sel" onchange="iadNicheChange()" style="padding:7px 10px;font-size:12px;font-weight:700;font-family:inherit;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:7px;color:var(--text);outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;">
+          <option value="plumbing">Plumbing</option>
+          <option value="hvac">HVAC</option>
+          <option value="property">Property</option>
+        </select>
+        <button class="iad-btn iad-btn-em" id="iad-btn-call" type="button" onclick="iadSimByNiche('call')">&#128222; Simulate Call</button>
+        <button class="iad-btn iad-btn-hi" id="iad-btn-sms"  type="button" onclick="iadSimByNiche('sms')">&#128172; Simulate SMS</button>
+        <button class="iad-btn iad-btn-nr" id="iad-btn-form" type="button" onclick="iadSimByNiche('form')">&#127760; Simulate Web Lead</button>
+        <button class="iad-btn" type="button" onclick="iadStartCall()" id="iad-voice-btn" style="background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.35);color:#a78bfa;">&#127897;&#65039; Live Voice</button>
+        <button class="iad-btn" type="button" onclick="iadReset()" style="margin-left:auto;">&#8635; Reset</button>
+      </div>
+
+      <!-- Voice Call Panel — shown during active call -->
+      <div id="iad-voice-panel" style="display:none;padding:12px 20px;border-bottom:1px solid rgba(124,58,237,.2);background:rgba(124,58,237,.04);flex-wrap:wrap;gap:12px;align-items:center;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span id="iad-voice-dot" style="width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s,box-shadow .3s;"></span>
+          <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#a78bfa;">Live Voice Recovery</span>
+        </div>
+        <span id="iad-voice-status" style="font-size:13px;font-weight:600;color:var(--muted);flex:1;">Idle</span>
+        <button class="iad-btn" type="button" onclick="iadEndCall()" style="background:rgba(255,92,92,.08);border-color:rgba(255,92,92,.3);color:#ff9b9b;">&#9632; End Call</button>
+      </div>
+
+      <!-- Pipeline stage header -->
+      <div style="display:grid;grid-template-columns:180px 1fr 80px 240px 110px;padding:8px 16px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.015);" class="iad-hdr-grid">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);">Channel</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);">Deal</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);">Value</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;gap:0;justify-content:space-between;padding-right:4px;">
+          <span>Incoming</span><span>Contacted</span><span>Follow-Up</span><span>Active</span><span>Closed</span>
+        </div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);">Status</div>
+      </div>
+
+      <!-- Pipeline deal rows -->
+      <div id="iad-rows" style="display:flex;flex-direction:column;">
+        <div id="iad-empty" style="padding:36px;text-align:center;font-size:13px;color:var(--muted);font-style:italic;">No deals yet &mdash; simulate a missed call, SMS, or web lead above to see the pipeline in action</div>
+      </div>
+
+      <!-- Bottom panels -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border);" class="iad-bottom-grid">
+        <div style="padding:16px 20px;border-right:1px solid var(--border);">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">&#128293; Live Recovery Feed</div>
+          <div id="iad-feed" style="display:flex;flex-direction:column;gap:4px;max-height:130px;overflow-y:auto;">
+            <div data-iad-placeholder style="font-size:12px;color:var(--muted);font-style:italic;">Deals will appear here as they get captured&hellip;</div>
+          </div>
+        </div>
+        <div style="padding:16px 20px;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">&#128200; Sales Impact</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted);line-height:1.55;"><span style="color:#9ff0bf;flex-shrink:0;font-weight:700;">&#10003;</span><span>First to respond wins the deal &mdash; under 2 seconds, 24/7</span></div>
+            <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted);line-height:1.55;"><span style="color:#9ff0bf;flex-shrink:0;font-weight:700;">&#10003;</span><span>Calls, texts, and web leads all enter one pipeline &mdash; no revenue slips through</span></div>
+            <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted);line-height:1.55;"><span style="color:#9ff0bf;flex-shrink:0;font-weight:700;">&#10003;</span><span>Automated follow-up drives 3&times; more closes on leads that go cold</span></div>
+            <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted);line-height:1.55;"><span style="color:#9ff0bf;flex-shrink:0;font-weight:700;">&#10003;</span><span>High-value deals jump the queue &mdash; your best opportunities handled first</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    .iad-btn { padding:8px 16px; font-size:13px; font-weight:700; font-family:inherit; border-radius:8px; cursor:pointer; border:1px solid var(--border); background:rgba(255,255,255,.04); color:var(--text); transition:background .15s,transform .15s,box-shadow .15s; white-space:nowrap; -webkit-tap-highlight-color:transparent; }
+    .iad-btn:hover { background:rgba(255,255,255,.08); transform:translateY(-1px); }
+    .iad-btn:active { transform:translateY(0); }
+    .iad-btn-em { background:rgba(255,92,92,.08); border-color:rgba(255,92,92,.3); color:#ff9b9b; }
+    .iad-btn-em:hover { background:rgba(255,92,92,.15); box-shadow:0 0 14px rgba(255,92,92,.2); }
+    .iad-btn-hi { background:rgba(255,176,32,.08); border-color:rgba(255,176,32,.3); color:#ffd28a; }
+    .iad-btn-hi:hover { background:rgba(255,176,32,.15); box-shadow:0 0 14px rgba(255,176,32,.2); }
+    .iad-btn-nr { background:rgba(59,214,113,.08); border-color:rgba(59,214,113,.3); color:#9ff0bf; }
+    .iad-btn-nr:hover { background:rgba(59,214,113,.15); box-shadow:0 0 14px rgba(59,214,113,.2); }
+    @keyframes iadRowIn { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
+    @media(max-width:900px){ .iad-deal-row,.iad-hdr-grid{ grid-template-columns:1fr 1fr 60px 1fr !important; } }
+    @media(max-width:600px){ .iad-deal-row{ grid-template-columns:1fr 1fr !important; } .iad-hdr-grid{ display:none !important; } }
+    @media(max-width:768px){ .iad-bottom-grid { grid-template-columns:1fr !important; } .iad-bottom-grid > div:first-child { border-right:none; border-bottom:1px solid var(--border); } }
+    @media(max-width:600px){ .iad-btn { padding:8px 12px; font-size:12px; } }
+  </style>
+
+  <!-- ── Customer-Side Request Form (feeds the pipeline live) ── -->
+  <div style="max-width:1160px;margin:32px auto 0;padding:0 48px;" data-reveal>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;" class="crf-grid">
+      <!-- Customer side -->
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#ff9b9b,var(--blue));"></div>
+        <div style="padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Customer Side</span>
+          <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.25);color:var(--cyan);">What Clients See</span>
+        </div>
+        <div style="padding:20px;">
+          <p style="font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.6;">Try submitting a request below &mdash; watch it appear in the pipeline and close automatically.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <input id="crf-name" class="glc-input" type="text" placeholder="Your name" autocomplete="name">
+            <select id="crf-type" class="glc-input" style="cursor:pointer;">
+              <option value="Emergency">Emergency</option>
+              <option value="Repair Request">Repair Request</option>
+              <option value="Inspection">Inspection</option>
+            </select>
+            <button type="button" onclick="crfSubmit()" style="padding:12px;font-size:15px;font-weight:800;font-family:inherit;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(90deg,#1d4ed8,#2563eb);color:#fff;box-shadow:0 4px 14px rgba(29,78,216,.4);transition:opacity .15s,transform .15s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">Submit Request &#8594;</button>
+          </div>
+          <div id="crf-status" style="font-size:13px;font-weight:600;color:var(--cyan);margin-top:12px;min-height:18px;"></div>
+        </div>
+      </div>
+      <!-- What happens automatically -->
+      <div style="background:rgba(34,211,238,.03);border:1px solid rgba(34,211,238,.18);border-radius:16px;overflow:hidden;position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--blue));"></div>
+        <div style="padding:18px 20px;border-bottom:1px solid rgba(34,211,238,.12);display:flex;align-items:center;gap:8px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Your Business Dashboard</span>
+          <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.25);color:var(--cyan);">What You See</span>
+        </div>
+        <div style="padding:20px;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">What Happens Automatically</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="width:22px;height:22px;border-radius:50%;background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#ff9b9b;flex-shrink:0;">1</span><span>Request captured in pipeline instantly</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="width:22px;height:22px;border-radius:50%;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--cyan);flex-shrink:0;">2</span><span>Customer contacted in under 2 seconds</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="width:22px;height:22px;border-radius:50%;background:rgba(255,176,32,.1);border:1px solid rgba(255,176,32,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#ffd28a;flex-shrink:0;">3</span><span>Follow-up sequence started</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="width:22px;height:22px;border-radius:50%;background:rgba(59,214,113,.1);border:1px solid rgba(59,214,113,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#9ff0bf;flex-shrink:0;">4</span><span>Deal moves to close &mdash; revenue recovered</span></div>
+          </div>
+          <div id="crf-feed" style="margin-top:14px;display:flex;flex-direction:column;gap:4px;max-height:100px;overflow-y:auto;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>@media(max-width:768px){.crf-grid{grid-template-columns:1fr !important;}}</style>
+  <script>
+  (function(){
+    window.crfSubmit = function(){
+      var name = ((document.getElementById('crf-name')||{}).value||'').trim() || 'New Customer';
+      var type = (document.getElementById('crf-type')||{}).value || 'Repair Request';
+      var st = document.getElementById('crf-status');
+      if(st) st.innerHTML = '&#10003; Submitted &mdash; entering pipeline&hellip;';
+      /* Feed into main pipeline */
+      if(typeof window.iadSimulate === 'function') window.iadSimulate('Form', type);
+      /* Reset form */
+      setTimeout(function(){
+        var n = document.getElementById('crf-name'); if(n) n.value = '';
+        if(st) st.innerHTML = '&#10003; Done &mdash; watch the pipeline above to see your deal recover.';
+      }, 400);
+      /* Update CRF feed */
+      var feed = document.getElementById('crf-feed');
+      if(feed){
+        var msgs = ['Request received','Response sent instantly','Follow-up queued','Deal active in pipeline'];
+        var delays = [0, 400, 950, 1400];
+        msgs.forEach(function(msg, i){
+          setTimeout(function(){
+            var d = document.createElement('div');
+            d.style.cssText = 'font-size:12px;display:flex;align-items:center;gap:6px;padding:3px 0;color:var(--text);';
+            d.innerHTML = '<span style="color:#9ff0bf;font-weight:700;">&#10003;</span>'+msg;
+            feed.appendChild(d);
+          }, delays[i]);
+        });
+      }
+    };
+  })();
+  </script>
+
+  <!-- ── Lead Capture Inline Panel (shown after first user simulation) ── -->
+  <div id="glc-inline-form" style="max-width:1160px;margin:24px auto 0;padding:0 48px;display:none;">
+    <div style="background:linear-gradient(135deg,rgba(79,156,255,.08),rgba(34,211,238,.04));border:1px solid rgba(79,156,255,.25);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));"></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+        <span style="font-size:26px;line-height:1;">&#9889;</span>
+        <div>
+          <div style="font-size:17px;font-weight:900;letter-spacing:-.01em;">You just saw what this system can do.</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:3px;">Let me set this up for your business this week &mdash; no card required.</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end;" class="glc-inline-grid">
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);" for="gli-name">Your Name</label>
+          <input class="glc-input" id="gli-name" type="text" placeholder="John Smith" autocomplete="name">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);" for="gli-phone">Phone</label>
+          <input class="glc-input" id="gli-phone" type="tel" placeholder="(555) 000-0000" autocomplete="tel">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);" for="gli-biz">Business Type</label>
+          <select class="glc-input" id="gli-biz" style="cursor:pointer;">
+            <option value="">Select industry&hellip;</option>
+            <option value="HVAC">HVAC</option>
+            <option value="Plumbing">Plumbing</option>
+            <option value="Property Management / HOA">Property Management / HOA</option>
+            <option value="Dental">Dental</option>
+            <option value="General Contractor">General Contractor</option>
+          </select>
+        </div>
+        <button type="button" onclick="glcInlineSubmit()" style="padding:11px 24px;font-size:14px;font-weight:800;font-family:inherit;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(90deg,#1d4ed8,#2563eb);color:#fff;white-space:nowrap;box-shadow:0 4px 14px rgba(29,78,216,.45);transition:opacity .15s,transform .15s;min-height:44px;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">Get Set Up &rarr;</button>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px;">1&ndash;2 day setup &bull; Pay after you see it working &bull; Cancel anytime</p>
+    </div>
+  </div>
+  <!-- Confirmation panel (populated by JS after capture) -->
+  <div id="glc-confirm-panel" style="max-width:1160px;margin:24px auto 0;padding:0 48px;display:none;"></div>
+  <style>
+    .glc-input{width:100%;padding:11px 14px;font-size:14px;font-family:inherit;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:8px;color:var(--text);outline:none;-webkit-appearance:none;appearance:none;transition:border-color .15s;}
+    .glc-input:focus{border-color:var(--blue);}
+    .glc-input::placeholder{color:var(--muted);opacity:.6;}
+    .glc-input option{background:#0c1b33;color:var(--text);}
+    @keyframes glcSlideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:768px){.glc-inline-grid{grid-template-columns:1fr !important;} .glc-inline-grid button{width:100%;}}
+    .hot-lead-badge{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:4px;background:rgba(255,50,50,.15);border:1px solid rgba(255,50,50,.4);color:#ff6b6b;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;}
+  </style>
 
   <!-- ── How It Works ── -->
   <div style="max-width:1160px;margin:80px auto 0;padding:0 48px;" data-reveal>
     <p class="sec-label" style="text-align:center;margin-bottom:8px">The Process</p>
-    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:40px;">How the system works</h2>
+    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:40px;">From missed deal to closed deal &mdash; automatically</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="hiw-grid">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden;">
-        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));"></div>
-        <div style="width:36px;height:36px;border-radius:50%;background:rgba(79,156,255,.12);border:1px solid rgba(79,156,255,.3);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--blue);margin-bottom:16px;">1</div>
-        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Request comes in</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.65;">Customer fills a form, submits a photo, or calls the voice line — the system captures everything in real time, no manual entry.</div>
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#ff9b9b,var(--blue));"></div>
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,92,92,.12);border:1px solid rgba(255,92,92,.3);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#ff9b9b;margin-bottom:16px;">1</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Deal would have been lost</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.65;">Call goes unanswered. Text sits unread. Web form goes cold. Without this system, that revenue is gone. With it, every one gets captured the instant it comes in.</div>
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--blue));"></div>
         <div style="width:36px;height:36px;border-radius:50%;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--cyan);margin-bottom:16px;">2</div>
-        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">System responds instantly</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.65;">Confirmations, notices, and follow-ups fire within seconds — no one types a single email or makes a manual call.</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Contact sent in under 2 seconds</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.65;">The first business to respond wins the job. Every time. This system responds before any competitor even picks up the phone &mdash; 24 hours a day.</div>
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(34,197,94,.6),var(--cyan));"></div>
         <div style="width:36px;height:36px;border-radius:50%;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#4ade80;margin-bottom:16px;">3</div>
-        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Everything is tracked</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.65;">Every request, status update, and message lives in one place — organized automatically, visible in real time on the live dashboard.</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Deal closes, revenue recovered</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.65;">Follow-up runs on its own until the deal closes. No manual steps. The revenue you were losing every week starts coming back on day one.</div>
       </div>
     </div>
   </div>
@@ -767,24 +1011,24 @@
   <!-- ── Before / After ── -->
   <div style="max-width:1160px;margin:60px auto 0;padding:0 48px;" data-reveal>
     <p class="sec-label" style="text-align:center;margin-bottom:8px">Why It Matters</p>
-    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:40px;">The difference is immediate</h2>
+    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:40px;">The revenue difference is immediate</h2>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" class="ba-grid">
       <div style="background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.2);border-radius:16px;padding:28px 24px;">
-        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:18px;">Before</div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:18px;">Without This System</div>
         <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;">
-          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>Manual tracking across spreadsheets and sticky notes</li>
-          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>Missed follow-ups and leads that fall through the cracks</li>
-          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>Scattered records across inboxes and text threads</li>
-          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>Hours spent writing the same follow-up emails</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>2&ndash;5 missed deals per day, every single day</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>Leads go cold before anyone responds</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>Competitor responds first &mdash; you lose the job</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.5"><span style="color:#f87171;font-size:16px;flex-shrink:0;margin-top:1px">✕</span>$2k&ndash;$8k in revenue lost every single week</li>
         </ul>
       </div>
       <div style="background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.2);border-radius:16px;padding:28px 24px;">
-        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#4ade80;margin-bottom:18px;">After</div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#4ade80;margin-bottom:18px;">With This System</div>
         <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;">
-          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>Fully automated pipeline — zero manual steps</li>
-          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>Every lead captured and followed up within seconds</li>
-          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>One centralized log — every interaction on record</li>
-          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>Sub-second response time, 24/7, without lifting a finger</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>Every missed deal captured and worked to close</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>Response in under 2 seconds &mdash; before anyone else</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>Automated follow-up closes deals that go quiet</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.5"><span style="color:#4ade80;font-size:16px;flex-shrink:0;margin-top:1px">✓</span>Revenue recovered from day one, tracked in real time</li>
         </ul>
       </div>
     </div>
@@ -1651,22 +1895,125 @@
 
   <!-- ── Book a Demo ── -->
   <div id="book-demo" style="max-width:1160px;margin:80px auto 0;padding:0 48px;">
-    <p class="sec-label" style="text-align:center;margin-bottom:8px">Schedule a Call</p>
-    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:8px;">Book a Demo Call</h2>
-    <p style="text-align:center;color:var(--muted);font-size:15px;margin-bottom:32px;">Pick a time that works for you &mdash; we'll walk through exactly how this system would work for your business.</p>
+    <p class="sec-label" style="text-align:center;margin-bottom:8px">Get It Installed</p>
+    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:8px;">Book Your Setup Call</h2>
+    <p style="text-align:center;color:var(--muted);font-size:15px;margin-bottom:32px;">Pick a time. We&rsquo;ll walk through your deal flow, configure the recovery pipeline for your business, and have it capturing deals within 1&ndash;2 days.</p>
     <div style="border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#fff;">
       <div class="calendly-inline-widget" data-url="https://calendly.com/grayhorizonsenterprise/30min" style="min-width:320px;height:700px;"></div>
     </div>
   </div>
 
+  <!-- ── Sales Impact Panel ── -->
+  <div style="max-width:1160px;margin:80px auto 0;padding:0 48px;" data-reveal>
+    <p class="sec-label" style="text-align:center;margin-bottom:8px">The Numbers</p>
+    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:40px;">Sales Impact</h2>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;" class="si-stat-grid">
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#ff9b9b,#ff6b6b);"></div>
+        <div style="font-size:42px;font-weight:900;color:#ff9b9b;font-variant-numeric:tabular-nums;letter-spacing:-.03em;margin-bottom:6px;">400%</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:500;line-height:1.5;">Higher close rate when you respond within 5 minutes vs. 30 minutes</div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));"></div>
+        <div style="font-size:42px;font-weight:900;color:var(--blue);font-variant-numeric:tabular-nums;letter-spacing:-.03em;margin-bottom:6px;">&lt;2s</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:500;line-height:1.5;">Average response time to every lead, 24 hours a day, 7 days a week</div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#ffd28a,#f59e0b);"></div>
+        <div style="font-size:42px;font-weight:900;color:#ffd28a;font-variant-numeric:tabular-nums;letter-spacing:-.03em;margin-bottom:6px;">80%</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:500;line-height:1.5;">Of deals close between the 5th and 12th follow-up &mdash; most businesses stop at 1</div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#9ff0bf,#4ade80);"></div>
+        <div style="font-size:42px;font-weight:900;color:#9ff0bf;font-variant-numeric:tabular-nums;letter-spacing:-.03em;margin-bottom:6px;">$0</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:500;line-height:1.5;">You pay nothing until the system is live and you see it working</div>
+      </div>
+    </div>
+  </div>
+  <style>@media(max-width:768px){.si-stat-grid{grid-template-columns:repeat(2,1fr) !important;}}</style>
+
+  <!-- F) What This Does — plain language -->
+  <div style="max-width:1160px;margin:80px auto 0;padding:0 48px;" data-reveal>
+    <p class="sec-label" style="text-align:center;margin-bottom:8px">Plain and Simple</p>
+    <h2 style="font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:32px;">Four Ways This Directly Increases Revenue</h2>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;" class="wtd-grid">
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;align-items:flex-start;gap:16px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.25);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#128228;</div>
+        <div><div style="font-size:15px;font-weight:700;margin-bottom:6px;">Stops revenue from walking out the door</div><div style="font-size:13px;color:var(--muted);line-height:1.65;">Missed calls, slow responses, and dropped leads are the #1 source of lost revenue for service businesses. Every one of those gets captured instead of lost.</div></div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;align-items:flex-start;gap:16px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.22);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#9889;</div>
+        <div><div style="font-size:15px;font-weight:700;margin-bottom:6px;">Faster response = higher close rate</div><div style="font-size:13px;color:var(--muted);line-height:1.65;">Studies show responding in under 5 minutes increases close rate by 400%. This system responds in under 2 seconds, 24/7 &mdash; giving you the win before any competitor can react.</div></div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;align-items:flex-start;gap:16px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.22);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#128200;</div>
+        <div><div style="font-size:15px;font-weight:700;margin-bottom:6px;">Automated follow-up closes more deals</div><div style="font-size:13px;color:var(--muted);line-height:1.65;">80% of sales happen between the 5th and 12th follow-up. Most businesses give up after one. This system follows up automatically until the deal closes or the lead opts out.</div></div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;align-items:flex-start;gap:16px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(59,214,113,.08);border:1px solid rgba(59,214,113,.22);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#128181;</div>
+        <div><div style="font-size:15px;font-weight:700;margin-bottom:6px;">Pipeline conversion tracked in real time</div><div style="font-size:13px;color:var(--muted);line-height:1.65;">See exactly how many deals were captured, how many closed, and how much revenue came back &mdash; every day. No guesswork, no spreadsheets, no manual entry required.</div></div>
+      </div>
+    </div>
+  </div>
+  <style>@media(max-width:768px){.wtd-grid{grid-template-columns:1fr !important;}}</style>
+
+  <!-- H) Closing Strip — risk reversal -->
+  <div style="max-width:1160px;margin:80px auto 0;padding:0 48px;" data-reveal>
+    <div style="background:linear-gradient(135deg,rgba(79,156,255,.07),rgba(34,211,238,.04));border:1px solid rgba(79,156,255,.18);border-radius:20px;padding:52px 40px;text-align:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue) 30%,var(--cyan) 70%,transparent);"></div>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px;">Every Day Without This Costs You Money</p>
+      <h2 style="font-size:clamp(22px,3vw,34px);font-weight:900;letter-spacing:-.03em;margin-bottom:16px;max-width:700px;margin-left:auto;margin-right:auto;line-height:1.2;">Stop losing deals to businesses that respond faster.<br>Install this for your team this week.</h2>
+      <p style="color:var(--muted);font-size:15px;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;">Live in 1&ndash;2 days. If the pipeline isn&rsquo;t capturing and closing deals exactly as shown, you pay nothing. No risk.</p>
+      <button class="btn btn-book" type="button" onclick="gheTriggerCapture(function(){document.getElementById('book-demo').scrollIntoView({behavior:'smooth'})})" style="font-size:16px;padding:15px 40px;font-weight:800;">Install This For Your Team &rarr;</button>
+      <p style="font-size:12px;color:var(--muted);margin-top:14px;">No card required &bull; See it working first &bull; Cancel anytime</p>
+    </div>
+  </div>
+
   <footer>
     <span>&copy; 2026 Gray Horizons Enterprise</span>
-    <button class="btn btn-book" type="button" onclick="openCal()" style="font-size:14px;padding:9px 20px;">
-      &#128197; Book a Demo Call &rarr;
+    <button class="btn btn-book" type="button" onclick="gheTriggerCapture(function(){openCal()})" style="font-size:14px;padding:9px 20px;">
+      &#9889; Install This For Your Team &rarr;
     </button>
   </footer>
 
 </div><!-- /wrap -->
+
+<!-- ── Lead Capture Modal ── -->
+<div id="glc-modal" role="dialog" aria-modal="true" aria-label="Get Set Up" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(5,15,30,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:16px;visibility:hidden;pointer-events:none;opacity:0;transition:opacity .22s ease,visibility .22s ease;">
+  <div style="width:100%;max-width:480px;background:var(--panel);border:1px solid rgba(79,156,255,.35);border-radius:18px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.7);position:relative;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));"></div>
+    <button type="button" onclick="glcClose()" aria-label="Close" style="position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);cursor:pointer;font-family:inherit;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.12)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">&#10005;</button>
+    <div style="padding:28px 28px 0;text-align:center;">
+      <div style="font-size:32px;line-height:1;margin-bottom:12px;">&#9889;</div>
+      <div style="font-size:20px;font-weight:900;letter-spacing:-.02em;margin-bottom:8px;">Install the Revenue Recovery Pipeline</div>
+      <p style="font-size:14px;color:var(--muted);line-height:1.65;max-width:360px;margin:0 auto 22px;">30 seconds to start. We&rsquo;ll configure it for your business and have it capturing deals within 1&ndash;2 days &mdash; no card needed.</p>
+    </div>
+    <div style="padding:0 28px 28px;">
+      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;">
+        <label style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);" for="glc-name">Your Name</label>
+        <input class="glc-input" id="glc-name" type="text" placeholder="John Smith" autocomplete="name">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;">
+        <label style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);" for="glc-phone">Phone Number</label>
+        <input class="glc-input" id="glc-phone" type="tel" placeholder="(555) 000-0000" autocomplete="tel">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:18px;">
+        <label style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);" for="glc-biz">Business Type</label>
+        <select class="glc-input" id="glc-biz" style="cursor:pointer;">
+          <option value="">Select your industry&hellip;</option>
+          <option value="HVAC">HVAC</option>
+          <option value="Plumbing">Plumbing</option>
+          <option value="Property Management / HOA">Property Management / HOA</option>
+          <option value="Dental">Dental</option>
+          <option value="General Contractor">General Contractor</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <button type="button" onclick="glcSubmit()" style="width:100%;padding:14px;font-size:16px;font-weight:800;font-family:inherit;border:none;border-radius:10px;cursor:pointer;background:linear-gradient(90deg,#1d4ed8,#2563eb);color:#fff;letter-spacing:.02em;box-shadow:0 4px 16px rgba(29,78,216,.5);transition:opacity .15s,transform .15s;" onmouseover="this.style.opacity='.9';this.style.transform='translateY(-1px)'" onmouseout="this.style.opacity='1';this.style.transform=''">Get My System Set Up &rarr;</button>
+      <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;">1&ndash;2 day setup &bull; Pay after you see it working &bull; Cancel anytime</p>
+    </div>
+  </div>
+</div>
 
 <!-- AI Voice Demo Modal -->
 <div class="vchat-modal" id="vchat-modal" role="dialog" aria-modal="true" aria-label="Live AI Demo Call">
@@ -3293,7 +3640,7 @@ function submitVoiceText(){
 
   /* ── Hero stats ticker — live-feeling animated numbers ── */
   (function(){
-    var targets={calls:14283, resp:340, up:99.9, sys:5};
+    var targets={calls:14283, resp:2, up:99.9, sys:5};
     var cur={calls:0, resp:0, up:0, sys:0};
     var dur=2200, start=null;
     function ease(t){ return 1-Math.pow(1-t,3); }
@@ -3316,5 +3663,598 @@ function submitVoiceText(){
 })();
 </script>
 
+<script>
+/* ── Deal Recovery Pipeline ── */
+(function(){
+  'use strict';
+  var _iadN=0, _iadJobs=0, _iadValue=0;
+
+  var PRIORITY=[
+    {test:/Emergency|Urgent|Burst/i, label:'High Value', color:'#ff9b9b', bg:'rgba(255,92,92,.1)',  border:'rgba(255,92,92,.3)',  value:1200},
+    {test:/Repair|Failure|Leak/i,    label:'Mid Value',  color:'#ffd28a', bg:'rgba(255,176,32,.1)', border:'rgba(255,176,32,.3)', value:600},
+    {test:/.*/,                       label:'Standard',   color:'#9ff0bf', bg:'rgba(59,214,113,.1)', border:'rgba(59,214,113,.3)', value:250}
+  ];
+
+  function _p(type){
+    for(var i=0;i<PRIORITY.length;i++){if(PRIORITY[i].test.test(type))return PRIORITY[i];}
+    return PRIORITY[PRIORITY.length-1];
+  }
+  function _esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function _ts(){var d=new Date(),h=d.getHours(),m=d.getMinutes(),ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+(m<10?'0':'')+m+' '+ap;}
+
+  function _addFeed(text,color){
+    var feed=document.getElementById('iad-feed');if(!feed)return;
+    var ph=feed.querySelector('[data-iad-placeholder]');if(ph)ph.remove();
+    var div=document.createElement('div');
+    div.style.cssText='font-size:12px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;gap:6px;flex-shrink:0;';
+    div.innerHTML='<span style="width:5px;height:5px;border-radius:50%;background:'+(color||'var(--cyan)')+';flex-shrink:0;box-shadow:0 0 4px '+(color||'var(--cyan)')+';"></span>'+
+      '<span style="color:var(--muted);font-size:11px;white-space:nowrap;">'+_ts()+'</span>'+
+      '<span style="color:var(--text);">'+_esc(text)+'</span>';
+    feed.prepend(div);
+    while(feed.children.length>15)feed.removeChild(feed.lastChild);
+  }
+
+  function _updatePills(){
+    var c=document.getElementById('iad-count');if(c)c.textContent=_iadJobs;
+    var i=document.getElementById('iad-instant');if(i)i.textContent=_iadJobs;
+    var v=document.getElementById('iad-value');if(v)v.textContent=_iadValue.toLocaleString();
+  }
+
+  /* Pipeline stage track builder — 5 stages: Incoming/Contacted/Follow-Up/Active/Closed */
+  function _buildTrack(id){
+    var h='<div class="iad-track">';
+    for(var i=0;i<5;i++){
+      h+='<div class="iad-tdot'+(i===0?' iad-active':'')+'" id="iad-d'+i+'-'+id+'" title="'+['Incoming Lead','Contacted','Follow-Up Sent','In Progress','Closed'][i]+'"></div>';
+      if(i<4) h+='<div class="iad-tline" id="iad-l'+(i+1)+'-'+id+'"></div>';
+    }
+    return h+'</div>';
+  }
+
+  function _setStage(id, stageNum){
+    for(var i=0;i<5;i++){
+      var dot=document.getElementById('iad-d'+i+'-'+id); if(!dot)continue;
+      dot.className='iad-tdot'+(i<stageNum?' iad-done':(i===stageNum?' iad-active':''));
+      if(i<4){
+        var line=document.getElementById('iad-l'+(i+1)+'-'+id);
+        if(line) line.className='iad-tline'+(i<stageNum?' iad-done':'');
+      }
+    }
+  }
+
+  function _setStatus(id,html,color){
+    var el=document.getElementById('iad-s-'+id);if(!el)return;
+    el.innerHTML=html;if(color)el.style.color=color;
+  }
+
+  var CHAN_ICONS={'Call':'&#128222;','SMS':'&#128172;','Form':'&#127760;'};
+
+  window.iadSimulate=function(source,type){
+    var id=++_iadN;
+    var p=_p(type);
+    var icon=CHAN_ICONS[source]||'&#128228;';
+
+    var empty=document.getElementById('iad-empty');if(empty)empty.remove();
+
+    var rows=document.getElementById('iad-rows');if(!rows)return;
+    var row=document.createElement('div');
+    row.id='iad-r-'+id;
+    row.style.cssText='animation:iadRowIn .3s ease-out;border-bottom:1px solid rgba(255,255,255,.04);display:grid;grid-template-columns:180px 1fr 80px 240px 110px;align-items:center;padding:10px 16px;gap:8px;transition:background .4s;';
+    row.className='iad-deal-row';
+    row.innerHTML=
+      '<div style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;">'+
+        icon+' <span style="font-size:12px;font-weight:600;color:var(--muted);">'+_esc(source)+'</span>'+
+        '<span style="margin-left:4px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;background:'+p.bg+';border:1px solid '+p.border+';color:'+p.color+';">'+p.label+'</span>'+
+      '</div>'+
+      '<div style="font-size:13px;color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+_esc(type)+'</div>'+
+      '<div style="font-size:14px;font-weight:900;color:#9ff0bf;font-variant-numeric:tabular-nums;">$'+p.value+'</div>'+
+      '<div>'+_buildTrack(id)+'</div>'+
+      '<div style="font-size:11px;font-weight:700;color:var(--muted);" id="iad-s-'+id+'">&#128228; Incoming</div>';
+    rows.insertBefore(row,rows.firstChild);
+
+    _iadJobs++;_iadValue+=p.value;_updatePills();
+    _addFeed(source+' \u2014 missed deal captured: '+_esc(type),p.color);
+    try{updateGlobalSystem({mode:'intake',id:'IAD'+id,ts:_ts(),name:source+' Deal',email:'',unit:'',type:type,notice:type});}catch(_){}
+
+    setTimeout(function(){
+      _setStage(id,1);
+      _setStatus(id,'&#9889; Contacted','var(--cyan)');
+      _addFeed('Contacted instantly \u2014 deal alive','var(--cyan)');
+    },400);
+    setTimeout(function(){
+      _setStage(id,2);
+      _setStatus(id,'&#128229; Follow-Up Sent',p.color);
+      _addFeed('Follow-up sent \u2014 deal in pipeline',p.color);
+    },950);
+    setTimeout(function(){
+      _setStage(id,3);
+      _setStatus(id,'&#128200; In Progress','#ffd28a');
+      _addFeed('Deal active \u2014 moving to close','#ffd28a');
+    },1400);
+    setTimeout(function(){
+      _setStage(id,4);
+      _setStatus(id,'&#10003; Closed','#9ff0bf');
+      _addFeed('Deal closed \u2014 $'+p.value+' recovered','#9ff0bf');
+      var r=document.getElementById('iad-r-'+id);
+      if(r) r.classList.add('deal-closed-row');
+    },1700);
+  };
+
+  window.iadComplete=function(id){
+    _setStage(id,4);
+    _setStatus(id,'&#10003; Closed','#9ff0bf');
+    _addFeed('Deal manually closed \u2014 revenue recovered','#9ff0bf');
+  };
+
+  window.iadReset=function(){
+    var rows=document.getElementById('iad-rows');if(!rows)return;
+    rows.innerHTML='<div id="iad-empty" style="padding:36px;text-align:center;font-size:13px;color:var(--muted);font-style:italic;">No deals yet \u2014 simulate a missed call, SMS, or web lead above to see the pipeline in action</div>';
+    var feed=document.getElementById('iad-feed');
+    if(feed)feed.innerHTML='<div data-iad-placeholder style="font-size:12px;color:var(--muted);font-style:italic;">Deals will appear here as they get captured\u2026</div>';
+    _iadJobs=0;_iadValue=0;_iadN=0;_updatePills();
+  };
+
+  /* Boot demo — shows the pipeline moving on page load */
+  setTimeout(function(){iadSimulate('Call','Emergency Leak');},600);
+  setTimeout(function(){iadSimulate('Form','Repair Request');},950);
+  setTimeout(function(){iadSimulate('SMS','Inspection');},1300);
+})();
+</script>
+<script>
+/* ── IAD Live Voice Intake ── */
+(function(){
+  'use strict';
+  var _iadRec = null;
+  var _iadCallActive = false;
+
+  function _iadSpeak(text, onEnd){
+    if(!window.speechSynthesis) return onEnd && onEnd();
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US'; u.rate = 1.0;
+    /* Prefer a Google/natural voice if available */
+    var vs = window.speechSynthesis.getVoices();
+    var pref = vs.find(function(v){return /google/i.test(v.name)&&v.lang==='en-US';})
+            || vs.find(function(v){return v.lang==='en-US';});
+    if(pref) u.voice = pref;
+    if(onEnd) u.onend = onEnd;
+    window.speechSynthesis.speak(u);
+  }
+
+  function _setVoiceStatus(text, dotColor, dotGlow){
+    var s = document.getElementById('iad-voice-status'); if(s) s.textContent = text;
+    var d = document.getElementById('iad-voice-dot');
+    if(d){
+      d.style.background = dotColor || 'var(--muted)';
+      d.style.boxShadow  = dotGlow  ? '0 0 7px '+(dotColor||'var(--muted)') : 'none';
+      d.style.animation  = dotGlow  ? 'pulse 1.2s ease-in-out infinite' : 'none';
+    }
+  }
+
+  function _showVoicePanel(show){
+    var p = document.getElementById('iad-voice-panel');
+    if(p) p.style.display = show ? 'flex' : 'none';
+  }
+
+  window.iadStartCall = function(){
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR){
+      alert('Live voice requires Chrome or Edge on desktop. Use the SMS/Form buttons on this browser.');
+      return;
+    }
+    if(_iadCallActive) return;
+    _iadCallActive = true;
+    _showVoicePanel(true);
+    _setVoiceStatus('Connecting\u2026', '#a78bfa', true);
+    var btn = document.getElementById('iad-voice-btn');
+    if(btn){ btn.disabled = true; btn.style.opacity = '.5'; }
+
+    /* Greet then listen */
+    _iadSpeak('Thank you for calling. Please tell me your name and describe the issue.', function(){
+      if(!_iadCallActive) return;
+      _setVoiceStatus('Listening \u2014 speak now\u2026', '#22c55e', true);
+
+      _iadRec = new SR();
+      _iadRec.lang = 'en-US';
+      _iadRec.continuous = false;
+      _iadRec.interimResults = false;
+      _iadRec.maxAlternatives = 1;
+
+      _iadRec.onresult = function(e){
+        var transcript = e.results[0][0].transcript;
+        _setVoiceStatus('Heard: \u201c' + transcript + '\u201d', '#22d3ee', false);
+        _iadSpeak('Got it. We are sending someone out now. You will receive a confirmation shortly.');
+        /* Feed into the intake pipeline */
+        if(window.iadSimulate){
+          window.iadSimulate('Call', transcript);
+        }
+        setTimeout(function(){ window.iadEndCall(); }, 3500);
+      };
+
+      _iadRec.onerror = function(evt){
+        var MSGS = {
+          'no-speech':    'No speech detected \u2014 tap again to retry',
+          'not-allowed':  'Mic blocked \u2014 allow microphone access in browser settings',
+          'audio-capture':'No microphone found \u2014 check device'
+        };
+        _setVoiceStatus(MSGS[evt.error] || 'Mic error: '+evt.error, '#f87171', false);
+        setTimeout(function(){ window.iadEndCall(); }, 3000);
+      };
+
+      _iadRec.onend = function(){
+        if(_iadCallActive && document.getElementById('iad-voice-dot')){
+          /* Recognition ended without result — browser timed out */
+          var s = document.getElementById('iad-voice-status');
+          if(s && /Listening/i.test(s.textContent)){
+            _setVoiceStatus('No speech captured \u2014 call ended', 'var(--muted)', false);
+            setTimeout(function(){ window.iadEndCall(); }, 2000);
+          }
+        }
+      };
+
+      try{ _iadRec.start(); } catch(err){ _setVoiceStatus('Could not start mic: '+err.message,'#f87171',false); window.iadEndCall(); }
+    });
+  };
+
+  window.iadEndCall = function(){
+    _iadCallActive = false;
+    if(_iadRec){ try{ _iadRec.stop(); }catch(_){} _iadRec = null; }
+    if(window.speechSynthesis) window.speechSynthesis.cancel();
+    _setVoiceStatus('Call ended', 'var(--muted)', false);
+    setTimeout(function(){
+      _showVoicePanel(false);
+      _setVoiceStatus('Idle', 'var(--muted)', false);
+    }, 2000);
+    var btn = document.getElementById('iad-voice-btn');
+    if(btn){ btn.disabled = false; btn.style.opacity = '1'; }
+  };
+})();
+</script>
+<script>
+/* ── System Hint Toasts (fixed & integrated) ── */
+(function(){
+  'use strict';
+  var _hintSlots = [];  /* tracks live hint elements for vertical stacking */
+  var _bootDone  = false;
+  /* Mute hints during the boot demo so 12 toasts don't fire on page load */
+  setTimeout(function(){ _bootDone = true; }, 2600);
+
+  window.showSysHint = function(text, color){
+    /* Prune any hints already removed from DOM */
+    _hintSlots = _hintSlots.filter(function(h){ return document.body.contains(h); });
+    if(_hintSlots.length >= 3) return; /* cap — avoid covering entire screen */
+
+    var c = color || 'var(--cyan)';
+    var el = document.createElement('div');
+    var bottomPx = 24 + _hintSlots.length * 62;
+    el.style.cssText =
+      'position:fixed;bottom:'+bottomPx+'px;right:24px;z-index:9998;' +
+      'background:#0c1b33;border:1px solid '+c+';border-radius:10px;' +
+      'padding:11px 16px;font-size:13px;font-weight:600;color:#e2e8f0;' +
+      'box-shadow:0 8px 28px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.25);' +
+      'display:flex;align-items:center;gap:9px;max-width:284px;' +
+      'pointer-events:none;opacity:0;transform:translateY(8px);' +
+      'transition:opacity .22s ease,transform .22s ease;';
+    el.innerHTML =
+      '<span style="width:6px;height:6px;border-radius:50%;background:'+c+';box-shadow:0 0 6px '+c+';flex-shrink:0;"></span>' +
+      '<span>'+String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span>';
+    document.body.appendChild(el);
+    _hintSlots.push(el);
+
+    requestAnimationFrame(function(){
+      el.style.opacity='1'; el.style.transform='translateY(0)';
+    });
+    setTimeout(function(){
+      el.style.opacity='0'; el.style.transform='translateY(6px)';
+      setTimeout(function(){
+        if(el.parentNode) el.parentNode.removeChild(el);
+        _hintSlots = _hintSlots.filter(function(h){ return h!==el; });
+      }, 230);
+    }, 2400);
+  };
+
+  /* Priority → dollar value (mirrors IAD IIFE map) */
+  function _wrapVal(type){
+    if(/Emergency|Urgent|Burst/i.test(type)) return 1200;
+    if(/Repair|Failure|Leak/i.test(type))    return 600;
+    return 250;
+  }
+
+  /* B) ROI Bar — Recovered counter */
+  window.iadAddRecovered = function(amount){
+    var el = document.getElementById('roi-recovered'); if(!el) return;
+    var cur = parseInt(el.getAttribute('data-raw')||'0', 10) + (amount||0);
+    el.setAttribute('data-raw', String(cur));
+    el.textContent = '$' + cur.toLocaleString();
+    /* Flash green on update */
+    el.style.transition = 'transform .2s,opacity .2s';
+    el.style.transform = 'scale(1.15)';
+    setTimeout(function(){ el.style.transform = 'scale(1)'; }, 200);
+  };
+
+  /* G) Multi-niche label map */
+  var _iadNicheMap = {
+    plumbing: {call:'Emergency Leak',   sms:'Pipe Repair',        form:'Inspection'},
+    hvac:     {call:'AC Failure',       sms:'Emergency Repair',   form:'Maintenance'},
+    property: {call:'Tenant Issue',     sms:'Noise Complaint',    form:'Violation'}
+  };
+  window.iadSimByNiche = function(slot){
+    var sel  = document.getElementById('iad-niche-sel');
+    var key  = sel ? sel.value : 'plumbing';
+    var map  = _iadNicheMap[key] || _iadNicheMap.plumbing;
+    var src  = slot==='call'?'Call':slot==='sms'?'SMS':'Form';
+    if(typeof window.iadSimulate === 'function') window.iadSimulate(src, map[slot]);
+  };
+  window.iadNicheChange = function(){
+    var sel = document.getElementById('iad-niche-sel'); if(!sel) return;
+    var map = _iadNicheMap[sel.value] || _iadNicheMap.plumbing;
+    var cb  = document.getElementById('iad-btn-call');
+    var sb  = document.getElementById('iad-btn-sms');
+    var fb  = document.getElementById('iad-btn-form');
+    if(cb) cb.title = map.call;
+    if(sb) sb.title = map.sms;
+    if(fb) fb.title = map.form;
+  };
+
+  /* Wrap iadSimulate — emit stage hints + always increment Recovered */
+  var _origSim = window.iadSimulate;
+  if(typeof _origSim === 'function'){
+    window.iadSimulate = function(source, type){
+      _origSim(source, type);
+      var val = _wrapVal(type);
+      /* Recovered increments for ALL jobs (including boot demo) */
+      setTimeout(function(){ window.iadAddRecovered(val); }, 1800);
+      /* Hints only after boot demo settles */
+      if(!_bootDone) return;
+      showSysHint('Missed '+source+' captured \u2014 deal recovered', '#ff9b9b');
+      setTimeout(function(){ showSysHint('Contacted instantly \u2014 lead engaged', 'var(--cyan)'); }, 500);
+      setTimeout(function(){ showSysHint('Follow-up sent \u2014 deal moving', '#ffd28a'); }, 1050);
+      setTimeout(function(){ showSysHint('Deal closed \u2714 Revenue recovered', '#9ff0bf'); }, 1800);
+    };
+  }
+
+  /* Wrap updateGlobalSystem — hint on real form submissions */
+  var _origUGS = window.updateGlobalSystem;
+  if(typeof _origUGS === 'function'){
+    window.updateGlobalSystem = function(payload){
+      _origUGS(payload);
+      if(payload && payload.mode && payload.mode !== 'intake' && _bootDone){
+        showSysHint('\u2713 '+String(payload.mode).toUpperCase()+' request received', 'var(--cyan)');
+        setTimeout(function(){ showSysHint('Confirmation dispatched automatically', '#4f9cff'); }, 800);
+      }
+    };
+  }
+
+  /* runDemoSequence — exported for manual use, NOT auto-called.
+     Boot demo in the IAD section already pre-seeds rows on load. */
+  window.runDemoSequence = function(){
+    if(typeof window.iadSimulate === 'function') window.iadSimulate('Call','Emergency Leak');
+  };
+
+})();
+</script>
+<script>
+/* ══════════════════════════════════════════════════════════
+   GHE Pipeline — Lead Capture, Notification & Close Flow
+   ══════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  var _captured  = false;
+  var _pendingFn = null;
+
+  /* Restore capture state within this session */
+  try{ if(sessionStorage.getItem('ghe_cap')) _captured = true; }catch(_){}
+
+  /* HTML escaping */
+  function _esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  /* Timestamp */
+  function _ts(){ var d=new Date(),h=d.getHours(),m=d.getMinutes(),ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+(m<10?'0':'')+m+' '+ap; }
+
+  /* Shake a field to indicate validation error */
+  function _shake(id){
+    var el=document.getElementById(id); if(!el) return;
+    el.style.borderColor='#f87171';
+    if(el.animate) el.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'translateX(-3px)'},{transform:'translateX(0)'}],{duration:280,easing:'ease-out'});
+    setTimeout(function(){ el.style.borderColor=''; el.focus(); }, 900);
+  }
+
+  /* ── Send lead to GHE webhook (beacon + JSONP fallback) ── */
+  function _sendLead(payload){
+    try{
+      if(navigator.sendBeacon && typeof GHE_SCRIPT_URL !== 'undefined'){
+        navigator.sendBeacon(GHE_SCRIPT_URL, new Blob([JSON.stringify(payload)],{type:'application/json'}));
+      }
+    }catch(_){}
+    /* JSONP fallback */
+    try{
+      if(typeof GHE_SCRIPT_URL === 'undefined') return;
+      var cb='_glc_'+Date.now();
+      var s=document.createElement('script');
+      window[cb]=function(){ try{delete window[cb];}catch(_){} if(s.parentNode)s.parentNode.removeChild(s); };
+      s.onerror=function(){ if(s.parentNode)s.parentNode.removeChild(s); };
+      s.src=GHE_SCRIPT_URL+'?callback='+cb+'&data='+encodeURIComponent(JSON.stringify(payload));
+      document.head.appendChild(s);
+    }catch(_){}
+  }
+
+  /* ── Open modal ── */
+  function glcOpen(afterFn){
+    if(_captured){ if(typeof afterFn==='function') afterFn(); return; }
+    _pendingFn = afterFn || null;
+    var m=document.getElementById('glc-modal');
+    if(m){ m.style.visibility='visible'; m.style.pointerEvents='auto'; m.style.opacity='1'; }
+    lockScroll();
+    setTimeout(function(){ var n=document.getElementById('glc-name'); if(n) n.focus(); }, 220);
+  }
+  window.glcOpen = glcOpen;
+
+  /* ── Close modal ── */
+  window.glcClose = function(){
+    var m=document.getElementById('glc-modal');
+    if(m){ m.style.visibility='hidden'; m.style.pointerEvents='none'; m.style.opacity='0'; }
+    unlockScroll();
+    _pendingFn = null;
+  };
+
+  /* ── Shared submit path (used by modal AND inline form) ── */
+  function _processCapture(name, phone, biz){
+    /* Mark captured */
+    _captured = true;
+    try{ sessionStorage.setItem('ghe_cap','1'); }catch(_){}
+
+    /* Store to localStorage */
+    var lead = {name:name, phone:phone, biz:biz, ts:new Date().toISOString()};
+    try{
+      var arr=JSON.parse(localStorage.getItem('ghe_leads')||'[]');
+      arr.push(lead); localStorage.setItem('ghe_leads', JSON.stringify(arr));
+    }catch(_){}
+
+    /* Send to webhook */
+    _sendLead({mode:'lead_capture', name:name, phone:phone, biz:biz, ts:lead.ts, source:'site'});
+
+    /* Close modal */
+    window.glcClose();
+
+    /* Downstream effects */
+    _showConfirm(name, biz);
+    _addHotLead(name, biz);
+
+    /* Boost ROI recovered (avg setup value) */
+    if(typeof window.iadAddRecovered==='function') window.iadAddRecovered(450);
+
+    /* Hint toast */
+    if(typeof window.showSysHint==='function'){
+      window.showSysHint('HOT LEAD captured \u2014 '+name, '#ff6b6b');
+      setTimeout(function(){ window.showSysHint('Setup team notified', '#9ff0bf'); }, 600);
+      setTimeout(function(){ window.showSysHint('Follow-up scheduled', '#ffd28a'); }, 1200);
+    }
+
+    /* Execute any pending navigation action */
+    if(typeof _pendingFn==='function'){
+      setTimeout(_pendingFn, 400);
+      _pendingFn = null;
+    }
+  }
+
+  /* ── Modal submit ── */
+  window.glcSubmit = function(){
+    var name  = ((document.getElementById('glc-name')||{}).value||'').trim();
+    var phone = ((document.getElementById('glc-phone')||{}).value||'').trim();
+    var biz   = ((document.getElementById('glc-biz')||{}).value||'').trim();
+    if(!name){  _shake('glc-name');  return; }
+    if(!phone){ _shake('glc-phone'); return; }
+    if(!biz){   _shake('glc-biz');   return; }
+    _processCapture(name, phone, biz);
+  };
+
+  /* ── Inline form submit ── */
+  window.glcInlineSubmit = function(){
+    var name  = ((document.getElementById('gli-name')||{}).value||'').trim();
+    var phone = ((document.getElementById('gli-phone')||{}).value||'').trim();
+    var biz   = ((document.getElementById('gli-biz')||{}).value||'').trim();
+    if(!name||!phone||!biz){
+      if(typeof window.showSysHint==='function') window.showSysHint('Please fill all fields', '#f87171');
+      return;
+    }
+    /* Hide inline form */
+    var inl=document.getElementById('glc-inline-form'); if(inl) inl.style.display='none';
+    /* Sync to modal fields (for shared _processCapture path) */
+    var fn=document.getElementById('glc-name'); if(fn) fn.value=name;
+    var fp=document.getElementById('glc-phone'); if(fp) fp.value=phone;
+    var fb=document.getElementById('glc-biz'); if(fb) fb.value=biz;
+    _processCapture(name, phone, biz);
+  };
+
+  /* ── Confirmation panel ── */
+  function _showConfirm(name, biz){
+    var panel = document.getElementById('glc-confirm-panel');
+    if(!panel) return;
+    panel.innerHTML =
+      '<div style="background:linear-gradient(135deg,rgba(34,211,238,.06),rgba(79,156,255,.04));border:1px solid rgba(34,211,238,.25);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;">' +
+        '<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--blue));"></div>' +
+        '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">' +
+          '<span style="font-size:28px;line-height:1;">&#9989;</span>' +
+          '<div><div style="font-size:17px;font-weight:900;letter-spacing:-.01em;">Got it, '+_esc(name)+'!</div>' +
+          '<div style="font-size:13px;color:var(--muted);margin-top:3px;">Your setup request is in. Here\'s what happens next.</div></div>' +
+        '</div>' +
+        '<p style="font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.7;">I can set this up for your <strong style="color:var(--text)">'+_esc(biz)+'</strong> business this week. You\'ll see it working before you pay anything.</p>' +
+        '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">' +
+          '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);"><span style="color:#22c55e;font-weight:800;font-size:15px;">&#10003;</span>Lead captured and logged to outreach system</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);"><span style="color:#22c55e;font-weight:800;font-size:15px;">&#10003;</span>Notification sent to setup team</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);"><span style="color:#22c55e;font-weight:800;font-size:15px;">&#10003;</span>Follow-up call scheduled within 2 hours</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);"><span style="color:#ffd28a;font-weight:800;font-size:15px;">&#9889;</span>System deployment queued &mdash; <strong style="color:var(--text)">'+_esc(biz)+'</strong> template selected</div>' +
+        '</div>' +
+        '<div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:18px;">' +
+          '<div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Delivery Checklist</div>' +
+          '<div style="display:flex;flex-direction:column;gap:7px;">' +
+            '<div style="font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;"><span style="color:#22c55e;">&#10003;</span>Client: <strong>'+_esc(name)+'</strong></div>' +
+            '<div style="font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;"><span style="color:#22c55e;">&#10003;</span>Industry: <strong>'+_esc(biz)+'</strong></div>' +
+            '<div style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;"><span style="color:#ffd28a;">&#9675;</span>API keys: <span style="color:var(--muted)">collected on setup call</span></div>' +
+            '<div style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;"><span style="color:#ffd28a;">&#9675;</span>Deployment link: <span style="color:var(--muted)">generated after onboarding</span></div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:12px;flex-wrap:wrap;">' +
+          '<button class="btn btn-p" type="button" onclick="document.getElementById(\'book-demo\').scrollIntoView({behavior:\'smooth\'})" style="font-size:14px;padding:11px 24px;">Schedule Your Setup Call &rarr;</button>' +
+        '</div>' +
+      '</div>';
+    panel.style.display = 'block';
+    panel.style.animation = 'glcSlideIn .35s ease-out';
+    setTimeout(function(){ panel.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 150);
+  }
+
+  /* ── HOT LEAD entry in activity feed ── */
+  function _addHotLead(name, biz){
+    var feed = document.getElementById('activity-feed'); if(!feed) return;
+    var row = document.createElement('div');
+    row.style.cssText = 'padding:8px 12px;background:rgba(255,50,50,.07);border:1px solid rgba(255,50,50,.3);border-radius:7px;font-size:13px;animation:rowFlash .8s ease-out;';
+    row.innerHTML =
+      '<span class="hot-lead-badge">&#128293; HOT LEAD</span> ' +
+      '<strong style="color:var(--text)">'+_esc(name)+'</strong> &mdash; ' +
+      '<strong>'+_esc(biz)+'</strong> &middot; ' +
+      '<span style="font-size:11px;color:var(--muted)">'+_ts()+'</span> &mdash; ' +
+      '<span style="color:#ffd28a;font-size:11px;font-weight:700">Setup requested &mdash; follow-up within 1 hr</span>';
+    feed.insertBefore(row, feed.firstChild);
+  }
+
+  /* ── gheTriggerCapture — exposed for CTA onclick wiring ── */
+  window.gheTriggerCapture = function(afterFn){ glcOpen(afterFn); };
+
+  /* ── Wrap iadSimByNiche to show inline form after first user click ── */
+  var _origSimByNiche = window.iadSimByNiche;
+  var _userSimCount = 0;
+  window.iadSimByNiche = function(slot){
+    _userSimCount++;
+    if(typeof _origSimByNiche === 'function') _origSimByNiche(slot);
+    /* After first user-initiated sim, reveal inline capture if not yet captured */
+    if(_userSimCount === 1 && !_captured){
+      setTimeout(function(){
+        var inl = document.getElementById('glc-inline-form');
+        var conf = document.getElementById('glc-confirm-panel');
+        if(inl && conf && conf.style.display !== 'block'){
+          inl.style.display = 'block';
+          inl.style.animation = 'glcSlideIn .35s ease-out';
+          setTimeout(function(){ inl.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 100);
+        }
+      }, 2200); /* wait for simulation pipeline to finish */
+    }
+  };
+
+  /* ── Click-outside to close ── */
+  document.addEventListener('click', function(e){
+    var m = document.getElementById('glc-modal');
+    if(m && m.style.visibility === 'visible' && e.target === m) window.glcClose();
+  });
+
+  /* ── ESC to close ── */
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      var m = document.getElementById('glc-modal');
+      if(m && m.style.visibility === 'visible') window.glcClose();
+    }
+  });
+
+})();
+</script>
 </body>
 </html>

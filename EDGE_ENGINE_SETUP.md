@@ -3,7 +3,7 @@
 
 Everything runs from one folder: `edge_engine/`
 One command to scan everything: `python scan.py`
-
+ODDS_API_KEY=4352426fd69d93b1edd05e63f6242d4e
 ---
 
 ## What This System Does

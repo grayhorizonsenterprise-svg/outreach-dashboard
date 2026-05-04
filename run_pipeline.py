@@ -6,10 +6,11 @@ sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 print("\n=== Starting Full Outreach Pipeline ===\n", flush=True)
 
 steps = [
-    "prospect_finder.py",
-    "prospect_enricher.py",
-    "prospect_qualifier.py",
-    "outreach_generator.py"
+    "maps_scraper.py",       # Google Maps: 100 cities x 7 niches = thousands of businesses
+    "prospect_finder.py",    # DuckDuckGo: supplemental email-direct leads
+    "prospect_enricher.py",  # scrape company websites for contact emails
+    "prospect_qualifier.py", # score and rank leads
+    "outreach_generator.py", # generate personalized messages
 ]
 
 for step in steps:

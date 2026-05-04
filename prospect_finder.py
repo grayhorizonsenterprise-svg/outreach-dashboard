@@ -51,8 +51,7 @@ def get_headers():
 # Each query yields ~10 results = ~600 prospects per run
 # =========================
 NICHE_QUERIES: list[tuple[str, str]] = [
-    # ── HOA ───────────────────────────────────────────────────────────────────
-    # Signals: "LLC" "Inc" "free quote" "serving" force actual company pages not directories
+    # ── HOA — West / Southwest ─────────────────────────────────────────────────
     ("hoa", 'HOA management company California LLC -yelp -angi -thumbtack -directory'),
     ("hoa", 'HOA management company Arizona Nevada Utah LLC -yelp -directory'),
     ("hoa", 'HOA management company Oregon Washington "free quote" -yelp -thumbtack'),
@@ -65,8 +64,33 @@ NICHE_QUERIES: list[tuple[str, str]] = [
     ("hoa", 'property management HOA company Texas "free proposal" -yelp -angi'),
     ("hoa", 'HOA management company "serving" California Nevada -yelp -thumbtack'),
     ("hoa", 'condo association management company Southeast LLC -yelp -directory'),
+    # ── HOA — Northeast / Mid-Atlantic ─────────────────────────────────────────
+    ("hoa", 'HOA management company New York New Jersey LLC -yelp -directory'),
+    ("hoa", 'community association management Massachusetts Connecticut "contact us" -yelp'),
+    ("hoa", 'HOA management Pennsylvania Maryland Virginia LLC -yelp -angi'),
+    ("hoa", 'homeowners association management Buffalo Rochester Albany LLC -yelp'),
+    ("hoa", 'HOA management company Providence Hartford Worcester LLC -yelp -directory'),
+    # ── HOA — Southeast ────────────────────────────────────────────────────────
+    ("hoa", 'HOA management North Carolina South Carolina LLC -yelp -directory'),
+    ("hoa", 'community association management Georgia Alabama Tennessee -yelp -angi'),
+    ("hoa", 'HOA management company Raleigh Charlotte Columbia LLC -yelp'),
+    ("hoa", 'homeowners association management Louisiana Arkansas Kentucky LLC -yelp'),
+    ("hoa", 'HOA management company Mississippi Alabama "contact us" -yelp -directory'),
+    # ── HOA — Midwest / Plains ─────────────────────────────────────────────────
+    ("hoa", 'HOA management company Minnesota Wisconsin Iowa LLC -yelp -angi'),
+    ("hoa", 'HOA management Missouri Kansas Nebraska LLC -yelp -directory'),
+    ("hoa", 'community association management Omaha Des Moines Wichita -yelp'),
+    ("hoa", 'HOA management Grand Rapids Lansing Fort Wayne LLC -yelp -directory'),
+    # ── HOA — Mountain / Small Markets ────────────────────────────────────────
+    ("hoa", 'HOA management Montana Idaho Wyoming LLC -yelp -directory'),
+    ("hoa", 'HOA management company Boise Spokane Eugene LLC -yelp -angi'),
+    ("hoa", 'community association management Bozeman Missoula Billings LLC -yelp'),
+    ("hoa", 'HOA management company Waco Amarillo Lubbock Texas LLC -yelp'),
+    ("hoa", 'HOA management Tallahassee Gainesville Pensacola LLC -yelp -directory'),
+    ("hoa", 'HOA management company Albuquerque Tucson El Paso LLC -yelp'),
+    ("hoa", 'HOA management Chattanooga Knoxville Huntsville LLC -yelp'),
 
-    # ── HVAC ──────────────────────────────────────────────────────────────────
+    # ── HVAC — West / Southwest ────────────────────────────────────────────────
     ("hvac", 'HVAC company California "free estimate" LLC -yelp -angi -thumbtack'),
     ("hvac", 'HVAC company Arizona Texas "licensed" -yelp -angi -thumbtack -directory'),
     ("hvac", 'HVAC contractor Oregon Washington "serving" LLC -yelp -directory'),
@@ -79,8 +103,24 @@ NICHE_QUERIES: list[tuple[str, str]] = [
     ("hvac", 'HVAC contractor Salt Lake City Nevada "free quote" -yelp -angi'),
     ("hvac", 'residential HVAC company "serving" Midwest LLC -yelp -directory'),
     ("hvac", 'HVAC service company Southwest "free estimate" -yelp -thumbtack'),
+    # ── HVAC — Northeast / Mid-Atlantic ───────────────────────────────────────
+    ("hvac", 'HVAC company New York New Jersey LLC "free estimate" -yelp -angi'),
+    ("hvac", 'heating cooling company Massachusetts Connecticut Pennsylvania -yelp'),
+    ("hvac", 'HVAC contractor Maryland Virginia "licensed" LLC -yelp -directory'),
+    ("hvac", 'heating air conditioning Buffalo Rochester Pittsburgh LLC -yelp'),
+    # ── HVAC — Southeast / Plains ─────────────────────────────────────────────
+    ("hvac", 'HVAC company North Carolina South Carolina Tennessee LLC -yelp -angi'),
+    ("hvac", 'air conditioning company Alabama Louisiana Mississippi -yelp -directory'),
+    ("hvac", 'HVAC company Raleigh Charlotte Birmingham Baton Rouge LLC -yelp'),
+    ("hvac", 'heating cooling company Wichita Tulsa Oklahoma City LLC -yelp'),
+    # ── HVAC — Mountain / Small Markets ───────────────────────────────────────
+    ("hvac", 'HVAC company Boise Spokane Eugene Salem LLC "free estimate" -yelp'),
+    ("hvac", 'heating cooling Bozeman Missoula Billings Cheyenne LLC -yelp'),
+    ("hvac", 'HVAC company Lubbock Waco Amarillo LLC "licensed" -yelp -angi'),
+    ("hvac", 'air conditioning company Albuquerque Tucson El Paso LLC -yelp'),
+    ("hvac", 'HVAC contractor Knoxville Chattanooga Huntsville LLC -yelp'),
 
-    # ── Dental ────────────────────────────────────────────────────────────────
+    # ── Dental — West / Southwest ─────────────────────────────────────────────
     ("dental", 'dental office California "accepting new patients" -yelp -healthgrades -zocdoc'),
     ("dental", 'dental clinic Arizona Nevada Texas "new patients welcome" -yelp -healthgrades'),
     ("dental", 'dentist practice Oregon Washington "accepting new patients" -yelp -directory'),
@@ -93,8 +133,23 @@ NICHE_QUERIES: list[tuple[str, str]] = [
     ("dental", 'multi-location dental office "contact us" -yelp -healthgrades -directory'),
     ("dental", 'dental management group "locations" LLC -yelp -healthgrades'),
     ("dental", 'dental practice Southwest "free consultation" -yelp -angi -directory'),
+    # ── Dental — Northeast / Mid-Atlantic ─────────────────────────────────────
+    ("dental", 'dental office New York New Jersey "accepting new patients" -yelp -healthgrades'),
+    ("dental", 'dentist Massachusetts Connecticut "new patients welcome" -yelp -zocdoc'),
+    ("dental", 'dental practice Pennsylvania Maryland Virginia LLC -yelp -healthgrades'),
+    ("dental", 'family dentist Buffalo Rochester Albany Syracuse -yelp -healthgrades'),
+    # ── Dental — Southeast / Plains ───────────────────────────────────────────
+    ("dental", 'dental office North Carolina South Carolina Tennessee -yelp -healthgrades'),
+    ("dental", 'dental clinic Alabama Georgia "accepting patients" -yelp -zocdoc'),
+    ("dental", 'dentist practice Raleigh Charlotte Birmingham Baton Rouge -yelp'),
+    ("dental", 'dental office Wichita Omaha Des Moines LLC -yelp -healthgrades'),
+    # ── Dental — Small Markets ────────────────────────────────────────────────
+    ("dental", 'dental practice Boise Spokane Eugene Salem -yelp -healthgrades'),
+    ("dental", 'family dentist Bozeman Missoula Billings Cheyenne -yelp'),
+    ("dental", 'dental office Chattanooga Knoxville Huntsville LLC -yelp'),
+    ("dental", 'dental clinic Albuquerque Lubbock Waco -yelp -healthgrades'),
 
-    # ── Plumbing ──────────────────────────────────────────────────────────────
+    # ── Plumbing — West / Southwest ───────────────────────────────────────────
     ("plumbing", 'plumbing company California "licensed" LLC -yelp -angi -thumbtack'),
     ("plumbing", 'plumber Arizona Nevada Texas "free estimate" -yelp -angi -thumbtack'),
     ("plumbing", 'plumbing contractor Oregon Washington LLC "serving" -yelp -directory'),
@@ -107,8 +162,23 @@ NICHE_QUERIES: list[tuple[str, str]] = [
     ("plumbing", 'plumbing repair service Utah Nevada LLC -yelp -thumbtack'),
     ("plumbing", 'residential plumbing contractor Midwest "free quote" -yelp -directory'),
     ("plumbing", 'plumbing company Southwest LLC "serving" -yelp -angi -thumbtack'),
+    # ── Plumbing — Northeast / Mid-Atlantic ───────────────────────────────────
+    ("plumbing", 'plumbing company New York New Jersey LLC "licensed" -yelp -angi'),
+    ("plumbing", 'plumber Massachusetts Connecticut "free estimate" -yelp -thumbtack'),
+    ("plumbing", 'plumbing contractor Pennsylvania Maryland Virginia LLC -yelp'),
+    ("plumbing", 'plumbing company Buffalo Rochester Pittsburgh "licensed" -yelp'),
+    # ── Plumbing — Southeast / Plains ─────────────────────────────────────────
+    ("plumbing", 'plumber North Carolina South Carolina Tennessee LLC -yelp -angi'),
+    ("plumbing", 'plumbing company Alabama Georgia Louisiana "licensed" -yelp'),
+    ("plumbing", 'plumber Raleigh Charlotte Birmingham Baton Rouge LLC -yelp'),
+    ("plumbing", 'plumbing company Wichita Tulsa Omaha Des Moines LLC -yelp'),
+    # ── Plumbing — Small Markets ──────────────────────────────────────────────
+    ("plumbing", 'plumber Boise Spokane Eugene Salem "licensed" LLC -yelp'),
+    ("plumbing", 'plumbing company Bozeman Billings Missoula Cheyenne LLC -yelp'),
+    ("plumbing", 'plumber Chattanooga Knoxville Huntsville LLC -yelp -angi'),
+    ("plumbing", 'plumbing service Albuquerque Lubbock Waco LLC -yelp'),
 
-    # ── General Contractor ────────────────────────────────────────────────────
+    # ── General Contractor — West / Southwest ─────────────────────────────────
     ("contractor", 'general contractor California LLC "free estimate" -yelp -angi -thumbtack'),
     ("contractor", 'general contractor Arizona Texas "licensed" LLC -yelp -angi -directory'),
     ("contractor", 'construction company Oregon Washington "free estimate" -yelp -directory'),
@@ -121,18 +191,87 @@ NICHE_QUERIES: list[tuple[str, str]] = [
     ("contractor", 'residential contractor company "serving" -yelp -angi -thumbtack'),
     ("contractor", 'commercial construction company LLC "contact us" -yelp -directory'),
     ("contractor", 'home builder contractor Southwest "free quote" LLC -yelp -angi'),
+    # ── Contractor — Northeast / Mid-Atlantic ─────────────────────────────────
+    ("contractor", 'general contractor New York New Jersey "licensed" LLC -yelp -angi'),
+    ("contractor", 'construction company Massachusetts Connecticut -yelp -directory'),
+    ("contractor", 'home remodel contractor Pennsylvania Maryland Virginia LLC -yelp'),
+    ("contractor", 'general contractor Buffalo Rochester Albany "free estimate" -yelp'),
+    # ── Contractor — Southeast / Plains ───────────────────────────────────────
+    ("contractor", 'general contractor North Carolina South Carolina Tennessee LLC -yelp'),
+    ("contractor", 'construction company Alabama Georgia "licensed" -yelp -angi'),
+    ("contractor", 'home remodel Raleigh Charlotte Birmingham LLC -yelp -directory'),
+    ("contractor", 'general contractor Wichita Tulsa Omaha LLC "free estimate" -yelp'),
+    # ── Contractor — Small Markets ────────────────────────────────────────────
+    ("contractor", 'general contractor Boise Spokane Eugene "licensed" LLC -yelp'),
+    ("contractor", 'construction company Bozeman Billings Missoula LLC -yelp'),
+    ("contractor", 'home remodel Chattanooga Knoxville Huntsville LLC -yelp'),
+    ("contractor", 'general contractor Albuquerque Lubbock Waco LLC "free estimate" -yelp'),
+
+    # ── Landscaping ───────────────────────────────────────────────────────────
+    ("landscaping", 'landscaping company California "free estimate" LLC -yelp -angi -thumbtack'),
+    ("landscaping", 'lawn care company Texas Florida "licensed" LLC -yelp -angi'),
+    ("landscaping", 'landscaping contractor Arizona Nevada Colorado LLC -yelp'),
+    ("landscaping", 'landscaping company Illinois Ohio Michigan "free quote" -yelp'),
+    ("landscaping", 'lawn service company Midwest "serving" LLC -yelp -directory'),
+    ("landscaping", 'landscaping company North Carolina Georgia Tennessee LLC -yelp'),
+    ("landscaping", 'lawn care company New York New Jersey "free estimate" -yelp -angi'),
+    ("landscaping", 'landscaping company Boise Spokane Bozeman LLC -yelp'),
+    ("landscaping", 'landscaping company Wichita Omaha Des Moines LLC -yelp'),
+    ("landscaping", 'landscaping contractor Raleigh Charlotte Birmingham LLC -yelp'),
+
+    # ── Roofing ───────────────────────────────────────────────────────────────
+    ("roofing", 'roofing company California "free estimate" LLC -yelp -angi -thumbtack'),
+    ("roofing", 'roofing contractor Texas Florida "licensed" LLC -yelp -angi'),
+    ("roofing", 'roofing company Illinois Ohio Michigan LLC -yelp -directory'),
+    ("roofing", 'roofer Arizona Colorado "free quote" LLC -yelp -angi'),
+    ("roofing", 'roofing company North Carolina Georgia Tennessee LLC -yelp'),
+    ("roofing", 'roofing contractor Midwest LLC "serving" -yelp -thumbtack'),
+    ("roofing", 'roofing company New York New Jersey "licensed" LLC -yelp -angi'),
+    ("roofing", 'roofer Boise Spokane Billings LLC -yelp'),
+    ("roofing", 'roofing company Wichita Tulsa Oklahoma City LLC -yelp'),
+    ("roofing", 'roofing contractor Raleigh Charlotte Huntsville LLC -yelp'),
 ]
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
 
-WEST_COAST_STATES = [
-    "California", "Oregon", "Washington", "Nevada", "Arizona", "Utah", "Idaho",
-    "Colorado", "New Mexico", "Montana", "Wyoming",
-    "Texas", "Illinois", "Ohio", "Michigan", "Indiana", "Wisconsin",
-    "Florida", "Georgia", "North Carolina", "Tennessee",
-    "Los Angeles", "Phoenix", "Denver", "Seattle", "Portland", "Las Vegas",
-    "Chicago", "Dallas", "Houston", "Atlanta", "Miami",
+US_LOCATIONS = [
+    # All 50 states
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
+    "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
+    "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
+    "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
+    "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
+    "New Hampshire", "New Jersey", "New Mexico", "New York",
+    "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon",
+    "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+    "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
+    "Washington", "West Virginia", "Wisconsin", "Wyoming",
+    # Major metros
+    "Los Angeles", "New York", "Chicago", "Houston", "Phoenix", "Philadelphia",
+    "San Antonio", "San Diego", "Dallas", "San Jose", "Austin", "Jacksonville",
+    "Fort Worth", "Columbus", "Charlotte", "Indianapolis", "San Francisco",
+    "Seattle", "Denver", "Nashville", "Oklahoma City", "El Paso", "Washington DC",
+    "Boston", "Portland", "Las Vegas", "Memphis", "Atlanta", "Miami",
+    "Minneapolis", "Tulsa", "Tampa", "New Orleans", "Cleveland", "Honolulu",
+    "Albuquerque", "Tucson", "Fresno", "Sacramento", "Baltimore",
+    "Long Beach", "Mesa", "Raleigh", "Virginia Beach", "Colorado Springs",
+    "Omaha", "Oakland", "Minneapolis", "Wichita", "Arlington", "Bakersfield",
+    # Small/mid-size markets targeted in queries
+    "Boise", "Spokane", "Eugene", "Salem", "Medford", "Bend",
+    "Bozeman", "Missoula", "Billings", "Cheyenne", "Casper",
+    "Waco", "Amarillo", "Lubbock", "Tallahassee", "Gainesville", "Pensacola",
+    "Knoxville", "Chattanooga", "Huntsville", "Montgomery", "Mobile",
+    "Rochester", "Buffalo", "Albany", "Syracuse", "Providence", "Hartford",
+    "Worcester", "Manchester", "Richmond", "Norfolk", "Greensboro",
+    "Winston-Salem", "Columbia", "Augusta", "Savannah", "Wilmington",
+    "Grand Rapids", "Lansing", "Fort Wayne", "South Bend", "Green Bay",
+    "Madison", "Des Moines", "Sioux Falls", "Fargo", "Little Rock",
+    "Baton Rouge", "Shreveport", "Jackson", "Dayton", "Akron", "Toledo",
+    "Pittsburgh", "Allentown",
 ]
+
+# Keep old name as alias so existing code in this file still works
+WEST_COAST_STATES = US_LOCATIONS
 
 JUNK_EMAIL_PATTERNS = [
     "example", "domain", "user@", "noreply", "no-reply",
@@ -185,9 +324,9 @@ def extract_location(soup: BeautifulSoup, snippet: str) -> str:
     meta_desc = soup.find("meta", attrs={"name": "description"})
     if meta_desc:
         combined += meta_desc.get("content", "")
-    for state in WEST_COAST_STATES:
-        if state.lower() in combined.lower():
-            return state
+    for loc in US_LOCATIONS:
+        if loc.lower() in combined.lower():
+            return loc
     return ""
 
 

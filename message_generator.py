@@ -67,7 +67,7 @@ closings = [
 
 signature = """
 
-– Gray
+Alex
 Gray Horizons Enterprise
 https://grayhorizonsenterprise.com
 """

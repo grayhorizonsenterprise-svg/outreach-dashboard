@@ -117,15 +117,25 @@ with open(LOG_FILE, "a", newline="", encoding="utf-8") as log_f:
         company = row.get("company", "Unknown").strip()
         name    = row.get("name",    "").strip()
         message = row.get("message", "").strip()
-        subject = f"{company} — quick question"
+        subject = row.get("subject", "").strip() or "Quick question"
 
         print(f"[{i}/{len(to_send)}] Sending to {email} ({company})...", end=" ", flush=True)
 
+        # Strip any existing signature from the stored message to avoid duplicating it
+        clean_msg = message
+        for sig_marker in ["Alex\nGray Horizons Enterprise", "Gray\nGray Horizons Enterprise"]:
+            if sig_marker in clean_msg:
+                clean_msg = clean_msg[:clean_msg.rfind(sig_marker)].rstrip()
+                break
+
         html_body = (
-            "<div style='font-family:Arial;line-height:1.6;'>"
-            "<p>Hi " + (name or "there") + ",</p>"
-            "<p>" + message.replace("\n", "<br>") + "</p>"
-            "<p>Alex<br>Gray Horizons Enterprise<br>grayhorizonsenterprise.com</p>"
+            "<div style='font-family:Arial,sans-serif;line-height:1.7;color:#222;max-width:600px;'>"
+            "<p>" + clean_msg.replace("\n\n", "</p><p>").replace("\n", "<br>") + "</p>"
+            "<br>"
+            "<p style='margin:0;'>Alex<br>"
+            "Gray Horizons Enterprise<br>"
+            "<a href='https://grayhorizonsenterprise.com' style='color:#1a73e8;'>"
+            "grayhorizonsenterprise.com</a></p>"
             "</div>"
         )
 

@@ -26,9 +26,9 @@ closers = [
 ]
 
 signoffs = [
-"— Gray",
-"— GHE",
-"— Gray Horizons"
+"Alex",
+"Alex",
+"Alex"
 ]
 
 companies = [
@@ -49,7 +49,7 @@ Hi {company} team,
 
 {random.choice(openers)}
 
-Quick question — {random.choice(questions)}
+Quick question: {random.choice(questions)}
 
 {random.choice(closers)}
 

@@ -43,6 +43,36 @@ Happy to compare notes if that's a pain point.
 
 Alex
 Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+One thing I keep hearing from HOA managers is that the first 48 hours after a violation gets reported is where everything either gets handled cleanly or turns into a mess. How are you managing that window right now?
+
+Just curious what your process looks like.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+Random question — when a board member calls asking for documentation on a violation from six months ago, how long does it take your team to pull that up? That's usually the moment where people realize they need a better system.
+
+Happy to share what we built if it's useful.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Not trying to sell you anything right now. Just wanted to ask: is violation tracking still mostly manual on your end, or have you got something automated?
+
+We've been putting together something that handles the whole cycle and a few managers have found it pretty useful. Worth a quick conversation if you're curious.
+
+Alex
+Gray Horizons Enterprise""",
     ],
 
     "hvac": [
@@ -70,6 +100,36 @@ Gray Horizons Enterprise""",
 Hey,
 
 Wanted to ask something real quick: during peak season when calls are stacking up, how does your team keep track of which jobs are pending, in progress, and completed? Is it centralized anywhere or still kind of scattered?
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+How do you handle it when a customer calls back three days later asking for an update on their service request and no one on the team knows where that job stands? That one comes up a lot with HVAC companies I talk to.
+
+Genuinely curious how you manage it.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+One quick question: after a tech finishes a job, how does that get communicated back to the office and to the customer? Is there a system for that or is it still mostly a phone call?
+
+Happy to share what we've put together if you're open to it.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi there,
+
+Not a pitch — just wanted to ask how you're handling missed calls during busy periods. Specifically when someone calls for a repair and doesn't reach anyone, what happens to that lead?
+
+That gap is usually where a lot of revenue walks out the door.
 
 Alex
 Gray Horizons Enterprise""",
@@ -105,6 +165,36 @@ Curious if that's something you're actively managing.
 
 Alex
 Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+Not a pitch — just wanted to ask: when a potential new patient fills out a contact form or leaves a voicemail after hours, what's the follow-up process? Do they hear back the same day or does it depend on who picks it up?
+
+That's usually where practices lose the most new patients.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Quick one: how many new patient inquiries would you say your office gets in a week where someone reaches out but never actually books? Even a rough number.
+
+We've been helping practices recover those. Happy to share how if it's useful.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi there,
+
+How are you handling patient reactivation right now — people who haven't been in for over a year? Is that something your team actively reaches out on or does it tend to fall through the cracks?
+
+Just curious what your process looks like.
+
+Alex
+Gray Horizons Enterprise""",
     ],
 
     "plumbing": [
@@ -132,6 +222,34 @@ Gray Horizons Enterprise""",
 Hey,
 
 Direct question: when a customer calls about a burst pipe or active leak, what does the first 10 minutes look like on your end? Is dispatch centralized or is it still kind of ad hoc?
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+One thing I hear a lot from plumbing companies: by the time they call back a missed lead, someone else already got there. How are you handling after-hours calls and weekend inquiries right now?
+
+Curious what your process looks like.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Not trying to take up much of your time — just wanted to ask: when a job gets finished, how does your team handle following up with the customer to check in or ask for a review? Is that something you have a process for?
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi there,
+
+How many calls does your office miss on an average day — calls that don't get a callback or get lost in the shuffle? We've been helping plumbing companies capture those and turn them into booked jobs.
+
+Happy to share how if it's useful.
 
 Alex
 Gray Horizons Enterprise""",
@@ -167,15 +285,109 @@ Curious how you're handling the volume.
 
 Alex
 Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+One thing I keep hearing from contractors: they're great at the work but the leads that don't convert are usually the ones where follow-up fell through. Is that something you track, or does it kind of get lost once the estimate goes out?
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Quick one: when you send an estimate and don't hear back for a week, does your team follow up automatically or does it depend on someone remembering to do it?
+
+We've been helping contractors close more jobs by automating that part. Happy to share what that looks like.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi there,
+
+Not a pitch — just wanted to ask: how do you handle it when a homeowner reaches out through your website or Google listing after hours? Is there a system that captures and responds to that, or does it sit until someone gets to it the next day?
+
+That after-hours window is usually where a lot of jobs go to a competitor.
+
+Alex
+Gray Horizons Enterprise""",
+    ],
+
+    "landscaping": [
+        """\
+Hey,
+
+Quick question: when a homeowner calls for an estimate, how quickly does your team get back to them? In landscaping that first response window is usually what wins or loses the job.
+
+Curious how you're handling it.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi there,
+
+How are you managing recurring client schedules and reminders right now? Specifically making sure seasonal clients don't fall off or go quiet between services.
+
+Happy to compare notes if that's something you deal with.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Not trying to waste your time — just wanted to ask: when you have a full schedule and someone new reaches out, how does your team capture that lead without it getting lost?
+
+That overflow moment is usually where companies either grow or miss out.
+
+Alex
+Gray Horizons Enterprise""",
+    ],
+
+    "roofing": [
+        """\
+Hey,
+
+Quick one: after a storm comes through your area, how does your team handle the wave of calls that come in? Is there a system to track each one or does it get a little chaotic?
+
+We've been helping roofing companies manage exactly that.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi there,
+
+How are you following up on estimates that went out but never got a response? In roofing those can be pretty high-value jobs to let slip.
+
+Just curious what your current process looks like.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Direct question: when a homeowner calls about a leak or damage and you can't get to them for three days, how do you keep them from calling someone else in the meantime?
+
+That's usually the biggest gap I hear about. Happy to share what we've built if it's useful.
+
+Alex
+Gray Horizons Enterprise""",
     ],
 }
 
 NICHE_SUBJECTS = {
-    "hoa":        ["Quick question", "How do you handle violation tracking?", "Quick one for you"],
-    "hvac":       ["Quick question", "How are you dispatching right now?",    "Quick one for you"],
-    "dental":     ["Quick question", "How are you handling new patients?",    "Quick one for you"],
-    "plumbing":   ["Quick question", "How do you handle emergency calls?",    "Quick one for you"],
-    "contractor": ["Quick question", "How are you managing bids?",            "Quick one for you"],
+    "hoa":          ["Quick question", "How do you handle violation tracking?", "Quick one for you", "HOA compliance question"],
+    "hvac":         ["Quick question", "How are you dispatching right now?",    "Quick one for you", "HVAC service tracking"],
+    "dental":       ["Quick question", "How are you handling new patients?",    "Quick one for you", "New patient follow-up"],
+    "plumbing":     ["Quick question", "How do you handle emergency calls?",    "Quick one for you", "Dispatch question"],
+    "contractor":   ["Quick question", "How are you managing bids?",            "Quick one for you", "Estimate follow-up"],
+    "landscaping":  ["Quick question", "How are you handling new leads?",       "Quick one for you"],
+    "roofing":      ["Quick question", "How are you managing storm calls?",     "Quick one for you", "Storm season question"],
 }
 
 def is_clean_name(name: str) -> bool:
@@ -203,7 +415,10 @@ def generate_message(company, niche):
     templates = NICHE_MESSAGES.get(niche, NICHE_MESSAGES["hoa"])
     template  = random.choice(templates)
     display   = company if is_clean_name(company) else "your team"
-    return template.replace("{company}", display)
+    msg = template.replace("{company}", display)
+    if "grayhorizonsenterprise.com" not in msg:
+        msg += "\nhttps://grayhorizonsenterprise.com"
+    return msg
 
 def run():
     if not os.path.exists(INPUT_FILE):
@@ -256,7 +471,15 @@ def run():
         company = str(row.get("company", "")).strip()
         niche   = str(row.get("niche",   "hoa")).strip().lower()
         if niche not in NICHE_MESSAGES:
-            niche = "hoa"
+            # best-effort mapping for alternate spellings
+            if niche in ("landscape", "lawn"):
+                niche = "landscaping"
+            elif niche in ("roof", "roofer"):
+                niche = "roofing"
+            elif niche in ("electric", "electrician"):
+                niche = "contractor"
+            else:
+                niche = "hoa"
 
         rows.append({
             "company": company,

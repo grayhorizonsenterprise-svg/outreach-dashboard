@@ -7,14 +7,14 @@ print("================================\n")
 
 steps = [
 
-    "maps_scraper.py",
-    "niche_splitter.py",
-    "prospect_enricher.py",
-    "prospect_qualifier.py",
-    "email_finder.py",
-    "outreach_generator.py",
-    "outreach_sender.py",
-    "agent_alert.py"
+    "maps_scraper.py",       # Google Maps: 100 cities × 7 niches = thousands of businesses
+    "prospect_finder.py",    # DuckDuckGo web search: supplemental email-direct leads
+    "niche_splitter.py",     # split into per-niche CSV files
+    "prospect_enricher.py",  # scrape contact emails from company websites
+    "prospect_qualifier.py", # score and rank leads
+    "email_finder.py",       # additional email lookup fallback
+    "outreach_generator.py", # generate personalized email per lead
+    "agent_alert.py"         # notify on completion — run resend_now.py to send
 
 ]
 
