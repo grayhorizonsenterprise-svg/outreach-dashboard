@@ -1,27 +1,12 @@
 @echo off
-cd /d "%~dp0"
-echo.
-echo =======================================
-echo  AUTO RENDER - GRAY HORIZONS ENTERPRISE
-echo  Drop clips here. Double click. Done.
-echo =======================================
-echo.
 
 mkdir output 2>nul
 
-set COUNT=0
-
 for %%f in (*.mp4) do (
-  echo [RENDERING] %%f
   ffmpeg -y -i "%%f" ^
-    -vf "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,drawtext=text='We turn content into customers':fontcolor=white:fontsize=42:borderw=3:bordercolor=black:x=(w-text_w)/2:y=h-200" ^
-    -c:v libx264 -preset veryfast -crf 23 -c:a copy "output\%%~nf_out.mp4"
-  set /a COUNT+=1
-  echo [DONE] output\%%~nf_out.mp4
-  echo.
+  -vf "scale=1080:1920:force_original_aspect_ratio=cover,crop=1080:1920,drawtext=text='GET MORE CUSTOMERS':fontcolor=white:fontsize=72:x=(w-text_w)/2:y=200:box=1:boxcolor=black@0.6:boxborderw=20,drawtext=text='Most businesses get ignored online':fontcolor=white:fontsize=58:x=(w-text_w)/2:y=900:box=1:boxcolor=black@0.6:boxborderw=20,drawtext=text='We fix that':fontcolor=yellow:fontsize=64:x=(w-text_w)/2:y=1500:box=1:boxcolor=black@0.7:boxborderw=25" ^
+  -c:v libx264 -preset veryfast -crf 23 -c:a copy "output\%%~nf_out.mp4"
 )
 
-echo =======================================
-echo  DONE - Check the output\ folder
-echo =======================================
+echo Done.
 pause
