@@ -34,7 +34,7 @@ URL_PLUMBING   = os.getenv("PLUMBING_URL", "#")
 EDGE_ENGINE_URL = os.getenv("EDGE_ENGINE_URL", "https://outreach-dashboard-production-6894.up.railway.app")
 URL_GRANTS       = "https://ghe-grant-agent-production.up.railway.app"
 URL_VOICE_SERVER = os.getenv("VOICE_SERVER_URL", "https://ghe-voice-production.up.railway.app")
-PIPELINE_SCRIPTS = ["prospect_finder.py", "prospect_enricher.py",
+PIPELINE_SCRIPTS = ["maps_scraper.py", "prospect_finder.py", "prospect_enricher.py",
                     "prospect_qualifier.py", "outreach_generator.py"]
 
 # =========================
@@ -181,13 +181,21 @@ def log_sent(to_email, name, company, subject, success, error=""):
         writer.writerow(row)
 
 def _build_html_body(name, sender_name, message):
-    return f"""
-    <div style="font-family:Arial;line-height:1.6;">
-        <p>Hi {name or 'there'},</p>
-        <p>{format_message(message)}</p>
-        <p>{sender_name}<br>Gray Horizons Enterprise</p>
-    </div>
-    """
+    clean_msg = message
+    for sig_marker in ["Alex\nGray Horizons Enterprise", "Gray\nGray Horizons Enterprise"]:
+        if sig_marker in clean_msg:
+            clean_msg = clean_msg[:clean_msg.rfind(sig_marker)].rstrip()
+            break
+    return (
+        "<div style='font-family:Arial,sans-serif;line-height:1.7;color:#222;max-width:600px;'>"
+        "<p>" + clean_msg.replace("\n\n", "</p><p>").replace("\n", "<br>") + "</p>"
+        "<br>"
+        "<p style='margin:0;'>Alex<br>"
+        "Gray Horizons Enterprise<br>"
+        "<a href='https://grayhorizonsenterprise.com' style='color:#1a73e8;'>"
+        "grayhorizonsenterprise.com</a></p>"
+        "</div>"
+    )
 
 def _send_via_sendgrid(api_key, sender_addr, sender_name, to_email, subject, html_body, name, company):
     # Force lowercase — SendGrid sender verification is case-sensitive
@@ -246,10 +254,10 @@ def _send_via_smtp(sender_addr, smtp_password, to_email, subject, html_body, nam
         log_sent(to_email, name, company, subject, False, f"smtp: {e}")
         return False
 
-def send_email(to_email, name, company, message):
+def send_email(to_email, name, company, message, subject=""):
     sender_addr = os.getenv("SENDER_EMAIL", "").strip()
-    sender_name = os.getenv("SENDER_NAME", "Gray Horizons")
-    subject     = f"{company} — quick question"
+    sender_name = os.getenv("SENDER_NAME", "Alex")
+    subject     = subject.strip() if subject.strip() else "Quick question for your team"
 
     if not sender_addr:
         print("[SEND] ERROR: SENDER_EMAIL not set")
@@ -371,6 +379,8 @@ def dashboard():
   .niche-dental{{background:#2d1a3a;color:#c084fc;}}
   .niche-plumbing{{background:#2a1f0a;color:#fbbf24;}}
   .niche-contractor{{background:#2a1515;color:#f87171;}}
+  .niche-roofing{{background:#1a1a2e;color:#818cf8;}}
+  .niche-landscaping{{background:#0f2a1a;color:#34d399;}}
 
   /* Grant iframe wrapper */
   .grants-iframe-wrap{{position:relative;width:100%;height:calc(100vh - 90px);overflow:auto;-webkit-overflow-scrolling:touch;}}
@@ -434,6 +444,8 @@ def dashboard():
     <button class="nf-btn" onclick="filterNiche('dental',this)">Dental</button>
     <button class="nf-btn" onclick="filterNiche('plumbing',this)">Plumbing</button>
     <button class="nf-btn" onclick="filterNiche('contractor',this)">Contractor</button>
+    <button class="nf-btn" onclick="filterNiche('roofing',this)">Roofing</button>
+    <button class="nf-btn" onclick="filterNiche('landscaping',this)">Landscaping</button>
   </div>
 """
 
@@ -538,7 +550,8 @@ def send(index):
         row["email"],
         row["name"],
         row["company"],
-        row["message"]
+        row["message"],
+        row.get("subject", ""),
     )
 
     df.at[index, "status"] = "sent"

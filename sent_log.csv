@@ -4,3 +4,105 @@ timestamp,company_name,website,email,subject,status,note
 2026-03-09 19:09:12,7 Reasons to Join YourHOABoard| Associa,https://hub.associaonline.com/blog/7-reasons-to-join-your-hoa-board,,A Smarter Way to Handle HOA Compliance — Built for Teams Like Yours,SKIPPED,No email address found
 2026-03-31 06:40 PM PT,Annapolis MD,,sam@benchmarkpmgmt.com,Annapolis MD — quick question,False,missing env vars
 2026-03-31 06:40 PM PT,Management Trust,,natalie.waldo@managementtrust.com,Management Trust — quick question,False,missing env vars
+2026-04-16 09:37 AM,Annapolis MD,,sam@benchmarkpmgmt.com,Annapolis MD — quick question,True,smtp-local
+2026-04-16 09:37 AM,Management Trust,,natalie.waldo@managementtrust.com,Management Trust — quick question,True,smtp-local
+2026-04-16 09:37 AM,Personalized,,info@ppminternet.com,Personalized — quick question,True,smtp-local
+2026-04-16 09:37 AM,San Diego,,abrumbalow@associa.us,San Diego — quick question,True,smtp-local
+2026-04-16 09:37 AM,California Association,,info@cacm.org,California Association — quick question,True,smtp-local
+2026-04-16 09:37 AM,Progressive Inc.,,info@progressive-am.com,Progressive Inc. — quick question,True,smtp-local
+2026-04-16 09:37 AM,Professionals (PMP),,care@pmpmanage.com,Professionals (PMP) — quick question,True,smtp-local
+2026-04-16 09:37 AM,Elite Management,,customerservice@elitemanagement.com,Elite Management — quick question,True,smtp-local
+2026-04-16 09:37 AM,Management Services,,owner@4rentbend.com,Management Services — quick question,True,smtp-local
+2026-04-16 09:37 AM,Community,,customerservice@embmanagement.com,Community — quick question,True,smtp-local
+2026-04-16 09:37 AM,Alabama HOA,,bstewart@mckaymanagement.com,Alabama HOA — quick question,True,smtp-local
+2026-04-16 09:37 AM,Community,,askus@cmc-management.com,Community — quick question,True,smtp-local
+2026-04-16 09:37 AM,EJF Real Estate Services,,clientservices@ejfrealestate.com,EJF Real Estate Services — quick question,True,smtp-local
+2026-04-16 09:37 AM,navigate-condohoa,,support@navigatecm.com,navigate-condohoa — quick question,True,smtp-local
+2026-04-16 09:37 AM,"Lighthouse Community Partners, LLC",,filler@godaddy.com,"Lighthouse Community Partners, LLC — quick question",True,smtp-local
+2026-04-16 09:37 AM,Community,,emaciel@associasn.com,Community — quick question,True,smtp-local
+2026-04-16 09:37 AM,"Capstone Realty Consultants, Inc.",,info@capstonetriad.com,"Capstone Realty Consultants, Inc. — quick question",True,smtp-local
+2026-04-16 09:37 AM,Community,,claudia.oberthier@associa.us,Community — quick question,True,smtp-local
+2026-04-16 09:37 AM,Amcor,,jnelson@amcorprop.com,Amcor — quick question,True,smtp-local
+2026-04-16 09:38 AM,Arizona Association,,events@aacm.com,Arizona Association — quick question,True,smtp-local
+2026-04-16 09:38 AM,Consulting,,services@communitymanagementaz.com,Consulting — quick question,True,smtp-local
+2026-04-16 09:38 AM,Align Community Mgmt,,reception@alignaz.com,Align Community Mgmt — quick question,True,smtp-local
+2026-04-16 09:38 AM,Utah Chapter,,info@uccai.com,Utah Chapter — quick question,True,smtp-local
+2026-04-16 09:38 AM,Community,,bc@associamexico.com,Community — quick question,True,smtp-local
+2026-04-16 09:38 AM,Elevate Your Community Experience,,management@mgm.replypro.homes,Elevate Your Community Experience — quick question,True,smtp-local
+2026-04-16 09:38 AM,Iron Eagle,,officestaff@ironeaglepm.com,Iron Eagle — quick question,True,smtp-local
+2026-04-16 09:38 AM,HOALiving,,manager@hoaliving.com,HOALiving — quick question,True,smtp-local
+2026-04-16 09:38 AM,Management One,,info@managementoneidaho.com,Management One — quick question,True,smtp-local
+2026-04-16 09:38 AM,Neighborhood Management Inc,,nmi@neighborhoodmanagement.com,Neighborhood Management Inc — quick question,True,smtp-local
+2026-04-16 09:38 AM,NMSAE,,jespinoza.kw@gmail.com,NMSAE — quick question,True,smtp-local
+2026-04-16 09:38 AM,PARTNERS,,info@partnerscm.com,PARTNERS — quick question,True,smtp-local
+2026-04-16 09:38 AM,HOA UNLIMITED,,info@hoaunlimited.com,HOA UNLIMITED — quick question,True,smtp-local
+2026-04-16 09:38 AM,HOA Simplified,,hello@hoasimplified.com,HOA Simplified — quick question,True,smtp-local
+2026-04-16 09:38 AM,Citadel Properties,,geoff@citadelproperties.com,Citadel Properties — quick question,True,smtp-local
+2026-04-16 09:38 AM,Sacramento,,w.constructify@gmail.com,Sacramento — quick question,True,smtp-local
+2026-04-16 09:38 AM,Avey,,contact@avey-group.com,Avey — quick question,True,smtp-local
+2026-04-16 09:38 AM,Thoroughbred Management,,admin@tmilv.com,Thoroughbred Management — quick question,True,smtp-local
+2026-04-16 09:38 AM,MKJ Company,,mike@mkjco.com,MKJ Company — quick question,True,smtp-local
+2026-04-16 09:38 AM,We efficiently manage your community,,HOA@adamllc.com,We efficiently manage your community — quick question,True,smtp-local
+2026-04-16 09:38 AM,Focus,,chris@appsoftdev.com,Focus — quick question,True,smtp-local
+2026-04-16 09:38 AM,Salt City Co.,,info@saltcitypmc.com,Salt City Co. — quick question,True,smtp-local
+2026-04-16 09:38 AM,Brightstar Management Group,,hello@brightstarcolorado.com,Brightstar Management Group — quick question,True,smtp-local
+2026-04-16 09:38 AM,Alliance Management Partners,,patrick@ampmyhoa.com,Alliance Management Partners — quick question,True,smtp-local
+2026-04-16 09:38 AM,HOA Administration,,info.boise@homeriver.com,HOA Administration — quick question,True,smtp-local
+2026-04-16 09:38 AM,Boise You Can Trust,,paul@pmitreasurevalley.com,Boise You Can Trust — quick question,True,smtp-local
+2026-04-16 09:38 AM,HOA & Condominium Management Services,,customerservice@prescottmgt.com,HOA & Condominium Management Services — quick question,True,smtp-local
+2026-04-16 09:38 AM,Professionals Inc,,info@hoamanagepro.com,Professionals Inc — quick question,True,smtp-local
+2026-04-16 09:38 AM,LCL Realty/,,customercare@LCLRealty.com,LCL Realty/ — quick question,True,smtp-local
+2026-04-16 09:39 AM,Advance Denver,,clientservices@advancehoa.com,Advance Denver — quick question,True,smtp-local
+2026-04-16 09:39 AM,Solutions,,info@hoasolutions.info,Solutions — quick question,True,smtp-local
+2026-04-16 09:39 AM,Management Services,,bob.johnson@integratedmtn.com,Management Services — quick question,True,smtp-local
+2026-04-16 09:49 AM,Annapolis MD,,sam@benchmarkpmgmt.com,Annapolis MD — quick question,True,smtp-local
+2026-04-16 09:49 AM,Management Trust,,natalie.waldo@managementtrust.com,Management Trust — quick question,True,smtp-local
+2026-04-16 09:49 AM,Personalized,,info@ppminternet.com,Personalized — quick question,True,smtp-local
+2026-04-16 09:49 AM,San Diego,,abrumbalow@associa.us,San Diego — quick question,True,smtp-local
+2026-04-16 09:49 AM,California Association,,info@cacm.org,California Association — quick question,True,smtp-local
+2026-04-16 09:49 AM,Progressive Inc.,,info@progressive-am.com,Progressive Inc. — quick question,True,smtp-local
+2026-04-16 09:49 AM,Professionals (PMP),,care@pmpmanage.com,Professionals (PMP) — quick question,True,smtp-local
+2026-04-16 09:49 AM,Elite Management,,customerservice@elitemanagement.com,Elite Management — quick question,True,smtp-local
+2026-04-16 09:49 AM,Management Services,,owner@4rentbend.com,Management Services — quick question,True,smtp-local
+2026-04-16 09:49 AM,Community,,customerservice@embmanagement.com,Community — quick question,True,smtp-local
+2026-04-16 09:49 AM,Alabama HOA,,bstewart@mckaymanagement.com,Alabama HOA — quick question,True,smtp-local
+2026-04-16 09:49 AM,Community,,askus@cmc-management.com,Community — quick question,True,smtp-local
+2026-04-16 09:49 AM,EJF Real Estate Services,,clientservices@ejfrealestate.com,EJF Real Estate Services — quick question,True,smtp-local
+2026-04-16 09:50 AM,navigate-condohoa,,support@navigatecm.com,navigate-condohoa — quick question,True,smtp-local
+2026-04-16 09:50 AM,"Lighthouse Community Partners, LLC",,filler@godaddy.com,"Lighthouse Community Partners, LLC — quick question",True,smtp-local
+2026-04-16 09:50 AM,Community,,emaciel@associasn.com,Community — quick question,True,smtp-local
+2026-04-16 09:50 AM,"Capstone Realty Consultants, Inc.",,info@capstonetriad.com,"Capstone Realty Consultants, Inc. — quick question",True,smtp-local
+2026-04-16 09:50 AM,Community,,claudia.oberthier@associa.us,Community — quick question,True,smtp-local
+2026-04-16 09:50 AM,Amcor,,jnelson@amcorprop.com,Amcor — quick question,True,smtp-local
+2026-04-16 09:50 AM,Arizona Association,,events@aacm.com,Arizona Association — quick question,True,smtp-local
+2026-04-16 09:50 AM,Consulting,,services@communitymanagementaz.com,Consulting — quick question,True,smtp-local
+2026-04-16 09:50 AM,Align Community Mgmt,,reception@alignaz.com,Align Community Mgmt — quick question,True,smtp-local
+2026-04-16 09:50 AM,Utah Chapter,,info@uccai.com,Utah Chapter — quick question,True,smtp-local
+2026-04-16 09:50 AM,Community,,bc@associamexico.com,Community — quick question,True,smtp-local
+2026-04-16 09:50 AM,Elevate Your Community Experience,,management@mgm.replypro.homes,Elevate Your Community Experience — quick question,True,smtp-local
+2026-04-16 09:50 AM,Iron Eagle,,officestaff@ironeaglepm.com,Iron Eagle — quick question,True,smtp-local
+2026-04-16 09:50 AM,HOALiving,,manager@hoaliving.com,HOALiving — quick question,True,smtp-local
+2026-04-16 09:50 AM,Management One,,info@managementoneidaho.com,Management One — quick question,True,smtp-local
+2026-04-16 09:50 AM,Neighborhood Management Inc,,nmi@neighborhoodmanagement.com,Neighborhood Management Inc — quick question,True,smtp-local
+2026-04-16 09:50 AM,NMSAE,,jespinoza.kw@gmail.com,NMSAE — quick question,True,smtp-local
+2026-04-16 09:50 AM,PARTNERS,,info@partnerscm.com,PARTNERS — quick question,True,smtp-local
+2026-04-16 09:50 AM,HOA UNLIMITED,,info@hoaunlimited.com,HOA UNLIMITED — quick question,True,smtp-local
+2026-04-16 09:50 AM,HOA Simplified,,hello@hoasimplified.com,HOA Simplified — quick question,True,smtp-local
+2026-04-16 09:50 AM,Citadel Properties,,geoff@citadelproperties.com,Citadel Properties — quick question,True,smtp-local
+2026-04-16 09:51 AM,Sacramento,,w.constructify@gmail.com,Sacramento — quick question,True,smtp-local
+2026-04-16 09:51 AM,Avey,,contact@avey-group.com,Avey — quick question,True,smtp-local
+2026-04-16 09:51 AM,Thoroughbred Management,,admin@tmilv.com,Thoroughbred Management — quick question,True,smtp-local
+2026-04-16 09:51 AM,MKJ Company,,mike@mkjco.com,MKJ Company — quick question,True,smtp-local
+2026-04-16 09:51 AM,We efficiently manage your community,,HOA@adamllc.com,We efficiently manage your community — quick question,True,smtp-local
+2026-04-16 09:51 AM,Focus,,chris@appsoftdev.com,Focus — quick question,True,smtp-local
+2026-04-16 09:51 AM,Salt City Co.,,info@saltcitypmc.com,Salt City Co. — quick question,True,smtp-local
+2026-04-16 09:51 AM,Brightstar Management Group,,hello@brightstarcolorado.com,Brightstar Management Group — quick question,True,smtp-local
+2026-04-16 09:51 AM,Alliance Management Partners,,patrick@ampmyhoa.com,Alliance Management Partners — quick question,True,smtp-local
+2026-04-16 09:51 AM,HOA Administration,,info.boise@homeriver.com,HOA Administration — quick question,True,smtp-local
+2026-04-16 09:51 AM,Boise You Can Trust,,paul@pmitreasurevalley.com,Boise You Can Trust — quick question,True,smtp-local
+2026-04-16 09:51 AM,HOA & Condominium Management Services,,customerservice@prescottmgt.com,HOA & Condominium Management Services — quick question,True,smtp-local
+2026-04-16 09:51 AM,Professionals Inc,,info@hoamanagepro.com,Professionals Inc — quick question,True,smtp-local
+2026-04-16 09:51 AM,LCL Realty/,,customercare@LCLRealty.com,LCL Realty/ — quick question,True,smtp-local
+2026-04-16 09:51 AM,Advance Denver,,clientservices@advancehoa.com,Advance Denver — quick question,True,smtp-local
+2026-04-16 09:51 AM,Solutions,,info@hoasolutions.info,Solutions — quick question,True,smtp-local
+2026-04-16 09:51 AM,Management Services,,bob.johnson@integratedmtn.com,Management Services — quick question,True,smtp-local
