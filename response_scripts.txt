@@ -1,0 +1,147 @@
+===============================================================
+  GRAY HORIZONS ENTERPRISE — CONVERSION RESPONSE SCRIPTS
+  Use these when someone replies to a comment or follows you.
+  Copy exact text. Do not improvise until you know what works.
+===============================================================
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STAGE 1 — They replied to your comment (curious / question)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Pick one based on their reply tone:
+
+[CURIOUS / OPEN]
+"yeah that's exactly the gap we help close. we set up a system that turns
+ your content into an actual lead flow — so views start converting into
+ booked calls or sales. want me to show you a quick example of what that
+ looks like for a business like yours?"
+
+[DEFENSIVE / "i do fine"]
+"totally — not saying your content isn't working. just asking because
+ most businesses we talk to have one piece dialed in but the connection
+ between content and cash is still manual. what does your follow-up look
+ like when someone comments or DMs?"
+
+[SHORT REPLY / just "how?"]
+"short version: we build a system where your content pre-sells for you,
+ so by the time someone reaches out they're already halfway sold. takes
+ about 2 weeks to set up. want to see what it would look like for your
+ specific business?"
+
+[NO REPLY BUT FOLLOWED YOU]
+"hey — saw you followed. noticed your content and wanted to ask honestly:
+ are you getting actual clients from it or mostly just engagement?
+ we help businesses close that gap. happy to show you a real example
+ if that's something you're thinking about."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STAGE 2 — They said "yes" or "show me" or "how does it work"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"cool. so there are three things most businesses are missing:
+
+ 1. a hook system that filters out browsers and pulls in buyers
+ 2. a follow-up sequence so leads don't go cold
+ 3. a content loop that builds trust before they even reach out
+
+ we build all three and connect them to whatever you're already posting.
+ takes about 2 weeks, works in the background once it's set up.
+
+ what kind of business do you run? i want to show you a real example
+ from someone in a similar space."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STAGE 3 — They told you their business type / asked about price
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[TOLD YOU THEIR BUSINESS]
+"perfect. i've seen this work really well for [their niche]. the key for
+ you specifically would be [one specific thing — e.g., 'capturing the
+ people who watch your videos but never reach out'].
+
+ i can put together a quick breakdown of exactly what we'd set up for
+ you. what's the best way to send it — DM here or do you have an email?"
+
+[ASKED ABOUT PRICE]
+"depends on what we're building but most setups run between $500-$1500
+ one-time, or $300-$500/month if you want us to run it for you.
+
+ before we talk numbers i'd rather show you the actual system first so
+ you can see if it makes sense for your business. takes 15 minutes.
+
+ what's your email? i'll send over the walkthrough."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STAGE 4 — They gave you their email / agreed to a call
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+-> Add to outreach_queue.csv with niche = "social" and send via dashboard
+-> Subject: "quick walkthrough for [their business name]"
+
+EMAIL BODY:
+"Hey [name],
+
+Appreciate you reaching out.
+
+Quick version of what we do: we build a system that connects your social
+content directly to a lead flow — so instead of hoping viewers reach out,
+the system follows up with them automatically.
+
+Here's what that looks like in 3 steps:
+  1. Content is posted (you keep doing what you're doing)
+  2. Anyone who engages hits an automated follow-up sequence
+  3. Interested leads get routed directly to you — pre-warmed, pre-sold
+
+We've set this up for [niche] businesses and the typical result is
+10-30 additional leads per month without changing what you're posting.
+
+I put together a quick breakdown specific to [their business type].
+Want me to send it over or jump on a 15-minute call this week?
+
+Alex
+Gray Horizons Enterprise
+https://grayhorizonsenterprise.com"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+YOUR DAILY LOOP (takes 45 min/day)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Morning (15 min):
+  1. python comment_generator.py
+  2. Open TikTok or YouTube
+  3. Search the target terms in comments_today.txt
+  4. Drop 50 comments (skip if < 1k views on the video)
+
+Midday check (10 min):
+  5. Check notifications for replies
+  6. Respond using Stage 1 scripts above
+
+Evening (20 min):
+  7. Follow up any Stage 2+ conversations
+  8. Add any email leads to outreach_queue.csv
+  9. python viral_system.py (if buffer < 20 clips)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SPEED TARGETS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Comments posted/day:    50-100
+  Expected replies:       10-20
+  Expected email leads:   3-5
+  Expected closes/week:   2-4
+  Target revenue/month:   $2,000-$5,000 (at $500-$1,500/client)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT TO TRACK (update this daily)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Date | Comments | Replies | Emails | Closes | Revenue
+-----|----------|---------|--------|--------|--------
+     |          |         |        |        |
+
+===============================================================
