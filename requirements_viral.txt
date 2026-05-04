@@ -1,0 +1,8 @@
+moviepy==1.0.3
+opencv-python
+numpy
+requests
+imageio
+imageio-ffmpeg
+decorator
+tqdm
