@@ -100,7 +100,81 @@ def keep_alive():
 
 threading.Thread(target=keep_alive, daemon=True).start()
 
-CSV_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
+CSV_FILE    = os.path.join(DATA_DIR, "outreach_queue.csv")
+SOCIAL_FILE = os.path.join(DATA_DIR, "social_pipeline.csv")
+
+SOCIAL_STAGES = ["commented", "replied", "demo_sent", "closed", "dead"]
+
+def load_social():
+    import csv as _csv
+    if not os.path.exists(SOCIAL_FILE):
+        return []
+    with open(SOCIAL_FILE, newline="", encoding="utf-8") as f:
+        return list(_csv.DictReader(f))
+
+def save_social(rows):
+    import csv as _csv
+    if not rows:
+        return
+    with open(SOCIAL_FILE, "w", newline="", encoding="utf-8") as f:
+        writer = _csv.DictWriter(f, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+
+def add_social_prospect(handle, platform, notes):
+    import csv as _csv
+    rows = load_social()
+    new_id = str(len(rows) + 1)
+    row = {
+        "id": new_id,
+        "handle": handle.strip(),
+        "platform": platform.strip(),
+        "stage": "commented",
+        "notes": notes.strip(),
+        "added": datetime.now().strftime("%m/%d %I:%M %p"),
+    }
+    rows.append(row)
+    save_social(rows)
+
+def build_social_table():
+    rows = load_social()
+    if not rows:
+        return '<div style="text-align:center;padding:40px;color:#475569;font-size:13px;">No prospects yet. Drop a comment and add them above.</div>'
+
+    STAGE_COLORS = {
+        "commented":  ("#1e3a5f", "#60a5fa", "Commented"),
+        "replied":    ("#1a3a1a", "#4ade80", "Replied"),
+        "demo_sent":  ("#2d1a00", "#fbbf24", "Demo Sent"),
+        "closed":     ("#14532d", "#86efac", "CLOSED"),
+        "dead":       ("#1f1f1f", "#6b7280", "Dead"),
+    }
+
+    html = '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;">'
+    html += '<tr style="background:#0f172a;"><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;text-transform:uppercase;">Handle</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Platform</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Stage</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Notes</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Move</th></tr>'
+
+    for row in reversed(rows):
+        sid   = row.get("id", "")
+        stage = row.get("stage", "commented")
+        bg, fg, label = STAGE_COLORS.get(stage, ("#1e293b", "#e2e8f0", stage))
+
+        # next stage button
+        idx = SOCIAL_STAGES.index(stage) if stage in SOCIAL_STAGES else 0
+        next_stage = SOCIAL_STAGES[idx + 1] if idx + 1 < len(SOCIAL_STAGES) else None
+        next_btn = f'<a href="/social/advance/{sid}" style="background:#f97316;color:#000;border:none;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:bold;text-decoration:none;">Next</a>' if next_stage else '<span style="color:#475569;font-size:11px;">Done</span>'
+        kill_btn = f'<a href="/social/kill/{sid}" style="background:#ef4444;color:#fff;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;text-decoration:none;margin-left:4px;">✕</a>'
+
+        html += (
+            f'<tr style="border-bottom:1px solid #1e293b;">'
+            f'<td style="padding:9px 10px;color:#e2e8f0;font-weight:bold;">{row.get("handle","")}</td>'
+            f'<td style="padding:9px 10px;color:#94a3b8;">{row.get("platform","")}</td>'
+            f'<td style="padding:9px 10px;"><span style="background:{bg};color:{fg};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;">{label}</span></td>'
+            f'<td style="padding:9px 10px;color:#64748b;font-size:12px;">{row.get("notes","")}</td>'
+            f'<td style="padding:9px 10px;">{next_btn}{kill_btn}</td>'
+            f'</tr>'
+        )
+
+    html += '</table></div>'
+    return html
 
 # =========================
 # LOAD DATA
@@ -325,9 +399,10 @@ def dashboard():
 
     df = load_data()
 
-    pending_count = len(df[df["status"] == "pending"])
-    sent_count    = len(df[df["status"] == "sent"])
-    skipped_count = len(df[df["status"] == "skipped"])
+    pending_count    = len(df[df["status"] == "pending"])
+    sent_count       = len(df[df["status"] == "sent"])
+    skipped_count    = len(df[df["status"] == "skipped"])
+    social_table_html = build_social_table()
 
     status_text = '<span style="color:#22c55e">Scraping leads now...</span>' if pipeline_running else (
         f"Last run: {fmt_pacific(last_run_time)}" if last_run_time else "Starting soon..."
@@ -418,6 +493,7 @@ def dashboard():
 
 <div class="nav">
   <a onclick="showTab('outreach')" id="tab-outreach" class="{'active' if active_tab=='outreach' else ''}">Outreach ({pending_count} pending)</a>
+  <a onclick="showTab('social')"   id="tab-social"   class="{'active' if active_tab=='social' else ''}" style="color:#f97316;">Social Pipeline</a>
   <a onclick="showTab('grants')"   id="tab-grants"   class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grant Agent</a>
 </div>
 
@@ -508,6 +584,93 @@ def dashboard():
     <div style="color:#475569;font-size:12px;margin-top:16px;">Opens full dashboard with scan, apply, and AI application tools</div>
   </div>
 </div><!-- end grants tab -->
+
+<!-- SOCIAL PIPELINE TAB -->
+<div id="content-social" class="tab-content {'active' if active_tab=='social' else ''}">
+  <div style="max-width:780px;margin:0 auto;padding:20px 16px;">
+
+    <!-- MESSAGE TEMPLATES -->
+    <div style="margin-bottom:24px;">
+      <div style="font-size:13px;font-weight:bold;color:#f97316;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;">Message Templates — Click to Copy</div>
+
+      <div style="background:#1e293b;border-radius:10px;padding:16px;margin-bottom:12px;border-left:3px solid #38bdf8;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-size:11px;font-weight:bold;color:#38bdf8;text-transform:uppercase;">Message 1 — Cold Comment / DM</span>
+          <button onclick="copyMsg('msg1')" style="background:#38bdf8;color:#000;border:none;padding:4px 12px;border-radius:5px;font-size:11px;font-weight:bold;cursor:pointer;">Copy</button>
+        </div>
+        <div id="msg1" style="font-size:13px;line-height:1.7;color:#e2e8f0;white-space:pre-wrap;">Saw your post — quick question
+
+Are you trying to get customers from your content or just views?
+
+I focus specifically on content that brings in customers.
+
+Want a quick example?</div>
+      </div>
+
+      <div style="background:#1e293b;border-radius:10px;padding:16px;margin-bottom:12px;border-left:3px solid #22c55e;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-size:11px;font-weight:bold;color:#22c55e;text-transform:uppercase;">Message 2 — After They Reply (attach clip)</span>
+          <button onclick="copyMsg('msg2')" style="background:#22c55e;color:#000;border:none;padding:4px 12px;border-radius:5px;font-size:11px;font-weight:bold;cursor:pointer;">Copy</button>
+        </div>
+        <div id="msg2" style="font-size:13px;line-height:1.7;color:#e2e8f0;white-space:pre-wrap;">Here's a quick example 👇
+
+This is the type of content we use to drive attention + customers.
+
+We can set this up for you within a few days.
+
+👇 [attach clip from READY_TO_UPLOAD folder]</div>
+      </div>
+
+      <div style="background:#1e293b;border-radius:10px;padding:16px;margin-bottom:12px;border-left:3px solid #f97316;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-size:11px;font-weight:bold;color:#f97316;text-transform:uppercase;">Message 3 — Close</span>
+          <button onclick="copyMsg('msg3')" style="background:#f97316;color:#000;border:none;padding:4px 12px;border-radius:5px;font-size:11px;font-weight:bold;cursor:pointer;">Copy</button>
+        </div>
+        <div id="msg3" style="font-size:13px;line-height:1.7;color:#e2e8f0;white-space:pre-wrap;">We usually start at $1,000–$2,000 depending on volume.
+
+If you're ready, we can get started today.</div>
+      </div>
+    </div>
+
+    <!-- ADD PROSPECT -->
+    <div style="background:#1e293b;border-radius:10px;padding:16px;margin-bottom:20px;">
+      <div style="font-size:13px;font-weight:bold;color:#f97316;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Track a Prospect</div>
+      <form method="POST" action="/social/add" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <input name="handle"   placeholder="@handle or name"  required style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:8px 10px;font-size:13px;flex:1;min-width:140px;">
+        <input name="platform" placeholder="TikTok / YouTube" required style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:8px 10px;font-size:13px;width:130px;">
+        <input name="notes"    placeholder="notes (optional)"        style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:8px 10px;font-size:13px;flex:2;min-width:160px;">
+        <button type="submit" style="background:#f97316;color:#000;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:bold;cursor:pointer;">Add</button>
+      </form>
+    </div>
+
+    <!-- PIPELINE TABLE -->
+    <div style="font-size:13px;font-weight:bold;color:#f97316;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Pipeline</div>
+    {social_table_html}
+
+    <!-- DAILY TARGETS -->
+    <div style="background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:14px 16px;margin-top:20px;font-size:12px;color:#64748b;line-height:1.8;">
+      <span style="color:#f97316;font-weight:bold;">Daily targets:</span>
+      50-100 comments posted &nbsp;·&nbsp;
+      10-20 replies expected &nbsp;·&nbsp;
+      3-5 email leads &nbsp;·&nbsp;
+      2-4 closes/week &nbsp;·&nbsp;
+      <span style="color:#22c55e;">$2k–$6k/month</span>
+    </div>
+  </div>
+</div><!-- end social tab -->
+
+<script>
+function copyMsg(id) {{
+  var el = document.getElementById(id);
+  var text = el.innerText;
+  navigator.clipboard.writeText(text).then(function() {{
+    var btn = el.previousElementSibling.querySelector('button');
+    var orig = btn.innerText;
+    btn.innerText = 'Copied!';
+    setTimeout(function(){{ btn.innerText = orig; }}, 1500);
+  }});
+}}
+</script>
 
 <script>
 function showTab(name) {{
@@ -936,6 +1099,42 @@ def debug():
         "<a href='/'           style='color:#38bdf8;'>Dashboard</a>"
         "</div>"
     )
+
+# =========================
+# SOCIAL PIPELINE ROUTES
+# =========================
+@app.route('/social/add', methods=["POST"])
+def social_add():
+    from flask import request as freq
+    handle   = freq.form.get("handle",   "").strip()
+    platform = freq.form.get("platform", "").strip()
+    notes    = freq.form.get("notes",    "").strip()
+    if handle:
+        add_social_prospect(handle, platform, notes)
+    return redirect('/?tab=social')
+
+@app.route('/social/advance/<sid>')
+def social_advance(sid):
+    rows = load_social()
+    for row in rows:
+        if row.get("id") == sid:
+            stage = row.get("stage", "commented")
+            idx   = SOCIAL_STAGES.index(stage) if stage in SOCIAL_STAGES else 0
+            if idx + 1 < len(SOCIAL_STAGES):
+                row["stage"] = SOCIAL_STAGES[idx + 1]
+            break
+    save_social(rows)
+    return redirect('/?tab=social')
+
+@app.route('/social/kill/<sid>')
+def social_kill(sid):
+    rows = load_social()
+    for row in rows:
+        if row.get("id") == sid:
+            row["stage"] = "dead"
+            break
+    save_social(rows)
+    return redirect('/?tab=social')
 
 # =========================
 # HEALTH CHECK
