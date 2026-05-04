@@ -19,10 +19,10 @@ from metadata_engine import generate_metadata, reset_batch
 # =========================
 # CONFIG (override via .env or env vars)
 # =========================
-BASE   = Path(os.getenv("VIRAL_BASE", "D:/viral_clips"))
-RAW    = BASE / "raw_clips"
-READY  = BASE / "READY_TO_UPLOAD"
-POSTED = BASE / "POSTED"
+BASE   = Path(os.getenv("VIRAL_BASE", r"C:\Users\curti\Downloads\First Agentic Workflows\clips"))
+RAW    = BASE / "raw"
+READY  = BASE / "output"
+POSTED = BASE / "posted"
 AUDIO  = BASE / "audio"
 
 for d in [RAW, READY, POSTED, AUDIO]:
