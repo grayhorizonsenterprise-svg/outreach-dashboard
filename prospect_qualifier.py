@@ -112,7 +112,7 @@ def clean_company_name(raw: str, website: str = "") -> str:
     return name
 
 
-KNOWN_NICHES = {"hoa", "hvac", "dental", "plumbing", "contractor"}
+KNOWN_NICHES = {"hoa", "hvac", "dental", "plumbing", "contractor", "roofing", "landscaping"}
 
 # Niche keywords used to loosen word-count and name validation
 NICHE_KEYWORDS = {
@@ -215,21 +215,30 @@ def clean():
     if "niche" not in df.columns:
         df["niche"] = ""
 
-    # Step 1: filter raw titles — pass niche so known-niche rows bypass word check
-    mask = df.apply(lambda r: is_valid_raw(r["company"], r.get("niche", "")), axis=1)
-    df = df[mask].copy()
+    # Rows that already have an email are enriched — always keep them
+    has_email    = df["email"].fillna("").str.strip() != "" if "email" in df.columns else pd.Series([False]*len(df))
+    enriched_df  = df[has_email].copy()
+    df_raw       = df[~has_email].copy()
+
+    # Step 1: filter raw titles — known-niche rows bypass the BUSINESS_WORDS check
+    mask = df_raw.apply(lambda r: is_valid_raw(r["company"], r.get("niche", "")), axis=1)
+    df_raw = df_raw[mask].copy()
 
     # Step 2: clean names
-    df["company"] = df.apply(
+    df_raw["company"] = df_raw.apply(
         lambda r: clean_company_name(r["company"], r.get("website", "")), axis=1
     )
 
-    # Step 3: validate cleaned names — pass niche for looser rules on confirmed niches
-    mask2 = df.apply(lambda r: is_valid_clean(r["company"], r.get("niche", "")), axis=1)
-    df = df[mask2].copy()
+    # Step 3: validate cleaned names — looser rules for confirmed niches
+    mask2 = df_raw.apply(lambda r: is_valid_clean(r["company"], r.get("niche", "")), axis=1)
+    df_raw = df_raw[mask2].copy()
+
+    # Merge: enriched rows always survive + filtered unenriched rows
+    df = pd.concat([enriched_df, df_raw], ignore_index=True)
 
     cleaned_count = len(df)
     df.to_csv(OUTPUT_FILE, index=False)
+    print(f"  Enriched rows protected: {len(enriched_df)}")
 
     # Report per-niche survival counts
     for niche in sorted(df["niche"].dropna().unique()):
