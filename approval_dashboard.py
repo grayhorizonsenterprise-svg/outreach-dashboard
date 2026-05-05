@@ -1,4 +1,4 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, request as flask_request, Response
 import pandas as pd
 import os
 import requests
@@ -608,6 +608,7 @@ def dashboard():
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <a href="/send-batch" class="btn-link" style="background:{'#475569' if batch_running else '#f97316'};color:{'#94a3b8' if batch_running else '#000'};font-weight:bold;">{'Sending...' if batch_running else f'Send {daily_remaining} Now'}</a>
+      <a href="/upload-queue" class="btn-link" style="background:#22c55e;color:#000;font-weight:bold;">Upload Leads</a>
       <a href="/sent" class="btn-link" style="background:#7c3aed;">View Sent</a>
       <a href="/resend-failed" class="btn-link" style="background:#f59e0b;color:#000;">Resend Failed</a>
       <a href="/refresh" class="btn-link">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
@@ -1262,6 +1263,166 @@ def social_kill(sid):
             break
     save_social(rows)
     return redirect('/?tab=social')
+
+# =========================
+# UPLOAD QUEUE — drag & drop outreach_queue.csv into Railway
+# GET  /upload-queue  — upload form
+# POST /upload-queue  — receives CSV, merges with existing queue
+# =========================
+@app.route('/upload-queue', methods=["GET"])
+def upload_queue_form():
+    df      = load_data()
+    pending = len(df[df["status"] == "pending"]) if len(df) else 0
+    total   = len(df)
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Upload Leads — Gray Horizons</title>
+    <style>
+      *{{box-sizing:border-box;margin:0;padding:0;}}
+      body{{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}}
+      .box{{background:#1e293b;border-radius:12px;padding:36px 32px;max-width:560px;width:100%;}}
+      h2{{color:#22c55e;font-size:20px;margin-bottom:6px;}}
+      .sub{{color:#64748b;font-size:13px;margin-bottom:24px;}}
+      .stats{{background:#0f172a;border-radius:8px;padding:12px 16px;font-size:13px;color:#94a3b8;margin-bottom:24px;line-height:1.8;}}
+      .stat-hi{{color:#38bdf8;font-weight:bold;}}
+      label{{display:block;font-size:13px;color:#94a3b8;margin-bottom:8px;}}
+      .drop-zone{{border:2px dashed #334155;border-radius:8px;padding:40px 20px;text-align:center;cursor:pointer;transition:border-color .2s;margin-bottom:20px;}}
+      .drop-zone:hover,.drop-zone.over{{border-color:#22c55e;background:#0f2a1a;}}
+      .drop-zone input{{display:none;}}
+      .drop-icon{{font-size:36px;margin-bottom:8px;}}
+      .drop-text{{color:#64748b;font-size:13px;}}
+      .file-name{{color:#22c55e;font-size:13px;margin-top:8px;font-weight:bold;}}
+      .btn{{background:#22c55e;color:#000;border:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:bold;cursor:pointer;width:100%;}}
+      .btn:hover{{background:#16a34a;}}
+      .note{{font-size:11px;color:#475569;margin-top:16px;line-height:1.6;}}
+      a.back{{display:inline-block;margin-top:20px;color:#38bdf8;font-size:13px;}}
+    </style>
+    </head>
+    <body>
+    <div class="box">
+      <h2>Upload Lead Queue</h2>
+      <div class="sub">Loads your outreach_queue.csv directly into the dashboard.</div>
+
+      <div class="stats">
+        Current queue on Railway:<br>
+        <span class="stat-hi">{total}</span> total leads &nbsp;·&nbsp;
+        <span class="stat-hi">{pending}</span> pending
+      </div>
+
+      <form method="POST" action="/upload-queue" enctype="multipart/form-data" id="uploadForm">
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('csvFile').click()">
+          <input type="file" name="csv_file" id="csvFile" accept=".csv" onchange="showFile(this)">
+          <div class="drop-icon">📂</div>
+          <div class="drop-text">Click to select <strong>outreach_queue.csv</strong><br>or drag and drop it here</div>
+          <div class="file-name" id="fileName"></div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="checkbox" name="merge" value="1" checked style="width:16px;height:16px;">
+            <span style="font-size:13px;color:#94a3b8;">Merge with existing (preserve sent/skipped — only add new pending)</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn">Upload & Load into Dashboard</button>
+      </form>
+
+      <div class="note">
+        After upload, all leads appear in the Outreach tab with Send / Skip buttons.<br>
+        Existing sent and skipped records are preserved when merge is checked.
+      </div>
+
+      <a class="back" href="/">← Back to Dashboard</a>
+    </div>
+
+    <script>
+    function showFile(input) {{
+      document.getElementById('fileName').textContent = input.files[0] ? input.files[0].name : '';
+    }}
+    var dz = document.getElementById('dropZone');
+    dz.addEventListener('dragover', function(e){{ e.preventDefault(); dz.classList.add('over'); }});
+    dz.addEventListener('dragleave', function(){{ dz.classList.remove('over'); }});
+    dz.addEventListener('drop', function(e){{
+      e.preventDefault(); dz.classList.remove('over');
+      var f = e.dataTransfer.files[0];
+      if (f) {{
+        var dt = new DataTransfer(); dt.items.add(f);
+        document.getElementById('csvFile').files = dt.files;
+        showFile(document.getElementById('csvFile'));
+      }}
+    }});
+    </script>
+    </body>
+    </html>
+    """
+
+@app.route('/upload-queue', methods=["POST"])
+def upload_queue_post():
+    file  = flask_request.files.get("csv_file")
+    merge = flask_request.form.get("merge") == "1"
+
+    if not file or not file.filename.endswith(".csv"):
+        return "<p style='color:red;font-family:Arial;padding:40px;'>No valid CSV file received. <a href='/upload-queue' style='color:#38bdf8;'>Try again</a></p>", 400
+
+    try:
+        import io
+        content  = file.read().decode("utf-8", errors="replace")
+        uploaded = pd.read_csv(io.StringIO(content)).fillna("")
+
+        for col in ["company","name","email","message","status","niche","subject","website"]:
+            if col not in uploaded.columns:
+                uploaded[col] = ""
+
+        uploaded.loc[uploaded["status"] == "", "status"] = "pending"
+
+        if merge and os.path.exists(CSV_FILE):
+            existing = load_data()
+            # Keep sent/skipped from existing; use uploaded for pending
+            done_emails = set(
+                existing.loc[existing["status"].isin(["sent","skipped"]), "email"]
+                .str.strip().str.lower().tolist()
+            )
+            existing_done = existing[existing["status"].isin(["sent","skipped"])]
+            new_pending   = uploaded[
+                ~uploaded["email"].str.strip().str.lower().isin(done_emails)
+            ].copy()
+            new_pending["status"] = "pending"
+            merged = pd.concat([existing_done, new_pending], ignore_index=True)
+        else:
+            merged = uploaded
+
+        merged.to_csv(CSV_FILE, index=False)
+
+        added   = len(merged[merged["status"] == "pending"])
+        kept    = len(merged[merged["status"].isin(["sent","skipped"])])
+        total   = len(merged)
+
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head><meta charset="utf-8"><title>Upload Complete</title>
+        <style>body{{background:#0f172a;color:#e2e8f0;font-family:Arial;display:flex;align-items:center;justify-content:center;min-height:100vh;}}
+        .box{{background:#1e293b;border-radius:12px;padding:40px;max-width:480px;width:100%;text-align:center;}}</style>
+        </head>
+        <body><div class="box">
+          <div style="font-size:48px;margin-bottom:16px;">✅</div>
+          <h2 style="color:#22c55e;margin-bottom:16px;">Upload Complete</h2>
+          <div style="background:#0f172a;border-radius:8px;padding:16px;font-size:14px;line-height:2;margin-bottom:24px;">
+            <div><span style="color:#94a3b8;">Total loaded:</span> <strong style="color:#38bdf8;">{total}</strong></div>
+            <div><span style="color:#94a3b8;">Pending (ready to send):</span> <strong style="color:#22c55e;">{added}</strong></div>
+            <div><span style="color:#94a3b8;">Preserved (sent/skipped):</span> <strong style="color:#64748b;">{kept}</strong></div>
+          </div>
+          <a href="/" style="display:inline-block;background:#22c55e;color:#000;padding:12px 32px;border-radius:8px;font-weight:bold;font-size:15px;text-decoration:none;">Go to Dashboard →</a>
+        </div></body></html>
+        """
+
+    except Exception as e:
+        return f"<p style='color:red;font-family:Arial;padding:40px;'>Upload failed: {e}<br><a href='/upload-queue' style='color:#38bdf8;'>Try again</a></p>", 500
+
 
 # =========================
 # HEALTH CHECK
