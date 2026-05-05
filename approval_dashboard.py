@@ -660,7 +660,6 @@ def dashboard():
         else:
             html += '<button class="btn-disabled">No Email</button>'
         html += f'<a href="/skip/{i}" class="btn-skip">Skip</a>'
-        html += f'<a href="/social/from-email/{i}" style="background:#f97316;color:#000;border:none;padding:9px 12px;border-radius:6px;cursor:pointer;font-size:12px;text-decoration:none;display:inline-block;margin-top:10px;margin-left:8px;">Social</a>'
         html += '</div></div>'
 
     html += "</div><!-- end outreach tab -->\n"
@@ -923,11 +922,12 @@ def sent_log_view():
         html += '<p style="text-align:center;color:#64748b;">No emails sent yet.</p>'
     else:
         # also check old-format column names (status/note vs success/error)
-        html += "<div class='wrap'><table><tr><th>Time</th><th>Company</th><th>Email</th><th>Subject</th><th>Status</th><th>Error / Detail</th></tr>"
+        html += "<div class='wrap'><table><tr><th>Time</th><th>Company</th><th>Email</th><th>Subject</th><th>Status</th><th>Error / Detail</th><th>Follow Up</th></tr>"
         for r in reversed(rows):
             success_raw = str(r.get("success", r.get("status", ""))).strip().lower()
             error_msg   = str(r.get("error",   r.get("note",   ""))).strip()
-            if success_raw in ("true", "1", "yes", "smtp", "sendgrid"):
+            was_sent    = success_raw in ("true", "1", "yes", "smtp", "sendgrid", "gmail-smtp-accepted")
+            if was_sent:
                 status_cell = '<span class="ok">SENT</span>'
             elif success_raw in ("skipped",):
                 status_cell = '<span style="color:#94a3b8;font-weight:bold;">SKIPPED</span>'
@@ -937,6 +937,11 @@ def sent_log_view():
             email   = str(r.get("email", "")).strip()
             subject = str(r.get("subject", "")).strip()
             ts      = str(r.get("timestamp", "")).strip()
+            import urllib.parse
+            social_btn = (
+                f'<a href="/social/from-sent?company={urllib.parse.quote(company)}&email={urllib.parse.quote(email)}" '
+                f'style="background:#f97316;color:#000;padding:3px 10px;border-radius:5px;font-size:11px;font-weight:bold;text-decoration:none;white-space:nowrap;">Social</a>'
+            ) if was_sent else ""
             html += (
                 "<tr>"
                 "<td style='white-space:nowrap;color:#94a3b8;font-size:11px;'>" + ts + "</td>"
@@ -945,6 +950,7 @@ def sent_log_view():
                 "<td style='color:#cbd5e1;font-size:12px;'>" + subject + "</td>"
                 "<td>" + status_cell + "</td>"
                 "<td class='err'>" + error_msg + "</td>"
+                "<td style='padding:8px;'>" + social_btn + "</td>"
                 "</tr>"
             )
         html += "</table></div>"
@@ -1214,6 +1220,17 @@ def send_batch():
     if not batch_running:
         threading.Thread(target=run_batch_send, daemon=True).start()
     return redirect('/')
+
+@app.route('/social/from-sent')
+def social_from_sent():
+    company  = flask_request.args.get("company", "").strip()
+    email    = flask_request.args.get("email",   "").strip()
+    if company or email:
+        rows = load_social()
+        existing_emails = [r.get("email","").lower() for r in rows]
+        if email.lower() not in existing_emails:
+            add_social_prospect(company or email, "Email", "no reply — follow up socially", email)
+    return redirect('/?tab=social')
 
 @app.route('/social/from-email/<int:index>')
 def social_from_email(index):
