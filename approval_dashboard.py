@@ -396,13 +396,22 @@ def _send_via_smtp(sender_addr, smtp_password, to_email, subject, html_body, nam
         return False
 
 def send_email(to_email, name, company, message, subject=""):
-    sender_addr = os.getenv("SENDER_EMAIL", "").strip()
+    # Check all possible variable names Railway might use
+    sender_addr = (
+        os.getenv("SENDER_EMAIL", "").strip() or
+        os.getenv("GMAIL_USER", "").strip() or
+        os.getenv("SMTP_USER", "").strip() or
+        os.getenv("EMAIL_FROM", "").strip() or
+        "grayhorizonsenterprise@gmail.com"  # hardcoded fallback
+    )
     sender_name = os.getenv("SENDER_NAME", "Alex")
     subject     = subject.strip() if subject.strip() else "Quick question for your team"
 
-    if not sender_addr:
-        print("[SEND] ERROR: SENDER_EMAIL not set")
-        log_sent(to_email, name, company, subject, False, "SENDER_EMAIL not set")
+    print(f"[SEND] sender={sender_addr} to={to_email}")
+
+    if not to_email or not str(to_email).strip():
+        print("[SEND] ERROR: No recipient email")
+        log_sent(to_email, name, company, subject, False, "no recipient")
         return False
 
     if not to_email or not str(to_email).strip():
