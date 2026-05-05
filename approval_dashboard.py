@@ -397,16 +397,20 @@ def send_email(to_email, name, company, message, subject=""):
 
     html_body = _build_html_body(name, sender_name, message)
 
+    smtp_password = os.getenv("SENDER_APP_PASSWORD", "").strip()
+
     # ── Primary: SendGrid (if key is set) ─────────────────────────────────────
     api_key = os.getenv("SENDGRID_API_KEY", "").strip()
     if api_key:
-        return _send_via_sendgrid(api_key, sender_addr, sender_name,
-                                  to_email, subject, html_body, name, company)
+        ok = _send_via_sendgrid(api_key, sender_addr, sender_name,
+                                to_email, subject, html_body, name, company)
+        if ok:
+            return True
+        # SendGrid failed — fall through to SMTP
+        print(f"[SEND] SendGrid failed for {to_email} — trying Gmail SMTP")
 
-    # ── Fallback: Gmail SMTP (uses SENDER_APP_PASSWORD) ───────────────────────
-    smtp_password = os.getenv("SENDER_APP_PASSWORD", "").strip()
+    # ── Fallback: Gmail SMTP ───────────────────────────────────────────────────
     if smtp_password:
-        print(f"[SEND] No SendGrid key — using Gmail SMTP for {to_email}")
         return _send_via_smtp(sender_addr, smtp_password,
                               to_email, subject, html_body, name, company)
 
