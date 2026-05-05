@@ -91,27 +91,11 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick one: when a customer calls in for an emergency repair, how are you dispatching and tracking that job from the first call to close-out? Still phone and spreadsheet, or do you have a system?
+Most HVAC companies we work with had the same problem - emergency calls coming in with no centralized way to track from first call to job close-out
 
-We've been working with HVAC companies to tighten up that gap. Curious how you're handling it.
+We built a system that handles dispatch, updates, and follow-up automatically so nothing falls through
 
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hi there,
-
-Not sure if this is relevant, but how are you managing your service calls and maintenance schedules right now? Specifically keeping techs, customers, and follow-ups all in sync without things falling through.
-
-Happy to share what we've seen work well if it's useful.
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hey,
-
-Wanted to ask something real quick: during peak season when calls are stacking up, how does your team keep track of which jobs are pending, in progress, and completed? Is it centralized anywhere or still kind of scattered?
+I can show you exactly how it works and get it running for your team this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -119,9 +103,11 @@ Gray Horizons Enterprise""",
         """\
 Hi,
 
-How do you handle it when a customer calls back three days later asking for an update on their service request and no one on the team knows where that job stands? That one comes up a lot with HVAC companies I talk to.
+The gap between a service call being logged and the tech actually getting dispatched is where most HVAC companies lose time and customers
 
-Genuinely curious how you manage it.
+We fixed that for several companies and now it runs without anyone manually tracking it
+
+I can walk you through the setup this week if you want to see it in action
 
 Alex
 Gray Horizons Enterprise""",
@@ -129,19 +115,47 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-One quick question: after a tech finishes a job, how does that get communicated back to the office and to the customer? Is there a system for that or is it still mostly a phone call?
+Missed calls during peak season cost HVAC companies more revenue than almost anything else - the customer calls once, nobody answers, and they book someone else
 
-Happy to share what we've put together if you're open to it.
+We built a system that captures those calls and routes them automatically so you stop losing jobs to competitors
+
+I can show you exactly how we set it up this week
 
 Alex
 Gray Horizons Enterprise""",
 
         """\
-Hi there,
+Hi,
 
-Not a pitch - just wanted to ask how you're handling missed calls during busy periods. Specifically when someone calls for a repair and doesn't reach anyone, what happens to that lead?
+When a customer calls back asking for a job update and nobody on your team knows where it stands - that is the moment you lose the review and the referral
 
-That gap is usually where a lot of revenue walks out the door.
+We built a system that keeps every job status updated and visible without anyone having to chase it down
+
+I can get you set up in about a week. Let me know and I will show you how it works
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+After a tech finishes a job the follow-up almost never happens automatically - no check-in, no review request, no next appointment
+
+We built that entire post-job flow into a system that runs on its own
+
+I can show you what it looks like and get it running for your team this week
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+HVAC companies lose more revenue to missed and unreturned calls than almost any other gap in the business
+
+We built a system that captures every missed call and routes it back into your pipeline automatically
+
+I can show you exactly how it works this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -151,29 +165,11 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick question: how are you handling new patient intake and appointment follow-ups right now? Specifically making sure patients who inquire actually get booked and don't fall off.
+Most dental practices we work with were losing new patients between the first inquiry and the actual booking - the follow-up just was not happening consistently
 
-We've been working with a few dental practices on exactly that. Curious how you're running it.
+We built a system that handles that entire process automatically so no inquiry goes cold
 
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hi there,
-
-Not sure if this is an issue on your end, but how does your front desk handle it when someone calls for an emergency appointment and the schedule is already full? Is there a system for that or is it mostly judgment call?
-
-Happy to share what we've seen work.
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hey,
-
-Random question: how are you tracking patients who called, got put on a waitlist, and never followed up? That gap between first inquiry and actual booking is where a lot of practices lose people.
-
-Curious if that's something you're actively managing.
+I can show you exactly how it works and get it running for your practice this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -181,9 +177,11 @@ Gray Horizons Enterprise""",
         """\
 Hi,
 
-Not a pitch - just wanted to ask: when a potential new patient fills out a contact form or leaves a voicemail after hours, what's the follow-up process? Do they hear back the same day or does it depend on who picks it up?
+After-hours voicemails and contact form submissions are where most practices lose new patients - nobody follows up until the next day and by then the patient has booked somewhere else
 
-That's usually where practices lose the most new patients.
+We built a system that responds and follows up automatically regardless of when they reach out
+
+I can walk you through it this week and show you what it looks like in practice
 
 Alex
 Gray Horizons Enterprise""",
@@ -191,19 +189,47 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick one: how many new patient inquiries would you say your office gets in a week where someone reaches out but never actually books? Even a rough number.
+Patients who call, get put on a waitlist, and never hear back again are lost revenue that most practices do not even track
 
-We've been helping practices recover those. Happy to share how if it's useful.
+We built a system that keeps every patient inquiry active and followed up until they are booked or confirmed out
+
+I can show you how we set it up this week
 
 Alex
 Gray Horizons Enterprise""",
 
         """\
-Hi there,
+Hi,
 
-How are you handling patient reactivation right now - people who haven't been in for over a year? Is that something your team actively reaches out on or does it tend to fall through the cracks?
+The gap between a new patient reaching out and actually sitting in your chair is where practices lose the most revenue
 
-Just curious what your process looks like.
+We closed that gap for several practices with a system that manages intake, follow-up, and booking automatically
+
+I can get you set up in about a week. Let me know and I will show you exactly how it works
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Patient reactivation is one of the highest-return activities a practice can do - reaching back out to patients who have not been in over a year
+
+We built a system that handles outreach, scheduling, and follow-up automatically so your team does not have to manage it manually
+
+I can show you how it works this week
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+Most practices have hundreds of patients who inquired, never booked, and were never followed up with again
+
+We built a system that recovers those patients automatically - no manual work from your front desk
+
+I can show you exactly how it works and what it would look like for your practice this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -213,27 +239,11 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick one: when an emergency call comes in, how are you routing it to a tech and making sure the customer gets an update without someone manually tracking it the whole time?
+The biggest revenue leak for most plumbing companies is missed calls - the customer calls once, nobody answers, and they book someone else before you call back
 
-We work with plumbing companies to clean up that dispatch-to-completion flow. Curious how you're handling it.
+We built a system that captures every missed call and gets it back into your pipeline automatically
 
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hi there,
-
-Not sure if this is relevant, but how are you managing job tracking across your crews right now? Specifically knowing where each job stands without having to call the tech directly.
-
-Happy to compare notes if that's something you deal with.
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hey,
-
-Direct question: when a customer calls about a burst pipe or active leak, what does the first 10 minutes look like on your end? Is dispatch centralized or is it still kind of ad hoc?
+I can show you exactly how it works this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -241,9 +251,11 @@ Gray Horizons Enterprise""",
         """\
 Hi,
 
-One thing I hear a lot from plumbing companies: by the time they call back a missed lead, someone else already got there. How are you handling after-hours calls and weekend inquiries right now?
+Emergency calls are where plumbing companies win or lose customers - the ones who respond fastest get the job
 
-Curious what your process looks like.
+We built a dispatch system that routes emergency calls to the right tech instantly and keeps the customer updated automatically
+
+I can walk you through it this week and show you what it looks like running
 
 Alex
 Gray Horizons Enterprise""",
@@ -251,17 +263,47 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Not trying to take up much of your time - just wanted to ask: when a job gets finished, how does your team handle following up with the customer to check in or ask for a review? Is that something you have a process for?
+Most plumbing companies we work with had no system for job tracking across crews - status updates required calling the tech directly every time
+
+We fixed that with a system that keeps every job visible from dispatch to close-out without anyone having to chase it down
+
+I can get you set up in about a week
 
 Alex
 Gray Horizons Enterprise""",
 
         """\
-Hi there,
+Hi,
 
-How many calls does your office miss on an average day - calls that don't get a callback or get lost in the shuffle? We've been helping plumbing companies capture those and turn them into booked jobs.
+After-hours and weekend calls are where most plumbing companies lose the most jobs - by the time someone calls back the customer has already moved on
 
-Happy to share how if it's useful.
+We built a system that captures and responds to those inquiries automatically so you stop losing jobs to whoever answers first
+
+I can show you exactly how we set it up this week
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Post-job follow-up almost never happens in plumbing - no check-in call, no review request, no next service reminder
+
+We built that entire process into a system that runs automatically after every job closes
+
+I can show you what it looks like and get it running for your team this week
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+The gap between a job finishing and the customer leaving a review is where most plumbing companies lose their referral pipeline
+
+We built a system that handles post-job follow-up and review collection automatically
+
+I can show you how it works this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -271,29 +313,11 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick question: how are you managing the gap between a client's first estimate request and when the actual project kicks off? That handoff tends to be where leads go cold.
+Most contractors we work with were losing jobs not because of the work but because estimate follow-up was not happening consistently
 
-We've been working with contracting firms on tightening up that process. Curious how you're running it.
+We built a system that tracks every open bid and follows up automatically until you get a response
 
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hi there,
-
-Not sure if this applies, but how are you tracking open bids and follow-ups right now? Specifically making sure estimates you sent out actually get a response before they go stale.
-
-Happy to share what we've put together if it's useful.
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hey,
-
-Random question: when a potential client reaches out about a remodel or addition, how quickly does your team get them a quote and follow up? That response window is usually the difference between winning the job and losing it.
-
-Curious how you're handling the volume.
+I can show you exactly how it works and get it running for your team this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -301,7 +325,11 @@ Gray Horizons Enterprise""",
         """\
 Hi,
 
-One thing I keep hearing from contractors: they're great at the work but the leads that don't convert are usually the ones where follow-up fell through. Is that something you track, or does it kind of get lost once the estimate goes out?
+The window between sending an estimate and hearing back is where most contracting jobs go cold - the customer gets another quote and signs with whoever follows up first
+
+We built a system that handles automatic follow-up so you stop losing jobs to faster competitors
+
+I can walk you through it this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -309,19 +337,49 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick one: when you send an estimate and don't hear back for a week, does your team follow up automatically or does it depend on someone remembering to do it?
+After-hours inquiries from homeowners are some of the highest-intent leads a contractor gets - and most of them go unanswered until the next day
 
-We've been helping contractors close more jobs by automating that part. Happy to share what that looks like.
+We built a system that captures and responds to those leads automatically so you are always first to respond
+
+I can show you how we set it up this week
 
 Alex
 Gray Horizons Enterprise""",
 
         """\
-Hi there,
+Hi,
 
-Not a pitch - just wanted to ask: how do you handle it when a homeowner reaches out through your website or Google listing after hours? Is there a system that captures and responds to that, or does it sit until someone gets to it the next day?
+The gap between a lead reaching out and your team getting them a quote is usually where the job goes to a competitor
 
-That after-hours window is usually where a lot of jobs go to a competitor.
+We built a system that cuts that response time down and automates the follow-up so no lead goes cold
+
+I can get you set up in about a week. Let me know and I will show you exactly how it works
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Contractors lose more jobs to slow follow-up than to price - the client moves on before the estimate even gets a response
+
+We fixed that for several firms with a system that tracks every estimate and follows up automatically
+
+I can show you what that looks like this week
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+When a homeowner submits a project request through your website or Google listing after hours it almost always sits until the next day
+
+By then they have already called two more contractors
+
+We built a system that responds immediately and keeps them engaged until your team is available
+
+I can show you how it works this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -331,19 +389,35 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Quick question: when a homeowner calls for an estimate, how quickly does your team get back to them? In landscaping that first response window is usually what wins or loses the job.
+The first company to respond to an estimate request in landscaping almost always wins the job - most homeowners book whoever gets back to them first
 
-Curious how you're handling it.
+We built a system that captures new inquiries and responds automatically so you are always first
+
+I can show you exactly how it works this week
 
 Alex
 Gray Horizons Enterprise""",
 
         """\
-Hi there,
+Hi,
 
-How are you managing recurring client schedules and reminders right now? Specifically making sure seasonal clients don't fall off or go quiet between services.
+Seasonal clients who go quiet between services are lost revenue that most landscaping companies never recover
 
-Happy to compare notes if that's something you deal with.
+We built a system that keeps every recurring client on schedule with automatic reminders and follow-up
+
+I can walk you through it this week and show you what it looks like running
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+When your schedule is full and a new lead comes in it almost always gets lost - there is no system to capture it for later
+
+We built a system that holds every overflow lead and follows up automatically when your schedule opens
+
+I can show you how we set it up this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -393,13 +467,13 @@ Gray Horizons Enterprise""",
 }
 
 NICHE_SUBJECTS = {
-    "hoa":          ["Quick question", "How do you handle violation tracking?", "Quick one for you", "HOA compliance question"],
-    "hvac":         ["Quick question", "How are you dispatching right now?",    "Quick one for you", "HVAC service tracking"],
-    "dental":       ["Quick question", "How are you handling new patients?",    "Quick one for you", "New patient follow-up"],
-    "plumbing":     ["Quick question", "How do you handle emergency calls?",    "Quick one for you", "Dispatch question"],
-    "contractor":   ["Quick question", "How are you managing bids?",            "Quick one for you", "Estimate follow-up"],
-    "landscaping":  ["Quick question", "How are you handling new leads?",       "Quick one for you"],
-    "roofing":      ["Quick question", "How are you managing storm calls?",     "Quick one for you", "Storm season question"],
+    "hoa":         ["Violation tracking question", "HOA follow-up process", "Compliance documentation gap", "HOA violation workflow"],
+    "hvac":        ["HVAC dispatch question", "Service call follow-up", "Job tracking question", "Missed calls this season"],
+    "dental":      ["New patient follow-up", "Appointment booking gap", "Patient intake question", "After-hours inquiry process"],
+    "plumbing":    ["Emergency call routing", "Dispatch follow-up question", "Job tracking question", "Missed call recovery"],
+    "contractor":  ["Estimate follow-up process", "Bid tracking question", "Lead response time", "Job closing question"],
+    "landscaping": ["New lead response time", "Client scheduling question", "Seasonal client follow-up"],
+    "roofing":     ["Storm call management", "Estimate follow-up question", "Job pipeline question", "Post-storm inquiry process"],
 }
 
 def is_clean_name(name: str) -> bool:
