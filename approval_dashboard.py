@@ -605,7 +605,7 @@ def dashboard():
 </style>
 </head>
 <body>
-<div class="header">Gray Horizons Enterprise — Command Center</div>
+<div class="header">Gray Horizons Enterprise | Command Center</div>
 
 {'<div style="background:#060a12;border-bottom:1px solid #1f2937;padding:6px 24px;display:flex;align-items:center;gap:6px;"><span style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-right:8px;">Dashboard</span><a href="' + EDGE_ENGINE_URL + '" style="padding:4px 12px;border-radius:5px;font-size:10px;font-weight:700;text-decoration:none;background:transparent;color:#6b7280;border:1px solid #1f2937;" target="_blank">Edge Engine</a><span style="padding:4px 12px;border-radius:5px;font-size:10px;font-weight:700;background:#06b6d4;color:#000;border:1px solid #06b6d4;">Outreach</span></div>' if EDGE_ENGINE_URL else ''}
 
@@ -673,6 +673,10 @@ def dashboard():
     </div>
     <div class="card-sub">{email if email else '❌ No Email'}</div>
     <div class="card-msg">{format_message(row["message"])}</div>
+    <div style="border-top:1px solid #334155;margin:10px 0 8px;padding-top:8px;font-size:12px;color:#64748b;line-height:1.7;">
+      Alex<br>Gray Horizons Enterprise<br>
+      <a href="https://grayhorizonsenterprise.com" style="color:#38bdf8;text-decoration:none;">grayhorizonsenterprise.com</a>
+    </div>
     <div>"""
         if email:
             html += f'<a href="/send/{i}" class="btn-send">Send</a>'
