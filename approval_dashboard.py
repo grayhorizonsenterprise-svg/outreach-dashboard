@@ -307,11 +307,22 @@ def log_sent(to_email, name, company, subject, success, error=""):
         writer.writerow(row)
 
 def _build_html_body(name, sender_name, message):
-    clean_msg = message
-    for sig_marker in ["Alex\nGray Horizons Enterprise", "Gray\nGray Horizons Enterprise"]:
+    # Normalize line endings before any processing
+    clean_msg = message.replace("\r\n", "\n").replace("\r", "\n")
+    # Strip any existing signature block and URL
+    for sig_marker in [
+        "Alex\nGray Horizons Enterprise",
+        "Gray\nGray Horizons Enterprise",
+        "alex\nGray Horizons Enterprise",
+    ]:
         if sig_marker in clean_msg:
             clean_msg = clean_msg[:clean_msg.rfind(sig_marker)].rstrip()
             break
+    # Also strip any trailing URL line
+    for url_trail in ["https://grayhorizonsenterprise.com", "grayhorizonsenterprise.com",
+                      "GrayHorizonsEnterprise.com"]:
+        if clean_msg.rstrip().endswith(url_trail):
+            clean_msg = clean_msg[:clean_msg.rstrip().rfind(url_trail)].rstrip()
     return (
         "<div style='font-family:Arial,sans-serif;line-height:1.7;color:#222;max-width:600px;'>"
         "<p>" + clean_msg.replace("\n\n", "</p><p>").replace("\n", "<br>") + "</p>"
