@@ -658,7 +658,9 @@ def dashboard():
             html += f'<a href="/send/{i}" class="btn-send">Send</a>'
         else:
             html += '<button class="btn-disabled">No Email</button>'
-        html += f'<a href="/skip/{i}" class="btn-skip">Skip</a></div></div>'
+        html += f'<a href="/skip/{i}" class="btn-skip">Skip</a>'
+        html += f'<a href="/social/from-email/{i}" style="background:#f97316;color:#000;border:none;padding:9px 12px;border-radius:6px;cursor:pointer;font-size:12px;text-decoration:none;display:inline-block;margin-top:10px;margin-left:8px;">Social</a>'
+        html += '</div></div>'
 
     html += "</div><!-- end outreach tab -->\n"
 
@@ -737,11 +739,13 @@ If you're ready, we can get started today.</div>
     <div style="background:#1e293b;border-radius:10px;padding:16px;margin-bottom:20px;">
       <div style="font-size:13px;font-weight:bold;color:#f97316;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Track a Prospect</div>
       <form method="POST" action="/social/add" style="display:flex;gap:8px;flex-wrap:wrap;">
-        <input name="handle"   placeholder="@handle or name"  required style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:8px 10px;font-size:13px;flex:1;min-width:140px;">
-        <input name="platform" placeholder="TikTok / YouTube" required style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:8px 10px;font-size:13px;width:130px;">
-        <input name="notes"    placeholder="notes (optional)"        style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:8px 10px;font-size:13px;flex:2;min-width:160px;">
+        <input name="handle"   placeholder="@handle or name"  required style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:8px 10px;font-size:13px;flex:1;min-width:130px;">
+        <input name="platform" placeholder="TikTok / YouTube" required style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:8px 10px;font-size:13px;width:120px;">
+        <input name="email"    placeholder="email (auto-queues outreach)" style="background:#0f172a;color:#e2e8f0;border:1px solid #f97316;border-radius:6px;padding:8px 10px;font-size:13px;flex:2;min-width:180px;">
+        <input name="notes"    placeholder="notes"             style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:8px 10px;font-size:13px;flex:1;min-width:100px;">
         <button type="submit" style="background:#f97316;color:#000;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:bold;cursor:pointer;">Add</button>
       </form>
+      <div style="font-size:11px;color:#475569;margin-top:6px;">Tip: add their email and it auto-queues in the Email Outreach system too.</div>
     </div>
 
     <!-- PIPELINE TABLE -->
@@ -1204,14 +1208,36 @@ def debug():
 # =========================
 # SOCIAL PIPELINE ROUTES
 # =========================
+@app.route('/send-batch')
+def send_batch():
+    if not batch_running:
+        threading.Thread(target=run_batch_send, daemon=True).start()
+    return redirect('/')
+
+@app.route('/social/from-email/<int:index>')
+def social_from_email(index):
+    df = load_data()
+    if index < len(df):
+        row      = df.loc[index]
+        handle   = str(row.get("company", "")).strip() or f"Lead #{index}"
+        email    = str(row.get("email",   "")).strip()
+        platform = "Email"
+        notes    = str(row.get("niche",   "")).strip()
+        rows = load_social()
+        existing_emails = [r.get("email","").lower() for r in rows]
+        if email.lower() not in existing_emails:
+            add_social_prospect(handle, platform, notes, email)
+    return redirect('/?tab=social')
+
 @app.route('/social/add', methods=["POST"])
 def social_add():
     from flask import request as freq
     handle   = freq.form.get("handle",   "").strip()
     platform = freq.form.get("platform", "").strip()
     notes    = freq.form.get("notes",    "").strip()
+    email    = freq.form.get("email",    "").strip()
     if handle:
-        add_social_prospect(handle, platform, notes)
+        add_social_prospect(handle, platform, notes, email)
     return redirect('/?tab=social')
 
 @app.route('/social/advance/<sid>')
