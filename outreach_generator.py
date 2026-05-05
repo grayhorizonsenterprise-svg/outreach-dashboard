@@ -41,9 +41,11 @@ Gray Horizons Enterprise""",
         """\
 Hey, this is Alex with Gray Horizons
 
-Quick question about your violation tracking — when a homeowner reports something, how does your team make sure it doesn't fall through between the first report and final resolution?
+HOA teams we've worked with had the same problem — violations documented at the start, then lost somewhere between board review and resolution
 
-We built a system that handles that automatically. I can show you exactly how it works this week if that would help.
+We built a system that tracks the full lifecycle automatically so nothing slips
+
+I can show you exactly how it works and get it running for your team this week
 
 Alex
 Gray Horizons Enterprise""",
@@ -51,11 +53,11 @@ Gray Horizons Enterprise""",
         """\
 Hey, this is Alex
 
-Most HOA managers we talk to say the same thing — violations start simple but the documentation and follow-up side turns into a mess fast
+Violation follow-up is where most HOA teams lose time — the documentation exists but pulling it together for a board review or audit takes way longer than it should
 
-We locked that process down for a few firms and it runs automatically now
+We fixed that for a handful of firms and now it runs on its own
 
-Happy to show you what that looks like if it's relevant to what you're dealing with
+I can walk you through the setup this week and show you what it looks like in practice
 
 Alex
 Gray Horizons Enterprise""",
@@ -63,11 +65,11 @@ Gray Horizons Enterprise""",
         """\
 Hey, this is Alex with Gray Horizons
 
-One thing that keeps coming up with HOA teams: when a board member asks for documentation on a violation from months ago, pulling it up takes way longer than it should
+The gap between a homeowner filing a report and that violation being fully resolved is where HOA teams take on the most risk
 
-We built a system that keeps everything logged and retrievable automatically
+We built a system that locks that gap down — every step tracked, documented, and followed up automatically
 
-If that's a problem on your end I can show you how we set it up — takes about a week to get running
+I can get you set up in about a week. Let me know and I'll show you exactly how it works
 
 Alex
 Gray Horizons Enterprise""",

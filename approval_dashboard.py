@@ -257,7 +257,7 @@ def count_sent_today() -> int:
         with open(SENT_LOG, newline="", encoding="utf-8") as f:
             for row in _csv.DictReader(f):
                 ts = row.get("timestamp", "")
-                ok = str(row.get("success", "")).strip().lower() in (
+                ok = str(row.get("success", row.get("status", ""))).strip().lower() in (
                     "true", "1", "smtp", "sendgrid", "gmail-smtp-accepted"
                 )
                 if ok and ts.startswith(today):
