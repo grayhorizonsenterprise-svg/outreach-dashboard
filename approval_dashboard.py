@@ -272,14 +272,18 @@ def count_sent_today() -> int:
 def format_message(msg):
     if not msg:
         return ""
-    # Preserve paragraph breaks (double newline) and single line breaks
-    # Do NOT break on every ". " — that makes emails look choppy
-    paragraphs = msg.split("\n\n")
-    parts = []
-    for p in paragraphs:
-        parts.append(p.replace("\n", "<br>"))
+    clean = msg.replace("\r\n", "\n").replace("\r", "\n")
+    # Strip signature block so it doesn't show in the card preview
+    for marker in ["Alex\nGray Horizons Enterprise", "Gray\nGray Horizons Enterprise"]:
+        if marker in clean:
+            clean = clean[:clean.rfind(marker)].rstrip()
+            break
+    for url in ["https://grayhorizonsenterprise.com", "grayhorizonsenterprise.com"]:
+        if clean.rstrip().endswith(url):
+            clean = clean[:clean.rstrip().rfind(url)].rstrip()
+    paragraphs = clean.split("\n\n")
     return "</p><p style='margin:0 0 12px 0;'>".join(
-        f"<p style='margin:0 0 12px 0;'>{p}</p>" for p in parts
+        f"<p style='margin:0 0 12px 0;'>{p.replace(chr(10), '<br>')}</p>" for p in paragraphs
     )
 
 # =========================
