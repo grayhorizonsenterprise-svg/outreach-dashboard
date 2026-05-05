@@ -914,6 +914,12 @@ def sent_log_view():
     <div style="text-align:center;margin:8px 0;">
         <a class="back" href="/">&#8592; Dashboard</a>
         <a class="back" href="/resend-failed" style="color:#f59e0b;">Resend Failed</a>
+        <form method="POST" action="/recycle-failed" style="display:inline;">
+            <button type="submit" style="background:#ef4444;color:#fff;border:none;padding:6px 18px;border-radius:6px;font-weight:bold;font-size:13px;cursor:pointer;margin:0 8px;"
+                onclick="return confirm('Reset all {failed_count_log} failed emails back to pending queue with fresh messages?')">
+                &#9851; Recycle Failed &#8594; Pending
+            </button>
+        </form>
         <a class="back" href="/test-email" style="color:#22c55e;">&#10003; Send Test Email</a>
     </div>
     """
@@ -1149,6 +1155,70 @@ def resend_failed_execute():
     </div>
     """
 
+
+# =========================
+# RECYCLE FAILED → PENDING
+# =========================
+@app.route('/recycle-failed', methods=["POST"])
+def recycle_failed():
+    """Reset all failed sent_log entries back to pending in the queue with fresh messages."""
+    import csv as _csv
+    from outreach_generator import generate_subject, generate_message
+
+    # 1. Collect failed emails from sent_log
+    failed_emails = set()
+    clean_rows = []
+    if os.path.exists(SENT_LOG):
+        try:
+            with open(SENT_LOG, newline="", encoding="utf-8") as f:
+                for row in _csv.DictReader(f):
+                    success_raw = str(row.get("success", row.get("status", ""))).strip().lower()
+                    error_msg   = str(row.get("error",   row.get("note",   ""))).strip().lower()
+                    was_failed  = success_raw in ("false", "0", "") and error_msg not in ("skipped",)
+                    email = str(row.get("email", "")).strip().lower()
+                    if was_failed and email:
+                        failed_emails.add(email)
+                    else:
+                        clean_rows.append(row)
+        except Exception as e:
+            return f"<p style='color:red;font-family:Arial;padding:40px;'>Error reading sent log: {e}</p>", 500
+
+    if not failed_emails:
+        return "<p style='font-family:Arial;padding:40px;color:#e2e8f0;background:#0f172a;min-height:100vh;'>No failed emails found to recycle.</p>"
+
+    # 2. Reset those emails in the queue to pending with fresh message/subject
+    df = load_data()
+    recycled = 0
+    for idx, row in df.iterrows():
+        if str(row.get("email", "")).strip().lower() in failed_emails:
+            niche   = str(row.get("niche", "hoa")).strip().lower()
+            company = str(row.get("company", "")).strip()
+            df.at[idx, "status"]  = "pending"
+            df.at[idx, "subject"] = generate_subject(company, niche)
+            df.at[idx, "message"] = generate_message(company, niche)
+            recycled += 1
+
+    df.to_csv(CSV_FILE, index=False)
+
+    # 3. Rewrite sent_log without the failed rows
+    if clean_rows:
+        with open(SENT_LOG, "w", newline="", encoding="utf-8") as f:
+            writer = _csv.DictWriter(f, fieldnames=clean_rows[0].keys())
+            writer.writeheader()
+            writer.writerows(clean_rows)
+    else:
+        open(SENT_LOG, "w").close()
+
+    return f"""
+    <div style="background:#0f172a;color:#e2e8f0;font-family:Arial;min-height:100vh;display:flex;align-items:center;justify-content:center;">
+      <div style="background:#1e293b;border-radius:12px;padding:40px;max-width:480px;width:100%;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;">&#9851;</div>
+        <h2 style="color:#22c55e;margin-bottom:12px;">Recycled {recycled} Emails</h2>
+        <p style="color:#94a3b8;margin-bottom:24px;">{recycled} failed emails reset to pending with fresh messages. {len(clean_rows)} successful entries preserved in sent log.</p>
+        <a href="/" style="display:inline-block;background:#22c55e;color:#000;padding:12px 32px;border-radius:8px;font-weight:bold;font-size:15px;text-decoration:none;">Go to Dashboard &#8594;</a>
+      </div>
+    </div>
+    """
 
 # =========================
 # MANUAL REFRESH TRIGGER
