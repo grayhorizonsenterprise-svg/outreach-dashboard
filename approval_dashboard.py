@@ -37,6 +37,10 @@ URL_VOICE_SERVER = os.getenv("VOICE_SERVER_URL", "https://ghe-voice-production.u
 PIPELINE_SCRIPTS = ["maps_scraper.py", "prospect_finder.py", "prospect_enricher.py",
                     "prospect_qualifier.py", "outreach_generator.py"]
 
+DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "400"))
+batch_running     = False
+batch_sent_count  = 0
+
 # =========================
 # BACKGROUND PIPELINE ENGINE
 # Runs the full pipeline every 6 hours inside the same process
@@ -121,20 +125,47 @@ def save_social(rows):
         writer.writeheader()
         writer.writerows(rows)
 
-def add_social_prospect(handle, platform, notes):
+def add_social_prospect(handle, platform, notes, email=""):
     import csv as _csv
-    rows = load_social()
+    rows  = load_social()
     new_id = str(len(rows) + 1)
     row = {
-        "id": new_id,
-        "handle": handle.strip(),
+        "id":       new_id,
+        "handle":   handle.strip(),
         "platform": platform.strip(),
-        "stage": "commented",
-        "notes": notes.strip(),
-        "added": datetime.now().strftime("%m/%d %I:%M %p"),
+        "email":    email.strip(),
+        "stage":    "commented",
+        "notes":    notes.strip(),
+        "added":    datetime.now().strftime("%m/%d %I:%M %p"),
     }
     rows.append(row)
     save_social(rows)
+
+    # Auto-queue in email outreach if email provided and not already in queue
+    if email.strip():
+        df = load_data()
+        existing_emails = df["email"].fillna("").str.lower().tolist()
+        if email.strip().lower() not in existing_emails:
+            new_email_row = {
+                "company": handle.strip(),
+                "name":    "",
+                "email":   email.strip(),
+                "website": "",
+                "niche":   "social",
+                "subject": "Quick question about your content",
+                "message": (
+                    "Hey,\n\n"
+                    "Saw your content and had a quick question: are you getting customers "
+                    "from your posts or mostly just views?\n\n"
+                    "We help businesses turn content into actual leads. "
+                    "Happy to show you what that looks like.\n\n"
+                    "Alex\nGray Horizons Enterprise"
+                ),
+                "status": "pending",
+            }
+            df = pd.concat([df, pd.DataFrame([new_email_row])], ignore_index=True)
+            save_data(df)
+            print(f"[SOCIAL→EMAIL] Auto-queued {email} from social pipeline", flush=True)
 
 def build_social_table():
     rows = load_social()
@@ -150,23 +181,25 @@ def build_social_table():
     }
 
     html = '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;">'
-    html += '<tr style="background:#0f172a;"><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;text-transform:uppercase;">Handle</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Platform</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Stage</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Notes</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Move</th></tr>'
+    html += '<tr style="background:#0f172a;"><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;text-transform:uppercase;">Handle</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Platform</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Email</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Stage</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Notes</th><th style="padding:8px 10px;text-align:left;color:#64748b;font-size:11px;">Move</th></tr>'
 
     for row in reversed(rows):
         sid   = row.get("id", "")
         stage = row.get("stage", "commented")
         bg, fg, label = STAGE_COLORS.get(stage, ("#1e293b", "#e2e8f0", stage))
+        email = row.get("email", "")
+        email_cell = f'<span style="color:#38bdf8;font-size:11px;">{email}</span>' if email else '<span style="color:#475569;font-size:11px;">none</span>'
 
-        # next stage button
-        idx = SOCIAL_STAGES.index(stage) if stage in SOCIAL_STAGES else 0
+        idx        = SOCIAL_STAGES.index(stage) if stage in SOCIAL_STAGES else 0
         next_stage = SOCIAL_STAGES[idx + 1] if idx + 1 < len(SOCIAL_STAGES) else None
-        next_btn = f'<a href="/social/advance/{sid}" style="background:#f97316;color:#000;border:none;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:bold;text-decoration:none;">Next</a>' if next_stage else '<span style="color:#475569;font-size:11px;">Done</span>'
-        kill_btn = f'<a href="/social/kill/{sid}" style="background:#ef4444;color:#fff;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;text-decoration:none;margin-left:4px;">✕</a>'
+        next_btn   = f'<a href="/social/advance/{sid}" style="background:#f97316;color:#000;border:none;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:bold;text-decoration:none;">Next</a>' if next_stage else '<span style="color:#475569;font-size:11px;">Done</span>'
+        kill_btn   = f'<a href="/social/kill/{sid}" style="background:#ef4444;color:#fff;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;text-decoration:none;margin-left:4px;">✕</a>'
 
         html += (
             f'<tr style="border-bottom:1px solid #1e293b;">'
             f'<td style="padding:9px 10px;color:#e2e8f0;font-weight:bold;">{row.get("handle","")}</td>'
             f'<td style="padding:9px 10px;color:#94a3b8;">{row.get("platform","")}</td>'
+            f'<td style="padding:9px 10px;">{email_cell}</td>'
             f'<td style="padding:9px 10px;"><span style="background:{bg};color:{fg};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;">{label}</span></td>'
             f'<td style="padding:9px 10px;color:#64748b;font-size:12px;">{row.get("notes","")}</td>'
             f'<td style="padding:9px 10px;">{next_btn}{kill_btn}</td>'
@@ -213,6 +246,25 @@ def load_data():
 
 def save_data(df):
     df.to_csv(CSV_FILE, index=False)
+
+def count_sent_today() -> int:
+    if not os.path.exists(SENT_LOG):
+        return 0
+    try:
+        import csv as _csv
+        today = now_pacific().strftime("%Y-%m-%d")
+        n = 0
+        with open(SENT_LOG, newline="", encoding="utf-8") as f:
+            for row in _csv.DictReader(f):
+                ts = row.get("timestamp", "")
+                ok = str(row.get("success", "")).strip().lower() in (
+                    "true", "1", "smtp", "sendgrid", "gmail-smtp-accepted"
+                )
+                if ok and ts.startswith(today):
+                    n += 1
+        return n
+    except Exception:
+        return 0
 
 # =========================
 # FORMAT MESSAGE (FIX PARAGRAPHS)
@@ -365,6 +417,51 @@ def send_email(to_email, name, company, message, subject=""):
     return False
 
 # =========================
+# BATCH SENDER — runs in background thread, 400 emails/day
+# =========================
+def run_batch_send():
+    global batch_running, batch_sent_count
+    if batch_running:
+        return
+    batch_running    = True
+    batch_sent_count = 0
+
+    sent_today = count_sent_today()
+    remaining  = max(0, DAILY_EMAIL_LIMIT - sent_today)
+    print(f"[BATCH] Daily limit {DAILY_EMAIL_LIMIT} | sent today {sent_today} | sending up to {remaining}", flush=True)
+
+    if remaining == 0:
+        print("[BATCH] Daily limit already reached.", flush=True)
+        batch_running = False
+        return
+
+    df      = load_data()
+    mask    = (df["status"] == "pending") & (df["email"].fillna("").str.strip() != "")
+    pending = df[mask].head(remaining)
+
+    sent_indexes = []
+    for i, row in pending.iterrows():
+        ok = send_email(
+            row["email"], row["name"], row["company"],
+            row["message"], row.get("subject", "")
+        )
+        if ok:
+            sent_indexes.append(i)
+            batch_sent_count += 1
+        time.sleep(1.5)
+
+    # Write results back
+    df2 = load_data()
+    for i in sent_indexes:
+        if i < len(df2):
+            df2.at[i, "status"] = "sent"
+    save_data(df2)
+
+    print(f"[BATCH] Done — {batch_sent_count} sent", flush=True)
+    batch_running = False
+
+
+# =========================
 # FETCH GRANTS FROM GRANT AGENT API
 # =========================
 def fetch_grants(limit=20):
@@ -399,9 +496,11 @@ def dashboard():
 
     df = load_data()
 
-    pending_count    = len(df[df["status"] == "pending"])
-    sent_count       = len(df[df["status"] == "sent"])
-    skipped_count    = len(df[df["status"] == "skipped"])
+    pending_count     = len(df[df["status"] == "pending"])
+    sent_count        = len(df[df["status"] == "sent"])
+    skipped_count     = len(df[df["status"] == "skipped"])
+    sent_today        = count_sent_today()
+    daily_remaining   = max(0, DAILY_EMAIL_LIMIT - sent_today)
     social_table_html = build_social_table()
 
     status_text = '<span style="color:#22c55e">Scraping leads now...</span>' if pipeline_running else (
@@ -505,8 +604,10 @@ def dashboard():
       <span>Pending: <span class="stat-val">{pending_count}</span></span>
       <span>Sent: <span class="stat-val">{sent_count}</span></span>
       <span>Skipped: <span class="stat-val">{skipped_count}</span></span>
+      <span>Today: <span class="stat-val" style="color:#f97316;">{sent_today}/{DAILY_EMAIL_LIMIT}</span></span>
     </div>
-    <div style="display:flex;gap:8px;">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="/send-batch" class="btn-link" style="background:{'#475569' if batch_running else '#f97316'};color:{'#94a3b8' if batch_running else '#000'};font-weight:bold;">{'Sending...' if batch_running else f'Send {daily_remaining} Now'}</a>
       <a href="/sent" class="btn-link" style="background:#7c3aed;">View Sent</a>
       <a href="/resend-failed" class="btn-link" style="background:#f59e0b;color:#000;">Resend Failed</a>
       <a href="/refresh" class="btn-link">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
