@@ -686,6 +686,17 @@
   <section class="hero" aria-label="Hero">
     <div class="eyebrow">For Service Businesses</div>
     <h1>Recover Lost Deals<br><span class="grad">Automatically</span></h1>
+
+    <!-- VIDEO SECTION -->
+    <div style="max-width:900px;margin:40px auto;text-align:center;">
+      <video autoplay muted loop controls style="width:100%;border-radius:12px;">
+        <source src="demo.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div style="text-align:center;margin:20px;color:#94a3b8;font-size:14px;">
+      What you're seeing below is the system running live
+    </div>
     <p class="hero-sub">Every missed call, slow response, or dropped request is captured and converted automatically.</p>
     <p style="font-size:16px;font-weight:800;color:#ffd28a;margin-bottom:28px;max-width:520px;line-height:1.6;">Missing just 2 deals per day&nbsp;=&nbsp;thousands lost every week.<br>This recovers them immediately.</p>
     <div class="btn-row">
@@ -1137,9 +1148,34 @@
       </div>
       <!-- END GHE SYSTEM LAYER -->
 
+      <!-- Video walkthrough block -->
+      <div style="margin-bottom:24px;border:1px solid rgba(79,156,255,.25);border-radius:12px;overflow:hidden;background:rgba(255,255,255,.02);">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(79,156,255,.06);border-bottom:1px solid rgba(79,156,255,.18);">
+          <div style="font-size:12px;font-weight:700;color:var(--blue);display:flex;align-items:center;gap:8px;"><div class="sim-pulse"></div>System Walkthrough &mdash; See how deals get recovered in 2 min</div>
+          <button id="hvac-vid-toggle" type="button" onclick="(function(){var w=document.getElementById('hvac-vid-wrap');var iframe=document.getElementById('hvac-vid-iframe');var ph=document.getElementById('hvac-vid-placeholder');var open=w.style.display!=='none';w.style.display=open?'none':'block';document.getElementById('hvac-vid-toggle').innerHTML=open?'&#9654; Watch':'&#9660; Hide';if(!open&&iframe&&iframe.getAttribute('data-src')&&iframe.getAttribute('data-src')!=='PASTE_EMBED_URL_HERE'){iframe.src=iframe.getAttribute('data-src');if(ph)ph.style.display='none';}})()" style="font-size:12px;font-weight:700;font-family:inherit;padding:5px 14px;border-radius:6px;border:1px solid rgba(79,156,255,.35);background:rgba(79,156,255,.1);color:var(--blue);cursor:pointer;transition:background .15s;" onmouseover="this.style.background='rgba(79,156,255,.2)'" onmouseout="this.style.background='rgba(79,156,255,.1)'">&#9654; Watch</button>
+        </div>
+        <div id="hvac-vid-wrap" style="display:none;">
+          <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;">
+            <!-- REPLACE src with your Loom or YouTube embed URL before going live -->
+            <iframe src="" data-src="PASTE_EMBED_URL_HERE" id="hvac-vid-iframe" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="System Walkthrough" loading="lazy"></iframe>
+            <div id="hvac-vid-placeholder" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(7,20,38,.95);">
+              <div style="font-size:48px;line-height:1;">&#9654;</div>
+              <div style="font-size:15px;font-weight:700;color:var(--text);">Paste your Loom or YouTube embed URL above</div>
+              <div style="font-size:12px;color:var(--muted);">Replace the <code style="color:var(--cyan)">data-src</code> on the iframe with your video embed link</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="hoa-workflow" id="hvac-workflow">
         <div class="hoa-wf-header">
-          <div class="hoa-wf-header-left"><div class="sim-pulse"></div>HVAC Service Workflow &mdash; Live System</div>
+          <div class="hoa-wf-header-left">
+            <div class="sim-pulse"></div>
+            <div>
+              <div>Live Workflow System &mdash; Adapts to Your Business</div>
+              <div style="font-size:10px;font-weight:500;color:var(--muted);margin-top:2px;letter-spacing:.02em;">Configured for HVAC &bull; Plumbing &bull; HOA &bull; Contractors &bull; and more</div>
+            </div>
+          </div>
           <span class="hoa-wf-badge">&#9889; Live Demo</span>
         </div>
         <div class="hoa-wf-form">
@@ -1150,9 +1186,9 @@
           </div>
           <div class="hoa-wf-row">
             <div class="hoa-wf-field">
-              <label for="hvac-type">Service Type</label>
+              <label for="hvac-type">Request Type</label>
               <select id="hvac-type">
-                <option value="">Select service type&hellip;</option>
+                <option value="">Select request type&hellip;</option>
                 <option>Repair</option>
                 <option>Installation</option>
                 <option>Emergency</option>
@@ -1160,7 +1196,7 @@
                 <option>Inspection</option>
               </select>
             </div>
-            <div class="hoa-wf-field hoa-wf-field-wide"><label for="hvac-notice">Issue Description</label><input type="text" id="hvac-notice" placeholder="Describe the issue&hellip;" autocomplete="off"></div>
+            <div class="hoa-wf-field hoa-wf-field-wide"><label for="hvac-notice">Request Details</label><input type="text" id="hvac-notice" placeholder="Describe your request&hellip;" autocomplete="off"></div>
           </div>
           <div class="hoa-wf-submit-row">
             <button class="hoa-wf-btn" id="hvac-submit-btn" type="button" onclick="submitHvac()">Submit Request &#8594;</button>
@@ -2490,7 +2526,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheetsM
       /* 1. Persist locally + render immediately */
       var entries=loadCache(mode);
       var newId=entries.length?Math.max.apply(null,entries.map(function(e){return parseInt(e.id)||0;}))+1:1;
-      var payload={id:newId,ts:stamp(),ts_iso:stampISO(),name:name,email:email,unit:unit,type:type,notice:notice,mode:mode,noEmail:true,demo:true};
+      var payload={id:newId,ts:stamp(),ts_iso:stampISO(),name:name,email:email,unit:unit,type:type,notice:notice,mode:mode};
       entries.push(payload);saveCache(mode,entries);renderTable(mode,newId);
       try{updateGlobalSystem(payload);}catch(_){}
 
