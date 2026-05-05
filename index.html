@@ -694,6 +694,13 @@
       <button class="btn btn-watch" type="button" onclick="openVoiceDemo()">&#128222; Live Demo Call</button>
     </div>
     <p style="font-size:12px;color:var(--muted);margin-top:10px;margin-bottom:0;">Ready in 1&ndash;2 days &bull; See it working before you pay anything</p>
+
+    <!-- GHE PLACE 1: OWNERSHIP BANNER -->
+    <div style="margin:18px auto 0;width:100%;max-width:620px;background:linear-gradient(180deg,rgba(0,194,122,0.10),rgba(0,194,122,0.03));border:1px solid rgba(0,194,122,0.28);border-radius:12px;padding:14px 18px;text-align:left;">
+      <div style="color:#00c27a;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:4px;">What This Is</div>
+      <div style="color:#d6e2ff;font-size:13px;line-height:1.6;">A system you own outright. Once installed it captures every request, follows up automatically, and tracks everything so nothing gets missed. No subscription. No lock-in.</div>
+    </div>
+
     <!-- Revenue stats ticker -->
     <div class="hero-stats" aria-hidden="true">
       <div class="hero-stat"><span class="hero-stat-val" id="hs-calls">0</span><span class="hero-stat-lbl">Deals Recovered</span></div>
@@ -711,6 +718,17 @@
       </div>
       <div id="voice-fallback-status" style="font-size:12px;color:#a78bfa;margin-top:6px;min-height:14px;"></div>
     </div>
+    <!-- GHE PLACE 2: TRANSITION TEXT ABOVE PIPELINE -->
+    <div id="ghe-transition-text" style="display:none;max-width:600px;margin:16px auto 8px;text-align:center;color:#94a3b8;font-size:14px;font-weight:500;line-height:1.6;">
+      What you're seeing below is the system running live &mdash; this is exactly how it works for your business.
+    </div>
+
+    <!-- GHE PLACE 3: RESPONSE + CONTEXT LAYER -->
+    <div id="ghe-response" style="display:none;max-width:600px;width:100%;margin:0 auto 12px;background:rgba(0,194,122,0.06);border:1px solid rgba(0,194,122,0.25);border-radius:10px;padding:12px 16px;">
+      <div style="color:#00c27a;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px;">System Response</div>
+      <div id="ghe-response-log" style="font-size:13px;color:#d6e2ff;line-height:1.7;min-height:20px;"></div>
+    </div>
+
     <div id="sim-out" class="sim-output" role="status" aria-live="polite">
       <div class="sim-pipeline" id="sim-pipeline">
         <div class="sim-pipeline-header">
@@ -4269,6 +4287,60 @@ function submitVoiceText(){
     }
   });
 
+})();
+</script>
+
+<!-- PLACE 4 — GHE SYSTEM LAYER SCRIPT -->
+<script>
+(function(){
+  function showGHEResponse(steps){
+    var trans = document.getElementById('ghe-transition-text');
+    var resp  = document.getElementById('ghe-response');
+    var log   = document.getElementById('ghe-response-log');
+    if(trans) trans.style.display = 'block';
+    if(resp)  resp.style.display  = 'block';
+    if(!log)  return;
+    log.innerHTML = '';
+    var delay = 0;
+    steps.forEach(function(step){
+      setTimeout(function(){
+        var line = document.createElement('div');
+        line.style.cssText = 'padding:4px 0;border-bottom:1px solid #1e293b;font-size:13px;color:#94a3b8;';
+        line.innerHTML = '<span style="color:#38bdf8;margin-right:8px;">&#x25B6;</span>' + step;
+        log.appendChild(line);
+        log.scrollTop = log.scrollHeight;
+      }, delay);
+      delay += 600;
+    });
+    if(resp) setTimeout(function(){ resp.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 300);
+  }
+
+  var GHE_STEPS = [
+    'Lead captured — niche detected',
+    'Outreach message generated',
+    'Subject line assigned',
+    'Email queued for batch send',
+    'CRM record created',
+    'Follow-up sequence armed',
+    'Pipeline stage: <strong style="color:#22c55e;">ACTIVE</strong>'
+  ];
+
+  /* Hook into existing runFlow / logSentDB if present */
+  var _origRunFlow = window.runFlow;
+  window.runFlow = function(){
+    if(_origRunFlow) _origRunFlow.apply(this, arguments);
+    setTimeout(function(){ showGHEResponse(GHE_STEPS); }, 2400);
+  };
+
+  /* Auto-attach to any contact/demo forms on the page */
+  document.addEventListener('DOMContentLoaded', function(){
+    var forms = document.querySelectorAll('form');
+    forms.forEach(function(form){
+      form.addEventListener('submit', function(){
+        setTimeout(function(){ showGHEResponse(GHE_STEPS); }, 800);
+      });
+    });
+  });
 })();
 </script>
 </body>
