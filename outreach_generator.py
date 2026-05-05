@@ -15,61 +15,71 @@ NICHE_MESSAGES = {
 
     "hoa": [
         """\
-Hey,
+Hey, this is Alex with Gray Horizons
 
-Quick question: when a homeowner submits a violation or complaint, how does your team track it from that first report all the way to resolution? Still email threads, or do you have something more structured?
+Most HOA teams we've worked with were losing track of violations between the initial report and final resolution
 
-We work with a few HOA firms and that handoff tends to be where things fall through. Happy to share what we put together if it's relevant.
+We fixed that with a simple system that handles tracking and follow-ups automatically
 
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hi there,
-
-How are you handling violation notices and compliance documentation across your communities? It sounds simple but gets messy fast once you're managing more than a handful of associations.
-
-Not a pitch, just genuinely curious how you're running it right now.
+If this is even slightly an issue on your side, I can show you exactly how we set it up this week
 
 Alex
 Gray Horizons Enterprise""",
 
         """\
-Hey,
+Hey, this is Alex
 
-Direct question: how does your team deal with violation management across multiple HOAs? Specifically the documentation side, keeping records, following up, making sure nothing gets dropped.
+The biggest issue we keep seeing with HOA teams is violations getting lost between report, board review, and resolution
 
-Happy to compare notes if that's a pain point.
+We built a system that locks that entire process down so nothing slips through
 
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hey,
-
-One thing I keep hearing from HOA managers is that the first 48 hours after a violation gets reported is where everything either gets handled cleanly or turns into a mess. How are you managing that window right now?
-
-Just curious what your process looks like.
+If you want, I can walk you through it and get something similar set up for you quickly
 
 Alex
 Gray Horizons Enterprise""",
 
         """\
-Hi,
+Hey, this is Alex with Gray Horizons
 
-Random question — when a board member calls asking for documentation on a violation from six months ago, how long does it take your team to pull that up? That's usually the moment where people realize they need a better system.
+Quick question about your violation tracking — when a homeowner reports something, how does your team make sure it doesn't fall through between the first report and final resolution?
 
-Happy to share what we built if it's useful.
+We built a system that handles that automatically. I can show you exactly how it works this week if that would help.
 
 Alex
 Gray Horizons Enterprise""",
 
         """\
-Hey,
+Hey, this is Alex
 
-Not trying to sell you anything right now. Just wanted to ask: is violation tracking still mostly manual on your end, or have you got something automated?
+Most HOA managers we talk to say the same thing — violations start simple but the documentation and follow-up side turns into a mess fast
 
-We've been putting together something that handles the whole cycle and a few managers have found it pretty useful. Worth a quick conversation if you're curious.
+We locked that process down for a few firms and it runs automatically now
+
+Happy to show you what that looks like if it's relevant to what you're dealing with
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey, this is Alex with Gray Horizons
+
+One thing that keeps coming up with HOA teams: when a board member asks for documentation on a violation from months ago, pulling it up takes way longer than it should
+
+We built a system that keeps everything logged and retrievable automatically
+
+If that's a problem on your end I can show you how we set it up — takes about a week to get running
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey, this is Alex
+
+Straight to it — we help HOA management teams stop losing violations in the handoff between report, tracking, and resolution
+
+Most teams we work with had it happening constantly and didn't realize how much time it was costing
+
+I can show you exactly how we fixed it this week if you want to see it
 
 Alex
 Gray Horizons Enterprise""",
