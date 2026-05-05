@@ -41,7 +41,7 @@ Gray Horizons Enterprise""",
         """\
 Hey, this is Alex with Gray Horizons
 
-HOA teams we've worked with had the same problem — violations documented at the start, then lost somewhere between board review and resolution
+HOA teams we've worked with had the same problem - violations documented at the start, then lost somewhere between board review and resolution
 
 We built a system that tracks the full lifecycle automatically so nothing slips
 
@@ -53,7 +53,7 @@ Gray Horizons Enterprise""",
         """\
 Hey, this is Alex
 
-Violation follow-up is where most HOA teams lose time — the documentation exists but pulling it together for a board review or audit takes way longer than it should
+Violation follow-up is where most HOA teams lose time - the documentation exists but pulling it together for a board review or audit takes way longer than it should
 
 We fixed that for a handful of firms and now it runs on its own
 
@@ -67,7 +67,7 @@ Hey, this is Alex with Gray Horizons
 
 The gap between a homeowner filing a report and that violation being fully resolved is where HOA teams take on the most risk
 
-We built a system that locks that gap down — every step tracked, documented, and followed up automatically
+We built a system that locks that gap down - every step tracked, documented, and followed up automatically
 
 I can get you set up in about a week. Let me know and I'll show you exactly how it works
 
@@ -77,7 +77,7 @@ Gray Horizons Enterprise""",
         """\
 Hey, this is Alex
 
-Straight to it — we help HOA management teams stop losing violations in the handoff between report, tracking, and resolution
+Straight to it - we help HOA management teams stop losing violations in the handoff between report, tracking, and resolution
 
 Most teams we work with had it happening constantly and didn't realize how much time it was costing
 
@@ -139,7 +139,7 @@ Gray Horizons Enterprise""",
         """\
 Hi there,
 
-Not a pitch — just wanted to ask how you're handling missed calls during busy periods. Specifically when someone calls for a repair and doesn't reach anyone, what happens to that lead?
+Not a pitch - just wanted to ask how you're handling missed calls during busy periods. Specifically when someone calls for a repair and doesn't reach anyone, what happens to that lead?
 
 That gap is usually where a lot of revenue walks out the door.
 
@@ -181,7 +181,7 @@ Gray Horizons Enterprise""",
         """\
 Hi,
 
-Not a pitch — just wanted to ask: when a potential new patient fills out a contact form or leaves a voicemail after hours, what's the follow-up process? Do they hear back the same day or does it depend on who picks it up?
+Not a pitch - just wanted to ask: when a potential new patient fills out a contact form or leaves a voicemail after hours, what's the follow-up process? Do they hear back the same day or does it depend on who picks it up?
 
 That's usually where practices lose the most new patients.
 
@@ -201,7 +201,7 @@ Gray Horizons Enterprise""",
         """\
 Hi there,
 
-How are you handling patient reactivation right now — people who haven't been in for over a year? Is that something your team actively reaches out on or does it tend to fall through the cracks?
+How are you handling patient reactivation right now - people who haven't been in for over a year? Is that something your team actively reaches out on or does it tend to fall through the cracks?
 
 Just curious what your process looks like.
 
@@ -251,7 +251,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Not trying to take up much of your time — just wanted to ask: when a job gets finished, how does your team handle following up with the customer to check in or ask for a review? Is that something you have a process for?
+Not trying to take up much of your time - just wanted to ask: when a job gets finished, how does your team handle following up with the customer to check in or ask for a review? Is that something you have a process for?
 
 Alex
 Gray Horizons Enterprise""",
@@ -259,7 +259,7 @@ Gray Horizons Enterprise""",
         """\
 Hi there,
 
-How many calls does your office miss on an average day — calls that don't get a callback or get lost in the shuffle? We've been helping plumbing companies capture those and turn them into booked jobs.
+How many calls does your office miss on an average day - calls that don't get a callback or get lost in the shuffle? We've been helping plumbing companies capture those and turn them into booked jobs.
 
 Happy to share how if it's useful.
 
@@ -319,7 +319,7 @@ Gray Horizons Enterprise""",
         """\
 Hi there,
 
-Not a pitch — just wanted to ask: how do you handle it when a homeowner reaches out through your website or Google listing after hours? Is there a system that captures and responds to that, or does it sit until someone gets to it the next day?
+Not a pitch - just wanted to ask: how do you handle it when a homeowner reaches out through your website or Google listing after hours? Is there a system that captures and responds to that, or does it sit until someone gets to it the next day?
 
 That after-hours window is usually where a lot of jobs go to a competitor.
 
@@ -351,7 +351,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Not trying to waste your time — just wanted to ask: when you have a full schedule and someone new reaches out, how does your team capture that lead without it getting lost?
+Not trying to waste your time - just wanted to ask: when you have a full schedule and someone new reaches out, how does your team capture that lead without it getting lost?
 
 That overflow moment is usually where companies either grow or miss out.
 
@@ -434,7 +434,7 @@ def generate_message(company, niche):
 
 def run():
     if not os.path.exists(INPUT_FILE):
-        print(f"[SKIP] {INPUT_FILE} not found yet — skipping outreach generation.")
+        print(f"[SKIP] {INPUT_FILE} not found yet - skipping outreach generation.")
         return
 
     df = pd.read_csv(INPUT_FILE).fillna("")
