@@ -401,8 +401,7 @@ def send_email(to_email, name, company, message, subject=""):
         os.getenv("SENDER_EMAIL", "").strip() or
         os.getenv("GMAIL_USER", "").strip() or
         os.getenv("SMTP_USER", "").strip() or
-        os.getenv("EMAIL_FROM", "").strip() or
-        "grayhorizonsenterprise@gmail.com"  # hardcoded fallback
+        os.getenv("EMAIL_FROM", "").strip()
     )
     sender_name = os.getenv("SENDER_NAME", "Alex")
     subject     = subject.strip() if subject.strip() else "Quick question for your team"
@@ -1004,20 +1003,88 @@ def test_email():
         to_email="grayhorizonsenterprise@gmail.com",
         name="Alex",
         company="Gray Horizons Enterprise",
-        message="This is a test message confirming the outreach system is live and sending correctly through SendGrid. If you received this, everything is working."
+        message="This is a test message confirming the outreach system is live and sending correctly."
     )
-    status = "SUCCESS — email delivered to grayhorizonsenterprise@gmail.com" if result else "FAILED — check /sent for the error details"
+    status = "SUCCESS" if result else "FAILED — check /sent for error details"
     color  = "#22c55e" if result else "#ef4444"
     return f"""
     <div style="background:#0f172a;color:white;font-family:Arial;min-height:100vh;display:flex;align-items:center;justify-content:center;">
         <div style="text-align:center;">
             <div style="font-size:22px;font-weight:bold;color:{color};margin-bottom:16px;">{status}</div>
-            <a href="/" style="color:#38bdf8;">← Back to Dashboard</a>
-            &nbsp;|&nbsp;
+            <a href="/" style="color:#38bdf8;">&#8592; Back</a> &nbsp;|&nbsp;
             <a href="/sent" style="color:#38bdf8;">View Sent Log</a>
         </div>
-    </div>
-    """
+    </div>"""
+
+@app.route('/test-sendgrid')
+def test_sendgrid():
+    """Diagnose SendGrid: check key validity, sender verification, account status."""
+    api_key = os.getenv("SENDGRID_API_KEY", "").strip()
+    sender  = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com").strip()
+    lines   = []
+
+    if not api_key:
+        return "<p style='font-family:Arial;color:red;padding:40px;'>SENDGRID_API_KEY not set in Railway Variables.</p>"
+
+    lines.append(f"API key found: ...{api_key[-6:]}")
+    lines.append(f"Sender address: {sender}")
+
+    # 1. Check account / API key validity
+    try:
+        r = requests.get("https://api.sendgrid.com/v3/user/account",
+                         headers={"Authorization": f"Bearer {api_key}"}, timeout=10)
+        lines.append(f"Account check: HTTP {r.status_code}")
+        if r.status_code == 200:
+            info = r.json()
+            lines.append(f"  Plan: {info.get('type','?')} | Company: {info.get('company','?')}")
+        else:
+            lines.append(f"  Response: {r.text[:300]}")
+    except Exception as e:
+        lines.append(f"Account check ERROR: {e}")
+
+    # 2. Check sender verification
+    try:
+        r2 = requests.get("https://api.sendgrid.com/v3/verified_senders",
+                          headers={"Authorization": f"Bearer {api_key}"}, timeout=10)
+        lines.append(f"Sender verification: HTTP {r2.status_code}")
+        if r2.status_code == 200:
+            senders = r2.json().get("results", [])
+            if senders:
+                for s in senders:
+                    lines.append(f"  {s.get('from_email')} — verified={s.get('verified')} locked={s.get('locked')}")
+            else:
+                lines.append("  NO verified senders found — this blocks all sending")
+        else:
+            lines.append(f"  Response: {r2.text[:300]}")
+    except Exception as e:
+        lines.append(f"Sender check ERROR: {e}")
+
+    # 3. Send a live test
+    try:
+        payload = {
+            "personalizations": [{"to": [{"email": sender}]}],
+            "from": {"email": sender, "name": "Alex"},
+            "subject": "SendGrid live test",
+            "content": [{"type": "text/plain", "value": "SendGrid test from Gray Horizons dashboard."}]
+        }
+        r3 = requests.post("https://api.sendgrid.com/v3/mail/send",
+                           json=payload,
+                           headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+                           timeout=15)
+        lines.append(f"Live send test: HTTP {r3.status_code}")
+        if r3.status_code == 202:
+            lines.append("  SUCCESS — check your inbox")
+        else:
+            lines.append(f"  FAILED: {r3.text[:400]}")
+    except Exception as e:
+        lines.append(f"Live send ERROR: {e}")
+
+    body = "<br>".join(lines)
+    return f"""<div style='background:#0f172a;color:#e2e8f0;font-family:monospace;padding:40px;min-height:100vh;line-height:2;'>
+    <h2 style='color:#38bdf8;'>SendGrid Diagnostics</h2>
+    {body}<br><br>
+    <a href='/' style='color:#38bdf8;'>&#8592; Dashboard</a>
+    </div>"""
 
 # =========================
 # RESEND FAILED EMAILS
