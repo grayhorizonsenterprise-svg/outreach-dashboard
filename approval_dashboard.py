@@ -395,26 +395,14 @@ def _send_via_smtp(sender_addr, smtp_password, to_email, subject, html_body, nam
         log_sent(to_email, name, company, subject, False, f"smtp: {e}")
         return False
 
+VERIFIED_SENDER = "grayhorizonsenterprise@gmail.com"
+
 def send_email(to_email, name, company, message, subject=""):
-    # Check all possible variable names Railway might use
-    sender_addr = (
-        os.getenv("SENDER_EMAIL", "").strip() or
-        os.getenv("GMAIL_USER", "").strip() or
-        os.getenv("SMTP_USER", "").strip() or
-        os.getenv("EMAIL_FROM", "").strip()
-    )
+    sender_addr = VERIFIED_SENDER  # verified in SendGrid, always use this
     sender_name = os.getenv("SENDER_NAME", "Alex")
     subject     = subject.strip() if subject.strip() else "Quick question for your team"
 
-    print(f"[SEND] sender={sender_addr} to={to_email}")
-
     if not to_email or not str(to_email).strip():
-        print("[SEND] ERROR: No recipient email")
-        log_sent(to_email, name, company, subject, False, "no recipient")
-        return False
-
-    if not to_email or not str(to_email).strip():
-        print("[SEND] ERROR: No recipient email")
         log_sent(to_email, name, company, subject, False, "no recipient")
         return False
 
@@ -1020,7 +1008,7 @@ def test_email():
 def test_sendgrid():
     """Diagnose SendGrid: check key validity, sender verification, account status."""
     api_key = os.getenv("SENDGRID_API_KEY", "").strip()
-    sender  = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com").strip()
+    sender  = VERIFIED_SENDER
     lines   = []
 
     if not api_key:
