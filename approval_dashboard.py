@@ -37,7 +37,7 @@ URL_VOICE_SERVER = os.getenv("VOICE_SERVER_URL", "https://ghe-voice-production.u
 PIPELINE_SCRIPTS = ["maps_scraper.py", "prospect_finder.py", "prospect_enricher.py",
                     "prospect_qualifier.py", "outreach_generator.py"]
 
-DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "400"))
+DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "1000"))
 batch_running     = False
 batch_sent_count  = 0
 
@@ -441,6 +441,10 @@ def run_batch_send():
     batch_running    = True
     batch_sent_count = 0
 
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    import threading
+    lock = threading.Lock()
+
     sent_today = count_sent_today()
     remaining  = max(0, DAILY_EMAIL_LIMIT - sent_today)
     print(f"[BATCH] Daily limit {DAILY_EMAIL_LIMIT} | sent today {sent_today} | sending up to {remaining}", flush=True)
@@ -452,18 +456,44 @@ def run_batch_send():
 
     df      = load_data()
     mask    = (df["status"] == "pending") & (df["email"].fillna("").str.strip() != "")
-    pending = df[mask].head(remaining)
+    pending = df[mask]
+
+    # Deduplicate by email — only send to each address once
+    seen_emails = set()
+    rows = []
+    for i, row in pending.iterrows():
+        email_key = str(row["email"]).strip().lower()
+        if email_key not in seen_emails:
+            seen_emails.add(email_key)
+            rows.append((i, row))
+        else:
+            # Mark duplicate as skipped so it doesn't keep reappearing
+            df.at[i, "status"] = "skipped"
+    save_data(df)
+    df = load_data()
+    rows = rows[:remaining]
 
     sent_indexes = []
-    for i, row in pending.iterrows():
+
+    def _send_one(item):
+        i, row = item
         ok = send_email(
-            row["email"], row["name"], row["company"],
+            row["email"], row.get("name", ""), row.get("company", ""),
             row["message"], row.get("subject", "")
         )
-        if ok:
-            sent_indexes.append(i)
-            batch_sent_count += 1
-        time.sleep(1.5)
+        return i, ok
+
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = {executor.submit(_send_one, r): r for r in rows}
+        for future in as_completed(futures):
+            try:
+                i, ok = future.result()
+                if ok:
+                    with lock:
+                        sent_indexes.append(i)
+                        batch_sent_count += 1
+            except Exception as e:
+                print(f"[BATCH] thread error: {e}", flush=True)
 
     # Write results back
     df2 = load_data()
@@ -1273,17 +1303,23 @@ def recycle_failed():
     if not failed_emails:
         return "<p style='font-family:Arial;padding:40px;color:#e2e8f0;background:#0f172a;min-height:100vh;'>No failed emails found to recycle.</p>"
 
-    # 2. Reset those emails in the queue to pending with fresh message/subject
+    # 2. Reset those emails in the queue — ONE row per email only, mark rest skipped
     df = load_data()
     recycled = 0
+    already_reset = set()
     for idx, row in df.iterrows():
-        if str(row.get("email", "")).strip().lower() in failed_emails:
-            niche   = str(row.get("niche", "hoa")).strip().lower()
-            company = str(row.get("company", "")).strip()
-            df.at[idx, "status"]  = "pending"
-            df.at[idx, "subject"] = generate_subject(company, niche)
-            df.at[idx, "message"] = generate_message(company, niche)
-            recycled += 1
+        email_key = str(row.get("email", "")).strip().lower()
+        if email_key in failed_emails:
+            if email_key not in already_reset:
+                niche   = str(row.get("niche", "hoa")).strip().lower()
+                company = str(row.get("company", "")).strip()
+                df.at[idx, "status"]  = "pending"
+                df.at[idx, "subject"] = generate_subject(company, niche)
+                df.at[idx, "message"] = generate_message(company, niche)
+                already_reset.add(email_key)
+                recycled += 1
+            else:
+                df.at[idx, "status"] = "skipped"  # duplicate — skip it
 
     df.to_csv(CSV_FILE, index=False)
 
