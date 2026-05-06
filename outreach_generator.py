@@ -497,11 +497,24 @@ def generate_subject(company, niche):
     display  = company if is_clean_name(company) else "your firm"
     return subject.replace("{company}", display)
 
+def _add_periods(msg):
+    skip = {"hey", "hi", "alex", "gray horizons enterprise", "https://grayhorizonsenterprise.com"}
+    lines = msg.split("\n")
+    out = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped and stripped.lower() not in skip and not stripped.startswith("http"):
+            if stripped[-1] not in ".!?,;:":
+                line = line.rstrip() + "."
+        out.append(line)
+    return "\n".join(out)
+
 def generate_message(company, niche):
     templates = NICHE_MESSAGES.get(niche, NICHE_MESSAGES["hoa"])
     template  = random.choice(templates)
     display   = company if is_clean_name(company) else "your team"
     msg = template.replace("{company}", display)
+    msg = _add_periods(msg)
     if "grayhorizonsenterprise.com" not in msg:
         msg += "\nhttps://grayhorizonsenterprise.com"
     return msg
