@@ -656,6 +656,7 @@ def dashboard():
       <a href="/upload-queue" class="btn-link" style="background:#22c55e;color:#000;font-weight:bold;">Upload Leads</a>
       <a href="/sent" class="btn-link" style="background:#7c3aed;">View Sent</a>
       <a href="/resend-failed" class="btn-link" style="background:#f59e0b;color:#000;">Resend Failed</a>
+      <a href="/rebuild-queue" class="btn-link" style="background:#06b6d4;color:#000;font-weight:bold;">Rebuild Queue</a>
       <a href="/refresh" class="btn-link">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
     </div>
   </div>
@@ -1350,6 +1351,23 @@ def recycle_failed():
 def refresh():
     if not pipeline_running:
         threading.Thread(target=run_pipeline_once, daemon=True).start()
+    return redirect('/')
+
+@app.route('/rebuild-queue')
+def rebuild_queue():
+    def _run():
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        print("[REBUILD] Running outreach_generator.py...", flush=True)
+        try:
+            subprocess.run(
+                [sys.executable, "-u", os.path.join(script_dir, "outreach_generator.py")],
+                env={**os.environ, "PYTHONUNBUFFERED": "1"},
+                timeout=300
+            )
+            print("[REBUILD] Done.", flush=True)
+        except Exception as e:
+            print(f"[REBUILD] Error: {e}", flush=True)
+    threading.Thread(target=_run, daemon=True).start()
     return redirect('/')
 
 # =========================
