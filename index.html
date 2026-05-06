@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Gray Horizons Enterprise | Automation Systems</title>
-  <meta name="description" content="Automation systems that capture leads, follow up instantly, and close work automatically. Built for HVAC, dental, plumbing, and HOA businesses.">
+  <meta name="description" content="Automation systems that capture every lead, follow up instantly, and close work automatically. Built for local service businesses across every industry.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://grayhorizonsenterprise.com/">
   <meta property="og:type" content="website">
@@ -647,7 +647,7 @@
     <div class="sys-status-item"><span class="sys-dot green"></span>AI Engine Online</div>
     <div class="sys-status-item"><span class="sys-dot green"></span>Voice Server Active</div>
     <div class="sys-status-item"><span class="sys-dot blue"></span>5 Systems Running</div>
-    <div class="sys-status-item"><span class="sys-dot cyan"></span>Claude Haiku 4.5</div>
+    <div class="sys-status-item"><span class="sys-dot cyan"></span>Response Engine Active</div>
     <div class="sys-status-item"><span class="sys-dot green"></span>99.9% Uptime</div>
     <div class="sys-status-item" id="sys-latency-item" style="display:none"><span class="sys-dot blue"></span><span id="sys-latency-val">--</span>ms Avg Response</div>
   </div>
@@ -2246,14 +2246,14 @@ runCounters(document.getElementById('panel-hvac'));
 /* ── Simulation ── */
 var simTimeouts=[];
 var SIM_STAGES=[
-  {icon:'📡',label:'New Lead Received',sub:'Someone just filled out your contact form',status:'RECEIVED'},
-  {icon:'🤖',label:'AI Reads the Request',sub:'System captures name, email, and service needed',status:'READING'},
-  {icon:'✅',label:'Lead Qualified',sub:'Confirmed as a real, interested prospect',status:'QUALIFIED'},
-  {icon:'📊',label:'Added to Your Sheet',sub:'Lead logged automatically — no manual entry',status:'LOGGED'},
-  {icon:'✍️',label:'Response Written by AI',sub:'Personalized reply drafted in seconds',status:'DRAFTING'},
-  {icon:'📧',label:'Email Sent Instantly',sub:'Delivered before a competitor even responds',status:'SENT'},
-  {icon:'🗓️',label:'Follow-Ups Scheduled',sub:'3 automatic reminders queued if no reply',status:'QUEUED'},
-  {icon:'🔒',label:'System Complete',sub:'Lead is live — your pipeline is running',status:'DONE'},
+  {icon:'📡',label:'New Lead Received',sub:'Call, form, or text — captured immediately',status:'RECEIVED'},
+  {icon:'🤖',label:'AI Reads the Request',sub:'Name, contact, and job type logged in seconds',status:'READING'},
+  {icon:'✅',label:'Lead Qualified',sub:'Real prospect confirmed — no manual review needed',status:'QUALIFIED'},
+  {icon:'📊',label:'Added to Your Pipeline',sub:'Logged automatically across every channel',status:'LOGGED'},
+  {icon:'✍️',label:'Response Sent by AI',sub:'Personalized reply out before any competitor responds',status:'DRAFTING'},
+  {icon:'📧',label:'Follow-Up Armed',sub:'3 automatic reminders queued if no reply',status:'SENT'},
+  {icon:'🗓️',label:'Booking Triggered',sub:'Appointment or callback scheduled without you lifting a finger',status:'QUEUED'},
+  {icon:'🔒',label:'Deal Closed',sub:'Revenue recovered — pipeline ready for the next one',status:'DONE'},
 ];
 function runSim(){
   simTimeouts.forEach(clearTimeout);simTimeouts=[];
