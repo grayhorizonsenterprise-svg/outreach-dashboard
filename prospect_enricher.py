@@ -59,10 +59,15 @@ JUNK_PATTERNS = [
     "@test.", "@example.", "@mailinator.",
 ]
 
-# Only the 5 most common paths — don't brute-force 20+
+# Contact paths to brute-force as last resort
 CONTACT_PATHS = [
     "/contact", "/contact-us", "/about", "/about-us", "/team",
+    "/staff", "/reach-us", "/get-in-touch", "/connect", "/office",
 ]
+
+# Email prefixes to guess if no email found anywhere on the site
+# Ordered by how commonly small businesses use each prefix
+GUESS_PREFIXES = ["info", "contact", "hello", "office", "admin", "team", "support"]
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
 
@@ -172,6 +177,17 @@ def enrich_prospect(site: str, contact_page: str = "") -> str:
                 found = extract_emails(html, site)
                 if found:
                     candidates += found
+                    break
+
+    # Last resort: guess common prefixes from the domain itself.
+    # Small businesses almost always have info@ or contact@ even if not shown on site.
+    if not candidates:
+        domain = get_domain(site)
+        if domain and "." in domain:
+            for prefix in GUESS_PREFIXES:
+                guessed = f"{prefix}@{domain}"
+                if is_valid_email(guessed, site):
+                    candidates.append(guessed)
                     break
 
     if not candidates:
