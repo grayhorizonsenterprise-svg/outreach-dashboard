@@ -1,11 +1,7 @@
 providers = ["python"]
 
-[phases.install]
-cmds = [
-  "python -m pip install -r requirements.txt",
-  "python -m pip install playwright || true",
-  "playwright install chromium --with-deps || true"
-]
+[phases.chromium]
+cmds = ["playwright install chromium --with-deps || true"]
 
 [start]
 cmd = "gunicorn approval_dashboard:app --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120"
