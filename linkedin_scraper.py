@@ -24,7 +24,7 @@ DATA_DIR      = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__))
 OUTPUT_FILE   = os.path.join(DATA_DIR, "prospects_raw.csv")
 OUTREACH_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
 
-LI_AT = os.getenv("LINKEDIN_LI_AT", "").strip()
+LI_AT = os.getenv("LI_AT", "").strip()
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
 PERSONAL_DOMAINS = {
@@ -288,8 +288,8 @@ def scrape_with_playwright(searches_per_run, max_per_search):
 
 def run():
     if not LI_AT:
-        print("[LI] LINKEDIN_LI_AT env var not set — skipping LinkedIn scrape.")
-        print("[LI] Add LINKEDIN_LI_AT=<li_at cookie value> to Railway env vars.")
+        print("[LI] LI_AT env var not set — skipping LinkedIn scrape.")
+        print("[LI] Add LI_AT=<li_at cookie value> to Railway env vars.")
         return
 
     seen_domains = set()
