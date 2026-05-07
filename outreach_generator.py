@@ -566,14 +566,156 @@ Gray Horizons Enterprise""",
     ],
 }
 
+NICHE_MESSAGES["auto"] = [
+    """\
+Hey,
+
+When someone calls about a repair and you're backed up, what happens to that call? Does it get logged or does it depend on whoever picks up remembering to follow through?
+
+That's usually where shops lose the most appointments without realizing it.
+
+Alex
+Gray Horizons Enterprise""",
+
+    """\
+Hi,
+
+After a repair is done, does your shop have anything that automatically follows up with the customer — check-in, review request, next service reminder?
+
+Most shops we've worked with said that whole process was completely manual.
+
+Alex
+Gray Horizons Enterprise""",
+
+    """\
+Hey,
+
+Direct question — when a customer calls for a quote and you don't hear back, how does your team track that? Is there a system following up or does it fall off?
+
+Happy to show you what we've built for this if it's relevant.
+
+Alex
+Gray Horizons Enterprise""",
+
+    """\
+Hi,
+
+Missed calls during your busiest hours are probably your biggest revenue leak. The customer calls once, nobody picks up, and they book somewhere else before you call back.
+
+We built a system that catches those and routes them automatically. I can show you how it works.
+
+Alex
+Gray Horizons Enterprise""",
+]
+
+NICHE_MESSAGES["chiropractic"] = [
+    """\
+Hey,
+
+New patient calls that come in after hours or while the front desk is with someone — what happens to those? Is there something catching them automatically or do they go to voicemail?
+
+That gap is where most practices lose new patients without realizing it.
+
+Alex
+Gray Horizons Enterprise""",
+
+    """\
+Hi,
+
+When a new patient inquiry comes in through your website or a referral calls after hours, how fast does your team typically follow up?
+
+The practices we've worked with said that window was their biggest drop-off point for new patients.
+
+Alex
+Gray Horizons Enterprise""",
+
+    """\
+Hey,
+
+Patient reactivation — reaching back out to patients who haven't been in for 3-6 months — is one of the highest-return things a practice can do. Most don't do it because it's manual.
+
+We automated that entire process for a few practices. Happy to show you what it looks like.
+
+Alex
+Gray Horizons Enterprise""",
+]
+
+NICHE_MESSAGES["realestate"] = [
+    """\
+Hey,
+
+When a new buyer or seller inquiry comes in through your website at night or on the weekend, how fast does your team get back to them?
+
+In real estate that response window is usually where the lead goes to whoever calls back first.
+
+Alex
+Gray Horizons Enterprise""",
+
+    """\
+Hi,
+
+Leads that go cold between first inquiry and first showing — how does your team track and follow up on those? Is there a system or does it depend on the agent remembering?
+
+That follow-up gap is where most agencies lose deals they should have closed.
+
+Alex
+Gray Horizons Enterprise""",
+
+    """\
+Hey,
+
+After a showing, what does your follow-up process look like? Is there anything automated that checks in with the buyer, or is it all manual from the agent?
+
+We built that entire post-showing flow into a system for a few agencies. Happy to walk you through it.
+
+Alex
+Gray Horizons Enterprise""",
+]
+
+NICHE_MESSAGES["salon"] = [
+    """\
+Hey,
+
+When a client tries to book online and your calendar is full, what happens to that request? Does it get captured somewhere or does that client just go book somewhere else?
+
+That overflow moment is usually where salons lose their best new clients.
+
+Alex
+Gray Horizons Enterprise""",
+
+    """\
+Hi,
+
+Clients who haven't been in for 60-90 days — is there anything that automatically reaches back out to them, or does that depend on someone on your staff remembering?
+
+We built a reactivation system for a few salons that runs completely on its own.
+
+Alex
+Gray Horizons Enterprise""",
+
+    """\
+Hey,
+
+After-hours booking requests — when someone fills out your contact form at 10pm, what happens to it? Does something respond automatically or does it sit until morning?
+
+By morning they've usually booked somewhere else.
+
+Alex
+Gray Horizons Enterprise""",
+]
+
 NICHE_SUBJECTS = {
-    "hoa":         ["Violation tracking question", "HOA follow-up process", "Compliance documentation gap", "HOA violation workflow"],
-    "hvac":        ["HVAC dispatch question", "Service call follow-up", "Job tracking question", "Missed calls this season"],
-    "dental":      ["New patient follow-up", "Appointment booking gap", "Patient intake question", "After-hours inquiry process"],
-    "plumbing":    ["Emergency call routing", "Dispatch follow-up question", "Job tracking question", "Missed call recovery"],
-    "contractor":  ["Estimate follow-up process", "Bid tracking question", "Lead response time", "Job closing question"],
-    "landscaping": ["New lead response time", "Client scheduling question", "Seasonal client follow-up"],
-    "roofing":     ["Storm call management", "Estimate follow-up question", "Job pipeline question", "Post-storm inquiry process"],
+    "hoa":          ["Violation tracking question", "HOA follow-up process", "Compliance documentation gap", "HOA violation workflow"],
+    "hvac":         ["HVAC dispatch question", "Service call follow-up", "Job tracking question", "Missed calls this season"],
+    "dental":       ["New patient follow-up", "Appointment booking gap", "Patient intake question", "After-hours inquiry process"],
+    "plumbing":     ["Emergency call routing", "Dispatch follow-up question", "Job tracking question", "Missed call recovery"],
+    "contractor":   ["Estimate follow-up process", "Bid tracking question", "Lead response time", "Job closing question"],
+    "landscaping":  ["New lead response time", "Client scheduling question", "Seasonal client follow-up"],
+    "roofing":      ["Storm call management", "Estimate follow-up question", "Job pipeline question", "Post-storm inquiry process"],
+    "auto":         ["Missed call follow-up", "Repair estimate tracking", "Customer follow-up process", "After-service check-in"],
+    "chiropractic": ["New patient inquiry process", "After-hours booking question", "Patient reactivation question", "Intake follow-up"],
+    "realestate":   ["Lead response time question", "Inquiry follow-up process", "Showing follow-up question", "Buyer lead question"],
+    "salon":        ["Booking overflow question", "Client reactivation question", "After-hours inquiry", "Client follow-up process"],
 }
 
 def is_clean_name(name: str) -> bool:
@@ -652,6 +794,24 @@ def run():
         "yourname", "sample@", "null@", "none@", "@mailinator", "@tempmail"
     ]
 
+    # Never email these — large corporations, insurance, hospitals, government
+    corporate_email_blocks = [
+        "bcbs", "bluecross", "blueshield", "aetna", "cigna", "humana",
+        "anthem", "molina", "kaiser", "unitedhealthcare", "centene",
+        ".gov", ".edu", ".mil",
+    ]
+    corporate_name_blocks = [
+        "blue cross", "blue shield", "bcbs", "aetna", "cigna", "humana",
+        "anthem", "molina", "kaiser", "united health", "centene",
+        "hospital", "health system", "medical center", "health network",
+        "insurance company", "insurance group", "insurance co",
+        "university", "college", "school district", "public school",
+        "city of ", "county of ", "state of ", "department of ",
+        "township", "municipality", "government",
+        "nationwide", "national chain", "franchise",
+        "chamber of commerce", "nonprofit", "non-profit", "foundation",
+    ]
+
     for _, row in df.iterrows():
         email = str(row.get("email", "")).strip()
         if email in ("", "nan", "None"):
@@ -664,19 +824,39 @@ def run():
         if any(p in e for p in junk_patterns):
             skipped += 1
             continue
+        # Block corporate/insurance/government emails
+        if any(p in e for p in corporate_email_blocks):
+            skipped += 1
+            continue
 
         seen_emails.add(email.lower())
 
         company = str(row.get("company", "")).strip()
+        company_lower = company.lower()
+
+        # Block corporate/institutional company names
+        if any(p in company_lower for p in corporate_name_blocks):
+            seen_emails.discard(email.lower())
+            skipped += 1
+            continue
+
         niche   = str(row.get("niche",   "hoa")).strip().lower()
         if niche not in NICHE_MESSAGES:
             # best-effort mapping for alternate spellings
-            if niche in ("landscape", "lawn"):
+            if niche in ("landscape", "lawn", "lawn care"):
                 niche = "landscaping"
             elif niche in ("roof", "roofer"):
                 niche = "roofing"
             elif niche in ("electric", "electrician"):
                 niche = "contractor"
+            elif niche in ("auto repair", "mechanic", "auto shop"):
+                niche = "auto"
+            elif niche in ("chiropractor", "chiro"):
+                niche = "chiropractic"
+            elif niche in ("real estate", "realtor", "realty"):
+                niche = "realestate"
+            elif niche in ("hair salon", "spa", "beauty", "nail salon"):
+                niche = "salon"
             else:
                 niche = "hoa"
 

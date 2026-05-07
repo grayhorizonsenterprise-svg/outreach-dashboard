@@ -50,10 +50,20 @@ NICHE_SEARCHES = [
     ("contractor",  "general contractor"),
     ("contractor",  "home remodeling"),
     ("contractor",  "construction company"),
-    ("landscaping", "landscaping"),
-    ("landscaping", "lawn care"),
-    ("roofing",     "roofing company"),
-    ("roofing",     "roofer"),
+    ("landscaping",  "landscaping"),
+    ("landscaping",  "lawn care"),
+    ("roofing",      "roofing company"),
+    ("roofing",      "roofer"),
+    ("auto",         "auto repair shop"),
+    ("auto",         "mechanic"),
+    ("auto",         "automotive service"),
+    ("chiropractic", "chiropractor"),
+    ("chiropractic", "chiropractic office"),
+    ("realestate",   "real estate agency"),
+    ("realestate",   "realty company"),
+    ("salon",        "hair salon"),
+    ("salon",        "day spa"),
+    ("salon",        "nail salon"),
 ]
 
 LOCATIONS = [
@@ -268,7 +278,7 @@ def run():
             pass
 
     # Rotate which searches we run each cycle so we cover new ground every time
-    searches_per_run = int(os.getenv("YP_SEARCHES_PER_RUN", "40"))
+    searches_per_run = int(os.getenv("YP_SEARCHES_PER_RUN", "55"))
     all_combos = [
         (niche, term, loc)
         for niche, term in NICHE_SEARCHES

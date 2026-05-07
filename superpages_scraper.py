@@ -43,10 +43,18 @@ NICHE_SEARCHES = [
     ("plumbing",    "plumbing company"),
     ("contractor",  "general contractor"),
     ("contractor",  "home remodeling contractor"),
-    ("landscaping", "landscaping company"),
-    ("landscaping", "lawn care service"),
-    ("roofing",     "roofing contractor"),
-    ("roofing",     "roofing company"),
+    ("landscaping",  "landscaping company"),
+    ("landscaping",  "lawn care service"),
+    ("roofing",      "roofing contractor"),
+    ("roofing",      "roofing company"),
+    ("auto",         "auto repair"),
+    ("auto",         "auto mechanic"),
+    ("chiropractic", "chiropractor"),
+    ("chiropractic", "chiropractic clinic"),
+    ("realestate",   "real estate agency"),
+    ("realestate",   "realty"),
+    ("salon",        "hair salon"),
+    ("salon",        "day spa"),
 ]
 
 LOCATIONS = [
@@ -255,7 +263,7 @@ def run():
         except Exception:
             pass
 
-    searches_per_run = int(os.getenv("SP_SEARCHES_PER_RUN", "35"))
+    searches_per_run = int(os.getenv("SP_SEARCHES_PER_RUN", "45"))
     all_combos = [
         (niche, term, loc)
         for niche, term in NICHE_SEARCHES
