@@ -2,8 +2,8 @@ providers = ["python"]
 
 [phases.install]
 cmds = [
-  "pip install -r requirements.txt",
-  "pip install playwright || true",
+  "python -m pip install -r requirements.txt",
+  "python -m pip install playwright || true",
   "playwright install chromium --with-deps || true"
 ]
 
