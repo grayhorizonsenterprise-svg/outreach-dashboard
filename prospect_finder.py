@@ -405,7 +405,40 @@ def scrape_prospect(url: str, title: str, snippet: str, niche: str = "hoa") -> d
 
 
 def run():
+    output_path   = os.path.join(DATA_DIR, "prospects_raw.csv")
+    outreach_path = os.path.join(DATA_DIR, "outreach_queue.csv")
+
     seen_domains: set[str] = set()
+    seen_emails:  set[str] = set()
+
+    # Load existing scraped domains so we never re-scrape the same site
+    if os.path.exists(output_path):
+        try:
+            existing_df = pd.read_csv(output_path).fillna("")
+            for url in existing_df.get("website", pd.Series(dtype=str)).tolist():
+                d = extract_domain(str(url))
+                if d:
+                    seen_domains.add(d)
+            for e in existing_df.get("email", pd.Series(dtype=str)).tolist():
+                e = str(e).strip().lower()
+                if e and e not in ("", "nan", "none"):
+                    seen_emails.add(e)
+            print(f"[DEDUP] Loaded {len(seen_domains)} existing domains, {len(seen_emails)} existing emails")
+        except Exception as exc:
+            print(f"[DEDUP] Could not load prospects_raw.csv: {exc}")
+
+    # Also skip emails already in the outreach queue (sent or pending)
+    if os.path.exists(outreach_path):
+        try:
+            oq = pd.read_csv(outreach_path).fillna("")
+            for e in oq.get("email", pd.Series(dtype=str)).tolist():
+                e = str(e).strip().lower()
+                if e and e not in ("", "nan", "none"):
+                    seen_emails.add(e)
+            print(f"[DEDUP] {len(seen_emails)} total seen emails after outreach queue")
+        except Exception:
+            pass
+
     all_prospects: list[dict] = []
 
     # Skip noisy domains that never have usable leads
@@ -444,17 +477,33 @@ def run():
             time.sleep(random.uniform(0.5, 1.2))
 
     if not all_prospects:
-        print("\n[INFO] No prospects collected. Check network connectivity.")
+        print("\n[INFO] No new prospects found this run — all domains already seen.")
         return
 
-    df = pd.DataFrame(all_prospects, columns=[
+    df_new = pd.DataFrame(all_prospects, columns=[
         "company", "website", "email", "contact_page_url", "location", "niche"
     ])
-    df.drop_duplicates(subset=["website"], inplace=True)
+    df_new.drop_duplicates(subset=["website"], inplace=True)
 
-    output_path = os.path.join(DATA_DIR, "prospects_raw.csv")
-    df.to_csv(output_path, index=False)
-    print(f"\n[DONE] Saved {len(df)} prospects to prospects_raw.csv")
+    # Filter out prospects whose email is already known
+    df_new = df_new[
+        ~df_new["email"].str.strip().str.lower().isin(seen_emails) |
+        (df_new["email"].str.strip() == "")
+    ]
+
+    # APPEND to existing file — never overwrite historical data
+    if os.path.exists(output_path):
+        try:
+            df_existing = pd.read_csv(output_path).fillna("")
+            df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+            df_combined.drop_duplicates(subset=["website"], inplace=True)
+        except Exception:
+            df_combined = df_new
+    else:
+        df_combined = df_new
+
+    df_combined.to_csv(output_path, index=False)
+    print(f"\n[DONE] prospects_raw.csv: {len(df_new)} new added, {len(df_combined)} total")
     for n, count in sorted(niche_counts.items()):
         print(f"  {n.upper():12s}: {count}")
 

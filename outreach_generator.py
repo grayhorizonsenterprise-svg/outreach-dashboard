@@ -85,6 +85,26 @@ I can show you exactly how we fixed it this week if you want to see it
 
 Alex
 Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Quick question - when a violation gets reported, what does your process look like from that initial report to final resolution? Is there a system tracking each step or is it mostly email threads?
+
+That gap is where most HOA teams run into problems.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+When a board member asks for a status update on an open violation, how long does it take your team to pull that together?
+
+We've been working on cutting that time down. Happy to show you what we built if it's relevant.
+
+Alex
+Gray Horizons Enterprise""",
     ],
 
     "hvac": [
@@ -156,6 +176,26 @@ HVAC companies lose more revenue to missed and unreturned calls than almost any 
 We built a system that captures every missed call and routes it back into your pipeline automatically
 
 I can show you exactly how it works this week
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Honest question - when a customer calls during a busy week and nobody picks up, what happens to that call? Does it hit voicemail or is there something that catches it?
+
+That's usually where HVAC companies lose the most jobs without realizing it.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+When your schedule fills up and a new call comes in, how does your team handle that? Is there a system capturing it or does it depend on someone remembering to call back?
+
+Just asking - happy to share what we've built if it's relevant.
 
 Alex
 Gray Horizons Enterprise""",
@@ -233,6 +273,26 @@ I can show you exactly how it works and what it would look like for your practic
 
 Alex
 Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+When someone calls or submits a form on your website after hours, what happens to that inquiry? Does it get caught automatically or does it sit until someone sees it in the morning?
+
+That's usually where practices lose new patients without realizing it.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+Quick one - how does your front desk handle new patient inquiries when they're backed up with existing patients? Is there a system following up automatically or is it manual?
+
+Just asking because that's usually the biggest gap in patient acquisition.
+
+Alex
+Gray Horizons Enterprise""",
     ],
 
     "plumbing": [
@@ -304,6 +364,26 @@ The gap between a job finishing and the customer leaving a review is where most 
 We built a system that handles post-job follow-up and review collection automatically
 
 I can show you how it works this week
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+Direct question - when an emergency call comes in at night and your main line is busy, how does your team handle it? Does it route somewhere or go to voicemail?
+
+That's usually the biggest gap I hear about from plumbing companies.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+When you finish a job, what does the follow-up process look like? Is there anything automated that checks in with the customer, or does it depend on the tech remembering to do it?
+
+We've built that whole post-job flow into a system. Happy to show you how it works.
 
 Alex
 Gray Horizons Enterprise""",
@@ -380,6 +460,26 @@ By then they have already called two more contractors
 We built a system that responds immediately and keeps them engaged until your team is available
 
 I can show you how it works this week
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hey,
+
+When you send out an estimate and don't hear back, what does your follow-up process look like? Is there a system tracking each open bid or does it depend on whoever sent it remembering to follow up?
+
+That's usually where jobs go cold.
+
+Alex
+Gray Horizons Enterprise""",
+
+        """\
+Hi,
+
+After-hours leads from homeowners - when they come in through your website or Google listing at night, what happens to them? Does something catch it automatically or does it sit until morning?
+
+Just asking because that's usually where the fastest-responding contractor wins the job.
 
 Alex
 Gray Horizons Enterprise""",

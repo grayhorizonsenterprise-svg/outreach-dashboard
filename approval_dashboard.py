@@ -34,7 +34,7 @@ URL_PLUMBING   = os.getenv("PLUMBING_URL", "#")
 EDGE_ENGINE_URL = os.getenv("EDGE_ENGINE_URL", "https://outreach-dashboard-production-6894.up.railway.app")
 URL_GRANTS       = "https://ghe-grant-agent-production.up.railway.app"
 URL_VOICE_SERVER = os.getenv("VOICE_SERVER_URL", "https://ghe-voice-production.up.railway.app")
-PIPELINE_SCRIPTS = ["prospect_qualifier.py", "outreach_generator.py"]
+PIPELINE_SCRIPTS = ["prospect_finder.py", "prospect_enricher.py", "prospect_qualifier.py", "outreach_generator.py"]
 
 DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "1000"))
 batch_running     = False
