@@ -705,17 +705,17 @@ Gray Horizons Enterprise""",
 ]
 
 NICHE_SUBJECTS = {
-    "hoa":          ["Violation tracking question", "HOA follow-up process", "Compliance documentation gap", "HOA violation workflow"],
-    "hvac":         ["HVAC dispatch question", "Service call follow-up", "Job tracking question", "Missed calls this season"],
-    "dental":       ["New patient follow-up", "Appointment booking gap", "Patient intake question", "After-hours inquiry process"],
-    "plumbing":     ["Emergency call routing", "Dispatch follow-up question", "Job tracking question", "Missed call recovery"],
-    "contractor":   ["Estimate follow-up process", "Bid tracking question", "Lead response time", "Job closing question"],
-    "landscaping":  ["New lead response time", "Client scheduling question", "Seasonal client follow-up"],
-    "roofing":      ["Storm call management", "Estimate follow-up question", "Job pipeline question", "Post-storm inquiry process"],
-    "auto":         ["Missed call follow-up", "Repair estimate tracking", "Customer follow-up process", "After-service check-in"],
-    "chiropractic": ["New patient inquiry process", "After-hours booking question", "Patient reactivation question", "Intake follow-up"],
-    "realestate":   ["Lead response time question", "Inquiry follow-up process", "Showing follow-up question", "Buyer lead question"],
-    "salon":        ["Booking overflow question", "Client reactivation question", "After-hours inquiry", "Client follow-up process"],
+    "hoa":          ["Quick question", "How do you handle this?", "Something we built for HOA teams", "Process question"],
+    "hvac":         ["Quick question", "Something we built", "How do you handle this?", "Question for you"],
+    "dental":       ["Quick question", "Something we built for practices", "How do you handle this?", "Question for you"],
+    "plumbing":     ["Quick question", "Something we built", "How do you handle missed calls?", "Question for you"],
+    "contractor":   ["Quick question", "Something we built for contractors", "How do you handle this?", "Question for you"],
+    "landscaping":  ["Quick question", "Something we built", "How do you handle overflow leads?"],
+    "roofing":      ["Quick question", "Something we built for roofers", "How do you handle this?", "Question for you"],
+    "auto":         ["Quick question", "Something we built for shops", "How do you handle this?", "Question for you"],
+    "chiropractic": ["Quick question", "Something we built for practices", "How do you handle this?", "Question for you"],
+    "realestate":   ["Quick question", "Something we built for agents", "How do you handle this?", "Question for you"],
+    "salon":        ["Quick question", "Something we built for salons", "How do you handle this?", "Question for you"],
 }
 
 def is_clean_name(name: str) -> bool:
@@ -810,7 +810,15 @@ def run():
         "township", "municipality", "government",
         "nationwide", "national chain", "franchise",
         "chamber of commerce", "nonprofit", "non-profit", "foundation",
+        # Software platforms and large management companies (have ticket systems)
+        "software", "platform", "saas", "tech solutions", "technologies",
+        "opencare", "rowcal", "appfolio", "buildium", "propertyware",
+        "management company", "management group", "management corp",
+        "national association", "association of ", " association",
     ]
+
+    # Also block support@ emails — companies with support@ have ticket systems, not owners
+    corporate_email_blocks.extend(["support@", "ticket@", "helpdesk@", "info@opencare", "info@rowcal"])
 
     for _, row in df.iterrows():
         email = str(row.get("email", "")).strip()
