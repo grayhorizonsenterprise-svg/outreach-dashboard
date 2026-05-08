@@ -7,6 +7,7 @@ DATA_DIR      = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__))
 INPUT_FILE    = os.path.join(DATA_DIR, "prospects_raw.csv")
 OUTPUT_FILE   = os.path.join(DATA_DIR, "outreach_queue.csv")
 CALENDLY_URL  = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
+STRIPE_LINK   = os.getenv("STRIPE_PAYMENT_LINK", "https://grayhorizonsenterprise.com")
 
 # =========================
 # NICHE MESSAGE TEMPLATES
@@ -676,6 +677,7 @@ def generate_message(company, niche):
     display   = company if is_clean_name(company) else "your team"
     msg = template.replace("{company}", display)
     msg = msg.replace("{calendly}", CALENDLY_URL)
+    msg = msg.replace("{stripe}", STRIPE_LINK)
     msg = _add_periods(msg)
     if "grayhorizonsenterprise.com" not in msg and CALENDLY_URL not in msg:
         msg += "\nhttps://grayhorizonsenterprise.com"
@@ -788,20 +790,39 @@ def run():
             else:
                 niche = "hoa"
 
+        subject = generate_subject(company, niche)
         rows.append({
             "company": company,
             "name":    "",
             "email":   email,
             "website": row.get("website", ""),
             "niche":   niche,
-            "subject": generate_subject(company, niche),
+            "subject": subject,
             "message": generate_message(company, niche),
             "status":  "pending",
         })
         niche_count[niche] = niche_count.get(niche, 0) + 1
 
+        # Track sent for performance weighting
+        try:
+            from performance_tracker import record_sent
+            record_sent(niche, subject)
+        except Exception:
+            pass
+
     out = pd.DataFrame(existing_rows + rows)
     out.to_csv(OUTPUT_FILE, index=False, quoting=1)
+
+    # Log performance weights so operator can see what's working
+    try:
+        from performance_tracker import get_niche_weights, get_summary
+        weights = get_niche_weights()
+        if any(w != 1.0 for w in weights.values()):
+            print("\n[PERF] Niche weights (auto-adjusted):")
+            for n, w in sorted(weights.items(), key=lambda x: -x[1]):
+                print(f"  {n.upper():12s}: {w}x")
+    except Exception:
+        pass
 
     print(f"[DONE] outreach_queue.csv: {len(rows)} new leads added, {len(done_emails)} preserved, {skipped} skipped")
     for n, c in sorted(niche_count.items()):

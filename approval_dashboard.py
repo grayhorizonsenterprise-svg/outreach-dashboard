@@ -1676,7 +1676,13 @@ def stripe_webhook():
             email    = data.get("customer_details", {}).get("email", "")
             name     = data.get("customer_details", {}).get("name", "")
             amount   = data.get("amount_total", 0) / 100
+            niche    = data.get("metadata", {}).get("niche", "hvac")
             _send_onboarding(name, email, amount)
+            try:
+                from performance_tracker import record_payment
+                record_payment(niche, amount)
+            except Exception:
+                pass
         return {"received": True}, 200
     except Exception as e:
         return {"error": str(e)}, 500
@@ -1751,6 +1757,15 @@ def health():
     except Exception:
         pass
     return f"OK | pipeline={status} | leads={leads}"
+
+
+@app.route('/performance')
+def performance():
+    try:
+        from performance_tracker import get_summary
+        return f"<pre style='font-family:monospace;padding:24px;background:#0f172a;color:#e2e8f0;'>{get_summary()}</pre>"
+    except Exception as e:
+        return f"No performance data yet: {e}"
 
 # =========================
 # GMAIL REPLY MONITOR
