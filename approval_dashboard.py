@@ -1665,6 +1665,16 @@ def health():
     return f"OK | pipeline={status} | leads={leads}"
 
 # =========================
+# GMAIL REPLY MONITOR
+# =========================
+try:
+    from gmail_reply_monitor import start_background as start_gmail_monitor
+    start_gmail_monitor()
+    print("[STARTUP] Gmail reply monitor started")
+except Exception as _gmail_err:
+    print(f"[STARTUP] Gmail monitor skipped: {_gmail_err}")
+
+# =========================
 # RUN
 # =========================
 if __name__ == "__main__":
