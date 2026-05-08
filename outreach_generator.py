@@ -3,9 +3,10 @@ import random
 import re
 import os
 
-DATA_DIR    = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
-INPUT_FILE  = os.path.join(DATA_DIR, "prospects_raw.csv")
-OUTPUT_FILE = os.path.join(DATA_DIR, "outreach_queue.csv")
+DATA_DIR      = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+INPUT_FILE    = os.path.join(DATA_DIR, "prospects_raw.csv")
+OUTPUT_FILE   = os.path.join(DATA_DIR, "outreach_queue.csv")
+CALENDLY_URL  = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
 
 # =========================
 # NICHE MESSAGE TEMPLATES
@@ -111,11 +112,13 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Most HVAC companies we work with had the same problem - emergency calls coming in with no centralized way to track from first call to job close-out
+HVAC companies with a full schedule typically miss 15-20 calls a week during peak season. At an average job value of $450, that's $6,750-$9,000 walking out the door every week.
 
-We built a system that handles dispatch, updates, and follow-up automatically so nothing falls through
+We set up an automated follow-up system for HVAC shops that catches every missed inquiry and follows up immediately - so the customer hears from you before they book someone else.
 
-I can show you exactly how it works and get it running for your team this week
+Three shops we've set this up for recovered 6-10 jobs in the first month they'd have otherwise lost.
+
+Worth a 20-minute call to see if it fits? {calendly}
 
 Alex
 Gray Horizons Enterprise""",
@@ -123,11 +126,13 @@ Gray Horizons Enterprise""",
         """\
 Hi,
 
-The gap between a service call being logged and the tech actually getting dispatched is where most HVAC companies lose time and customers
+Quick question - when your line is busy or it's after hours and a customer calls about a broken AC or furnace, what happens to that call?
 
-We fixed that for several companies and now it runs without anyone manually tracking it
+If it goes to voicemail, research shows 80% of those customers book the next company that answers before you call back.
 
-I can walk you through the setup this week if you want to see it in action
+We built a follow-up system that responds to those inquiries automatically and keeps them engaged until your team can get them on the schedule. Happy to show you how it works in 20 minutes.
+
+{calendly}
 
 Alex
 Gray Horizons Enterprise""",
@@ -135,35 +140,11 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Missed calls during peak season cost HVAC companies more revenue than almost anything else - the customer calls once, nobody answers, and they book someone else
+Most HVAC owners I talk to say the same thing - the jobs they lose aren't from bad work, they're from slow follow-up. Estimate sent, no response, job goes to whoever follows up first.
 
-We built a system that captures those calls and routes them automatically so you stop losing jobs to competitors
+We built an automated system that follows up on every open estimate and every missed inquiry without anyone on your team having to do it manually.
 
-I can show you exactly how we set it up this week
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hi,
-
-When a customer calls back asking for a job update and nobody on your team knows where it stands - that is the moment you lose the review and the referral
-
-We built a system that keeps every job status updated and visible without anyone having to chase it down
-
-I can get you set up in about a week. Let me know and I will show you how it works
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hey,
-
-After a tech finishes a job the follow-up almost never happens automatically - no check-in, no review request, no next appointment
-
-We built that entire post-job flow into a system that runs on its own
-
-I can show you what it looks like and get it running for your team this week
+If that sounds like something worth looking at, grab a time here: {calendly}
 
 Alex
 Gray Horizons Enterprise""",
@@ -171,31 +152,11 @@ Gray Horizons Enterprise""",
         """\
 Hi,
 
-HVAC companies lose more revenue to missed and unreturned calls than almost any other gap in the business
+The average HVAC company loses $45,000-$120,000 per year to missed and unreturned calls. Most owners don't realize it because there's no system tracking what's being lost.
 
-We built a system that captures every missed call and routes it back into your pipeline automatically
+We fix that. I can show you exactly what it looks like for a shop your size in 20 minutes.
 
-I can show you exactly how it works this week
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hey,
-
-Honest question - when a customer calls during a busy week and nobody picks up, what happens to that call? Does it hit voicemail or is there something that catches it?
-
-That's usually where HVAC companies lose the most jobs without realizing it.
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hi,
-
-When your schedule fills up and a new call comes in, how does your team handle that? Is there a system capturing it or does it depend on someone remembering to call back?
-
-Just asking - happy to share what we've built if it's relevant.
+{calendly}
 
 Alex
 Gray Horizons Enterprise""",
@@ -205,11 +166,13 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Most dental practices we work with were losing new patients between the first inquiry and the actual booking - the follow-up just was not happening consistently
+The average dental practice loses 8-12 new patients every month to slow follow-up. A patient submits a form or calls after hours, nobody responds until the next morning, and by then they've booked somewhere else.
 
-We built a system that handles that entire process automatically so no inquiry goes cold
+At $1,200 average lifetime value per new patient, that's $9,600-$14,400 a month slipping through.
 
-I can show you exactly how it works and get it running for your practice this week
+We built a follow-up system that responds to every new patient inquiry immediately - even at 11pm - and keeps them engaged until they're booked. Happy to show you how it works in 20 minutes.
+
+{calendly}
 
 Alex
 Gray Horizons Enterprise""",
@@ -217,11 +180,13 @@ Gray Horizons Enterprise""",
         """\
 Hi,
 
-After-hours voicemails and contact form submissions are where most practices lose new patients - nobody follows up until the next day and by then the patient has booked somewhere else
+Quick question for you - when a new patient submits a form on your website at 8pm on a Tuesday, what happens to that inquiry?
 
-We built a system that responds and follows up automatically regardless of when they reach out
+If it sits until the next morning, research shows 78% of those patients have already booked somewhere else by the time you call back.
 
-I can walk you through it this week and show you what it looks like in practice
+We fix that with an automated follow-up system. Three practices we've set this up for saw immediate increases in new patient bookings in the first 30 days.
+
+Worth 20 minutes to see the setup? {calendly}
 
 Alex
 Gray Horizons Enterprise""",
@@ -229,35 +194,11 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Patients who call, get put on a waitlist, and never hear back again are lost revenue that most practices do not even track
+Most practices have 200-400 patients who called or filled out a form, never booked, and were never followed up with again. That's $240,000-$480,000 in lost lifetime value sitting in a spreadsheet or voicemail box.
 
-We built a system that keeps every patient inquiry active and followed up until they are booked or confirmed out
+We built a reactivation system that reaches back out to those patients automatically and gets them back on the schedule.
 
-I can show you how we set it up this week
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hi,
-
-The gap between a new patient reaching out and actually sitting in your chair is where practices lose the most revenue
-
-We closed that gap for several practices with a system that manages intake, follow-up, and booking automatically
-
-I can get you set up in about a week. Let me know and I will show you exactly how it works
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hey,
-
-Patient reactivation is one of the highest-return activities a practice can do - reaching back out to patients who have not been in over a year
-
-We built a system that handles outreach, scheduling, and follow-up automatically so your team does not have to manage it manually
-
-I can show you how it works this week
+I can show you what this looks like for your practice in 20 minutes: {calendly}
 
 Alex
 Gray Horizons Enterprise""",
@@ -265,31 +206,9 @@ Gray Horizons Enterprise""",
         """\
 Hi,
 
-Most practices have hundreds of patients who inquired, never booked, and were never followed up with again
+Patient no-shows cost the average dental practice $50,000-$150,000 per year in lost chair time. Most practices send one reminder. We send an automated sequence that cuts no-show rates by 40-60%.
 
-We built a system that recovers those patients automatically - no manual work from your front desk
-
-I can show you exactly how it works and what it would look like for your practice this week
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hey,
-
-When someone calls or submits a form on your website after hours, what happens to that inquiry? Does it get caught automatically or does it sit until someone sees it in the morning?
-
-That's usually where practices lose new patients without realizing it.
-
-Alex
-Gray Horizons Enterprise""",
-
-        """\
-Hi,
-
-Quick one - how does your front desk handle new patient inquiries when they're backed up with existing patients? Is there a system following up automatically or is it manual?
-
-Just asking because that's usually the biggest gap in patient acquisition.
+Happy to walk you through exactly how it works: {calendly}
 
 Alex
 Gray Horizons Enterprise""",
@@ -756,8 +675,9 @@ def generate_message(company, niche):
     template  = random.choice(templates)
     display   = company if is_clean_name(company) else "your team"
     msg = template.replace("{company}", display)
+    msg = msg.replace("{calendly}", CALENDLY_URL)
     msg = _add_periods(msg)
-    if "grayhorizonsenterprise.com" not in msg:
+    if "grayhorizonsenterprise.com" not in msg and CALENDLY_URL not in msg:
         msg += "\nhttps://grayhorizonsenterprise.com"
     return msg
 
