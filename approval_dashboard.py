@@ -1652,6 +1652,94 @@ def upload_queue_post():
 
 
 # =========================
+# WEBHOOKS — CALENDLY + STRIPE
+# =========================
+@app.route('/webhook/calendly', methods=['POST'])
+def calendly_webhook():
+    try:
+        from auto_proposal import handle_calendly_webhook
+        result = handle_calendly_webhook(flask_request.get_json(force=True) or {})
+        return result, 200
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
+@app.route('/webhook/stripe', methods=['POST'])
+def stripe_webhook():
+    """On successful payment, send onboarding email automatically."""
+    try:
+        import json as _json
+        payload = flask_request.get_json(force=True) or {}
+        event_type = payload.get("type", "")
+        if event_type == "checkout.session.completed":
+            data     = payload.get("data", {}).get("object", {})
+            email    = data.get("customer_details", {}).get("email", "")
+            name     = data.get("customer_details", {}).get("name", "")
+            amount   = data.get("amount_total", 0) / 100
+            _send_onboarding(name, email, amount)
+        return {"received": True}, 200
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
+def _send_onboarding(name: str, email: str, amount: float):
+    import requests as _req
+    key  = os.getenv("SENDGRID_API_KEY", "")
+    from_email = os.getenv("FROM_EMAIL", "grayhorizonsenterprise@gmail.com")
+    cal  = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
+    if not key or not email:
+        return
+    first = name.split()[0] if name else "there"
+    body  = f"""Hey {first},
+
+Payment confirmed — thank you! You're officially on.
+
+Here's what happens next:
+
+1. Your AI Lead Follow-Up System will be live within 5 business days
+2. You'll receive your custom email sequences and dashboard access via this email
+3. Book your kickoff call here so we can walk through the setup together: {cal}
+
+If you have any questions before then, just reply to this email.
+
+Alex
+Gray Horizons Enterprise
+https://grayhorizonsenterprise.com"""
+
+    payload = {
+        "personalizations": [{"to": [{"email": email, "name": name}]}],
+        "from": {"email": from_email, "name": "Alex | Gray Horizons"},
+        "subject": "You're in — here's what happens next",
+        "content": [{"type": "text/plain", "value": body}],
+    }
+    try:
+        _req.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+            json=payload, timeout=10,
+        )
+        print(f"[ONBOARD] Sent to {email} (${amount})")
+    except Exception as e:
+        print(f"[ONBOARD] Error: {e}")
+
+
+# =========================
+# HOT LEADS API
+# =========================
+@app.route('/api/hot-leads')
+def api_hot_leads():
+    try:
+        import json as _json
+        hot_file = os.path.join(DATA_DIR, "hot_leads.json")
+        if os.path.exists(hot_file):
+            with open(hot_file) as f:
+                return _json.load(f), 200
+        return [], 200
+    except Exception:
+        return [], 200
+
+
+# =========================
 # HEALTH CHECK
 # =========================
 @app.route('/health')
