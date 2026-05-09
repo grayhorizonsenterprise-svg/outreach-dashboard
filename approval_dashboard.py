@@ -34,7 +34,7 @@ URL_PLUMBING   = os.getenv("PLUMBING_URL", "#")
 EDGE_ENGINE_URL = os.getenv("EDGE_ENGINE_URL", "https://outreach-dashboard-production-6894.up.railway.app")
 URL_GRANTS       = "https://ghe-grant-agent-production.up.railway.app"
 URL_VOICE_SERVER = os.getenv("VOICE_SERVER_URL", "https://ghe-voice-production.up.railway.app")
-PIPELINE_SCRIPTS = ["prospect_finder.py", "yellowpages_scraper.py", "superpages_scraper.py", "manta_scraper.py", "linkedin_scraper.py", "prospect_enricher.py", "prospect_qualifier.py", "outreach_generator.py"]
+PIPELINE_SCRIPTS = ["prospect_finder.py", "yellowpages_scraper.py", "superpages_scraper.py", "manta_scraper.py", "hotfrog_scraper.py", "chamberofcommerce_scraper.py", "bark_scraper.py", "yelp_scraper.py", "linkedin_scraper.py", "prospect_enricher.py", "prospect_qualifier.py", "outreach_generator.py"]
 
 DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "1000"))
 batch_running     = False
@@ -1657,9 +1657,112 @@ def upload_queue_post():
 @app.route('/webhook/calendly', methods=['POST'])
 def calendly_webhook():
     try:
+        payload = flask_request.get_json(force=True) or {}
         from auto_proposal import handle_calendly_webhook
-        result = handle_calendly_webhook(flask_request.get_json(force=True) or {})
+        result = handle_calendly_webhook(payload)
+        # Also trigger Bland.ai call if booking has a phone number
+        threading.Thread(
+            target=_bland_call_calendly,
+            args=(payload,),
+            daemon=True,
+        ).start()
         return result, 200
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
+def _bland_call_calendly(payload: dict):
+    try:
+        from bland_caller import call_from_calendly
+        call_from_calendly(payload)
+    except Exception as e:
+        print(f"[BLAND] Calendly trigger error: {e}")
+
+
+@app.route('/call-lead', methods=['POST'])
+def call_lead():
+    """Manually trigger a Bland.ai call for a specific lead from the dashboard."""
+    try:
+        data  = flask_request.get_json(force=True) or {}
+        from bland_caller import make_call
+        result = make_call(
+            name    = data.get("name", ""),
+            phone   = data.get("phone", ""),
+            company = data.get("company", ""),
+            niche   = data.get("niche", "hvac"),
+            email   = data.get("email", ""),
+        )
+        return result, 200
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+
+@app.route('/signals')
+def signals_page():
+    """Landing page for Edge Engine paid signals subscription."""
+    stripe_link = os.getenv("STRIPE_SIGNALS_LINK", "#")
+    try:
+        from signals_mailer import get_active_subscribers
+        sub_count = len(get_active_subscribers())
+    except Exception:
+        sub_count = 0
+    return f"""<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Edge Engine Signals</title>
+<style>
+  body{{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:0;}}
+  .wrap{{max-width:580px;margin:60px auto;padding:0 20px;}}
+  h1{{color:#38bdf8;font-size:28px;}}
+  .price{{font-size:48px;color:#22c55e;font-weight:bold;margin:24px 0 4px;}}
+  .mo{{color:#94a3b8;font-size:16px;}}
+  .btn{{display:block;background:#22c55e;color:#000;padding:18px;text-align:center;border-radius:8px;font-weight:bold;font-size:18px;text-decoration:none;margin:32px 0;}}
+  ul{{color:#94a3b8;line-height:2;padding-left:20px;}}
+  .badge{{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:16px 20px;margin:20px 0;font-size:14px;color:#64748b;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Gray Horizons Edge Engine</h1>
+  <p style="color:#94a3b8;">Daily AI-powered signals for stocks, crypto, and sports.</p>
+  <div class="price">$49<span class="mo">/month</span></div>
+  <ul>
+    <li>Daily stock signals with entry points + confidence scores</li>
+    <li>Crypto signals with trend analysis</li>
+    <li>Sports edge picks with Kelly criterion bet sizing</li>
+    <li>Congressional trading alerts</li>
+    <li>Delivered to your inbox every morning</li>
+    <li>Cancel anytime</li>
+  </ul>
+  <a href="{stripe_link}" class="btn">Subscribe — $49/month</a>
+  <div class="badge">{sub_count} active subscribers · Powered by Gray Horizons AI</div>
+  <p style="color:#475569;font-size:12px;">Not financial advice. Signals are algorithmic and for informational purposes only.</p>
+</div>
+</body>
+</html>"""
+
+
+@app.route('/webhook/stripe-signals', methods=['POST'])
+def stripe_signals_webhook():
+    """Stripe webhook for signals subscription payment — adds subscriber."""
+    try:
+        payload    = flask_request.get_json(force=True) or {}
+        event_type = payload.get("type", "")
+        if event_type == "checkout.session.completed":
+            data   = payload.get("data", {}).get("object", {})
+            email  = data.get("customer_details", {}).get("email", "")
+            name   = data.get("customer_details", {}).get("name", "")
+            cust   = data.get("customer", "")
+            if email:
+                from signals_mailer import add_subscriber, send_welcome_email
+                add_subscriber(email, name, cust)
+                send_welcome_email(email, name)
+        elif event_type in ("customer.subscription.deleted", "invoice.payment_failed"):
+            data  = payload.get("data", {}).get("object", {})
+            email = data.get("customer_email", "")
+            if email:
+                from signals_mailer import remove_subscriber
+                remove_subscriber(email)
+        return {"received": True}, 200
     except Exception as e:
         return {"error": str(e)}, 500
 

@@ -336,12 +336,14 @@ def run():
 
     df_new = pd.DataFrame(all_new)
 
-    # Only keep listings that have a website (enricher needs it to find email)
+    # Keep everything — phone-only leads go to Bland.ai call track
     df_with_site    = df_new[df_new["website"].str.strip() != ""].copy()
     df_without_site = df_new[df_new["website"].str.strip() == ""].copy()
-    print(f"[YP] {len(df_with_site)} with website, {len(df_without_site)} website-only (phone only — skipped)")
-    df_new = df_with_site
-    df_new.drop_duplicates(subset=["website"], inplace=True)
+    df_without_site = df_without_site[df_without_site["phone"].str.strip() != ""].copy()
+    df_without_site["lead_type"] = "PHONE_ONLY"
+    df_with_site.drop_duplicates(subset=["website"], inplace=True)
+    df_new = pd.concat([df_with_site, df_without_site], ignore_index=True)
+    print(f"[YP] {len(df_with_site)} with website, {len(df_without_site)} phone-only (Bland.ai call track)")
 
     # Append to existing prospects_raw.csv
     if os.path.exists(OUTPUT_FILE):

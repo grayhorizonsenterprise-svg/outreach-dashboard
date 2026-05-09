@@ -14,7 +14,7 @@ import json
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyBcyVrmGiYFMQv7LrT4uqoP5P-q7Kkr1q4")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")  # key removed — do not use Maps API
 OUTPUT_FILE    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "prospects_raw.csv")
 CHECKPOINT     = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".maps_checkpoint.json")
 

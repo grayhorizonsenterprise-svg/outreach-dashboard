@@ -726,7 +726,8 @@ def run():
         "blue cross", "blue shield", "bcbs", "aetna", "cigna", "humana",
         "anthem", "molina", "kaiser", "united health", "centene",
         "hospital", "health system", "medical center", "health network",
-        "insurance company", "insurance group", "insurance co",
+        # Block ALL insurance — they are never the right target
+        "insurance", "insurer", "underwriter", "surety", "indemnity",
         "university", "college", "school district", "public school",
         "city of ", "county of ", "state of ", "department of ",
         "township", "municipality", "government",
@@ -737,10 +738,18 @@ def run():
         "opencare", "rowcal", "appfolio", "buildium", "propertyware",
         "management company", "management group", "management corp",
         "national association", "association of ", " association",
+        # Other wrong-target business types
+        "law firm", "law office", "attorney", "legal services",
+        "accounting", "accountant", "cpa firm",
+        "bank", "credit union", "financial services", "lending",
+        "real estate investment", "reit", "property investor",
     ]
 
     # Also block support@ emails — companies with support@ have ticket systems, not owners
-    corporate_email_blocks.extend(["support@", "ticket@", "helpdesk@", "info@opencare", "info@rowcal"])
+    corporate_email_blocks.extend([
+        "support@", "ticket@", "helpdesk@", "info@opencare", "info@rowcal",
+        "insurance", "insure", "underwrite",
+    ])
 
     for _, row in df.iterrows():
         email = str(row.get("email", "")).strip()

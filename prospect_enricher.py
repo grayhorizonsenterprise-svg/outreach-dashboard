@@ -70,6 +70,7 @@ CONTACT_PATHS = [
 GUESS_PREFIXES = ["info", "contact", "hello", "office", "admin", "team", "support"]
 
 EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
+PHONE_REGEX = re.compile(r"\(?\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4}")
 
 
 def get_domain(url: str) -> str:
@@ -203,25 +204,37 @@ def enrich_prospect(site: str, contact_page: str = "") -> str:
     return sorted(deduped, key=lambda e: score_email(e, site), reverse=True)[0]
 
 
-def process_row(args):
-    """Worker function — enriches a single row. Returns (index, email, lead_type)."""
-    i, row = args
-    existing = str(row.get("email", "")).strip()
-    site     = str(row.get("website", "")).strip()
+def extract_phone(html: str) -> str:
+    for m in PHONE_REGEX.findall(html):
+        digits = re.sub(r"[^\d]", "", m)
+        if len(digits) == 10 and digits[0] not in ("0", "1"):
+            return digits
+        if len(digits) == 11 and digits[0] == "1":
+            return digits[1:]
+    return ""
 
-    # Already has a valid email — nothing to do
+
+def process_row(args):
+    """Worker function — enriches a single row. Returns (index, email, phone, lead_type)."""
+    i, row = args
+    existing       = str(row.get("email", "")).strip()
+    site           = str(row.get("website", "")).strip()
+    existing_phone = str(row.get("phone", "")).strip()
+
     if existing not in ("", "nan", "None") and is_valid_email(existing, site):
-        return (i, existing, "READY")
+        return (i, existing, existing_phone, "READY")
 
     if site in ("", "nan", "None"):
-        return (i, "", "NO_DATA")
+        return (i, "", existing_phone, "NO_DATA")
 
     contact_page = str(row.get("contact_page_url", "")).strip()
-    email = enrich_prospect(site, contact_page)
+    html         = fetch(site.rstrip("/"))
+    phone        = existing_phone or (extract_phone(html) if html else "")
+    email        = enrich_prospect(site, contact_page)
 
     if email:
-        return (i, email, "READY")
-    return (i, "", "WEBSITE_ONLY")
+        return (i, email, phone, "READY")
+    return (i, "", phone, "WEBSITE_ONLY")
 
 
 def run():
@@ -234,7 +247,7 @@ def run():
 
     df = pd.read_csv(INPUT_FILE)
 
-    for col in ["email", "website", "lead_type", "contact_page_url"]:
+    for col in ["email", "website", "lead_type", "contact_page_url", "phone"]:
         if col not in df.columns:
             df[col] = ""
 
@@ -258,8 +271,9 @@ def run():
         for future in as_completed(futures):
             idx = futures[future]
             try:
-                i, email, lead_type = future.result()
+                i, email, phone, lead_type = future.result()
                 df.at[i, "email"]     = email
+                df.at[i, "phone"]     = phone
                 df.at[i, "lead_type"] = lead_type
                 company = str(df.at[i, "company"])[:30]
                 if lead_type == "READY":

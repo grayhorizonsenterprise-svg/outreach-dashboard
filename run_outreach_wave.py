@@ -7,7 +7,6 @@ print("================================\n")
 
 steps = [
 
-    "maps_scraper.py",       # Google Maps: 100 cities × 7 niches = thousands of businesses
     "prospect_finder.py",    # DuckDuckGo web search: supplemental email-direct leads
     "niche_splitter.py",     # split into per-niche CSV files
     "prospect_enricher.py",  # scrape contact emails from company websites
