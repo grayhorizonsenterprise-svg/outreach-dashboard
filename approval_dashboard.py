@@ -1686,11 +1686,12 @@ def upload_queue_post():
             if col not in uploaded.columns:
                 uploaded[col] = ""
 
-        uploaded.loc[uploaded["status"] == "", "status"] = "pending"
+        # Always force uploaded leads to pending — DB tracks what's actually sent
+        uploaded["status"] = "pending"
 
-        if merge and os.path.exists(CSV_FILE):
+        if merge:
             existing = load_data()
-            # Keep sent/skipped from existing; use uploaded for pending
+            # Keep sent/skipped from DB (source of truth); add only new emails
             done_emails = set(
                 existing.loc[existing["status"].isin(["sent","skipped"]), "email"]
                 .str.strip().str.lower().tolist()
