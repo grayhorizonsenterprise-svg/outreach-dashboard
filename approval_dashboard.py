@@ -106,6 +106,52 @@ threading.Thread(target=keep_alive, daemon=True).start()
 CSV_FILE    = os.path.join(DATA_DIR, "outreach_queue.csv")
 SOCIAL_FILE = os.path.join(DATA_DIR, "social_pipeline.csv")
 
+# =========================
+# POSTGRESQL — persistent queue storage
+# =========================
+import psycopg2
+import psycopg2.extras
+
+_DATABASE_URL = os.getenv("DATABASE_URL", "")
+
+def _get_db():
+    if not _DATABASE_URL:
+        return None
+    try:
+        conn = psycopg2.connect(_DATABASE_URL, sslmode="require")
+        return conn
+    except Exception as e:
+        print(f"[DB] Connect failed: {e}", flush=True)
+        return None
+
+def _init_db():
+    conn = _get_db()
+    if not conn:
+        return
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS leads (
+                    id SERIAL PRIMARY KEY,
+                    company TEXT DEFAULT '',
+                    name TEXT DEFAULT '',
+                    email TEXT UNIQUE NOT NULL,
+                    message TEXT DEFAULT '',
+                    status TEXT DEFAULT 'pending',
+                    niche TEXT DEFAULT 'hoa',
+                    subject TEXT DEFAULT '',
+                    website TEXT DEFAULT ''
+                )
+            """)
+        conn.commit()
+        print("[DB] Table ready", flush=True)
+    except Exception as e:
+        print(f"[DB] Init error: {e}", flush=True)
+    finally:
+        conn.close()
+
+threading.Thread(target=_init_db, daemon=True).start()
+
 SOCIAL_STAGES = ["commented", "replied", "demo_sent", "closed", "dead"]
 
 def load_social():
@@ -211,25 +257,12 @@ def build_social_table():
 # =========================
 # LOAD DATA
 # =========================
-def load_data():
-    if not os.path.exists(CSV_FILE):
-        return pd.DataFrame(columns=["company","name","email","message","status"])
-
-    df = pd.read_csv(CSV_FILE)
-
-    df = df.rename(columns={
-        "Company": "company",
-        "Email": "email",
-        "Message": "message",
-        "Name": "name"
-    })
-
-    for col in ["company","name","email","message","status","niche"]:
+def _clean_df(df):
+    df = df.rename(columns={"Company": "company", "Email": "email", "Message": "message", "Name": "name"})
+    for col in ["company","name","email","message","status","niche","subject","website"]:
         if col not in df.columns:
             df[col] = ""
-
     df = df.fillna("")
-
     df["message"] = (
         df["message"]
         .str.replace("—", ",", regex=False)
@@ -237,13 +270,62 @@ def load_data():
         .str.replace("  ", " ", regex=False)
     )
     df.loc[df["status"] == "", "status"] = "pending"
-    # Tag all untagged rows as hoa (existing data pre-dates niche column)
     df.loc[df["niche"] == "", "niche"] = "hoa"
-
     return df
 
+def load_data():
+    conn = _get_db()
+    if conn:
+        try:
+            df = pd.read_sql(
+                "SELECT company,name,email,message,status,niche,subject,website FROM leads ORDER BY id",
+                conn
+            )
+            conn.close()
+            return _clean_df(df)
+        except Exception as e:
+            print(f"[DB] Load error: {e}", flush=True)
+            try:
+                conn.close()
+            except Exception:
+                pass
+    # Fallback to CSV
+    if not os.path.exists(CSV_FILE):
+        return pd.DataFrame(columns=["company","name","email","message","status","niche","subject","website"])
+    return _clean_df(pd.read_csv(CSV_FILE))
 
 def save_data(df):
+    conn = _get_db()
+    if conn:
+        try:
+            with conn.cursor() as cur:
+                for _, row in df.iterrows():
+                    email = str(row.get("email","")).strip().lower()
+                    if not email:
+                        continue
+                    cur.execute("""
+                        INSERT INTO leads (company,name,email,message,status,niche,subject,website)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                        ON CONFLICT (email) DO UPDATE SET
+                            company=EXCLUDED.company, name=EXCLUDED.name,
+                            message=EXCLUDED.message, status=EXCLUDED.status,
+                            niche=EXCLUDED.niche, subject=EXCLUDED.subject,
+                            website=EXCLUDED.website
+                    """, (
+                        str(row.get("company","")), str(row.get("name","")),
+                        email, str(row.get("message","")),
+                        str(row.get("status","pending")), str(row.get("niche","hoa")),
+                        str(row.get("subject","")), str(row.get("website",""))
+                    ))
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            print(f"[DB] Save error: {e}", flush=True)
+            try:
+                conn.close()
+            except Exception:
+                pass
+    # Always write CSV backup too
     df.to_csv(CSV_FILE, index=False)
 
 def count_sent_today() -> int:
@@ -1622,7 +1704,7 @@ def upload_queue_post():
         else:
             merged = uploaded
 
-        merged.to_csv(CSV_FILE, index=False)
+        save_data(merged)
 
         added   = len(merged[merged["status"] == "pending"])
         kept    = len(merged[merged["status"].isin(["sent","skipped"])])
