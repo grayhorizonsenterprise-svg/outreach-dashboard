@@ -28,6 +28,7 @@ UPLOAD_URL   = f"{RAILWAY_URL}/upload-queue"
 QUEUE_FILE   = os.path.join(os.path.dirname(os.path.abspath(__file__)), "outreach_queue.csv")
 
 PIPELINE = [
+    # Main outreach pipeline — AI system $997
     ("Scraping YellowPages",        "yellowpages_scraper.py"),
     ("Scraping Superpages",         "superpages_scraper.py"),
     ("Scraping Manta",              "manta_scraper.py"),
@@ -35,11 +36,17 @@ PIPELINE = [
     ("Scraping Chamber of Commerce","chamberofcommerce_scraper.py"),
     ("Scraping Bark",               "bark_scraper.py"),
     ("Scraping Yelp",               "yelp_scraper.py"),
-    ("Apollo verified contacts",    "apollo_scraper.py"),
+    ("Hunter.io email enrichment",  "hunter_scraper.py"),
     ("Finding leads via search",    "prospect_finder.py"),
     ("Enriching emails + phones",   "prospect_enricher.py"),
     ("Qualifying leads",            "prospect_qualifier.py"),
     ("Generating outreach",         "outreach_generator.py"),
+    # Follow-up sequences — 3x reply rate
+    ("Sending follow-ups",          "followup_sender.py"),
+    # Grant writing pipeline — $750-$1,500 per client
+    ("Scraping nonprofits",         "nonprofit_scraper.py"),
+    ("Generating grant outreach",   "grant_outreach_generator.py"),
+    ("Sending grant outreach",      "grant_blast.py"),
 ]
 
 

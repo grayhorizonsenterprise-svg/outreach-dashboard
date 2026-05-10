@@ -716,40 +716,65 @@ def run():
         "yourname", "sample@", "null@", "none@", "@mailinator", "@tempmail"
     ]
 
-    # Never email these — large corporations, insurance, hospitals, government
+    # Block ticket/system email prefixes — these are never real decision makers
     corporate_email_blocks = [
+        # Generic system emails
+        "noreply@", "no-reply@", "donotreply@", "do-not-reply@",
+        "support@", "ticket@", "helpdesk@", "help@",
+        "clientcare@", "customercare@", "customerservice@",
+        "care@", "service@", "billing@", "accounts@", "admin@",
+        "hello@", "team@", "press@", "media@",
+        # Known bad domains/patterns
+        "info@opencare", "info@rowcal",
+        "finda", "attorneys.org", "jobleads",
+        # Insurance/financial in email domain
+        "insurance", "insure", "underwrite",
         "bcbs", "bluecross", "blueshield", "aetna", "cigna", "humana",
-        "anthem", "molina", "kaiser", "unitedhealthcare", "centene",
+        "anthem", "molina", "kaiser", "unitedhealthcare",
+        # Government
         ".gov", ".edu", ".mil",
     ]
+
+    # Block these company name patterns — wrong targets entirely
     corporate_name_blocks = [
+        # Insurance (all forms)
+        "insurance", "insurer", "underwriter", "surety", "indemnity",
         "blue cross", "blue shield", "bcbs", "aetna", "cigna", "humana",
         "anthem", "molina", "kaiser", "united health", "centene",
+        # Medical/Healthcare institutions and major websites
         "hospital", "health system", "medical center", "health network",
-        # Block ALL insurance — they are never the right target
-        "insurance", "insurer", "underwriter", "surety", "indemnity",
+        "clinic group", "medical group", "patient portal", "communicare",
+        "webmd", "healthline", "mayo clinic", "cleveland clinic",
+        "academy of general dentistry", "agd", "membership services",
+        # Education/Government
         "university", "college", "school district", "public school",
         "city of ", "county of ", "state of ", "department of ",
-        "township", "municipality", "government",
-        "nationwide", "national chain", "franchise",
-        "chamber of commerce", "nonprofit", "non-profit", "foundation",
-        # Software platforms and large management companies (have ticket systems)
-        "software", "platform", "saas", "tech solutions", "technologies",
-        "opencare", "rowcal", "appfolio", "buildium", "propertyware",
-        "management company", "management group", "management corp",
-        "national association", "association of ", " association",
-        # Other wrong-target business types
-        "law firm", "law office", "attorney", "legal services",
-        "accounting", "accountant", "cpa firm",
-        "bank", "credit union", "financial services", "lending",
+        "township", "municipality", "government", "public works",
+        # Financial
+        "bank", "national bank", "credit union", "financial services",
+        "lending", "mortgage", "investment trust",
         "real estate investment", "reit", "property investor",
+        "city national", "chase", "wells fargo", "bank of america",
+        # Legal
+        "law firm", "law office", "attorney", "attorneys", "legal services",
+        "malpractice", "litigation", "lawyers",
+        # Tech/SaaS/Directories
+        "software", "platform", "saas", "tech solutions", "technologies",
+        "smugmug", "squarespace", "wix", "shopify", "hubspot", "salesforce",
+        "photography studio", "media group", "digital agency",
+        "hosting", "cloud services", "it services", "managed services",
+        "findamedical", "findadoctor", "findadentist", "findalawyer",
+        "jobleads", "directory", "listings",
+        # Property management platforms and software
+        "opencare", "rowcal", "appfolio", "buildium", "propertyware", "highrises",
+        "management company", "management group", "management corp",
+        # Non-profits/Associations
+        "national association", "association of ", " association",
+        "chamber of commerce", "nonprofit", "non-profit", "foundation",
+        "nationwide", "national chain", "franchise",
+        # Media
+        "magazine", "publisher", "broadcasting", "newspaper",
     ]
-
-    # Also block support@ emails — companies with support@ have ticket systems, not owners
-    corporate_email_blocks.extend([
-        "support@", "ticket@", "helpdesk@", "info@opencare", "info@rowcal",
-        "insurance", "insure", "underwrite",
-    ])
 
     for _, row in df.iterrows():
         email = str(row.get("email", "")).strip()
