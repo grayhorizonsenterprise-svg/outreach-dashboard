@@ -28,7 +28,7 @@ UPLOAD_URL   = f"{RAILWAY_URL}/upload-queue"
 QUEUE_FILE   = os.path.join(os.path.dirname(os.path.abspath(__file__)), "outreach_queue.csv")
 
 PIPELINE = [
-    # Main outreach pipeline — AI system $997
+    # ── ENGINE 1: AI System $997 ──────────────────────────────
     ("Scraping YellowPages",        "yellowpages_scraper.py"),
     ("Scraping Superpages",         "superpages_scraper.py"),
     ("Scraping Manta",              "manta_scraper.py"),
@@ -41,12 +41,22 @@ PIPELINE = [
     ("Enriching emails + phones",   "prospect_enricher.py"),
     ("Qualifying leads",            "prospect_qualifier.py"),
     ("Generating outreach",         "outreach_generator.py"),
-    # Follow-up sequences — 3x reply rate
     ("Sending follow-ups",          "followup_sender.py"),
-    # Grant writing pipeline — $750-$1,500 per client
+
+    # ── ENGINE 2: Signals $49/month ───────────────────────────
+    ("Scraping trader audience",    "signals_scraper.py"),
+    ("Sending signals outreach",    "signals_engine.py"),
+
+    # ── ENGINE 3: Grant Writing $1,500/client ─────────────────
     ("Scraping nonprofits",         "nonprofit_scraper.py"),
     ("Generating grant outreach",   "grant_outreach_generator.py"),
     ("Sending grant outreach",      "grant_blast.py"),
+
+    # ── ENGINE 4: GHL CRM $297/month ──────────────────────────
+    ("GHL agency outreach",         "ghl_outreach.py"),
+
+    # ── ENGINE 5: TradingView Indicators $19-39/month ─────────
+    ("TradingView trader outreach", "tradingview_engine.py"),
 ]
 
 
