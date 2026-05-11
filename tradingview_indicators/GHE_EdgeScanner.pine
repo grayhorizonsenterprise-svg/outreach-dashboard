@@ -1,0 +1,92 @@
+// GHE Edge Scanner — Gray Horizons Enterprise
+// Identifies high-probability momentum setups before market open.
+// Combines volume surge, RSI divergence, and trend confluence.
+// Sell at $29/month on TradingView invite-only.
+
+//@version=5
+indicator("GHE Edge Scanner", overlay=true, max_labels_count=500)
+
+// ─── INPUTS ───────────────────────────────────────────────────────────────────
+rsi_len        = input.int(14,    "RSI Length",          group="RSI Settings")
+rsi_ob         = input.int(70,    "Overbought Level",    group="RSI Settings")
+rsi_os         = input.int(30,    "Oversold Level",      group="RSI Settings")
+vol_mult       = input.float(2.0, "Volume Surge Mult",   group="Volume Settings", step=0.1)
+vol_len        = input.int(20,    "Volume Avg Length",   group="Volume Settings")
+ema_fast       = input.int(9,     "Fast EMA",            group="Trend Settings")
+ema_slow       = input.int(21,    "Slow EMA",            group="Trend Settings")
+show_labels    = input.bool(true, "Show Signal Labels",  group="Display")
+show_bg        = input.bool(true, "Show Background",     group="Display")
+
+// ─── CALCULATIONS ─────────────────────────────────────────────────────────────
+rsi            = ta.rsi(close, rsi_len)
+vol_avg        = ta.sma(volume, vol_len)
+vol_surge      = volume > vol_avg * vol_mult
+ema_f          = ta.ema(close, ema_fast)
+ema_s          = ta.ema(close, ema_slow)
+trend_up       = ema_f > ema_s
+trend_dn       = ema_f < ema_s
+
+// Momentum Score (0-100)
+rsi_component  = rsi * 0.4
+vol_component  = math.min(volume / vol_avg * 20, 40)
+trnd_component = trend_up ? 20 : 0
+momentum_score = math.round(rsi_component + vol_component + trnd_component)
+
+// ─── SIGNALS ──────────────────────────────────────────────────────────────────
+long_signal  = trend_up and rsi < rsi_ob and rsi > 45 and vol_surge and ta.crossover(ema_f, ema_s)
+short_signal = trend_dn and rsi > rsi_os and rsi < 55 and vol_surge and ta.crossunder(ema_f, ema_s)
+
+// High-confidence filter
+high_conf_long  = long_signal  and momentum_score >= 70
+high_conf_short = short_signal and momentum_score >= 70
+
+// ─── PLOTS ────────────────────────────────────────────────────────────────────
+plot(ema_f, "Fast EMA", color=color.new(color.blue, 30),  linewidth=1)
+plot(ema_s, "Slow EMA", color=color.new(color.orange, 30), linewidth=1)
+
+// Background
+bgcolor(show_bg and trend_up  ? color.new(color.green, 95) : na)
+bgcolor(show_bg and trend_dn  ? color.new(color.red,   95) : na)
+
+// Signal Labels
+if show_labels and high_conf_long
+    label.new(bar_index, low,
+        "▲ EDGE\n" + str.tostring(momentum_score) + "/100",
+        style=label.style_label_up,
+        color=color.new(color.green, 10),
+        textcolor=color.white,
+        size=size.small)
+
+if show_labels and high_conf_short
+    label.new(bar_index, high,
+        "▼ EDGE\n" + str.tostring(momentum_score) + "/100",
+        style=label.style_label_down,
+        color=color.new(color.red, 10),
+        textcolor=color.white,
+        size=size.small)
+
+// Standard signals for lower confidence
+plotshape(long_signal  and not high_conf_long,  "Long",  shape.triangleup,   location.belowbar, color.new(color.green, 40), size=size.tiny)
+plotshape(short_signal and not high_conf_short, "Short", shape.triangledown, location.abovebar, color.new(color.red,   40), size=size.tiny)
+
+// ─── TABLE ────────────────────────────────────────────────────────────────────
+var table info = table.new(position.top_right, 2, 4, bgcolor=color.new(color.black, 70), border_width=1)
+if barstate.islast
+    table.cell(info, 0, 0, "GHE Edge Scanner",  text_color=color.new(color.blue, 0),  text_size=size.small)
+    table.cell(info, 1, 0, "grayhorizonsenterprise.com", text_color=color.gray, text_size=size.tiny)
+    table.cell(info, 0, 1, "Momentum",          text_color=color.gray,  text_size=size.tiny)
+    table.cell(info, 1, 1, str.tostring(momentum_score) + "/100",
+        text_color=momentum_score >= 70 ? color.green : momentum_score >= 50 ? color.yellow : color.red,
+        text_size=size.small)
+    table.cell(info, 0, 2, "Trend",             text_color=color.gray,  text_size=size.tiny)
+    table.cell(info, 1, 2, trend_up ? "BULLISH" : "BEARISH",
+        text_color=trend_up ? color.green : color.red, text_size=size.small)
+    table.cell(info, 0, 3, "Volume",            text_color=color.gray,  text_size=size.tiny)
+    table.cell(info, 1, 3, vol_surge ? "SURGE ⚡" : "Normal",
+        text_color=vol_surge ? color.yellow : color.gray, text_size=size.small)
+
+// Alerts
+alertcondition(high_conf_long,  "GHE High-Conf Long",  "GHE Edge Scanner: High-confidence LONG setup detected")
+alertcondition(high_conf_short, "GHE High-Conf Short", "GHE Edge Scanner: High-confidence SHORT setup detected")
+alertcondition(long_signal,     "GHE Long Signal",     "GHE Edge Scanner: Long signal")
+alertcondition(short_signal,    "GHE Short Signal",    "GHE Edge Scanner: Short signal")

@@ -57,6 +57,9 @@ PIPELINE = [
 
     # ── ENGINE 5: TradingView Indicators $19-39/month ─────────
     ("TradingView trader outreach", "tradingview_engine.py"),
+
+    # ── ENGINE 6: Video Pipeline (YouTube/TikTok) ─────────────
+    ("Fetching + processing video clips", "video_pipeline.py"),
 ]
 
 

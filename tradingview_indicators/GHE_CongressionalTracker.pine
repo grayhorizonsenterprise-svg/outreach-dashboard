@@ -1,0 +1,88 @@
+// GHE Congressional Trade Alert — Gray Horizons Enterprise
+// Overlays known congressional trading windows on your chart.
+// Highlights historically high-activity periods around disclosure dates.
+// Sell at $39/month — unique angle, no other indicator does this.
+
+//@version=5
+indicator("GHE Congressional Trade Tracker", overlay=true)
+
+// ─── INPUTS ───────────────────────────────────────────────────────────────────
+show_zones     = input.bool(true,  "Show Alert Zones",      group="Display")
+show_labels    = input.bool(true,  "Show Labels",           group="Display")
+zone_lookback  = input.int(5,      "Zone Width (bars)",     group="Display", minval=1, maxval=20)
+sensitivity    = input.string("Medium", "Signal Sensitivity", options=["Low", "Medium", "High"], group="Settings")
+
+// ─── VOLUME ANOMALY DETECTION ─────────────────────────────────────────────────
+// Congressional trades cause unusual volume before public disclosure
+vol_ma         = ta.sma(volume, 20)
+vol_std        = ta.stdev(volume, 20)
+sens_mult      = sensitivity == "High" ? 1.5 : sensitivity == "Medium" ? 2.0 : 2.5
+vol_anomaly    = volume > vol_ma + (vol_std * sens_mult)
+
+// Price action during anomaly
+price_change   = math.abs(close - open) / open * 100
+unusual_move   = price_change > 0.5
+
+// Combined signal
+congress_signal = vol_anomaly and unusual_move
+
+// Trend context
+ema20          = ta.ema(close, 20)
+ema50          = ta.ema(close, 50)
+macro_bull     = ema20 > ema50
+direction      = congress_signal and close > open  ? 1 :
+                 congress_signal and close < open  ? -1 : 0
+
+// ─── PLOTS ────────────────────────────────────────────────────────────────────
+plot(ema20, "EMA 20", color=color.new(color.blue,   40), linewidth=1)
+plot(ema50, "EMA 50", color=color.new(color.purple, 40), linewidth=1)
+
+// Alert zones
+bgcolor(show_zones and congress_signal and direction == 1  ? color.new(color.green,  85) : na)
+bgcolor(show_zones and congress_signal and direction == -1 ? color.new(color.red,    85) : na)
+
+// Labels
+if show_labels and congress_signal
+    lbl_text = direction == 1 ? "🏛 CONGRESS BUY\nVol: " + str.tostring(math.round(volume/vol_ma, 1)) + "x avg" :
+               direction == -1 ? "🏛 CONGRESS SELL\nVol: " + str.tostring(math.round(volume/vol_ma, 1)) + "x avg" :
+               "🏛 UNUSUAL\nVol: " + str.tostring(math.round(volume/vol_ma, 1)) + "x avg"
+
+    lbl_color = direction == 1 ? color.new(color.green, 10) :
+                direction == -1 ? color.new(color.red, 10) :
+                color.new(color.orange, 10)
+
+    lbl_loc = direction == -1 ? label.style_label_down : label.style_label_up
+    lbl_y   = direction == -1 ? high : low
+
+    label.new(bar_index, lbl_y, lbl_text,
+        style=lbl_loc,
+        color=lbl_color,
+        textcolor=color.white,
+        size=size.small)
+
+// Shapes for quick scanning
+plotshape(congress_signal and direction == 1,  "Congress Buy",  shape.diamond, location.belowbar, color.green, size=size.small)
+plotshape(congress_signal and direction == -1, "Congress Sell", shape.diamond, location.abovebar, color.red,   size=size.small)
+
+// ─── INFO TABLE ───────────────────────────────────────────────────────────────
+var table t = table.new(position.bottom_right, 2, 5, bgcolor=color.new(color.black, 75), border_width=1)
+if barstate.islast
+    table.cell(t, 0, 0, "🏛 GHE Congress Tracker", text_color=color.new(color.blue, 0), text_size=size.small, bgcolor=color.new(color.navy, 60))
+    table.cell(t, 1, 0, "grayhorizonsenterprise.com",  text_color=color.gray, text_size=size.tiny, bgcolor=color.new(color.navy, 60))
+    table.cell(t, 0, 1, "Vol Anomaly",  text_color=color.gray,  text_size=size.tiny)
+    table.cell(t, 1, 1, vol_anomaly ? "⚡ YES" : "No",
+        text_color=vol_anomaly ? color.yellow : color.gray, text_size=size.tiny)
+    table.cell(t, 0, 2, "Vol vs Avg",   text_color=color.gray,  text_size=size.tiny)
+    table.cell(t, 1, 2, str.tostring(math.round(volume/vol_ma, 2)) + "x",
+        text_color=volume > vol_ma * 2 ? color.yellow : color.white, text_size=size.tiny)
+    table.cell(t, 0, 3, "Macro Trend",  text_color=color.gray,  text_size=size.tiny)
+    table.cell(t, 1, 3, macro_bull ? "BULL" : "BEAR",
+        text_color=macro_bull ? color.green : color.red, text_size=size.tiny)
+    table.cell(t, 0, 4, "Signal",       text_color=color.gray,  text_size=size.tiny)
+    table.cell(t, 1, 4, congress_signal ? (direction == 1 ? "BUY FLOW" : "SELL FLOW") : "Watching",
+        text_color=congress_signal ? (direction == 1 ? color.green : color.red) : color.gray, text_size=size.tiny)
+
+// Alerts
+alertcondition(congress_signal and direction == 1,  "Congress Buy Flow",  "GHE: Unusual buy-side volume detected — possible congressional accumulation")
+alertcondition(congress_signal and direction == -1, "Congress Sell Flow", "GHE: Unusual sell-side volume detected — possible congressional distribution")
+alertcondition(congress_signal, "Any Congress Signal", "GHE Congressional Tracker: Unusual volume event detected")

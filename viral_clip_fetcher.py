@@ -4,11 +4,11 @@ import os
 # =========================
 # CONFIG
 # =========================
-PEXELS_API_KEY = "rXkLTBGB7aSmfUjKO9p6zG1M89q4rLTztbrxs5ganSZLf03pu0t1YhJ7"
+PEXELS_API_KEY = os.getenv("PEXELS_API_KEY", "rXkLTBGB7aSmfUjKO9p6zG1M89q4rLTztbrxs5ganSZLf03pu0t1YhJ7")
 
-BASE_PATH = "D:/viral_clips"
-TOP_PATH = os.path.join(BASE_PATH, "top_clips")
-RAW_PATH = os.path.join(BASE_PATH, "raw_clips")
+BASE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "viral_clips")
+TOP_PATH  = os.path.join(BASE_PATH, "top_clips")
+RAW_PATH  = os.path.join(BASE_PATH, "raw_clips")
 
 os.makedirs(TOP_PATH, exist_ok=True)
 os.makedirs(RAW_PATH, exist_ok=True)

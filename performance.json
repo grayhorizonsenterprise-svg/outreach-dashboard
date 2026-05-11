@@ -1,0 +1,93 @@
+{
+  "niches": {
+    "hoa": {
+      "sent": 2813,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "hvac": {
+      "sent": 3300,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "dental": {
+      "sent": 3178,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "plumbing": {
+      "sent": 2789,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "contractor": {
+      "sent": 2837,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "landscaping": {
+      "sent": 1409,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "roofing": {
+      "sent": 1382,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    }
+  },
+  "subjects": {
+    "How do you handle this?": {
+      "sent": 3363,
+      "replies": 0
+    },
+    "Something we built for HOA teams": {
+      "sent": 729,
+      "replies": 0
+    },
+    "Process question": {
+      "sent": 733,
+      "replies": 0
+    },
+    "Quick question": {
+      "sent": 4518,
+      "replies": 0
+    },
+    "Something we built": {
+      "sent": 1990,
+      "replies": 0
+    },
+    "Question for you": {
+      "sent": 3373,
+      "replies": 0
+    },
+    "Something we built for practices": {
+      "sent": 797,
+      "replies": 0
+    },
+    "How do you handle missed calls?": {
+      "sent": 678,
+      "replies": 0
+    },
+    "Something we built for contractors": {
+      "sent": 678,
+      "replies": 0
+    },
+    "How do you handle overflow leads?": {
+      "sent": 490,
+      "replies": 0
+    },
+    "Something we built for roofers": {
+      "sent": 359,
+      "replies": 0
+    }
+  },
+  "last_updated": "2026-05-11T15:20:50.261022"
+}

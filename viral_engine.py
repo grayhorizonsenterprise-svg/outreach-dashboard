@@ -1,13 +1,13 @@
 import os, random, subprocess, shutil
 
-BASE  = "D:/viral_clips"
-RAW   = f"{BASE}/raw_clips"
-READY = f"{BASE}/READY_TO_UPLOAD"
-QUEUE = f"{BASE}/QUEUE"
-POSTED = f"{BASE}/POSTED"
-AUDIO = f"{BASE}/audio"
+BASE  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "viral_clips")
+RAW   = os.path.join(BASE, "raw_clips")
+READY = os.path.join(BASE, "READY_TO_UPLOAD")
+QUEUE = os.path.join(BASE, "QUEUE")
+POSTED = os.path.join(BASE, "POSTED")
+AUDIO = os.path.join(BASE, "audio")
 
-FONT = "C\\:/Windows/Fonts/arial.ttf"
+FONT = "C:/Windows/Fonts/arial.ttf"
 
 os.makedirs(READY,  exist_ok=True)
 os.makedirs(QUEUE,  exist_ok=True)
