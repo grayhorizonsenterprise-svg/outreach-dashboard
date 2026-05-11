@@ -3,3 +3,9 @@ __pycache__/
 *.pyo
 .env
 *.csv
+*.mp4
+*.exe
+*.pdf
+viral_clips/
+ebooks/*.html
+ebooks/*.pdf
