@@ -73,6 +73,24 @@ PIPELINE = [
 
     # ── ENGINE 10: AI Chatbot $97/month ───────────────────────
     ("Scraping + pitching AI chatbot",    "ai_chatbot_outreach.py"),
+
+    # ── ENGINE 11: AI Voice Receptionist $197/month ────────────
+    ("Scraping + pitching voice AI",      "ai_voice_receptionist.py"),
+
+    # ── ENGINE 12: Lead Reactivation $497 one-time ─────────────
+    ("Scraping + pitching reactivation",  "lead_reactivation.py"),
+
+    # ── ENGINE 13: Social Media Mgmt $297/month ────────────────
+    ("Scraping + pitching social media",  "social_media_mgmt.py"),
+
+    # ── ENGINE 14: Website Audit $297 + $97/month ──────────────
+    ("Scraping + pitching website audit", "website_audit.py"),
+
+    # ── ENGINE 15: SMS Marketing $147/month ────────────────────
+    ("Scraping + pitching SMS marketing", "sms_marketing.py"),
+
+    # ── CONTINUOUS LEAD SCANNER (feeds all queues) ─────────────
+    ("Multi-source lead scan",            "lead_scanner.py"),
 ]
 
 
