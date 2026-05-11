@@ -55,7 +55,8 @@ $49/month. Cancel anytime. First week free.
 {signals_link}
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+horizons56.gumroad.com""",
 
     """\
 Hey,
@@ -69,7 +70,8 @@ $49/month, no contracts. Link to see a sample and subscribe:
 {signals_link}
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+horizons56.gumroad.com""",
 
     """\
 Hey,
@@ -84,7 +86,8 @@ $49/month. Most subscribers say it pays for itself in the first week.
 
 {signals_link}
 
-— Alex | Gray Horizons Enterprise""",
+— Alex | Gray Horizons Enterprise
+horizons56.gumroad.com""",
 ]
 
 FOLLOWUP_1 = """\
@@ -113,7 +116,8 @@ $49/month. Cancel anytime.
 
 {signals_link}
 
-Alex | Gray Horizons"""
+Alex | Gray Horizons
+horizons56.gumroad.com"""
 
 SAMPLE_TICKERS = ["NVDA", "TSLA", "SPY", "META", "AAPL", "AMD", "MSFT", "AMZN"]
 
