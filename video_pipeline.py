@@ -26,9 +26,6 @@ POSTED    = os.path.join(BASE, "POSTED")
 QUEUE     = os.path.join(BASE, "QUEUE")
 LOG_FILE  = os.path.join(BASE, "upload_log.txt")
 
-YOUTUBE_KEY         = os.getenv("YOUTUBE_API_KEY", "")
-YOUTUBE_CLIENT_ID   = os.getenv("YOUTUBE_CLIENT_ID", "")
-YOUTUBE_CLIENT_SECRET = os.getenv("YOUTUBE_CLIENT_SECRET", "")
 
 for d in [BASE, READY, POSTED, QUEUE]:
     os.makedirs(d, exist_ok=True)
@@ -127,25 +124,13 @@ def run():
     process_clips()
     files = report_ready()
 
-    if not files:
-        print("\n[DONE] No videos ready yet. Run again after ffmpeg processes clips.")
-        return
-
-    # Upload up to 4 videos per day
-    uploaded = 0
-    for video_path in files[:4]:
-        print(f"\n[UPLOAD] {os.path.basename(video_path)}")
-        if YOUTUBE_CLIENT_ID:
-            success = upload_to_youtube(video_path)
-            if success:
-                uploaded += 1
-                time.sleep(5)
-        else:
-            print("  [MANUAL] No YouTube credentials — video is ready in READY_TO_UPLOAD folder")
-
     print(f"\n{'='*50}")
-    print(f"  DONE — {len(files)} clips ready, {uploaded} uploaded")
-    print(f"  Folder: {READY}")
+    if files:
+        print(f"  READY — {len(files)} clips prepared for manual upload")
+        print(f"  Folder: {READY}")
+        print(f"  Review each clip before uploading to YouTube/TikTok")
+    else:
+        print("  No clips ready yet — ffmpeg may still be processing")
     print(f"{'='*50}")
 
 

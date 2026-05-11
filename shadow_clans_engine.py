@@ -366,49 +366,6 @@ def save_prompts(episode: dict, ep_num: int):
     print(f"  [PROMPTS] Saved to {out.name}")
 
 
-# ─── YouTube Upload ───────────────────────────────────────────────────────────
-
-def upload_to_youtube(video_path: Path, episode: dict) -> bool:
-    """Upload episode to YouTube with full metadata."""
-    try:
-        from youtube_upload import main as yt_upload
-    except ImportError:
-        return False
-
-    title = episode.get("youtube_title", f"Shadow Clans — {episode.get('title', 'Episode')}")
-    desc  = episode.get("youtube_description", "")
-    if not desc:
-        desc = (
-            f"{episode.get('logline', '')}\n\n"
-            "Watch Shadow Clans — new episodes every week.\n\n"
-            "Subscribe for lore drops, battles, and the truth about the Hollow Gate.\n\n"
-            f"{YOUTUBE_TAGS.replace(',', ' #')}\n"
-        )
-
-    cmd = [
-        sys.executable, "-m", "youtube_upload",
-        "--title", title[:100],
-        "--description", desc,
-        "--tags", YOUTUBE_TAGS,
-        "--category", "1",  # Film & Animation
-        "--privacy", "public",
-        str(video_path),
-    ]
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
-        if result.returncode == 0:
-            vid_id = result.stdout.strip().split()[-1]
-            print(f"  [YT] Uploaded: youtube.com/watch?v={vid_id}")
-            dest = UPLOAD_DIR / f"POSTED_{video_path.name}"
-            video_path.rename(dest)
-            return True
-        else:
-            print(f"  [YT] Upload failed: {result.stderr[:150]}")
-            return False
-    except Exception as e:
-        print(f"  [YT] Error: {e}")
-        return False
-
 
 # ─── Episode Log ──────────────────────────────────────────────────────────────
 
@@ -509,19 +466,26 @@ def run():
 
         if episode_path and episode_path.exists():
             print("\n[SHORTS] Extracting Shorts...")
-            extract_shorts(episode_path, episode)
+            shorts = extract_shorts(episode_path, episode)
 
-            # Copy to upload-ready folder
-            upload_copy = UPLOAD_DIR / episode_path.name
+            # Copy episode + shorts to upload-ready folder with clear names
             import shutil
+            ep_num_str  = f"EP{episode.get('episode_number', 1):03d}"
+            title_clean = episode.get("title", "").replace(" ", "_")[:35]
+
+            upload_copy = UPLOAD_DIR / f"SC_{ep_num_str}_{title_clean}_FULL.mp4"
             shutil.copy2(episode_path, upload_copy)
 
-            if YOUTUBE_ID:
-                print("\n[YOUTUBE] Uploading episode...")
-                upload_to_youtube(upload_copy, episode)
-            else:
-                print(f"\n[READY] Episode queued for upload: {upload_copy}")
-                print("         Set YOUTUBE_CLIENT_ID to enable auto-upload")
+            for i, short in enumerate(shorts, 1):
+                short_dest = UPLOAD_DIR / f"SC_{ep_num_str}_SHORT_{i:02d}.mp4"
+                shutil.copy2(short, short_dest)
+
+            print(f"\n[READY] Episode + {len(shorts)} Shorts ready for manual upload")
+            print(f"         Folder: {UPLOAD_DIR}")
+            print(f"         Full episode: SC_{ep_num_str}_{title_clean}_FULL.mp4")
+            print(f"         Shorts:       SC_{ep_num_str}_SHORT_01 through {len(shorts):02d}")
+            print(f"         YouTube title: {episode.get('youtube_title', '')}")
+            print(f"         Review clips before uploading — upload at your own pace")
 
     # Update log
     log["last_episode"] = ep_num
