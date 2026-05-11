@@ -91,6 +91,9 @@ PIPELINE = [
 
     # ── CONTINUOUS LEAD SCANNER (feeds all queues) ─────────────
     ("Multi-source lead scan",            "lead_scanner.py"),
+
+    # ── TWITTER AUTO-POSTER (3 posts/day) ───────────────────────
+    ("Twitter daily posts",               "twitter_poster.py"),
 ]
 
 
