@@ -1,0 +1,474 @@
+================================================================================
+GRAY HORIZONS ENTERPRISE — MASTER DROP-IN GUIDE
+All 10 Revenue Engines | Fully Autonomous | $50K/month Target
+Last updated: 2026-05-11
+================================================================================
+
+This document is your complete operating manual. Every engine runs itself.
+Your job: check Railway dashboard once per day, respond to warm replies.
+
+================================================================================
+SECTION 1: BEEHIIV — NEWSLETTER ENGINE
+================================================================================
+
+STATUS: LIVE — 1,836 subscribers imported
+
+IMMEDIATE ACTIONS (do these once, today):
+
+1. ENABLE BOOSTS ($1-3 per new subscriber passive income)
+   → beehiiv.com → Monetize → Boosts
+   → Toggle ON all compatible newsletters
+   → Set minimum payout: $1.50 CPC
+   → Every new subscriber = $1-3 to your wallet. Automatic.
+
+2. ENABLE AD NETWORK (display ads in newsletter body)
+   → beehiiv.com → Monetize → Ad Network
+   → Apply for access (requires 1,000+ subscribers — you qualify)
+   → Once approved: auto-inserts ads, you earn per open
+   → Expected: $3-8 per 1,000 opens at 30-40% open rate
+
+3. LAUNCH PAID TIER ($9/month premium newsletter)
+   → beehiiv.com → Monetize → Premium Subscriptions
+   → Set price: $9/month or $79/year
+   → Create one premium post per week (market signals, exclusive content)
+   → Even 50 paid subscribers = $450/month recurring
+
+4. FIRST NEWSLETTER — SEND THIS WEEK:
+   Subject: "The AI System Replacing Your Front Office"
+   Body: 200-300 word intro to GHE + what your newsletter covers
+   Include: link to Gumroad store (horizons56.gumroad.com)
+   Include: link to Signals subscription (buy.stripe.com link)
+   CTA: "If you want us to audit your business for free, hit reply"
+
+5. POSTING SCHEDULE (autonomous):
+   → Every Tuesday: Business automation tip + Gumroad product link
+   → Every Thursday: Market signal preview + Signals subscription CTA
+   → Set up in beehiiv.com → Automations → RSS or scheduled posts
+
+GROWTH STRATEGY:
+   → Add beehiiv signup form to ghe final/index.html (add one line in footer)
+   → Every outreach email includes: "Get our free weekly automation tips: [beehiiv link]"
+   → Every Gumroad purchase gets auto-subscribed (beehiiv integrates with Gumroad)
+
+REVENUE PROJECTION (6 months):
+   Boosts: 200 new subs/month × $2 avg = $400/month
+   Ad Network: 1,836 subs × 35% open = 642 opens × $5 RPM = $3.21/send × 8/month = $25/month
+   Paid tier (50 subscribers): $450/month
+   Total newsletter alone: ~$875/month passive
+
+================================================================================
+SECTION 2: ENGINE 1 — AI SYSTEM ($997 one-time or $297/month retainer)
+================================================================================
+
+WHAT IT IS: You build businesses a custom AI automation system.
+HOW IT RUNS: outreach_generator.py sends daily emails to local businesses.
+YOUR ROLE: Reply to warm leads, book a call, close the deal.
+
+PIPELINE FILES:
+  yellowpages_scraper.py     → scrapes business emails
+  superpages_scraper.py      → second source
+  manta_scraper.py           → third source
+  hotfrog_scraper.py         → fourth source
+  chamberofcommerce_scraper.py → fifth source
+  bark_scraper.py            → sixth source
+  yelp_scraper.py            → seventh source
+  hunter_scraper.py          → email enrichment via Hunter.io
+  prospect_finder.py         → DuckDuckGo lead search
+  prospect_enricher.py       → adds phone numbers
+  prospect_qualifier.py      → scores leads by niche/size
+  outreach_generator.py      → writes and queues personalized emails
+  followup_sender.py         → sends follow-up sequence automatically
+  sync_to_railway.py         → pushes queue to Railway dashboard
+
+NICHES TARGETED: HOA, dentist, contractor, HVAC, roofing, landscaping,
+                 plumber, electrical, med spa, auto shop, salon, gym
+
+HOW TO CLOSE:
+  1. You get a warm reply → email back within 2 hours
+  2. Book a 20-min Zoom call (Calendly link)
+  3. On the call: ask 3 questions about their biggest pain point
+  4. Pitch: "We build you a custom AI system that handles [their exact pain]
+     in 30 days. $997 one-time or $297/month with maintenance."
+  5. Send Stripe payment link same day
+
+WHAT YOU DELIVER:
+  → Connect their calendar to auto-booking (Calendly + their email)
+  → Set up a simple chatbot for their website (use Tidio, free tier)
+  → Automate their follow-up emails (use Make.com or Zapier)
+  → Total build time: 4-6 hours per client
+  → Most clients: you outsource this for $200-300 on Fiverr and pocket $700
+
+RAILWAY DASHBOARD: https://ghe-dashboard-production.up.railway.app
+  → Check daily: review pending leads, mark sent
+  → PostgreSQL stores all leads permanently — no more wipeouts
+
+================================================================================
+SECTION 3: ENGINE 2 — EDGE ENGINE SIGNALS ($49/month recurring)
+================================================================================
+
+WHAT IT IS: Daily AI signals for stocks, crypto, sports. Email newsletter.
+HOW IT RUNS: signals_scraper.py + signals_engine.py run every morning.
+YOUR ROLE: Zero. This is fully autonomous.
+
+PIPELINE FILES:
+  signals_scraper.py   → finds traders/bettors via DuckDuckGo
+  signals_engine.py    → sends targeted pitch to 200 traders/day
+
+STRIPE LINK: Already embedded in all emails.
+  → Every subscriber: $49/month recurring
+  → 100 subscribers = $4,900/month
+  → 500 subscribers = $24,500/month
+
+WHAT SIGNALS ACTUALLY GO OUT:
+  → signals_blast.py: sends the actual daily signal email
+  → Edge Engine dashboard is live at Railway (separate deployment)
+  → content: top stock setups, crypto alerts, sports edge picks, Congress trades
+
+AFFILIATE REVENUE (add these when approved):
+  → DRAFTKINGS_AFFILIATE_URL env var → add to Railway
+  → FANDUEL_AFFILIATE_URL env var → add to Railway
+  → Expected: $5-15 per signup from email list
+
+TO DO (one-time):
+  → Apply to DraftKings/FanDuel affiliate programs
+  → Add approved links to Railway env vars
+  → Sit back
+
+================================================================================
+SECTION 4: ENGINE 3 — GRANT WRITING ($1,500/client)
+================================================================================
+
+WHAT IT IS: Full-service grant writing for nonprofits and small businesses.
+HOW IT RUNS: nonprofit_scraper.py → grant_outreach_generator.py → grant_blast.py
+GRANT AGENT: Live on Railway — auto-discovers grants and pre-drafts applications.
+
+PIPELINE FILES:
+  nonprofit_scraper.py        → scrapes nonprofits and eligible businesses
+  grant_outreach_generator.py → writes targeted outreach emails
+  grant_blast.py              → sends outreach to 100+ nonprofits/day
+  grant_agent/main.py         → the grant discovery and writing agent itself
+
+HOW TO CLOSE:
+  1. Warm reply from a nonprofit or small biz
+  2. Identify which grants they qualify for (grant agent does this)
+  3. Pitch: "We apply for grants on your behalf. We draft the entire application.
+     $1,500 flat, or 10% of any grant we win you."
+  4. Sign a simple 1-page agreement, collect 50% upfront
+  5. Grant agent generates the draft — you review and submit
+
+NICHES: nonprofits, arts organizations, community development,
+        small businesses under 50 employees, veterans-owned businesses
+
+HIGH-VALUE GRANTS TO PITCH:
+  → USDA Rural Development grants
+  → SBA Small Business Innovation grants
+  → State-level economic development grants (varies by state)
+  → Foundation grants (Walmart Foundation, Knight Foundation, etc.)
+
+================================================================================
+SECTION 5: ENGINE 4 — GHL CRM ($297/month recurring)
+================================================================================
+
+WHAT IT IS: White-label GoHighLevel CRM for local service businesses.
+HOW IT RUNS: ghl_outreach.py sends daily emails to agencies + local businesses.
+
+PIPELINE FILES:
+  ghl_outreach.py → scrapes and pitches agencies, consultants, local business owners
+
+TO ACTIVATE:
+  1. Sign up for GoHighLevel Agency account: gohighlevel.com ($97/month)
+  2. White-label it under "Gray Horizons Enterprise CRM"
+  3. Charge clients $297/month — your cost $97, profit $200/client
+  4. At 10 clients: $2,000/month profit on top of GHL fees
+
+PITCH SCRIPT:
+  "We manage your entire CRM — pipeline, follow-ups, appointment reminders,
+   missed call text-back, review requests — all in one dashboard you can
+   monitor from your phone. $297/month. Most clients see ROI in week 1."
+
+NOTE: This overlaps with missed call text-back. Bundle them:
+  → GHL $297/month includes missed call text-back + review gen + chatbot
+  → Total package value = $538/month in separate services → you charge $297
+  → High perceived value, easy close
+
+================================================================================
+SECTION 6: ENGINE 5 — TRADINGVIEW INDICATORS ($19-39/month per subscriber)
+================================================================================
+
+WHAT IT IS: Pine Script indicators published on TradingView.
+HOW IT RUNS: tradingview_engine.py sends outreach to traders.
+
+STATUS: Blocked — need Essential plan ($15/month) to publish scripts.
+
+IMMEDIATE ACTION:
+  → Upgrade at tradingview.com → Account → Plan → Essential ($15/month)
+  → Publish 3 indicators as "invite-only":
+    1. GHE_EdgeScanner (trend + momentum)
+    2. GHE_KellyCriterion (position sizing)
+    3. GHE_CongressionalTracker (congressional trade alerts)
+  → Price: $19/month per indicator or $39/month for all three
+
+WHERE SCRIPTS ARE: tradingview_indicators/
+
+REVENUE AT SCALE:
+  100 subscribers × $29 avg = $2,900/month recurring
+
+================================================================================
+SECTION 7: ENGINE 6 — VIDEO PIPELINE (YouTube/TikTok)
+================================================================================
+
+WHAT IT IS: Two parallel content streams:
+  A. Viral animal/reaction clips (Pexels-sourced, processed with captions)
+  B. Shadow Clans cinematic episodes (original IP)
+
+HOW IT RUNS: video_pipeline.py + shadow_clans_engine.py (both in sync_to_railway.py)
+
+STREAM A — VIRAL CLIPS:
+  viral_clip_fetcher.py → downloads clips from Pexels
+  viral_engine.py       → processes with captions, 1080x1920
+  video_pipeline.py     → orchestrates + queues YouTube upload
+  Output: viral_clips/READY_TO_UPLOAD/
+
+STREAM B — SHADOW CLANS:
+  shadow_clans_engine.py → Claude generates script + scene prompts
+  If STABILITY_API_KEY set → auto-generates frames via Stability AI ($0.004/frame)
+  If not set → saves prompts to shadow_clans_output/image_prompts/ for Midjourney
+  Output: shadow_clans_output/ready_to_upload/
+
+TO FULLY ACTIVATE SHADOW CLANS (full auto mode):
+  Option A: Get Stability AI key ($10 buys ~2,500 frames, ~300 episodes)
+    → platform.stability.ai → API → Create key
+    → Add to Railway: STABILITY_API_KEY
+  Option B: Manual Midjourney (free with subscription)
+    → Engine generates prompts daily to shadow_clans_output/image_prompts/
+    → Generate frames in Midjourney
+    → Drop PNGs into shadow_clans_output/frames/EP001/scene_01.png, etc.
+    → Re-run shadow_clans_engine.py to assemble video
+
+YOUTUBE SETUP (one-time):
+  → Google Cloud Console → Create project → Enable YouTube Data API v3
+  → Create OAuth credentials → Download client_secrets.json → put in project folder
+  → pip install youtube-upload
+  → Set YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET in Railway env vars
+  → First run requires browser auth (one time)
+
+SHADOW CLANS CONTENT STRATEGY:
+  → Post 1 full episode/week (90-120 seconds)
+  → Post 5-10 Shorts per episode extracted automatically
+  → Shorts have hook text overlay pre-added
+  → Monetization: YouTube Partner Program (1,000 subs + 4,000 watch hours)
+  → Projected timeline to monetization: 3-6 months of consistent posting
+
+================================================================================
+SECTION 8: ENGINE 7 — MISSED CALL TEXT-BACK ($97/month)
+================================================================================
+
+WHAT IT IS: Automated SMS response to missed calls for local service businesses.
+HOW IT RUNS: missed_call_textback.py scrapes and pitches daily.
+FILE: missed_call_textback.py
+
+TARGET: Contractors, home services, field service businesses
+PITCH: "Text backs every missed call in 60 seconds. $97/month. 2-week trial."
+
+HOW TO DELIVER THE SERVICE:
+  Option A: Use GHL (if you already signed up) — it has built-in missed call text-back
+  Option B: Use Twilio + a simple webhook ($10/month Twilio + $5/month hosting)
+    → Forward client's number to Twilio
+    → Twilio webhook fires on missed call → sends SMS
+    → Takes 2 hours to set up per client
+  Option C: Sell them on the GHL bundle (see Engine 4) — includes this feature
+
+REVENUE:
+  10 clients × $97 = $970/month
+  30 clients × $97 = $2,910/month
+
+================================================================================
+SECTION 9: ENGINE 8 — REVIEW GENERATION ($147/month)
+================================================================================
+
+WHAT IT IS: Automated Google review collection for local businesses.
+HOW IT RUNS: review_generation.py scrapes and pitches daily.
+FILE: review_generation.py
+
+TARGET: Any local business that cares about Google ranking
+PITCH: "We send your customers a review request text after every job. 10+ new
+        reviews per month on autopilot. $147/month."
+
+HOW TO DELIVER:
+  Option A: GHL has a built-in reputation management + review request tool
+  Option B: Use Podium or NiceJob (resell at markup)
+  Option C: Simple Twilio flow → post-job text → direct link to Google review page
+    → Client gives you their customer contact list weekly
+    → You load into system, texts go out automatically
+    → Takes 1 hour to set up per client
+
+REVENUE:
+  10 clients × $147 = $1,470/month
+  20 clients × $147 = $2,940/month
+
+================================================================================
+SECTION 10: ENGINE 9 — GBP OPTIMIZATION ($197/month)
+================================================================================
+
+WHAT IT IS: Google Business Profile management for local businesses.
+HOW IT RUNS: gbp_optimizer.py scrapes and pitches daily.
+FILE: gbp_optimizer.py
+
+TARGET: Local businesses with incomplete or stale Google profiles
+PITCH: "We manage your Google Business Profile — posts, reviews, photos, Q&A.
+        Most clients see 20-40% more profile views in 60 days. $197/month."
+
+HOW TO DELIVER (4 hours/month per client):
+  → Week 1: Full profile audit and rebuild (correct categories, description, hours)
+  → Weekly: 2 Google Posts (150-300 words, keyword-rich)
+  → Weekly: Respond to any new reviews (within 24 hours)
+  → Monthly: Upload 4-6 new photos (geo-tagged from client's location)
+  → Monthly: Update Q&A section with new questions
+
+TOOLS: All free
+  → Google Business Profile Manager (free)
+  → Canva for post graphics (free)
+  → Google My Business app for posting from phone
+
+HIRE A VA: Once you have 5+ clients, hire a VA on Upwork for $5-8/hour
+  → 4 hours/client/month × 5 clients = 20 hours/month = $100-160 VA cost
+  → You collect $985/month profit
+
+REVENUE:
+  5 clients × $197 = $985/month
+  15 clients × $197 = $2,955/month
+
+================================================================================
+SECTION 11: ENGINE 10 — AI CHATBOT ($97/month)
+================================================================================
+
+WHAT IT IS: Trained AI chatbot installed on client websites for 24/7 lead capture.
+HOW IT RUNS: ai_chatbot_outreach.py scrapes and pitches daily.
+FILE: ai_chatbot_outreach.py
+
+TARGET: Any business with a website and inbound leads
+PITCH: "AI chatbot trained on your business — answers questions, captures leads,
+        texts you contact info. 24/7. $97/month."
+
+HOW TO DELIVER:
+  Option A: Tidio (tidio.com) — $0-25/month, resell at $97
+    → Free plan handles basic chat
+    → AI responses from their library
+    → Embed code on client website (15 minutes)
+  Option B: Voiceflow.com — build custom AI agent ($0 for 2 agents free)
+    → More customizable, can handle complex questions
+    → Embed widget on website
+  Option C: GoHighLevel (if already using for CRM) — includes chatbot feature
+
+SETUP PER CLIENT:
+  → 1 hour: learn their top 10 FAQs, pricing, service area, CTA
+  → 1 hour: configure chatbot responses and lead capture flow
+  → 30 min: install on their website (copy/paste embed code)
+  → Total: 2.5 hours. At $97/month → pays for itself in 3 days.
+
+REVENUE:
+  10 clients × $97 = $970/month
+  25 clients × $97 = $2,425/month
+
+================================================================================
+TOTAL REVENUE PROJECTION — 90 DAYS
+================================================================================
+
+Engine 1:  AI System outreach    → 3 clients × $997 =       $2,991
+Engine 2:  Signals subscriptions → 50 subscribers × $49 =   $2,450/mo
+Engine 3:  Grant writing         → 2 clients × $1,500 =     $3,000
+Engine 4:  GHL CRM               → 5 clients × $297 =       $1,485/mo
+Engine 5:  TradingView           → 30 subscribers × $29 =   $870/mo
+Engine 6:  YouTube (viral)       → ad revenue starts M4-6 = $0-500/mo
+Engine 6:  Shadow Clans          → ad revenue starts M4-6 = $0-500/mo
+Engine 7:  Missed call           → 10 clients × $97 =       $970/mo
+Engine 8:  Review gen            → 10 clients × $147 =      $1,470/mo
+Engine 9:  GBP optimization      → 5 clients × $197 =       $985/mo
+Engine 10: AI chatbot            → 10 clients × $97 =       $970/mo
+Beehiiv:   Newsletter            → Boosts + Ads + Paid tier $875/mo
+
+MONTH 3 RECURRING: ~$11,075/month
+MONTH 6 RECURRING: ~$22,000-35,000/month (as client base grows)
+MONTH 12 TARGET:   $50,000+/month
+
+================================================================================
+OPERATING SCHEDULE (WHAT RUNS WHEN)
+================================================================================
+
+WINDOWS TASK SCHEDULER — GHE Daily Sync:
+  Time: 6:00 AM every day
+  Command: python sync_to_railway.py
+  Location: C:\Users\curti\Downloads\First Agentic Workflows\
+
+What runs automatically every morning:
+  6:00 AM  → All 10 engines scrape + send outreach simultaneously
+  6:30 AM  → Video clips fetched and processed
+  7:00 AM  → Shadow Clans script generated (if ANTHROPIC_API_KEY set)
+  7:15 AM  → Queue pushed to Railway dashboard
+  All day  → Railway sends emails at rate-limited intervals
+
+YOUR DAILY JOB (30 min max):
+  8:00 AM  → Check Railway dashboard for warm replies
+  8:15 AM  → Reply to any interested prospects within 2 hours
+  8:30 AM  → Review any videos ready to upload in READY_TO_UPLOAD folders
+  Done.
+
+================================================================================
+ENV VARS TO ADD TO RAILWAY (one-time setup)
+================================================================================
+
+REQUIRED (already set):
+  SENDGRID_API_KEY       → email delivery
+  SENDER_EMAIL           → grayhorizonsenterprise@gmail.com
+  ANTHROPIC_API_KEY      → Claude script generation (Shadow Clans)
+  RAILWAY_URL            → your Railway dashboard URL
+
+ADD WHEN READY:
+  STABILITY_API_KEY      → Stability AI image generation (Shadow Clans auto frames)
+  YOUTUBE_CLIENT_ID      → YouTube auto-upload
+  YOUTUBE_CLIENT_SECRET  → YouTube auto-upload
+  CALENDLY_URL           → your booking link (add this immediately)
+  STRIPE_PAYMENT_LINK    → your main Stripe payment link
+  DRAFTKINGS_AFFILIATE_URL → after DraftKings approves you
+  FANDUEL_AFFILIATE_URL    → after FanDuel approves you
+  GHL_API_KEY              → after GoHighLevel signup
+
+================================================================================
+GUMROAD — EXISTING PRODUCTS LIVE AT horizons56.gumroad.com
+================================================================================
+
+Products live now:
+  1. AI for Small Business: Automate Everything
+  2. HOA Management Made Simple
+  3. Stock Trading for the Working Professional
+  4. The Contractor's Playbook: Get More Jobs
+  5. The Sports Bettor's Edge
+
+PRICE RECOMMENDATION:
+  → Set each at $19-27 (sweet spot for impulse buys)
+  → Bundle all 5 for $49 (increase average order value)
+  → Add to every Beehiiv newsletter as recommended reading
+
+KDP (when SoFi bank account is ready):
+  → Publish all 5 books on KDP at $9.99 each
+  → Enroll in KDP Select (exclusive) for 90 days → access Kindle Unlimited royalties
+  → Expected: $0.50-2.00 per read via Kindle Unlimited
+  → At 500 reads/month: $250-1,000/month passive
+
+================================================================================
+QUICK-START CHECKLIST — DO THESE TODAY
+================================================================================
+
+[ ] Set CALENDLY_URL in Railway env vars (book meetings automatically)
+[ ] Enable Beehiiv Boosts (horizons56 → Monetize → Boosts)
+[ ] Apply for Beehiiv Ad Network (requires 1,000+ subscribers, you qualify)
+[ ] Sign up GoHighLevel ($97/month) — unlocks Engines 4, 7, 8, 10 delivery
+[ ] Verify sync_to_railway.py is still scheduled in Windows Task Scheduler
+[ ] Open SoFi account → publish KDP books
+[ ] Upgrade TradingView Essential → publish 3 indicators
+[ ] Apply to DraftKings + FanDuel affiliate programs
+[ ] Add STABILITY_API_KEY or run Shadow Clans in manual Midjourney mode
+
+================================================================================
+END — ALL SYSTEMS GO
+================================================================================

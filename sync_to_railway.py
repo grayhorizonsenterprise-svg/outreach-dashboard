@@ -60,6 +60,19 @@ PIPELINE = [
 
     # ── ENGINE 6: Video Pipeline (YouTube/TikTok) ─────────────
     ("Fetching + processing video clips", "video_pipeline.py"),
+    ("Shadow Clans episode generation",   "shadow_clans_engine.py"),
+
+    # ── ENGINE 7: Missed Call Text-Back $97/month ─────────────
+    ("Scraping + pitching missed call",   "missed_call_textback.py"),
+
+    # ── ENGINE 8: Review Generation $147/month ────────────────
+    ("Scraping + pitching review gen",    "review_generation.py"),
+
+    # ── ENGINE 9: GBP Optimization $197/month ─────────────────
+    ("Scraping + pitching GBP mgmt",      "gbp_optimizer.py"),
+
+    # ── ENGINE 10: AI Chatbot $97/month ───────────────────────
+    ("Scraping + pitching AI chatbot",    "ai_chatbot_outreach.py"),
 ]
 
 
