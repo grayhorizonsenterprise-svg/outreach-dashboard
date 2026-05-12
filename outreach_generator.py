@@ -27,7 +27,9 @@ We fixed that with a simple system that handles tracking and follow-ups automati
 If this is even slightly an issue on your side, I can show you exactly how we set it up this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey, this is Alex
@@ -39,7 +41,9 @@ We built a system that locks that entire process down so nothing slips through
 If you want, I can walk you through it and get something similar set up for you quickly
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey, this is Alex with Gray Horizons
@@ -51,7 +55,9 @@ We built a system that tracks the full lifecycle automatically so nothing slips
 I can show you exactly how it works and get it running for your team this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey, this is Alex
@@ -63,7 +69,9 @@ We fixed that for a handful of firms and now it runs on its own
 I can walk you through the setup this week and show you what it looks like in practice
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey, this is Alex with Gray Horizons
@@ -75,7 +83,9 @@ We built a system that locks that gap down - every step tracked, documented, and
 I can get you set up in about a week. Let me know and I'll show you exactly how it works
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey, this is Alex
@@ -87,7 +97,9 @@ Most teams we work with had it happening constantly and didn't realize how much 
 I can show you exactly how we fixed it this week if you want to see it
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -97,7 +109,9 @@ Quick question - when a violation gets reported, what does your process look lik
 That gap is where most HOA teams run into problems.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -107,7 +121,9 @@ When a board member asks for a status update on an open violation, how long does
 We've been working on cutting that time down. Happy to show you what we built if it's relevant.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
     ],
 
     "hvac": [
@@ -123,7 +139,9 @@ Three shops we've set this up for recovered 6-10 jobs in the first month they'd 
 Worth a 20-minute call to see if it fits? {calendly}
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -137,7 +155,9 @@ We built a follow-up system that responds to those inquiries automatically and k
 {calendly}
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -149,7 +169,9 @@ We built an automated system that follows up on every open estimate and every mi
 If that sounds like something worth looking at, grab a time here: {calendly}
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -161,7 +183,9 @@ We fix that. I can show you exactly what it looks like for a shop your size in 2
 {calendly}
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
     ],
 
     "dental": [
@@ -177,7 +201,9 @@ We built a follow-up system that responds to every new patient inquiry immediate
 {calendly}
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -191,7 +217,9 @@ We fix that with an automated follow-up system. Three practices we've set this u
 Worth 20 minutes to see the setup? {calendly}
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -203,7 +231,9 @@ We built a reactivation system that reaches back out to those patients automatic
 I can show you what this looks like for your practice in 20 minutes: {calendly}
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -213,7 +243,9 @@ Patient no-shows cost the average dental practice $50,000-$150,000 per year in l
 Happy to walk you through exactly how it works: {calendly}
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
     ],
 
     "plumbing": [
@@ -227,7 +259,9 @@ We built a system that captures every missed call and gets it back into your pip
 I can show you exactly how it works this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -239,7 +273,9 @@ We built a dispatch system that routes emergency calls to the right tech instant
 I can walk you through it this week and show you what it looks like running
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -251,7 +287,9 @@ We fixed that with a system that keeps every job visible from dispatch to close-
 I can get you set up in about a week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -263,7 +301,9 @@ We built a system that captures and responds to those inquiries automatically so
 I can show you exactly how we set it up this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -275,7 +315,9 @@ We built that entire process into a system that runs automatically after every j
 I can show you what it looks like and get it running for your team this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -287,7 +329,9 @@ We built a system that handles post-job follow-up and review collection automati
 I can show you how it works this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -297,7 +341,9 @@ Direct question - when an emergency call comes in at night and your main line is
 That's usually the biggest gap I hear about from plumbing companies.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -307,7 +353,9 @@ When you finish a job, what does the follow-up process look like? Is there anyth
 We've built that whole post-job flow into a system. Happy to show you how it works.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
     ],
 
     "contractor": [
@@ -321,7 +369,9 @@ We built a system that tracks every open bid and follows up automatically until 
 I can show you exactly how it works and get it running for your team this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -333,7 +383,9 @@ We built a system that handles automatic follow-up so you stop losing jobs to fa
 I can walk you through it this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -345,7 +397,9 @@ We built a system that captures and responds to those leads automatically so you
 I can show you how we set it up this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -357,7 +411,9 @@ We built a system that cuts that response time down and automates the follow-up 
 I can get you set up in about a week. Let me know and I will show you exactly how it works
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -369,7 +425,9 @@ We fixed that for several firms with a system that tracks every estimate and fol
 I can show you what that looks like this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -383,7 +441,9 @@ We built a system that responds immediately and keeps them engaged until your te
 I can show you how it works this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -393,7 +453,9 @@ When you send out an estimate and don't hear back, what does your follow-up proc
 That's usually where jobs go cold.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -403,7 +465,9 @@ After-hours leads from homeowners - when they come in through your website or Go
 Just asking because that's usually where the fastest-responding contractor wins the job.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
     ],
 
     "landscaping": [
@@ -417,7 +481,9 @@ We built a system that captures new inquiries and responds automatically so you 
 I can show you exactly how it works this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi,
@@ -429,7 +495,9 @@ We built a system that keeps every recurring client on schedule with automatic r
 I can walk you through it this week and show you what it looks like running
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -441,7 +509,9 @@ We built a system that holds every overflow lead and follows up automatically wh
 I can show you how we set it up this week
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -451,7 +521,9 @@ Not trying to waste your time - just wanted to ask: when you have a full schedul
 That overflow moment is usually where companies either grow or miss out.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
     ],
 
     "roofing": [
@@ -463,7 +535,9 @@ Quick one: after a storm comes through your area, how does your team handle the 
 We've been helping roofing companies manage exactly that.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hi there,
@@ -473,7 +547,9 @@ How are you following up on estimates that went out but never got a response? In
 Just curious what your current process looks like.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
         """\
 Hey,
@@ -483,7 +559,9 @@ Direct question: when a homeowner calls about a leak or damage and you can't get
 That's usually the biggest gap I hear about. Happy to share what we've built if it's useful.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
     ],
 }
 
@@ -496,7 +574,9 @@ When someone calls about a repair and you're backed up, what happens to that cal
 That's usually where shops lose the most appointments without realizing it.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
     """\
 Hi,
@@ -506,7 +586,9 @@ After a repair is done, does your shop have anything that automatically follows 
 Most shops we've worked with said that whole process was completely manual.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
     """\
 Hey,
@@ -516,7 +598,9 @@ Direct question — when a customer calls for a quote and you don't hear back, h
 Happy to show you what we've built for this if it's relevant.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
     """\
 Hi,
@@ -526,7 +610,9 @@ Missed calls during your busiest hours are probably your biggest revenue leak. T
 We built a system that catches those and routes them automatically. I can show you how it works.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 ]
 
 NICHE_MESSAGES["chiropractic"] = [
@@ -538,7 +624,9 @@ New patient calls that come in after hours or while the front desk is with someo
 That gap is where most practices lose new patients without realizing it.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
     """\
 Hi,
@@ -548,7 +636,9 @@ When a new patient inquiry comes in through your website or a referral calls aft
 The practices we've worked with said that window was their biggest drop-off point for new patients.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
     """\
 Hey,
@@ -558,7 +648,9 @@ Patient reactivation — reaching back out to patients who haven't been in for 3
 We automated that entire process for a few practices. Happy to show you what it looks like.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 ]
 
 NICHE_MESSAGES["realestate"] = [
@@ -570,7 +662,9 @@ When a new buyer or seller inquiry comes in through your website at night or on 
 In real estate that response window is usually where the lead goes to whoever calls back first.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
     """\
 Hi,
@@ -580,7 +674,9 @@ Leads that go cold between first inquiry and first showing — how does your tea
 That follow-up gap is where most agencies lose deals they should have closed.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
     """\
 Hey,
@@ -590,7 +686,9 @@ After a showing, what does your follow-up process look like? Is there anything a
 We built that entire post-showing flow into a system for a few agencies. Happy to walk you through it.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 ]
 
 NICHE_MESSAGES["salon"] = [
@@ -602,7 +700,9 @@ When a client tries to book online and your calendar is full, what happens to th
 That overflow moment is usually where salons lose their best new clients.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
     """\
 Hi,
@@ -612,7 +712,9 @@ Clients who haven't been in for 60-90 days — is there anything that automatica
 We built a reactivation system for a few salons that runs completely on its own.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 
     """\
 Hey,
@@ -622,7 +724,9 @@ After-hours booking requests — when someone fills out your contact form at 10p
 By morning they've usually booked somewhere else.
 
 Alex
-Gray Horizons Enterprise""",
+Gray Horizons Enterprise
+
+To opt out of future emails, reply with REMOVE.""",
 ]
 
 NICHE_SUBJECTS = {

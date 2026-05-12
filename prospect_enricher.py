@@ -57,6 +57,13 @@ JUNK_PATTERNS = [
     "domain.com", "yourname", "company.com",
     "placeholder", "sample@", "demo@", "fake@", "null@",
     "@test.", "@example.", "@mailinator.",
+    # Complaint / non-decision-maker prefixes
+    "abuse@", "spam@", "report@", "complaints@", "privacy@",
+    "legal@", "billing@", "webmaster@", "postmaster@", "mailer@",
+    "sales@", "marketing@", "hr@", "careers@", "jobs@",
+    "news@", "newsletter@", "press@", "media@", "pr@",
+    "helpdesk@", "support@", "ticket@", "help@",
+    "hrprocessing@", "pressinquiries@",
 ]
 
 # Contact paths to brute-force as last resort

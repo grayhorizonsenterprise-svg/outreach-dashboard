@@ -16,6 +16,9 @@ from datetime import datetime
 from pathlib import Path
 
 import anthropic
+from dotenv import load_dotenv
+
+load_dotenv()
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 

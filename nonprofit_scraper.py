@@ -22,6 +22,24 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
 }
 
+
+BAD_PREFIXES = {
+    'abuse','spam','report','complaints','privacy','legal','billing',
+    'webmaster','postmaster','mailer','sales','marketing','hr',
+    'careers','jobs','news','newsletter','press','media','helpdesk',
+    'support','ticket','hrprocessing','pressinquiries','donotreply',
+    'noreply','no-reply',
+}
+
+def is_clean_email(email: str) -> bool:
+    e = email.lower().strip()
+    if e.endswith(('.png','.jpg','.gif','.webp','.svg')):
+        return False
+    prefix = e.split('@')[0] if '@' in e else e
+    if any(prefix == b or prefix.startswith(b) for b in BAD_PREFIXES):
+        return False
+    return True
+
 EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
 
 # Nonprofit directories to scrape

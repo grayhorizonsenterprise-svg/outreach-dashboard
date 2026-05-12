@@ -1,43 +1,43 @@
 {
   "niches": {
     "hoa": {
-      "sent": 2813,
-      "replies": 0,
-      "payments": 0,
-      "revenue": 0.0
-    },
-    "hvac": {
       "sent": 3300,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
+    "hvac": {
+      "sent": 3954,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
     "dental": {
-      "sent": 3178,
+      "sent": 3779,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
     "plumbing": {
-      "sent": 2789,
+      "sent": 3250,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
     "contractor": {
-      "sent": 2837,
+      "sent": 3307,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
     "landscaping": {
-      "sent": 1409,
+      "sent": 1650,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
     "roofing": {
-      "sent": 1382,
+      "sent": 1610,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
@@ -45,49 +45,49 @@
   },
   "subjects": {
     "How do you handle this?": {
-      "sent": 3363,
+      "sent": 3967,
       "replies": 0
     },
     "Something we built for HOA teams": {
-      "sent": 729,
+      "sent": 844,
       "replies": 0
     },
     "Process question": {
-      "sent": 733,
+      "sent": 864,
       "replies": 0
     },
     "Quick question": {
-      "sent": 4518,
+      "sent": 5299,
       "replies": 0
     },
     "Something we built": {
-      "sent": 1990,
+      "sent": 2336,
       "replies": 0
     },
     "Question for you": {
-      "sent": 3373,
+      "sent": 4006,
       "replies": 0
     },
     "Something we built for practices": {
-      "sent": 797,
+      "sent": 940,
       "replies": 0
     },
     "How do you handle missed calls?": {
-      "sent": 678,
+      "sent": 800,
       "replies": 0
     },
     "Something we built for contractors": {
-      "sent": 678,
+      "sent": 797,
       "replies": 0
     },
     "How do you handle overflow leads?": {
-      "sent": 490,
+      "sent": 574,
       "replies": 0
     },
     "Something we built for roofers": {
-      "sent": 359,
+      "sent": 423,
       "replies": 0
     }
   },
-  "last_updated": "2026-05-11T15:20:50.261022"
+  "last_updated": "2026-05-12T14:18:45.544451"
 }
