@@ -246,6 +246,15 @@ SEARCH_QUERIES = [
 ]
 
 
+import requests
+from bs4 import BeautifulSoup
+
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",
+]
+
 def is_clean_email(email: str) -> bool:
     e = email.lower().strip()
     if not re.match(r"^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$", e):
@@ -258,7 +267,33 @@ def is_clean_email(email: str) -> bool:
     return True
 
 
+def fetch_emails_from_url(url: str) -> list:
+    """Fetch a page and extract all valid emails from HTML."""
+    try:
+        headers = {"User-Agent": random.choice(USER_AGENTS)}
+        resp = requests.get(url, headers=headers, timeout=8, verify=False, allow_redirects=True)
+        if resp.status_code != 200:
+            return []
+        text = resp.text
+
+        # Also check mailto: links
+        soup = BeautifulSoup(text, "html.parser")
+        for a in soup.find_all("a", href=True):
+            if a["href"].startswith("mailto:"):
+                addr = a["href"][7:].split("?")[0].strip()
+                if addr:
+                    text += f" {addr}"
+
+        found = [e.lower() for e in EMAIL_RE.findall(text) if is_clean_email(e.lower())]
+        return list(dict.fromkeys(found))  # dedup preserving order
+    except Exception:
+        return []
+
+
 def run():
+    import urllib3
+    urllib3.disable_warnings()
+
     seen_emails = set()
     if os.path.exists(OUT_FILE):
         try:
@@ -268,10 +303,10 @@ def run():
         except Exception:
             pass
 
-    searches_per_run = int(os.getenv("SIGNALS_SEARCHES_PER_RUN", "150"))
+    searches_per_run = int(os.getenv("SIGNALS_SEARCHES_PER_RUN", "100"))
     queries = random.sample(SEARCH_QUERIES, min(searches_per_run, len(SEARCH_QUERIES)))
 
-    print(f"[SIGNALS] Running {len(queries)} searches targeting traders/bettors/investors...")
+    print(f"[SIGNALS] Running {len(queries)} searches + page fetches for emails...")
 
     all_new = []
     ddgs = DDGS()
@@ -279,17 +314,25 @@ def run():
     for i, query in enumerate(queries):
         print(f"  [{i+1}/{len(queries)}] {query[:60]}")
         try:
-            results = list(ddgs.text(query, max_results=8))
+            results = list(ddgs.text(query, max_results=6))
             for r in results:
-                body   = r.get("body", "")
                 url    = r.get("href", "")
                 name   = r.get("title", "")[:80]
+                body   = r.get("body", "")
                 domain = urllib.parse.urlparse(url).netloc.lower().replace("www.", "")
-                if domain in SKIP_DOMAINS:
+                if domain in SKIP_DOMAINS or not url:
                     continue
-                for email in EMAIL_RE.findall(body):
-                    email = email.lower()
-                    if email in seen_emails or not is_clean_email(email):
+
+                # First check snippet text (fast)
+                emails_found = [e.lower() for e in EMAIL_RE.findall(body) if is_clean_email(e.lower())]
+
+                # If nothing in snippet, fetch the actual page
+                if not emails_found:
+                    emails_found = fetch_emails_from_url(url)
+                    time.sleep(random.uniform(0.3, 0.7))
+
+                for email in emails_found:
+                    if email in seen_emails:
                         continue
                     seen_emails.add(email)
                     all_new.append({
@@ -300,7 +343,9 @@ def run():
                         "status":  "pending",
                         "niche":   "signals",
                     })
-            time.sleep(random.uniform(0.4, 1.0))
+                    print(f"    [+] {email}")
+
+            time.sleep(random.uniform(0.5, 1.2))
         except Exception as e:
             print(f"    [ERR] {e}")
             time.sleep(2)
