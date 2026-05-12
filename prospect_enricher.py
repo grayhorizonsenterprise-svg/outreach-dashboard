@@ -245,7 +245,7 @@ def run():
         print(f"[SKIP] {INPUT_FILE} not found — skipping enrichment.")
         return
 
-    df = pd.read_csv(INPUT_FILE)
+    df = pd.read_csv(INPUT_FILE, dtype=str).fillna("")
 
     for col in ["email", "website", "lead_type", "contact_page_url", "phone"]:
         if col not in df.columns:
