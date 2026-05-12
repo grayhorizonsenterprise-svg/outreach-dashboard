@@ -1,6 +1,6 @@
 """
-review_generation.py — Gray Horizons Enterprise
-Revenue niche: Review Generation & Reputation Management — $147/month per client
+review_generation.py, Gray Horizons Enterprise
+Revenue niche: Review Generation & Reputation Management, $147/month per client
 Scrapes local service businesses → pitches automated review collection system.
 Separate queue: review_queue.csv / review_sent_log.csv
 """
@@ -57,7 +57,7 @@ When someone Googles "{niche} near me" they almost always call whoever has the m
 
 Most businesses with under 30 reviews are invisible to new customers. The ones with 80+ own the market.
 
-We built a simple system that automatically texts your customers after service asking for a Google review — with a direct link so they don't have to search for you. No extra work on your end.
+We built a simple system that automatically texts your customers after service asking for a Google review, with a direct link so they don't have to search for you. No extra work on your end.
 
 One client went from 14 reviews to 78 in 8 weeks. Their call volume went up 40%.
 
@@ -71,7 +71,7 @@ Gray Horizons Enterprise""",
     """\
 Hey,
 
-Quick honest question — when did someone last leave you a Google review?
+Quick honest question, when did someone last leave you a Google review?
 
 Most {niche}s do great work but never ask for reviews. The competitor across town asks every single time. That's why they show up first.
 
@@ -90,7 +90,7 @@ Alex | Gray Horizons""",
     """\
 Hey,
 
-Google ranks {niche}s with more recent reviews higher in local search. It's not complicated — more reviews = more calls.
+Google ranks {niche}s with more recent reviews higher in local search. It's not complicated, more reviews = more calls.
 
 We run a fully automated review collection system: text goes out after every job, customer clicks one link, review is posted. You never touch it.
 
@@ -107,7 +107,7 @@ Gray Horizons Enterprise""",
 FOLLOWUP = """\
 Hey,
 
-Following up from earlier — wanted to share one specific result.
+Following up from earlier, wanted to share one specific result.
 
 We worked with a {niche} who had 11 Google reviews. Got them to 67 in 3 months using the same automated text system. They told us their phone stopped going quiet on Mondays.
 
@@ -186,7 +186,7 @@ def send_email(email: str, company: str, niche: str, subject: str, message: str)
 
 def run():
     if not SENDGRID_KEY:
-        print("[REVIEW GEN] No SENDGRID_API_KEY — scraping only")
+        print("[REVIEW GEN] No SENDGRID_API_KEY, scraping only")
 
     print("[REVIEW GEN] Scraping review-hungry businesses...")
     leads = scrape_leads(300)
@@ -239,7 +239,7 @@ def run():
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
 
-    print(f"[REVIEW GEN] Done — {sent} sent, {fail} failed")
+    print(f"[REVIEW GEN] Done, {sent} sent, {fail} failed")
     print(f"  At 2% close: ~{int(sent * 0.02)} clients × $147 = ${int(sent * 0.02) * 147}/month")
 
 

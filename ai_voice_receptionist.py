@@ -1,6 +1,6 @@
 """
-ai_voice_receptionist.py — Gray Horizons Enterprise
-Revenue niche: AI Voice Receptionist — $197/month per client
+ai_voice_receptionist.py, Gray Horizons Enterprise
+Revenue niche: AI Voice Receptionist, $197/month per client
 24/7 AI phone answering via Bland AI. Books appointments, handles FAQs, takes messages.
 Separate queue: voice_queue.csv / voice_sent_log.csv
 """
@@ -41,19 +41,19 @@ CITIES = [
 ]
 
 SUBJECTS = [
-    "Your phones go unanswered after hours — here's the fix",
-    "AI answers your phones 24/7 — {niche}s are switching fast",
+    "Your phones go unanswered after hours, here's the fix",
+    "AI answers your phones 24/7, {niche}s are switching fast",
     "Missed calls = missed revenue. We fixed that for 3 {niche}s this month.",
     "Your front desk can't answer every call. This can.",
     "What happens when someone calls your {niche} at 8pm?",
-    "24/7 AI receptionist — books appointments while you sleep",
+    "24/7 AI receptionist, books appointments while you sleep",
 ]
 
 MESSAGES = [
     """\
 Hey,
 
-When your phones go unanswered — after hours, during a busy appointment, at lunch — that caller moves on. They don't leave a voicemail. They call the next result on Google.
+When your phones go unanswered, after hours, during a busy appointment, at lunch, that caller moves on. They don't leave a voicemail. They call the next result on Google.
 
 We set up an AI voice receptionist that answers every call, 24 hours a day. It sounds natural, handles your common questions, and books appointments directly to your calendar.
 
@@ -75,13 +75,13 @@ Gray Horizons Enterprise""",
     """\
 Hey,
 
-Most {niche}s lose 20-30% of inbound calls to voicemail or just ringing. Those people don't call back — they call someone else.
+Most {niche}s lose 20-30% of inbound calls to voicemail or just ringing. Those people don't call back, they call someone else.
 
 We install an AI receptionist that picks up every call. Sounds like a real person. Books the appointment. Sends you a summary.
 
 Setup takes 2 days. $197/month. No contracts.
 
-I can send you a demo recording of exactly how it sounds for a {niche} — takes 30 seconds to listen to.
+I can send you a demo recording of exactly how it sounds for a {niche}, takes 30 seconds to listen to.
 
 {calendly}
 
@@ -90,9 +90,9 @@ Alex | Gray Horizons""",
     """\
 Hey,
 
-Quick one — do your phones get answered every time they ring? After 5pm? On Saturdays?
+Quick one, do your phones get answered every time they ring? After 5pm? On Saturdays?
 
-Most don't. And that's fine — until you realize each unanswered call is a lost appointment.
+Most don't. And that's fine, until you realize each unanswered call is a lost appointment.
 
 We solved this with AI. It answers, talks naturally, books appointments, handles common questions. Runs 24/7 without a salary.
 
@@ -165,7 +165,7 @@ def send_email(email, company, niche, subject, message) -> bool:
 
 def run():
     if not SENDGRID_KEY:
-        print("[VOICE] No SENDGRID_API_KEY — scraping only")
+        print("[VOICE] No SENDGRID_API_KEY, scraping only")
     print("[VOICE] Scraping appointment-heavy businesses...")
     leads = scrape_leads(300)
     print(f"  Found {len(leads)} leads")
@@ -204,7 +204,7 @@ def run():
         if os.path.exists(LOG_FILE):
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
-    print(f"[VOICE] Done — {sent} sent, {fail} failed")
+    print(f"[VOICE] Done, {sent} sent, {fail} failed")
     print(f"  At 2% close: ~{int(sent * 0.02)} clients × $197 = ${int(sent * 0.02) * 197}/month")
 
 if __name__ == "__main__":

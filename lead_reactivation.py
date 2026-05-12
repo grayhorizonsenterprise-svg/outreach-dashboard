@@ -1,6 +1,6 @@
 """
-lead_reactivation.py — Gray Horizons Enterprise
-Revenue niche: Lead Reactivation Campaign — $497 one-time
+lead_reactivation.py, Gray Horizons Enterprise
+Revenue niche: Lead Reactivation Campaign, $497 one-time
 Client uploads their dead lead list → we blast a win-back sequence.
 High perceived value, zero recurring cost. Easiest close.
 Separate queue: reactivation_queue.csv / reactivation_sent_log.csv
@@ -42,10 +42,10 @@ CITIES = [
 ]
 
 SUBJECTS = [
-    "Your old leads are worth $10k+ — most businesses never touch them",
+    "Your old leads are worth $10k+, most businesses never touch them",
     "Dead leads in your CRM = money you never collected",
     "We turned 200 dead leads into 11 closed deals for a {niche}",
-    "You already paid for these leads — let us work them one more time",
+    "You already paid for these leads, let us work them one more time",
     "The fastest $10k in your business is sitting in your dead lead list",
     "We reactivate your old leads. You close the ones who respond.",
 ]
@@ -77,11 +77,11 @@ Gray Horizons Enterprise""",
     """\
 Hey,
 
-Most {niche}s are sitting on a goldmine they've already paid for — their old lead list.
+Most {niche}s are sitting on a goldmine they've already paid for, their old lead list.
 
 People who requested a quote 8 months ago and went dark. Past clients who haven't come back. Referrals that never converted.
 
-We run a win-back campaign against your full list. 3 emails over 10 days, written to sound personal and relevant — not a mass blast.
+We run a win-back campaign against your full list. 3 emails over 10 days, written to sound personal and relevant, not a mass blast.
 
 One campaign, $497. Most clients recover 5-10 clients from a list of 300+. At your margins, that's anywhere from $3,000 to $30,000 in recovered revenue.
 
@@ -94,11 +94,11 @@ Alex | Gray Horizons""",
     """\
 Hey,
 
-Quick question — do you have a list of leads or past customers who went cold?
+Quick question, do you have a list of leads or past customers who went cold?
 
 Most {niche}s do. And most never touch it again, which means they paid to acquire those leads and got nothing.
 
-We run a targeted reactivation campaign — 3 messages, 10 days, written specifically for your business and your customer type.
+We run a targeted reactivation campaign, 3 messages, 10 days, written specifically for your business and your customer type.
 
 It takes us 48 hours to set up. $497 flat. You handle replies, we handle everything else.
 
@@ -169,7 +169,7 @@ def send_email(email, company, niche, subject, message) -> bool:
 
 def run():
     if not SENDGRID_KEY:
-        print("[REACTIVATION] No SENDGRID_API_KEY — scraping only")
+        print("[REACTIVATION] No SENDGRID_API_KEY, scraping only")
     print("[REACTIVATION] Scraping businesses with large customer histories...")
     leads = scrape_leads(250)
     print(f"  Found {len(leads)} leads")
@@ -208,7 +208,7 @@ def run():
         if os.path.exists(LOG_FILE):
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
-    print(f"[REACTIVATION] Done — {sent} sent, {fail} failed")
+    print(f"[REACTIVATION] Done, {sent} sent, {fail} failed")
     print(f"  At 2% close: ~{int(sent * 0.02)} clients × $497 = ${int(sent * 0.02) * 497} one-time")
 
 if __name__ == "__main__":

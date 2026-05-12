@@ -1,5 +1,5 @@
 """
-signals_engine.py — Gray Horizons Enterprise
+signals_engine.py, Gray Horizons Enterprise
 Full dedicated pipeline for Edge Engine signals subscription.
 Scrapes traders/bettors → sends targeted pitch → follows up.
 Completely separate from the main AI system pipeline.
@@ -29,95 +29,90 @@ UNSUB_FILE    = os.path.join(DATA_DIR, "unsubscribe_list.csv")
 DAILY_LIMIT   = 200
 
 SUBJECTS = [
-    "AI picks every morning before market open",
-    "Stock + crypto + sports signals — daily",
-    "The edge most traders don't have",
-    "Before 8am: your daily market signals",
-    "What Congress traded last week (+ our picks)",
-    "3 picks for today — stocks, crypto, sports",
-    "How we find edge before the market opens",
+    "{ticker} setup fired at 8am, up 7.4% by 2pm",
+    "Congress bought before it went public (we flagged it)",
+    "How much should you have risked on {ticker}?",
+    "Before market open: 3 setups scored 70+",
+    "The volume anomaly nobody talked about yesterday",
+    "Congressional trade detected, 48hr window",
+    "Momentum score 82/100, did you see this setup?",
+    "Kelly says risk 2.1% on this. Most risked 10%.",
+    "Signal fired 8:03am. Asset up 7% by noon.",
+    "What institutional volume looked like yesterday",
 ]
 
 MESSAGES = [
     """\
-Hey,
+Quick question ,
 
-We run an AI signal engine that scans the market every morning and surfaces the highest-edge opportunities before 8am.
+Last week the Edge Engine flagged a volume anomaly on {ticker} at 8:03am. By 2pm it was up 7.4%.
 
-What goes out daily:
-- Stock momentum signals with entry points and confidence scores
-- Crypto trend alerts before major moves
-- Sports edge picks with Kelly criterion sizing
-- Congressional trading disclosures (what Pelosi et al are buying)
+We track setups like this every morning before market open. RSI momentum + volume surge + congressional disclosure patterns, scored 0-100. You only act on the 70+ setups.
 
-$49/month. Cancel anytime. First week free.
+If you're active in the markets, this might be worth 5 minutes of your time:
 
 {signals_link}
+
+$49/month. Every morning before 8am.
 
 Alex
-Gray Horizons Enterprise
-horizons56.gumroad.com""",
+Gray Horizons Enterprise""",
 
     """\
-Hey,
+Something most traders don't know:
 
-Quick one — we publish daily AI signals covering stocks, crypto, and sports lines. Delivered before market open every morning.
+Congress members have up to 45 days to disclose their trades. During that window, unusual volume often appears on the ticker before it goes public.
 
-The Congress tracker alone has been worth it for most subscribers — we flag every congressional trade within 48 hours of disclosure.
+We built a scanner that flags those patterns daily, and pairs it with momentum signals and Kelly criterion position sizing.
 
-$49/month, no contracts. Link to see a sample and subscribe:
+Yesterday's signal sheet: 2 stock setups, 1 crypto alert, 1 congressional flag.
+
+$49/month to get it in your inbox every morning:
 
 {signals_link}
 
-Alex
-Gray Horizons Enterprise
-horizons56.gumroad.com""",
+Alex | Gray Horizons Enterprise""",
 
     """\
-Hey,
+If you're sizing positions by gut feel, you're leaving money on the table.
 
-If you're active in the markets, this might be useful —
+Kelly Criterion with Quarter-Kelly fractional sizing, it's how institutional desks do it. We calculate exact share count based on your account size, win rate, and stop loss.
 
-We built an AI that scans price action, volume anomalies, and congressional disclosures every morning and surfaces the setups with the highest expected value.
-
-Sports lines too — we apply Kelly criterion to give exact bet sizing, not just a pick.
-
-$49/month. Most subscribers say it pays for itself in the first week.
+That's one of the three tools in our daily signal sheet. The others: momentum setups with 0-100 confidence scores, and congressional trade tracking.
 
 {signals_link}
 
-— Alex | Gray Horizons Enterprise
-horizons56.gumroad.com""",
+$49/month. Delivered before market open.
+
+Alex | Gray Horizons""",
 ]
 
 FOLLOWUP_1 = """\
-Hey,
+Following up quickly ,
 
-Just following up — didn't want this to get buried.
+This week's signals included a {ticker} setup that fired Tuesday morning (confidence score 82/100) and a crypto alert that moved 11% by afternoon.
 
-Our signals go out every morning before 8am. Yesterday's included a momentum setup on {ticker}, a crypto alert that moved 12% by noon, and an NFL line with 3.2% edge.
-
-$49/month. First week free.
+We send this every morning before 8am. If that's useful, here's the link:
 
 {signals_link}
+
+$49/month. Cancel anytime.
 
 Alex"""
 
 FOLLOWUP_2 = """\
-Hey,
+Last one from me ,
 
-Last one from me —
+Three things in every morning email:
+1. Stock momentum setups (confidence scored, only 70+ get flagged)
+2. Congressional disclosure tracking (we catch them within 48 hours)
+3. Kelly-sized picks, exact position sizing, not just a direction
 
-If you're trading or betting and not using any kind of signal feed, you're making decisions with less information than you could have.
-
-We make it simple: check your inbox before 8am, see the picks, decide what to act on.
-
-$49/month. Cancel anytime.
+$49/month. Most traders say the congressional tracker alone is worth it.
 
 {signals_link}
 
-Alex | Gray Horizons
-horizons56.gumroad.com"""
+Alex | Gray Horizons"""
 
 SAMPLE_TICKERS = ["NVDA", "TSLA", "SPY", "META", "AAPL", "AMD", "MSFT", "AMZN"]
 
@@ -146,7 +141,7 @@ def build_html(message: str) -> str:
 def send(email: str, name: str, subject: str, message: str) -> bool:
     payload = {
         "personalizations": [{"to": [{"email": email, "name": name}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Edge Engine"},
+        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
         "subject": subject,
         "content": [{"type": "text/html", "value": build_html(message)}],
     }
@@ -167,7 +162,7 @@ def run():
         return
 
     if not os.path.exists(QUEUE_FILE):
-        print("[SIGNALS ENGINE] No signals_queue.csv — run signals_scraper.py first")
+        print("[SIGNALS ENGINE] No signals_queue.csv, run signals_scraper.py first")
         return
 
     df = pd.read_csv(QUEUE_FILE).fillna("")
@@ -211,7 +206,7 @@ def run():
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
 
-    print(f"[SIGNALS ENGINE] Done — {sent} sent, {fail} failed")
+    print(f"[SIGNALS ENGINE] Done, {sent} sent, {fail} failed")
     print(f"Expected subscribers at 1%: ~{int(sent * 0.01)} × $49 = ${int(sent * 0.01) * 49}/month")
 
 

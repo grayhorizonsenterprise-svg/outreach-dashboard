@@ -1,7 +1,7 @@
 """
-signals_sender.py — Gray Horizons Enterprise
+signals_sender.py, Gray Horizons Enterprise
 Standalone Signals engine sender. Reads signals_queue.csv, sends emails via SendGrid.
-Runs completely independently — no dashboard required.
+Runs completely independently, no dashboard required.
 Schedule: run daily via Task Scheduler or Railway cron.
 """
 
@@ -30,7 +30,7 @@ SUBJECTS = [
     "What's in your inbox at 7:45am?",
     "Congress just disclosed 9 trades",
     "AI scanned the market before you woke up",
-    "Sports + stocks + crypto — one daily email",
+    "Sports + stocks + crypto, one daily email",
 ]
 
 MESSAGES = [
@@ -65,7 +65,7 @@ To opt out reply REMOVE.""",
     """\
 Hey,
 
-Quick question — when a stock on your watchlist breaks out, do you usually catch it before or after the move?
+Quick question, when a stock on your watchlist breaks out, do you usually catch it before or after the move?
 
 We built a system that flags those setups daily before 8am alongside congressional disclosures and sports lines with positive expected value.
 
@@ -81,7 +81,7 @@ Hey,
 
 Congress disclosed 14 trades last week. Most people didn't see them until the news covered it days later.
 
-Our subscribers had all 14 within 48 hours — before the price moved.
+Our subscribers had all 14 within 48 hours, before the price moved.
 
 Daily edge for traders: stocks, crypto, sports. $49/month: {link}
 
@@ -128,11 +128,11 @@ def send_sendgrid(to_email, subject, body):
 
 def run():
     if not SENDGRID_KEY:
-        print("[SIGNALS SENDER] SENDGRID_API_KEY not set — exiting")
+        print("[SIGNALS SENDER] SENDGRID_API_KEY not set, exiting")
         return
 
     if not os.path.exists(QUEUE_FILE):
-        print("[SIGNALS SENDER] No signals_queue.csv found — run signals_mass_scraper.py first")
+        print("[SIGNALS SENDER] No signals_queue.csv found, run signals_mass_scraper.py first")
         return
 
     df = pd.read_csv(QUEUE_FILE, dtype=str).fillna("")

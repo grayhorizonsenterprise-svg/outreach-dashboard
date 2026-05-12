@@ -1,6 +1,6 @@
 """
-website_audit.py — Gray Horizons Enterprise
-Revenue niche: Website SEO & Speed Audit + Fix — $297 one-time + $97/month
+website_audit.py, Gray Horizons Enterprise
+Revenue niche: Website SEO & Speed Audit + Fix, $297 one-time + $97/month
 Targets businesses with slow or poorly-ranking websites.
 Separate queue: website_queue.csv / website_sent_log.csv
 """
@@ -41,10 +41,10 @@ CITIES = [
 ]
 
 SUBJECTS = [
-    "I ran your website through Google's speed test — here's what I found",
+    "I ran your website through Google's speed test, here's what I found",
     "Your website is probably losing you 40% of mobile visitors",
     "Quick audit: 3 things your website is doing wrong right now",
-    "Google ranks slow websites lower — yours might be affected",
+    "Google ranks slow websites lower, yours might be affected",
     "{niche}s with fast websites get 3x more form submissions",
     "Your website has an issue that's costing you Google ranking",
 ]
@@ -60,11 +60,11 @@ The three most common problems we find:
 2. Missing or incorrect meta titles and descriptions
 3. No schema markup (Google can't understand what your business does)
 
-These aren't design problems — they're technical fixes that take a few hours and directly affect how high you show up when someone searches for a {niche} in your area.
+These aren't design problems, they're technical fixes that take a few hours and directly affect how high you show up when someone searches for a {niche} in your area.
 
 We do a full audit ($297 one-time) and fix everything we find. Then $97/month to keep it maintained and monitor rankings.
 
-If you want, I can pull your actual PageSpeed score right now and send it to you — takes 30 seconds.
+If you want, I can pull your actual PageSpeed score right now and send it to you, takes 30 seconds.
 
 {calendly}
 
@@ -76,13 +76,13 @@ Hey,
 
 One thing that consistently hurts local {niche} websites: load speed on mobile.
 
-Google confirmed in 2021 that page speed is a ranking factor. If your site takes more than 3 seconds to load on a phone, Google shows you lower in search results — even if everything else is right.
+Google confirmed in 2021 that page speed is a ranking factor. If your site takes more than 3 seconds to load on a phone, Google shows you lower in search results, even if everything else is right.
 
 We run a full technical audit: speed, mobile responsiveness, local SEO signals, meta data, schema markup. Then we fix everything in the same week.
 
 $297 audit + fix. $97/month ongoing monitoring. Most clients see a ranking improvement within 30-60 days.
 
-I can pull your site's score without any login or access on your end — want me to send it over?
+I can pull your site's score without any login or access on your end, want me to send it over?
 
 {calendly}
 
@@ -91,9 +91,9 @@ Alex | Gray Horizons""",
     """\
 Hey,
 
-Quick question about your website — when someone searches for a {niche} in your area, do you know where you rank?
+Quick question about your website, when someone searches for a {niche} in your area, do you know where you rank?
 
-Most business owners don't. And most are ranking lower than they should because of fixable technical issues — slow load times, missing local signals, no schema, outdated meta.
+Most business owners don't. And most are ranking lower than they should because of fixable technical issues, slow load times, missing local signals, no schema, outdated meta.
 
 We audit the full site and fix what's broken. $297 one-time, includes the fixes. Then $97/month to maintain rankings and catch new issues.
 
@@ -166,7 +166,7 @@ def send_email(email, company, niche, subject, message) -> bool:
 
 def run():
     if not SENDGRID_KEY:
-        print("[WEBSITE] No SENDGRID_API_KEY — scraping only")
+        print("[WEBSITE] No SENDGRID_API_KEY, scraping only")
     print("[WEBSITE] Scraping businesses with likely outdated websites...")
     leads = scrape_leads(300)
     print(f"  Found {len(leads)} leads")
@@ -205,7 +205,7 @@ def run():
         if os.path.exists(LOG_FILE):
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
-    print(f"[WEBSITE] Done — {sent} sent, {fail} failed")
+    print(f"[WEBSITE] Done, {sent} sent, {fail} failed")
     print(f"  At 2% close: ~{int(sent * 0.02)} clients × $297 = ${int(sent * 0.02) * 297} one-time")
 
 if __name__ == "__main__":

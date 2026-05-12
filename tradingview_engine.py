@@ -1,5 +1,5 @@
 """
-tradingview_engine.py — Gray Horizons Enterprise
+tradingview_engine.py, Gray Horizons Enterprise
 Finds and emails active traders about GHE TradingView indicators.
 Targets: active traders, TradingView users, trading communities.
 Writes to tradingview_queue.csv.
@@ -43,10 +43,10 @@ DDG_QUERIES = [
 
 SUBJECTS = [
     "3 TradingView indicators built for edge",
-    "The Congress tracker indicator — TradingView",
+    "The Congress tracker indicator, TradingView",
     "Kelly Criterion position sizer for TradingView",
     "New indicators: Edge Scanner + Congress Tracker",
-    "Custom TradingView indicators — $29/month",
+    "Custom TradingView indicators, $29/month",
 ]
 
 MESSAGES = [
@@ -57,11 +57,11 @@ I build custom TradingView indicators and wanted to reach out specifically.
 
 We just published 3 invite-only indicators:
 
-1. GHE Edge Scanner ($29/month) — momentum + volume surge + trend confluence. Labels high-confidence setups automatically.
+1. GHE Edge Scanner ($29/month), momentum + volume surge + trend confluence. Labels high-confidence setups automatically.
 
-2. GHE Kelly Position Sizer ($19/month) — calculates exact position size and dollar risk for every trade based on your account size and win rate.
+2. GHE Kelly Position Sizer ($19/month), calculates exact position size and dollar risk for every trade based on your account size and win rate.
 
-3. GHE Congressional Trade Tracker ($39/month) — flags unusual volume patterns correlated with congressional disclosure windows. No other indicator does this.
+3. GHE Congressional Trade Tracker ($39/month), flags unusual volume patterns correlated with congressional disclosure windows. No other indicator does this.
 
 All three have free 7-day trials. Happy to add you if you want to test them on your charts.
 
@@ -72,9 +72,9 @@ grayhorizonsenterprise.com""",
     """\
 Hey,
 
-Quick one — we built a TradingView indicator that tracks congressional trading patterns.
+Quick one, we built a TradingView indicator that tracks congressional trading patterns.
 
-It flags unusual volume anomalies that historically correlate with congressional disclosure windows. Politicians have to disclose trades within 45 days — this indicator helps you spot the pattern before the disclosure.
+It flags unusual volume anomalies that historically correlate with congressional disclosure windows. Politicians have to disclose trades within 45 days, this indicator helps you spot the pattern before the disclosure.
 
 $39/month, invite-only. 7-day free trial.
 
@@ -89,7 +89,7 @@ Hey,
 
 We publish invite-only TradingView indicators for active traders.
 
-The most popular one is our Kelly Criterion Position Sizer — you input your account size, win rate, and stop loss %, and it calculates exact position size and expected value for every trade in real time.
+The most popular one is our Kelly Criterion Position Sizer, you input your account size, win rate, and stop loss %, and it calculates exact position size and expected value for every trade in real time.
 
 $19/month. Saves the math on every single trade.
 
@@ -224,7 +224,7 @@ def run():
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
 
-    print(f"[TV ENGINE] Done — {sent} sent, {fail} failed")
+    print(f"[TV ENGINE] Done, {sent} sent, {fail} failed")
     print(f"Expected subscribers at 2%: ~{int(sent * 0.02)} × avg $29 = ${int(sent * 0.02) * 29}/month")
 
 

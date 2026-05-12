@@ -1,6 +1,6 @@
 """
-missed_call_textback.py — Gray Horizons Enterprise
-Revenue niche: Missed Call Text-Back Automation — $97/month per client
+missed_call_textback.py, Gray Horizons Enterprise
+Revenue niche: Missed Call Text-Back Automation, $97/month per client
 Scrapes local service businesses → pitches missed call automation.
 Separate queue: missed_call_queue.csv / missed_call_sent_log.csv
 """
@@ -41,7 +41,7 @@ CITIES = [
 SUBJECTS = [
     "Every missed call costs you $200+",
     "You're losing clients every time you miss a call",
-    "Missed calls = missed revenue — simple fix inside",
+    "Missed calls = missed revenue, simple fix inside",
     "Your missed calls are going straight to a competitor",
     "Fix this and win back 30% of leads you're losing",
     "How {niche} owners stop losing jobs to voicemail",
@@ -51,13 +51,13 @@ MESSAGES = [
     """\
 Hey,
 
-Quick question — when someone calls your business and you don't pick up, what happens?
+Quick question, when someone calls your business and you don't pick up, what happens?
 
 Most small businesses lose that lead. They don't call back, they don't leave a message, and they go straight to Google and call the next one.
 
 We built a simple system that texts any missed call back within 60 seconds automatically. Something like:
 
-"Hey, this is [Your Business]. Missed your call — what can we help with?"
+"Hey, this is [Your Business]. Missed your call, what can we help with?"
 
 That alone recovers 20-30% of missed leads. At your price point, that's real money.
 
@@ -73,13 +73,13 @@ Gray Horizons Enterprise""",
     """\
 Hey,
 
-If you're in {niche}, you know how it goes — job site, customer, phone rings, you can't answer.
+If you're in {niche}, you know how it goes, job site, customer, phone rings, you can't answer.
 
 That caller is gone. They moved on to whoever picked up.
 
 We fix that automatically. Every missed call gets a text back within 60 seconds from your number:
 
-"Hey, sorry we missed you — we're wrapping a job. What do you need?"
+"Hey, sorry we missed you, we're wrapping a job. What do you need?"
 
 One of our clients booked 4 extra jobs last week from leads he would have lost. It runs completely on its own.
 
@@ -92,7 +92,7 @@ Alex | Gray Horizons Enterprise""",
     """\
 Hey,
 
-Straight to the point — you're losing jobs every time you miss a call.
+Straight to the point, you're losing jobs every time you miss a call.
 
 Most contractors lose 25-40% of inbound leads to voicemail. Those people don't leave messages anymore, they just call the next Google result.
 
@@ -109,7 +109,7 @@ Gray Horizons""",
 FOLLOWUP = """\
 Hey,
 
-Just following up — wanted to make sure this landed.
+Just following up, wanted to make sure this landed.
 
 Missed call text-back is probably the highest-ROI thing a {niche} can do. One recovered job covers the whole year.
 
@@ -198,7 +198,7 @@ def send_email(email: str, company: str, niche: str, subject: str, message: str)
 
 def run():
     if not SENDGRID_KEY:
-        print("[MISSED CALL] No SENDGRID_API_KEY — scraping leads only")
+        print("[MISSED CALL] No SENDGRID_API_KEY, scraping leads only")
 
     # Scrape fresh leads
     print("[MISSED CALL] Scraping local service businesses...")
@@ -254,7 +254,7 @@ def run():
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
 
-    print(f"[MISSED CALL] Done — {sent} sent, {fail} failed")
+    print(f"[MISSED CALL] Done, {sent} sent, {fail} failed")
     print(f"  At 2% close: ~{int(sent * 0.02)} clients × $97 = ${int(sent * 0.02) * 97}/month")
 
 

@@ -1,5 +1,5 @@
 """
-ghl_outreach.py — Gray Horizons Enterprise
+ghl_outreach.py, Gray Horizons Enterprise
 Finds and emails marketing agencies + small businesses about
 Gray Horizons AI CRM (GoHighLevel white-label at $297/month).
 Cost: $97/month GHL. Margin: $200/client. 25 clients = $5,000/month.
@@ -31,18 +31,18 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
 
 SUBJECTS = [
-    "CRM that pays for itself in 30 days — {company}",
+    "CRM that pays for itself in 30 days, {company}",
     "Your clients are leaking revenue (here's the fix)",
     "All-in-one marketing platform for {company}",
     "We run the CRM, you keep the clients",
-    "Replace 6 tools with one — $297/month",
+    "Replace 6 tools with one, $297/month",
 ]
 
 MESSAGES = [
     """\
 Hey,
 
-Quick question — how are you currently handling follow-up for {company}?
+Quick question, how are you currently handling follow-up for {company}?
 
 Most agencies and small businesses we talk to are losing 20-30% of their leads because follow-up happens manually or not at all.
 
@@ -52,7 +52,7 @@ We set up an AI-powered CRM that handles it automatically:
 - Automated appointment booking
 - Reputation management (review requests sent automatically)
 
-All under your brand if you want. $297/month flat — no setup fees, no contracts.
+All under your brand if you want. $297/month flat, no setup fees, no contracts.
 
 Worth a 15-minute demo?
 
@@ -87,9 +87,9 @@ Gray Horizons Enterprise""",
     """\
 Hey,
 
-Reaching out to {company} specifically — we work with businesses in your space on marketing automation.
+Reaching out to {company} specifically, we work with businesses in your space on marketing automation.
 
-The short version: we set up a system that follows up with every lead automatically, books appointments, requests reviews, and tracks your pipeline — all without you touching it.
+The short version: we set up a system that follows up with every lead automatically, books appointments, requests reviews, and tracks your pipeline, all without you touching it.
 
 $297/month. No contracts. Cancel anytime.
 
@@ -234,7 +234,7 @@ def run():
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
 
-    print(f"[GHL] Done — {sent} sent, {fail} failed")
+    print(f"[GHL] Done, {sent} sent, {fail} failed")
     print(f"Expected clients at 1% conversion: ~{max(1, int(sent * 0.01))}")
     print(f"Expected revenue: ~${max(1, int(sent * 0.01)) * 200}/month profit")
 

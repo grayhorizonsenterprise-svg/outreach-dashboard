@@ -1,6 +1,6 @@
 """
-gbp_optimizer.py — Gray Horizons Enterprise
-Revenue niche: Google Business Profile Optimization — $197/month per client
+gbp_optimizer.py, Gray Horizons Enterprise
+Revenue niche: Google Business Profile Optimization, $197/month per client
 Scrapes local businesses with weak/incomplete GBP → pitches GBP management.
 Separate queue: gbp_queue.csv / gbp_sent_log.csv
 """
@@ -47,7 +47,7 @@ SUBJECTS = [
     "Why competitors show up before you on Google Maps",
     "Your Google Business Profile is working against you",
     "{niche}s: this one fix gets you more Google calls",
-    "You're invisible on Google Maps — here's why",
+    "You're invisible on Google Maps, here's why",
 ]
 
 MESSAGES = [
@@ -64,7 +64,7 @@ Most businesses in your space are missing:
 
 Google's algorithm actively ranks businesses that maintain their profiles. It's not complicated, but it takes consistent weekly work.
 
-We manage GBP profiles for local businesses — posting weekly, responding to reviews within 24 hours, optimizing categories, and running monthly photo updates. Most clients see a 20-40% increase in profile views within 60 days.
+We manage GBP profiles for local businesses, posting weekly, responding to reviews within 24 hours, optimizing categories, and running monthly photo updates. Most clients see a 20-40% increase in profile views within 60 days.
 
 $197/month. We handle everything. Want to see what a fully optimized profile looks like?
 
@@ -106,7 +106,7 @@ Google's local ranking algorithm weights three things:
 
 The businesses in the top 3 are almost always the ones posting weekly. It's that simple.
 
-We manage this entirely — you never log in. $197/month, cancel anytime, no contracts.
+We manage this entirely, you never log in. $197/month, cancel anytime, no contracts.
 
 If you want, I can pull your current Google rankings on a 15-minute call and show you where you stand.
 
@@ -119,7 +119,7 @@ Gray Horizons Enterprise""",
 FOLLOWUP = """\
 Hey,
 
-Following up — wanted to share something specific.
+Following up, wanted to share something specific.
 
 A {niche} we worked with was ranking #9 on Google Maps in their city. After 90 days of consistent GBP management, they were in the top 3. Their inbound calls went from 4-5/week to 15-20.
 
@@ -198,7 +198,7 @@ def send_email(email: str, company: str, niche: str, subject: str, message: str)
 
 def run():
     if not SENDGRID_KEY:
-        print("[GBP] No SENDGRID_API_KEY — scraping only")
+        print("[GBP] No SENDGRID_API_KEY, scraping only")
 
     print("[GBP] Scraping businesses with weak Google presence...")
     leads = scrape_leads(300)
@@ -251,7 +251,7 @@ def run():
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
 
-    print(f"[GBP] Done — {sent} sent, {fail} failed")
+    print(f"[GBP] Done, {sent} sent, {fail} failed")
     print(f"  At 2% close: ~{int(sent * 0.02)} clients × $197 = ${int(sent * 0.02) * 197}/month")
 
 

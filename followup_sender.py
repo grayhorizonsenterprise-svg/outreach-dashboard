@@ -1,5 +1,5 @@
 """
-followup_sender.py — Gray Horizons Enterprise
+followup_sender.py, Gray Horizons Enterprise
 Sends follow-up emails to leads that never replied to the first outreach.
 Follow-up 1: 3 days after first send
 Follow-up 2: 7 days after first send
@@ -34,7 +34,7 @@ FOLLOWUP_1 = {
     "days": 3,
     "subjects": [
         "Re: {original_subject}",
-        "Following up — {company}",
+        "Following up, {company}",
         "Quick follow-up",
     ],
     "messages": [
@@ -55,7 +55,7 @@ Gray Horizons Enterprise""",
         """\
 Hey,
 
-Circling back on this — didn't want it to slip through the cracks.
+Circling back on this, didn't want it to slip through the cracks.
 
 The system we set up for similar businesses has been handling {niche_pain} on autopilot. No ongoing work on their end.
 
@@ -71,19 +71,19 @@ Gray Horizons Enterprise""",
 FOLLOWUP_2 = {
     "days": 7,
     "subjects": [
-        "Still worth a look — {company}",
+        "Still worth a look, {company}",
         "Last thing on this",
-        "One more thought — {company}",
+        "One more thought, {company}",
     ],
     "messages": [
         """\
 Hey,
 
-I'll keep this short — we've helped businesses just like {company} stop losing time to {niche_pain}.
+I'll keep this short, we've helped businesses just like {company} stop losing time to {niche_pain}.
 
 The system runs itself. Setup takes one week. Cost is a flat $997, no monthly fees.
 
-If the timing isn't right, no worries at all. But if it is — here's a link to book a quick call:
+If the timing isn't right, no worries at all. But if it is, here's a link to book a quick call:
 
 {calendly}
 
@@ -95,7 +95,7 @@ Hey,
 
 Two things:
 
-1. The system we built handles {niche_pain} fully automatically — no manual work after setup.
+1. The system we built handles {niche_pain} fully automatically, no manual work after setup.
 2. We're currently offering it at $997 flat, which covers everything.
 
 If you want to see it in action before committing, I'm happy to do a quick demo this week.
@@ -110,15 +110,15 @@ Gray Horizons Enterprise""",
 FOLLOWUP_3 = {
     "days": 14,
     "subjects": [
-        "Closing the loop — {company}",
+        "Closing the loop, {company}",
         "Last one, I promise",
-        "Final follow-up — {company}",
+        "Final follow-up, {company}",
     ],
     "messages": [
         """\
 Hey,
 
-Last follow-up — I don't want to keep filling your inbox.
+Last follow-up, I don't want to keep filling your inbox.
 
 If {niche_pain} is something you're dealing with and want fixed, we can have a system running for you within the week. $997 flat, no monthly fees, no contracts.
 
@@ -346,7 +346,7 @@ def run():
             new_log = pd.concat([pd.read_csv(FOLLOWUP_LOG), new_log], ignore_index=True)
         new_log.to_csv(FOLLOWUP_LOG, index=False)
 
-    print(f"[FOLLOWUP] Done — {total_sent} follow-ups sent today")
+    print(f"[FOLLOWUP] Done, {total_sent} follow-ups sent today")
 
 
 if __name__ == "__main__":

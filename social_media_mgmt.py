@@ -1,6 +1,6 @@
 """
-social_media_mgmt.py — Gray Horizons Enterprise
-Revenue niche: Social Media Management — $297/month per client
+social_media_mgmt.py, Gray Horizons Enterprise
+Revenue niche: Social Media Management, $297/month per client
 Fully managed: 3 posts/week to Facebook + Instagram + Google.
 Separate queue: social_queue.csv / social_sent_log.csv
 """
@@ -42,25 +42,25 @@ CITIES = [
 ]
 
 SUBJECTS = [
-    "Your competitors are posting every day — you're not",
-    "3 posts/week on Instagram and Facebook — we handle all of it",
+    "Your competitors are posting every day, you're not",
+    "3 posts/week on Instagram and Facebook, we handle all of it",
     "Why {niche}s with active social media get 30% more walk-ins",
     "Your social media hasn't been updated in a while",
     "We run your social media while you run your business",
-    "Facebook + Instagram posts 3x/week — $297/month, we do everything",
+    "Facebook + Instagram posts 3x/week, $297/month, we do everything",
 ]
 
 MESSAGES = [
     """\
 Hey,
 
-Quick honest observation — most {niche}s have a Facebook and Instagram page that hasn't been updated in months.
+Quick honest observation, most {niche}s have a Facebook and Instagram page that hasn't been updated in months.
 
 That sends a bad signal. New customers check social before they visit. An empty page = a business that looks like it's struggling or barely open.
 
-We manage social media for local businesses — 3 posts a week, custom graphics and captions, posted across Facebook and Instagram. You never log in.
+We manage social media for local businesses, 3 posts a week, custom graphics and captions, posted across Facebook and Instagram. You never log in.
 
-Content we post: promotions, before/after, team highlights, reviews, service spotlights — whatever fits your business.
+Content we post: promotions, before/after, team highlights, reviews, service spotlights, whatever fits your business.
 
 $297/month. No contracts. I can show you examples from a similar {niche} we're managing right now.
 
@@ -74,7 +74,7 @@ Hey,
 
 3 posts a week on Facebook and Instagram. That's the difference between businesses people discover and businesses people forget about.
 
-We handle it completely — write the captions, design the graphics, schedule the posts, respond to comments. You just approve the first batch and we go from there.
+We handle it completely, write the captions, design the graphics, schedule the posts, respond to comments. You just approve the first batch and we go from there.
 
 For a {niche}, we typically post:
 - 1 promotional post (current offer or service)
@@ -92,7 +92,7 @@ Hey,
 
 Your social media is a storefront. Most people check Facebook or Instagram before they call a new {niche}.
 
-We manage it all — 3 posts/week, custom content, engagement — for $297/month. Everything is done for you, 100%.
+We manage it all, 3 posts/week, custom content, engagement, for $297/month. Everything is done for you, 100%.
 
 Results we've seen: 20-40% more profile visits, more DMs, better local search visibility.
 
@@ -165,7 +165,7 @@ def send_email(email, company, niche, subject, message) -> bool:
 
 def run():
     if not SENDGRID_KEY:
-        print("[SOCIAL] No SENDGRID_API_KEY — scraping only")
+        print("[SOCIAL] No SENDGRID_API_KEY, scraping only")
     print("[SOCIAL] Scraping local consumer-facing businesses...")
     leads = scrape_leads(300)
     print(f"  Found {len(leads)} leads")
@@ -204,7 +204,7 @@ def run():
         if os.path.exists(LOG_FILE):
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
-    print(f"[SOCIAL] Done — {sent} sent, {fail} failed")
+    print(f"[SOCIAL] Done, {sent} sent, {fail} failed")
     print(f"  At 2% close: ~{int(sent * 0.02)} clients × $297 = ${int(sent * 0.02) * 297}/month")
 
 if __name__ == "__main__":

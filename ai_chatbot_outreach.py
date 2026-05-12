@@ -1,6 +1,6 @@
 """
-ai_chatbot_outreach.py — Gray Horizons Enterprise
-Revenue niche: AI Website Chatbot — $97/month per client
+ai_chatbot_outreach.py, Gray Horizons Enterprise
+Revenue niche: AI Website Chatbot, $97/month per client
 Scrapes local service businesses → pitches 24/7 AI chatbot for lead capture.
 Separate queue: chatbot_queue.csv / chatbot_sent_log.csv
 """
@@ -43,7 +43,7 @@ CITIES = [
 
 SUBJECTS = [
     "Your website is losing 70% of visitors without answering them",
-    "Every {niche} website needs this — most don't have it",
+    "Every {niche} website needs this, most don't have it",
     "What happens when someone visits your website at 11pm?",
     "AI chatbot recovered 3 leads last night for a {niche} client",
     "Your website visitors are leaving without a way to contact you",
@@ -54,13 +54,13 @@ MESSAGES = [
     """\
 Hey,
 
-Quick question — when someone visits your website at 11pm and has a question, what happens?
+Quick question, when someone visits your website at 11pm and has a question, what happens?
 
 They leave. They go to Google and find someone who has an answer.
 
 We install a simple AI chatbot on your website that answers common questions 24/7, captures name and phone number, and sends you a text with the lead while you sleep.
 
-It's not a generic bot — we train it specifically on your services, pricing, FAQs, and how you want leads handled.
+It's not a generic bot, we train it specifically on your services, pricing, FAQs, and how you want leads handled.
 
 Most clients capture 3-7 extra leads per week they would have otherwise lost.
 
@@ -74,9 +74,9 @@ Gray Horizons Enterprise""",
     """\
 Hey,
 
-70% of website visitors leave without contacting a business — mostly because they have a question and nobody's there to answer it.
+70% of website visitors leave without contacting a business, mostly because they have a question and nobody's there to answer it.
 
-We fix this with a trained AI chatbot. It lives on your site, handles questions instantly, and captures contact info for every interested visitor — 24 hours a day.
+We fix this with a trained AI chatbot. It lives on your site, handles questions instantly, and captures contact info for every interested visitor, 24 hours a day.
 
 For a {niche}, it handles things like:
 - "Do you take [insurance/payments]?"
@@ -97,7 +97,7 @@ Hey,
 
 Most {niche} websites do one thing: tell people to call during business hours.
 
-We add a second channel — an AI that's live 24/7, answers questions in real-time, and captures every interested visitor's info before they bounce.
+We add a second channel, an AI that's live 24/7, answers questions in real-time, and captures every interested visitor's info before they bounce.
 
 What it does for you:
 - Answers common questions immediately (no one waits, no one leaves)
@@ -116,9 +116,9 @@ Gray Horizons Enterprise""",
 FOLLOWUP = """\
 Hey,
 
-Just following up — we had a {niche} client capture 6 leads last week from after-hours website visitors. All 6 would have bounced without the chatbot.
+Just following up, we had a {niche} client capture 6 leads last week from after-hours website visitors. All 6 would have bounced without the chatbot.
 
-$97/month. Happy to show you the demo — it takes 10 minutes.
+$97/month. Happy to show you the demo, it takes 10 minutes.
 
 {calendly}
 
@@ -193,7 +193,7 @@ def send_email(email: str, company: str, niche: str, subject: str, message: str)
 
 def run():
     if not SENDGRID_KEY:
-        print("[CHATBOT] No SENDGRID_API_KEY — scraping only")
+        print("[CHATBOT] No SENDGRID_API_KEY, scraping only")
 
     print("[CHATBOT] Scraping businesses with high-traffic websites...")
     leads = scrape_leads(300)
@@ -246,7 +246,7 @@ def run():
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
 
-    print(f"[CHATBOT] Done — {sent} sent, {fail} failed")
+    print(f"[CHATBOT] Done, {sent} sent, {fail} failed")
     print(f"  At 2% close: ~{int(sent * 0.02)} clients × $97 = ${int(sent * 0.02) * 97}/month")
 
 

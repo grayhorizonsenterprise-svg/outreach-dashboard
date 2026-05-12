@@ -1,5 +1,5 @@
 """
-grant_outreach_generator.py — Gray Horizons Enterprise
+grant_outreach_generator.py, Gray Horizons Enterprise
 Generates personalized grant writing outreach emails for nonprofits
 and small businesses. Reads from grant_queue.csv, writes messages.
 """
@@ -20,7 +20,7 @@ SUBJECT_LINES = [
     "Grant funding for {company}",
     "Found 3 grants {company} may qualify for",
     "Quick question about funding for {company}",
-    "Grant opportunities — {company}",
+    "Grant opportunities, {company}",
     "{company} may be leaving money on the table",
 ]
 
@@ -30,9 +30,9 @@ Hey,
 
 I run a grant research service and we came across {company} while looking at organizations in your space.
 
-There are currently 3-5 active federal and private grants your organization likely qualifies for — ranging from $5,000 to $250,000. Most go unclaimed simply because organizations don't have the bandwidth to find and apply.
+There are currently 3-5 active federal and private grants your organization likely qualifies for, ranging from $5,000 to $250,000. Most go unclaimed simply because organizations don't have the bandwidth to find and apply.
 
-We handle the full application — research, writing, submission. Flat fee, no retainer.
+We handle the full application, research, writing, submission. Flat fee, no retainer.
 
 If you want, I can pull the specific grants we found for you and send them over this week.
 
@@ -42,7 +42,7 @@ Gray Horizons Enterprise""",
     """\
 Hey,
 
-Quick one — we specialize in grant writing for organizations like {company}.
+Quick one, we specialize in grant writing for organizations like {company}.
 
 Right now there are several active grants in your sector that are open for applications. The average award we've helped clients secure is $47,000.
 
@@ -58,7 +58,7 @@ Hey,
 
 We work with nonprofits and small businesses to identify and apply for grants they qualify for but aren't currently pursuing.
 
-For organizations like {company}, there are usually 4-7 active opportunities at any given time. Most require a strong written application — that's what we do.
+For organizations like {company}, there are usually 4-7 active opportunities at any given time. Most require a strong written application, that's what we do.
 
 Flat fee per application. No upfront retainer. We've helped clients secure between $10,000 and $300,000.
 
@@ -81,7 +81,7 @@ def generate_message(company: str) -> str:
 
 def run():
     if not os.path.exists(QUEUE_FILE):
-        print("[GRANT] No grant_queue.csv found — run nonprofit_scraper.py first")
+        print("[GRANT] No grant_queue.csv found, run nonprofit_scraper.py first")
         return
 
     df = pd.read_csv(QUEUE_FILE).fillna("")
@@ -100,7 +100,7 @@ def run():
         df.at[i, "message"] = generate_message(company)
 
     df.to_csv(QUEUE_FILE, index=False)
-    print(f"[GRANT] Done — messages generated")
+    print(f"[GRANT] Done, messages generated")
 
 
 if __name__ == "__main__":

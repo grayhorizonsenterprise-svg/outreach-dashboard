@@ -581,7 +581,7 @@ To opt out of future emails, reply with REMOVE.""",
     """\
 Hi,
 
-After a repair is done, does your shop have anything that automatically follows up with the customer — check-in, review request, next service reminder?
+After a repair is done, does your shop have anything that automatically follows up with the customer, check-in, review request, next service reminder?
 
 Most shops we've worked with said that whole process was completely manual.
 
@@ -593,7 +593,7 @@ To opt out of future emails, reply with REMOVE.""",
     """\
 Hey,
 
-Direct question — when a customer calls for a quote and you don't hear back, how does your team track that? Is there a system following up or does it fall off?
+Direct question, when a customer calls for a quote and you don't hear back, how does your team track that? Is there a system following up or does it fall off?
 
 Happy to show you what we've built for this if it's relevant.
 
@@ -619,7 +619,7 @@ NICHE_MESSAGES["chiropractic"] = [
     """\
 Hey,
 
-New patient calls that come in after hours or while the front desk is with someone — what happens to those? Is there something catching them automatically or do they go to voicemail?
+New patient calls that come in after hours or while the front desk is with someone, what happens to those? Is there something catching them automatically or do they go to voicemail?
 
 That gap is where most practices lose new patients without realizing it.
 
@@ -643,7 +643,7 @@ To opt out of future emails, reply with REMOVE.""",
     """\
 Hey,
 
-Patient reactivation — reaching back out to patients who haven't been in for 3-6 months — is one of the highest-return things a practice can do. Most don't do it because it's manual.
+Patient reactivation, reaching back out to patients who haven't been in for 3-6 months, is one of the highest-return things a practice can do. Most don't do it because it's manual.
 
 We automated that entire process for a few practices. Happy to show you what it looks like.
 
@@ -669,7 +669,7 @@ To opt out of future emails, reply with REMOVE.""",
     """\
 Hi,
 
-Leads that go cold between first inquiry and first showing — how does your team track and follow up on those? Is there a system or does it depend on the agent remembering?
+Leads that go cold between first inquiry and first showing, how does your team track and follow up on those? Is there a system or does it depend on the agent remembering?
 
 That follow-up gap is where most agencies lose deals they should have closed.
 
@@ -707,7 +707,7 @@ To opt out of future emails, reply with REMOVE.""",
     """\
 Hi,
 
-Clients who haven't been in for 60-90 days — is there anything that automatically reaches back out to them, or does that depend on someone on your staff remembering?
+Clients who haven't been in for 60-90 days, is there anything that automatically reaches back out to them, or does that depend on someone on your staff remembering?
 
 We built a reactivation system for a few salons that runs completely on its own.
 
@@ -719,7 +719,7 @@ To opt out of future emails, reply with REMOVE.""",
     """\
 Hey,
 
-After-hours booking requests — when someone fills out your contact form at 10pm, what happens to it? Does something respond automatically or does it sit until morning?
+After-hours booking requests, when someone fills out your contact form at 10pm, what happens to it? Does something respond automatically or does it sit until morning?
 
 By morning they've usually booked somewhere else.
 
@@ -821,7 +821,7 @@ def run():
         "yourname", "sample@", "null@", "none@", "@mailinator", "@tempmail"
     ]
 
-    # Block ticket/system email prefixes — these are never real decision makers
+    # Block ticket/system email prefixes, these are never real decision makers
     corporate_email_blocks = [
         # Generic system emails
         "noreply@", "no-reply@", "donotreply@", "do-not-reply@",
@@ -840,7 +840,7 @@ def run():
         ".gov", ".edu", ".mil",
     ]
 
-    # Block these company name patterns — wrong targets entirely
+    # Block these company name patterns, wrong targets entirely
     corporate_name_blocks = [
         # Insurance (all forms)
         "insurance", "insurer", "underwriter", "surety", "indemnity",

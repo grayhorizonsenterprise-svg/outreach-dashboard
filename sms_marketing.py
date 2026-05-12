@@ -1,8 +1,8 @@
 """
-sms_marketing.py — Gray Horizons Enterprise
-Revenue niche: SMS Broadcast Marketing — $147/month per client
+sms_marketing.py, Gray Horizons Enterprise
+Revenue niche: SMS Broadcast Marketing, $147/month per client
 Monthly promotional SMS to client's customer list via Twilio.
-High retention — clients see direct response immediately after each blast.
+High retention, clients see direct response immediately after each blast.
 Separate queue: sms_queue.csv / sms_sent_log.csv
 """
 
@@ -42,10 +42,10 @@ CITIES = [
 ]
 
 SUBJECTS = [
-    "SMS marketing gets 98% open rates — email gets 20%",
+    "SMS marketing gets 98% open rates, email gets 20%",
     "Your customers read texts. They ignore emails.",
     "Fill slow days with one text to your customer list",
-    "We send 4 texts/month to your customer list — $147/month",
+    "We send 4 texts/month to your customer list, $147/month",
     "{niche}s are using SMS to fill their slowest days instantly",
     "One text to 500 customers filled up a {niche}'s entire week",
 ]
@@ -58,7 +58,7 @@ Text messages get a 98% open rate. Email gets about 20%.
 
 If you're sending promotions, special offers, or slow-day fills by email, most of your customers never see them.
 
-We run monthly SMS campaigns for local businesses — 4 texts per month to your existing customer list. Promotions, appointment reminders, loyalty offers, flash deals.
+We run monthly SMS campaigns for local businesses, 4 texts per month to your existing customer list. Promotions, appointment reminders, loyalty offers, flash deals.
 
 One {niche} sent a single "Tuesday slow day special" text to 400 customers and was fully booked by noon.
 
@@ -74,7 +74,7 @@ Hey,
 
 Every {niche} has slow days. The fastest fix is a text message to your existing customers.
 
-We set up and manage your SMS list — collect numbers from new customers, send monthly promos, handle replies. Done.
+We set up and manage your SMS list, collect numbers from new customers, send monthly promos, handle replies. Done.
 
 4 messages per month:
 - Week 1: Promo or special offer
@@ -91,11 +91,11 @@ Alex | Gray Horizons""",
     """\
 Hey,
 
-Quick question — when you have a slow Tuesday or empty appointment slots, how do you fill them?
+Quick question, when you have a slow Tuesday or empty appointment slots, how do you fill them?
 
 Most {niche}s just wait. The ones beating them send a text.
 
-We manage your entire SMS marketing — build the list, write the messages, handle opt-outs, send 4x/month.
+We manage your entire SMS marketing, build the list, write the messages, handle opt-outs, send 4x/month.
 
 98% open rate. Immediate responses. Works same-day.
 
@@ -168,7 +168,7 @@ def send_email(email, company, niche, subject, message) -> bool:
 
 def run():
     if not SENDGRID_KEY:
-        print("[SMS] No SENDGRID_API_KEY — scraping only")
+        print("[SMS] No SENDGRID_API_KEY, scraping only")
     print("[SMS] Scraping repeat-customer businesses...")
     leads = scrape_leads(300)
     print(f"  Found {len(leads)} leads")
@@ -207,7 +207,7 @@ def run():
         if os.path.exists(LOG_FILE):
             log_df = pd.concat([pd.read_csv(LOG_FILE), log_df], ignore_index=True)
         log_df.to_csv(LOG_FILE, index=False)
-    print(f"[SMS] Done — {sent} sent, {fail} failed")
+    print(f"[SMS] Done, {sent} sent, {fail} failed")
     print(f"  At 2% close: ~{int(sent * 0.02)} clients × $147 = ${int(sent * 0.02) * 147}/month")
 
 if __name__ == "__main__":
