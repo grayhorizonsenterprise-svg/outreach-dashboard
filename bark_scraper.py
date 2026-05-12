@@ -1,12 +1,9 @@
 """
 bark_scraper.py — Gray Horizons Enterprise
-Bark.com professional services directory — unique lead source, US businesses.
-Pros list themselves with contact info. High owner-operator concentration.
-No API key. Appends to prospects_raw.csv.
+Finds professional service providers via DuckDuckGo (replaced direct Bark.com scraping — 403 blocked on cloud IPs).
+Appends to prospects_raw.csv.
 """
 
-import requests
-from bs4 import BeautifulSoup
 import pandas as pd
 import re
 import time
@@ -14,144 +11,123 @@ import random
 import os
 import sys
 import urllib.parse
+from duckduckgo_search import DDGS
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 DATA_DIR    = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_FILE = os.path.join(DATA_DIR, "prospects_raw.csv")
 
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+NICHE_SEARCHES = [
+    ("hvac",         "hvac engineer"),
+    ("hvac",         "air conditioning repair"),
+    ("plumbing",     "plumber"),
+    ("electrician",  "electrician"),
+    ("contractor",   "general contractor"),
+    ("contractor",   "kitchen remodel"),
+    ("landscaping",  "landscaper"),
+    ("landscaping",  "lawn care"),
+    ("roofing",      "roofer"),
+    ("chiropractic", "chiropractor"),
+    ("dental",       "dentist"),
+    ("salon",        "hair salon"),
+    ("auto",         "auto mechanic"),
+    ("pest_control", "pest control"),
+    ("veterinary",   "veterinarian"),
+    ("optometry",    "optometrist"),
+    ("cleaning",     "house cleaning"),
+    ("realestate",   "real estate agent"),
 ]
 
-# Bark service category slugs → niche mapping
-BARK_CATEGORIES = [
-    ("hvac",         "hvac-engineers"),
-    ("hvac",         "air-conditioning-engineers"),
-    ("plumbing",     "plumbers"),
-    ("electrician",  "electricians"),
-    ("contractor",   "general-builders"),
-    ("contractor",   "kitchen-fitters"),
-    ("landscaping",  "gardeners"),
-    ("landscaping",  "landscapers"),
-    ("roofing",      "roofers"),
-    ("chiropractic", "chiropractors"),
-    ("dental",       "dentists"),
-    ("salon",        "hairdressers"),
-    ("auto",         "mechanics"),
-    ("pest_control", "pest-controllers"),
-    ("veterinary",   "vets"),
-    ("optometry",    "opticians"),
-    ("cleaning",     "house-cleaners"),
-    ("realestate",   "estate-agents"),
+LOCATIONS = [
+    "New York NY", "Los Angeles CA", "Chicago IL", "Houston TX", "Phoenix AZ",
+    "Philadelphia PA", "San Antonio TX", "San Diego CA", "Dallas TX",
+    "Austin TX", "Jacksonville FL", "Fort Worth TX", "Columbus OH", "Charlotte NC",
+    "Indianapolis IN", "Seattle WA", "Denver CO",
+    "Nashville TN", "Oklahoma City OK", "El Paso TX", "Boston MA", "Portland OR",
+    "Las Vegas NV", "Memphis TN", "Louisville KY", "Baltimore MD", "Milwaukee WI",
+    "Albuquerque NM", "Tucson AZ", "Fresno CA", "Sacramento CA", "Mesa AZ",
+    "Kansas City MO", "Atlanta GA", "Omaha NE", "Colorado Springs CO", "Raleigh NC",
+    "Minneapolis MN", "Tampa FL", "New Orleans LA", "Arlington TX", "Bakersfield CA",
 ]
 
-US_CITIES = [
-    "new-york-ny", "los-angeles-ca", "chicago-il", "houston-tx", "phoenix-az",
-    "philadelphia-pa", "san-antonio-tx", "san-diego-ca", "dallas-tx", "san-jose-ca",
-    "austin-tx", "jacksonville-fl", "fort-worth-tx", "columbus-oh", "charlotte-nc",
-    "indianapolis-in", "san-francisco-ca", "seattle-wa", "denver-co", "washington-dc",
-    "nashville-tn", "oklahoma-city-ok", "el-paso-tx", "boston-ma", "portland-or",
-    "las-vegas-nv", "memphis-tn", "louisville-ky", "baltimore-md", "milwaukee-wi",
-    "albuquerque-nm", "tucson-az", "fresno-ca", "sacramento-ca", "mesa-az",
-    "kansas-city-mo", "atlanta-ga", "omaha-ne", "colorado-springs-co", "raleigh-nc",
-    "miami-fl", "virginia-beach-va", "tampa-fl", "new-orleans-la", "cleveland-oh",
-    "aurora-co", "anaheim-ca", "honolulu-hi", "corpus-christi-tx", "riverside-ca",
-]
+SKIP_DOMAINS = {
+    "bark.com", "yellowpages.com", "superpages.com", "yelp.com",
+    "facebook.com", "twitter.com", "instagram.com", "linkedin.com",
+    "youtube.com", "google.com", "angi.com", "thumbtack.com",
+    "homeadvisor.com", "bbb.org", "nextdoor.com", "wikipedia.org", "indeed.com",
+}
 
-CORPORATE_BLOCKS = [
-    "national", "corporate", "franchise", "holdings", "partners",
-    "industries", "corporation", "international",
-]
-
-
-def get_headers():
-    return {
-        "User-Agent": random.choice(USER_AGENTS),
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Referer": "https://www.bark.com/",
-    }
-
-
-def scrape_bark(niche: str, category: str, city: str) -> list:
-    url = f"https://www.bark.com/en/us/{category}/{city}/"
-    try:
-        r = requests.get(url, headers=get_headers(), timeout=14)
-        if r.status_code == 429:
-            time.sleep(30)
-            return []
-        if r.status_code != 200:
-            return []
-
-        soup    = BeautifulSoup(r.text, "html.parser")
-        results = []
-
-        for card in soup.select(".provider-card, .profile-card, [class*='provider'], [class*='seller']"):
-            name_el = card.select_one("h2, h3, .provider-name, .seller-name, [class*='name']")
-            if not name_el:
-                continue
-            name = name_el.get_text(strip=True)
-            if not name or len(name) < 3:
-                continue
-            if any(b in name.lower() for b in CORPORATE_BLOCKS):
-                continue
-
-            website = ""
-            web_el  = card.select_one("a[href*='http']:not([href*='bark.com'])")
-            if web_el:
-                website = web_el.get("href", "")
-
-            loc_el = card.select_one("[class*='location'], [class*='city'], [class*='address']")
-            location_str = loc_el.get_text(strip=True)[:60] if loc_el else city.replace("-", " ").title()
-
-            results.append({
-                "company":          name,
-                "website":          website,
-                "email":            "",
-                "contact_page_url": "",
-                "location":         location_str,
-                "niche":            niche,
-                "lead_type":        "READY",
-                "phone":            "",
-            })
-
-        return results
-    except Exception as e:
-        print(f"[BARK] Error {url}: {e}")
-        return []
+EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
 
 
 def run():
-    existing   = pd.read_csv(OUTPUT_FILE).fillna("") if os.path.exists(OUTPUT_FILE) else pd.DataFrame()
-    done_names = set(existing["company"].str.lower().tolist()) if len(existing) else set()
+    seen_emails = set()
+    if os.path.exists(OUTPUT_FILE):
+        try:
+            df_ex = pd.read_csv(OUTPUT_FILE).fillna("")
+            seen_emails = set(df_ex.get("email", pd.Series(dtype=str)).str.lower().dropna())
+        except Exception:
+            pass
 
-    new_rows     = []
-    city_sample  = random.sample(US_CITIES, min(15, len(US_CITIES)))
+    searches_per_run = int(os.getenv("SCRAPER_SEARCHES_PER_RUN", "35"))
+    all_combos = [(n, t, loc) for n, t in NICHE_SEARCHES for loc in LOCATIONS]
+    random.shuffle(all_combos)
+    combos = all_combos[:searches_per_run]
 
-    for niche, category in BARK_CATEGORIES:
-        for city in city_sample[:8]:
-            rows = scrape_bark(niche, category, city)
-            for row in rows:
-                if row["company"].lower() in done_names:
+    print(f"[BARK] Running {len(combos)} DDG searches...")
+    all_new: dict[str, dict] = {}
+    niche_counts: dict[str, int] = {}
+    ddgs = DDGS()
+
+    for niche, term, location in combos:
+        query = f"{term} {location} email contact website"
+        print(f"  [BK:{niche.upper()}] '{term}' in {location}")
+        try:
+            results = list(ddgs.text(query, max_results=6))
+            for r in results:
+                body   = r.get("body", "")
+                url    = r.get("href", "")
+                name   = r.get("title", "")[:60]
+                domain = urllib.parse.urlparse(url).netloc.lower().replace("www.", "")
+                if domain in SKIP_DOMAINS:
                     continue
-                done_names.add(row["company"].lower())
-                new_rows.append(row)
-            time.sleep(random.uniform(2.0, 4.5))
+                for email in EMAIL_RE.findall(body):
+                    email = email.lower()
+                    if email in seen_emails or email.endswith((".png", ".jpg", ".gif")):
+                        continue
+                    seen_emails.add(email)
+                    all_new[email] = {
+                        "company": name, "website": url, "email": email,
+                        "contact_page_url": "", "location": location,
+                        "niche": niche, "phone": "",
+                    }
+                    niche_counts[niche] = niche_counts.get(niche, 0) + 1
+            time.sleep(random.uniform(0.5, 1.2))
+        except Exception as e:
+            print(f"    [BK] Error: {e}")
 
-    if not new_rows:
-        print("[BARK] No new leads found")
+    if not all_new:
+        print("[BARK] No new leads this run.")
         return
 
-    new_df = pd.DataFrame(new_rows)
-    if "phone" not in existing.columns and len(existing):
-        existing["phone"] = ""
-    out = pd.concat([existing, new_df], ignore_index=True) if len(existing) else new_df
-    out.to_csv(OUTPUT_FILE, index=False)
-    print(f"[BARK] Done — {len(new_rows)} new leads added (total: {len(out)})")
+    df_new = pd.DataFrame(list(all_new.values()))
+    if os.path.exists(OUTPUT_FILE):
+        try:
+            df_ex = pd.read_csv(OUTPUT_FILE).fillna("")
+            for col in ["phone", "contact_page_url"]:
+                if col not in df_ex.columns:
+                    df_ex[col] = ""
+            df_combined = pd.concat([df_ex, df_new], ignore_index=True).drop_duplicates(subset=["email"])
+        except Exception:
+            df_combined = df_new
+    else:
+        df_combined = df_new
+
+    df_combined.to_csv(OUTPUT_FILE, index=False)
+    print(f"\n[BARK DONE] {len(df_new)} new | {len(df_combined)} total")
+    for n, c in sorted(niche_counts.items()):
+        print(f"  {n.upper():14s}: {c}")
 
 
 if __name__ == "__main__":

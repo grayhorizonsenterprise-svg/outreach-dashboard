@@ -1,12 +1,10 @@
 """
 manta_scraper.py — Gray Horizons Enterprise
-Manta.com business directory — specifically indexes small/owner-operated businesses.
-Different database from Yellow Pages and Superpages.
-No API key. Rotates user agents. Appends to prospects_raw.csv.
+Finds small/owner-operated businesses via DuckDuckGo search.
+Replaced direct manta.com scraping (blocked by 403 on cloud IPs).
+Appends to prospects_raw.csv.
 """
 
-import requests
-from bs4 import BeautifulSoup
 import pandas as pd
 import re
 import time
@@ -14,6 +12,7 @@ import random
 import os
 import sys
 import urllib.parse
+from duckduckgo_search import DDGS
 
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
@@ -104,29 +103,15 @@ LOCATIONS = [
     "Tacoma, WA", "Bellevue, WA", "Everett, WA", "Bellingham, WA",
 ]
 
+EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
+
 SKIP_DOMAINS = {
     "manta.com", "yellowpages.com", "superpages.com", "yelp.com",
     "facebook.com", "twitter.com", "instagram.com", "linkedin.com",
     "youtube.com", "google.com", "angi.com", "thumbtack.com",
     "homeadvisor.com", "bbb.org", "nextdoor.com", "wikipedia.org",
+    "indeed.com", "glassdoor.com", "mapquest.com",
 }
-
-CORPORATE_NAME_SKIP = [
-    "hospital", "health system", "insurance", "university", "college",
-    "school district", "government", "department of", "city of", "county of",
-    "nationwide", "national chain", "nonprofit", "foundation",
-]
-
-
-def get_headers():
-    return {
-        "User-Agent":              random.choice(USER_AGENTS),
-        "Accept":                  "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language":         "en-US,en;q=0.9",
-        "Accept-Encoding":         "gzip, deflate, br",
-        "Connection":              "keep-alive",
-        "Upgrade-Insecure-Requests": "1",
-    }
 
 
 def extract_domain(url):
@@ -139,120 +124,18 @@ def extract_domain(url):
         return ""
 
 
-def scrape_manta_page(search_term, location, page=1):
-    """Scrape one page of Manta results. Returns list of prospect dicts."""
-    url = "https://www.manta.com/mb?" + urllib.parse.urlencode({
-        "search_term": search_term,
-        "location":    location,
-        "pg":          page,
-    })
-
-    try:
-        resp = requests.get(url, headers=get_headers(), timeout=12, allow_redirects=True)
-        if resp.status_code != 200:
-            print(f"    [MT] HTTP {resp.status_code} — '{search_term}' in {location}")
-            return []
-
-        soup = BeautifulSoup(resp.text, "html.parser")
-
-        # Manta business cards — try multiple known selectors
-        cards = (
-            soup.find_all("div",     class_=re.compile(r"\bcard\b",     re.I))
-            or soup.find_all("li",   class_=re.compile(r"\blisting\b",  re.I))
-            or soup.find_all("div",  class_=re.compile(r"\bbusiness\b", re.I))
-            or soup.find_all("article")
-        )
-
-        if not cards:
-            return []
-
-        results = []
-        for card in cards:
-            # Name
-            name = ""
-            for fn in [
-                lambda el: el.find("a",  class_=re.compile(r"business-name|company-name|listing-name", re.I)),
-                lambda el: el.find(      class_=re.compile(r"business-name|company-name|title",        re.I)),
-                lambda el: el.find("h2"),
-                lambda el: el.find("h3"),
-            ]:
-                tag = fn(card)
-                if tag:
-                    name = tag.get_text(strip=True)
-                    if name:
-                        break
-
-            if not name or len(name) < 3:
-                continue
-
-            name_lower = name.lower()
-            if any(p in name_lower for p in CORPORATE_NAME_SKIP):
-                continue
-
-            # Website
-            website = ""
-            for a in card.find_all("a", href=True):
-                href = a["href"]
-                if href.startswith("http") and "manta.com" not in href:
-                    domain = extract_domain(href)
-                    if domain and domain not in SKIP_DOMAINS:
-                        website = href
-                        break
-
-            # Phone
-            phone = ""
-            ph = card.find(class_=re.compile(r"\bphone\b|\btel\b", re.I))
-            if ph:
-                phone = re.sub(r"[^\d\-\(\)\+\s]", "", ph.get_text(strip=True)).strip()
-
-            # Address
-            address = location
-            addr = card.find(class_=re.compile(r"\baddress\b|\blocality\b|\badr\b", re.I))
-            if addr:
-                txt = addr.get_text(strip=True)
-                if txt:
-                    address = txt
-
-            results.append({
-                "name":    name,
-                "website": website,
-                "phone":   phone,
-                "address": address,
-            })
-
-        return results
-
-    except Exception as exc:
-        print(f"    [MT] Exception — '{search_term}' / {location}: {exc}")
-        return []
-
-
 def run():
-    seen_domains = set()
-    seen_emails  = set()
-
+    seen_emails = set()
     if os.path.exists(OUTPUT_FILE):
         try:
             df_ex = pd.read_csv(OUTPUT_FILE).fillna("")
-            for url in df_ex.get("website", pd.Series(dtype=str)).tolist():
-                d = extract_domain(str(url))
-                if d:
-                    seen_domains.add(d)
-            for e in df_ex.get("email", pd.Series(dtype=str)).tolist():
-                e = str(e).strip().lower()
-                if e and e not in ("", "nan", "none"):
-                    seen_emails.add(e)
-            print(f"[MT] {len(seen_domains)} existing domains loaded — skipping these")
-        except Exception as exc:
-            print(f"[MT] Could not load prospects_raw.csv: {exc}")
-
+            seen_emails = set(df_ex.get("email", pd.Series(dtype=str)).str.lower().dropna())
+        except Exception:
+            pass
     if os.path.exists(OUTREACH_FILE):
         try:
             oq = pd.read_csv(OUTREACH_FILE).fillna("")
-            for e in oq.get("email", pd.Series(dtype=str)).tolist():
-                e = str(e).strip().lower()
-                if e and e not in ("", "nan", "none"):
-                    seen_emails.add(e)
+            seen_emails |= set(oq.get("email", pd.Series(dtype=str)).str.lower().dropna())
         except Exception:
             pass
 
@@ -265,62 +148,56 @@ def run():
     random.shuffle(all_combos)
     combos = all_combos[:searches_per_run]
 
-    print(f"[MT] Running {len(combos)} searches ({len(all_combos)} total possible)...")
+    print(f"[MT] Running {len(combos)} DuckDuckGo searches...")
 
-    all_new    = []
+    all_new: list[dict] = []
     niche_counts: dict[str, int] = {}
+    ddgs = DDGS()
 
     for niche, term, location in combos:
+        query = f"{term} {location} email contact -site:yelp.com -site:yellowpages.com"
         print(f"  [MT:{niche.upper()}] '{term}' in {location}")
-
-        for page in [1, 2]:
-            listings = scrape_manta_page(term, location, page)
-            if not listings:
-                break
-
-            added = 0
-            for listing in listings:
-                domain = extract_domain(listing["website"])
-
-                if domain and domain in seen_domains:
+        try:
+            results = list(ddgs.text(query, max_results=6))
+            for r in results:
+                body = r.get("body", "")
+                url  = r.get("href", "")
+                name = r.get("title", "")[:60]
+                domain = extract_domain(url)
+                if domain in SKIP_DOMAINS:
                     continue
-                if domain and domain in SKIP_DOMAINS:
+                emails = [e for e in EMAIL_RE.findall(body)
+                          if not e.endswith((".png", ".jpg", ".gif"))]
+                email = emails[0].lower() if emails else ""
+                if not email or email in seen_emails:
                     continue
-                if domain:
-                    seen_domains.add(domain)
-
+                seen_emails.add(email)
                 all_new.append({
-                    "company":          listing["name"],
-                    "website":          listing["website"],
-                    "email":            "",
+                    "company":          name,
+                    "website":          url,
+                    "email":            email,
                     "contact_page_url": "",
-                    "location":         listing["address"],
+                    "location":         location,
                     "niche":            niche,
-                    "phone":            listing["phone"],
+                    "phone":            "",
                 })
                 niche_counts[niche] = niche_counts.get(niche, 0) + 1
-                added += 1
-
-            print(f"    page {page}: {len(listings)} found, {added} new")
-            time.sleep(random.uniform(2.0, 4.0))
-
-        time.sleep(random.uniform(1.5, 3.0))
+            time.sleep(random.uniform(0.5, 1.5))
+        except Exception as exc:
+            print(f"    [MT] Error: {exc}")
 
     if not all_new:
         print("[MT] No new prospects this run.")
         return
 
-    df_new = pd.DataFrame(all_new)
-    df_new = df_new[df_new["website"].str.strip() != ""].copy()
-    df_new.drop_duplicates(subset=["website"], inplace=True)
-
+    df_new = pd.DataFrame(all_new).drop_duplicates(subset=["email"])
     if os.path.exists(OUTPUT_FILE):
         try:
             df_existing = pd.read_csv(OUTPUT_FILE).fillna("")
             if "phone" not in df_existing.columns:
                 df_existing["phone"] = ""
             df_combined = pd.concat([df_existing, df_new], ignore_index=True)
-            df_combined.drop_duplicates(subset=["website"], inplace=True)
+            df_combined.drop_duplicates(subset=["email"], inplace=True)
         except Exception:
             df_combined = df_new
     else:

@@ -1,12 +1,9 @@
 """
 chamberofcommerce_scraper.py — Gray Horizons Enterprise
-Scrapes chamberofcommerce.com — excellent source for owner-operated local businesses.
-Members are vetted, real businesses with real owners. Different DB from all other scrapers.
-No API key. Appends to prospects_raw.csv.
+Finds chamber-member businesses via DuckDuckGo (replaced direct scraping — 403 blocked on cloud IPs).
+Targets owner-operated local businesses. Appends to prospects_raw.csv.
 """
 
-import requests
-from bs4 import BeautifulSoup
 import pandas as pd
 import re
 import time
@@ -14,22 +11,17 @@ import random
 import os
 import sys
 import urllib.parse
+from duckduckgo_search import DDGS
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 DATA_DIR    = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_FILE = os.path.join(DATA_DIR, "prospects_raw.csv")
 
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",
-]
-
 NICHE_SEARCHES = [
     ("hvac",         "hvac"),
-    ("hvac",         "air+conditioning"),
-    ("hvac",         "heating+cooling"),
+    ("hvac",         "air conditioning"),
+    ("hvac",         "heating cooling"),
     ("dental",       "dentist"),
     ("dental",       "dental"),
     ("plumbing",     "plumber"),
@@ -38,120 +30,115 @@ NICHE_SEARCHES = [
     ("contractor",   "remodeling"),
     ("landscaping",  "landscaping"),
     ("roofing",      "roofing"),
-    ("hoa",          "property+management"),
+    ("hoa",          "property management"),
     ("chiropractic", "chiropractor"),
-    ("auto",         "auto+repair"),
-    ("pest_control", "pest+control"),
+    ("auto",         "auto repair"),
+    ("pest_control", "pest control"),
     ("electrician",  "electrician"),
     ("salon",        "salon"),
     ("veterinary",   "veterinarian"),
     ("optometry",    "optometrist"),
 ]
 
-STATES = [
-    "TX", "FL", "GA", "NC", "TN", "AZ", "CO", "NV", "OH",
-    "IN", "KY", "OK", "KS", "NE", "NM", "ID", "UT", "SC", "AL", "MO",
+LOCATIONS = [
+    "Dallas TX", "Houston TX", "San Antonio TX", "Fort Worth TX", "Austin TX",
+    "Tampa FL", "Orlando FL", "Jacksonville FL", "Miami FL",
+    "Atlanta GA", "Savannah GA", "Augusta GA", "Macon GA",
+    "Charlotte NC", "Raleigh NC", "Greensboro NC",
+    "Nashville TN", "Memphis TN", "Knoxville TN",
+    "Phoenix AZ", "Tucson AZ", "Mesa AZ",
+    "Denver CO", "Colorado Springs CO",
+    "Las Vegas NV", "Henderson NV",
+    "Columbus OH", "Cleveland OH", "Cincinnati OH",
+    "Indianapolis IN", "Fort Wayne IN",
+    "Louisville KY", "Lexington KY",
+    "Oklahoma City OK", "Tulsa OK",
+    "Wichita KS", "Kansas City MO",
+    "Omaha NE", "Lincoln NE",
+    "Albuquerque NM", "Santa Fe NM",
+    "Boise ID", "Salt Lake City UT",
+    "Birmingham AL", "Montgomery AL",
+    "Columbia SC", "Charleston SC",
+    "St Louis MO", "Springfield MO",
 ]
 
-CORPORATE_BLOCKS = [
-    "national", "corporate", "franchise", "holdings", "partners",
-    "industries", "corporation", "international", "management group",
-]
+SKIP_DOMAINS = {
+    "chamberofcommerce.com", "yellowpages.com", "superpages.com", "yelp.com",
+    "facebook.com", "twitter.com", "instagram.com", "linkedin.com",
+    "youtube.com", "google.com", "angi.com", "thumbtack.com",
+    "homeadvisor.com", "bbb.org", "nextdoor.com", "wikipedia.org", "indeed.com",
+}
 
-
-def get_headers():
-    return {
-        "User-Agent": random.choice(USER_AGENTS),
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Referer": "https://www.chamberofcommerce.com/",
-    }
-
-
-def scrape_page(niche: str, keyword: str, state: str, page: int = 1) -> list:
-    url = f"https://www.chamberofcommerce.com/united-states/{state.lower()}/{keyword}?page={page}"
-    try:
-        r = requests.get(url, headers=get_headers(), timeout=14)
-        if r.status_code == 429:
-            print("[COC] Rate limited — sleeping 45s")
-            time.sleep(45)
-            return []
-        if r.status_code != 200:
-            return []
-
-        soup    = BeautifulSoup(r.text, "html.parser")
-        results = []
-
-        for card in soup.select(".business-listing, .result-card, [class*='listing'], [class*='result-item']"):
-            name_el = card.select_one("h2, h3, .business-name, [class*='name']")
-            if not name_el:
-                continue
-            name = name_el.get_text(strip=True)
-            if not name or len(name) < 3:
-                continue
-            if any(b in name.lower() for b in CORPORATE_BLOCKS):
-                continue
-
-            website = ""
-            web_el  = card.select_one("a[href*='http']:not([href*='chamberofcommerce'])")
-            if web_el:
-                website = web_el.get("href", "")
-
-            phone = ""
-            ph_el = card.select_one("[class*='phone'], [itemprop='telephone'], [class*='tel']")
-            if ph_el:
-                phone = re.sub(r"[^\d]", "", ph_el.get_text())
-
-            addr_el  = card.select_one("[class*='address'], [itemprop='address'], [class*='location']")
-            location_str = addr_el.get_text(strip=True)[:60] if addr_el else state
-
-            results.append({
-                "company":          name,
-                "website":          website,
-                "email":            "",
-                "contact_page_url": "",
-                "location":         location_str,
-                "niche":            niche,
-                "lead_type":        "READY",
-                "phone":            phone,
-            })
-
-        return results
-    except Exception as e:
-        print(f"[COC] Error {url}: {e}")
-        return []
+EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
 
 
 def run():
-    existing   = pd.read_csv(OUTPUT_FILE).fillna("") if os.path.exists(OUTPUT_FILE) else pd.DataFrame()
-    done_names = set(existing["company"].str.lower().tolist()) if len(existing) else set()
+    seen_emails = set()
+    if os.path.exists(OUTPUT_FILE):
+        try:
+            df_ex = pd.read_csv(OUTPUT_FILE).fillna("")
+            seen_emails = set(df_ex.get("email", pd.Series(dtype=str)).str.lower().dropna())
+        except Exception:
+            pass
 
-    new_rows   = []
-    state_sample = random.sample(STATES, min(10, len(STATES)))
+    searches_per_run = int(os.getenv("SCRAPER_SEARCHES_PER_RUN", "35"))
+    all_combos = [(n, t, loc) for n, t in NICHE_SEARCHES for loc in LOCATIONS]
+    random.shuffle(all_combos)
+    combos = all_combos[:searches_per_run]
 
-    for niche, keyword in NICHE_SEARCHES:
-        for state in state_sample:
-            for page in [1, 2, 3]:
-                rows = scrape_page(niche, keyword, state, page)
-                for row in rows:
-                    if row["company"].lower() in done_names:
+    print(f"[COC] Running {len(combos)} DDG searches...")
+    all_new: dict[str, dict] = {}
+    niche_counts: dict[str, int] = {}
+    ddgs = DDGS()
+
+    for niche, term, location in combos:
+        query = f"{term} {location} owner email contact small business"
+        print(f"  [COC:{niche.upper()}] '{term}' in {location}")
+        try:
+            results = list(ddgs.text(query, max_results=6))
+            for r in results:
+                body   = r.get("body", "")
+                url    = r.get("href", "")
+                name   = r.get("title", "")[:60]
+                domain = urllib.parse.urlparse(url).netloc.lower().replace("www.", "")
+                if domain in SKIP_DOMAINS:
+                    continue
+                for email in EMAIL_RE.findall(body):
+                    email = email.lower()
+                    if email in seen_emails or email.endswith((".png", ".jpg", ".gif")):
                         continue
-                    done_names.add(row["company"].lower())
-                    new_rows.append(row)
-                if not rows:
-                    break
-                time.sleep(random.uniform(2.0, 4.0))
+                    seen_emails.add(email)
+                    all_new[email] = {
+                        "company": name, "website": url, "email": email,
+                        "contact_page_url": "", "location": location,
+                        "niche": niche, "phone": "",
+                    }
+                    niche_counts[niche] = niche_counts.get(niche, 0) + 1
+            time.sleep(random.uniform(0.5, 1.2))
+        except Exception as e:
+            print(f"    [COC] Error: {e}")
 
-    if not new_rows:
-        print("[COC] No new leads found")
+    if not all_new:
+        print("[COC] No new leads this run.")
         return
 
-    new_df = pd.DataFrame(new_rows)
-    if "phone" not in existing.columns and len(existing):
-        existing["phone"] = ""
-    out = pd.concat([existing, new_df], ignore_index=True) if len(existing) else new_df
-    out.to_csv(OUTPUT_FILE, index=False)
-    print(f"[COC] Done — {len(new_rows)} new leads added (total: {len(out)})")
+    df_new = pd.DataFrame(list(all_new.values()))
+    if os.path.exists(OUTPUT_FILE):
+        try:
+            df_ex = pd.read_csv(OUTPUT_FILE).fillna("")
+            for col in ["phone", "contact_page_url"]:
+                if col not in df_ex.columns:
+                    df_ex[col] = ""
+            df_combined = pd.concat([df_ex, df_new], ignore_index=True).drop_duplicates(subset=["email"])
+        except Exception:
+            df_combined = df_new
+    else:
+        df_combined = df_new
+
+    df_combined.to_csv(OUTPUT_FILE, index=False)
+    print(f"\n[COC DONE] {len(df_new)} new | {len(df_combined)} total")
+    for n, c in sorted(niche_counts.items()):
+        print(f"  {n.upper():14s}: {c}")
 
 
 if __name__ == "__main__":
