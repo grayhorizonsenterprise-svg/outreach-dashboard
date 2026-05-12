@@ -513,9 +513,9 @@ def send_email(to_email, name, company, message, subject=""):
     return False
 
 # =========================
-# BATCH SENDER — runs in background thread, 400 emails/day
+# BATCH SENDER — runs in background thread
 # =========================
-def run_batch_send():
+def run_batch_send(limit=None):
     global batch_running, batch_sent_count
     if batch_running:
         return
@@ -526,14 +526,8 @@ def run_batch_send():
     import threading
     lock = threading.Lock()
 
-    sent_today = count_sent_today()
-    remaining  = max(0, DAILY_EMAIL_LIMIT - sent_today)
-    print(f"[BATCH] Daily limit {DAILY_EMAIL_LIMIT} | sent today {sent_today} | sending up to {remaining}", flush=True)
-
-    if remaining == 0:
-        print("[BATCH] Daily limit already reached.", flush=True)
-        batch_running = False
-        return
+    cap = limit if limit else DAILY_EMAIL_LIMIT
+    print(f"[BATCH] Sending up to {cap} emails...", flush=True)
 
     df      = load_data()
     mask    = (df["status"] == "pending") & (df["email"].fillna("").str.strip() != "")
@@ -548,11 +542,10 @@ def run_batch_send():
             seen_emails.add(email_key)
             rows.append((i, row))
         else:
-            # Mark duplicate as skipped so it doesn't keep reappearing
             df.at[i, "status"] = "skipped"
     save_data(df)
     df = load_data()
-    rows = rows[:remaining]
+    rows = rows[:cap]
 
     sent_indexes = []
 
@@ -576,7 +569,6 @@ def run_batch_send():
             except Exception as e:
                 print(f"[BATCH] thread error: {e}", flush=True)
 
-    # Write results back
     df2 = load_data()
     for i in sent_indexes:
         if i < len(df2):
@@ -734,6 +726,8 @@ def dashboard():
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <a href="/send-batch" class="btn-link" style="background:{'#475569' if batch_running else '#f97316'};color:{'#94a3b8' if batch_running else '#000'};font-weight:bold;">{'Sending...' if batch_running else f'Send {daily_remaining} Now'}</a>
+      <a href="/send-batch-1k" class="btn-link" style="background:{'#475569' if batch_running else '#16a34a'};color:#fff;font-weight:bold;">{'Sending...' if batch_running else 'Blast 1,000'}</a>
+      <a href="/send-batch-5k" class="btn-link" style="background:{'#475569' if batch_running else '#dc2626'};color:#fff;font-weight:bold;">{'Sending...' if batch_running else 'Blast 5,000'}</a>
       <a href="/upload-queue" class="btn-link" style="background:#22c55e;color:#000;font-weight:bold;">Upload Leads</a>
       <a href="/sent" class="btn-link" style="background:#7c3aed;">View Sent</a>
       <a href="/resend-failed" class="btn-link" style="background:#f59e0b;color:#000;">Resend Failed</a>
@@ -1511,6 +1505,18 @@ def debug():
 def send_batch():
     if not batch_running:
         threading.Thread(target=run_batch_send, daemon=True).start()
+    return redirect('/')
+
+@app.route('/send-batch-1k')
+def send_batch_1k():
+    if not batch_running:
+        threading.Thread(target=run_batch_send, kwargs={"limit": 1000}, daemon=True).start()
+    return redirect('/')
+
+@app.route('/send-batch-5k')
+def send_batch_5k():
+    if not batch_running:
+        threading.Thread(target=run_batch_send, kwargs={"limit": 5000}, daemon=True).start()
     return redirect('/')
 
 @app.route('/social/from-sent')
