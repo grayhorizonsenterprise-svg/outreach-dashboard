@@ -13,7 +13,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 DATA_DIR   = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 QUEUE_FILE = os.path.join(DATA_DIR, "grant_queue.csv")
-CALENDLY   = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
+CALENDLY   = os.getenv(""https://calendly.com/grayhorizonsenterprise/30min"", "https://calendly.com/grayhorizonsenterprise/30min")
 STRIPE_GRANT = os.getenv("STRIPE_GRANT_LINK", "")
 
 SUBJECT_LINES = [

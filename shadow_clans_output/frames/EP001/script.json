@@ -1,0 +1,84 @@
+{
+  "episode_number": 1,
+  "title": "The Night He Refused",
+  "logline": "When Wolf Clan's greatest warrior defies an unjust kill order, he loses everything — and sets the war in motion.",
+  "narrator_intro": "Before the three clans fractured... before the Hollow Gate was ever opened... there was one night. One refusal. One exile. And a world that was never the same again.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "Burned battlefield at the edge of Wolf Clan territory — charred snow, collapsed banners, distant fires dying in frozen wind",
+      "action": "Slow aerial push over the ruins of a skirmish. Broken weapons half-buried in ash-darkened snow. Distant torches still burning. A lone banner — torn Wolf Clan insignia — flaps in silence. No survivors visible. The camera descends slowly toward a single set of armored boot prints in the snow.",
+      "narration": "After every battle, the silence lied. This one told the truth.",
+      "image_prompt": "burned battlefield, collapsed snow-dusted banners, distant dying fires, ash-darkened snowfield, broken iron weapons half-buried in snow, cinematic aerial angle descending, practical natural lighting from distant fire glow, heavy mist, visible snowfall, no survivors, single boot track in ash-snow, photorealistic textures, film grain, desaturated blue-grey palette, shallow depth of field, handheld slight movement, cinematic film still, 4k realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 13,
+      "setting": "High rocky outcrop above the battlefield — moonlit tundra, frozen ruins behind, howling wind",
+      "action": "RAIZEN stands alone, back to camera, facing the valley below. Full scarred iron armor. Fur pauldrons shifting in the wind. Camera slowly pushes toward him. He does not move. His breath is visible in the cold air. He turns — silver eyes catch the moonlight. The weight in his expression is not anger. It is grief.",
+      "narration": "RAIZEN had followed every order. Until the one that demanded he become something unrecognizable.",
+      "image_prompt": "lone armored wolf warrior standing on frozen rocky outcrop, back to camera, snow-dusted fur pauldrons, scarred dark iron plate with claw marks, moonlit tundra below, visible breath in freezing air, slow cinematic push, silver glowing eyes subtle moonlight reflection, emotional grief expression, photorealistic skin and armor texture, desaturated silver-blue palette, shallow depth of field, film grain, practical moonlight only, NO lens flares, NO fantasy glow, cinematic realism, 4k, realistic textures, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 11,
+      "setting": "Wolf Clan war council chamber — stone walls, torch-lit, heavy smoke, animal skull mounted above a map table",
+      "action": "FLASHBACK. The council chamber. Three clan elders face RAIZEN. An elder slides a sealed order across the stone table: a name — a civilian settlement. RAIZEN reads it. His jaw tightens. He slides it back. The room goes very still.",
+      "narration": "The kill order bore a civilian name. He read it once. And refused.",
+      "image_prompt": "torch-lit stone war council chamber, heavy smoke, animal skull mounted above rough map table, three elder warriors in scarred armor around table, RAIZEN reading sealed parchment order, jaw tight, visible emotional tension, practical torch-only lighting, warm amber shadows, stone texture, animal fur on walls, cinematic medium shot, photorealistic facial detail, desaturated tone with amber torch warmth, film grain, shallow depth of field, 4k, NO anime shading, NO glow, realistic textures",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 12,
+      "setting": "Ruined stone tower on a storm-battered cliffside — Raven Order territory, twilight, heavy cloud cover",
+      "action": "Inside the Raven Order tower. KURO stands before a vast wall of pinned documents, maps, coded messages, surveillance sketches of all three clan leaders. He places a new sheet — RAIZEN's exile order, already obtained somehow. He taps it. A faint cold smile. He knew this would happen. He made it happen.",
+      "narration": "Somewhere else, the Raven Order had already filed the outcome.",
+      "image_prompt": "ruined stone tower interior, twilight storm light through cracked windows, vast wall covered in pinned documents maps and surveillance sketches, KURO in black feather-plated cloak obsidian half-mask, cold glowing blue eyes unblinking, pinning exile document, faint cold expression, dim blue-grey atmospheric fog, practical storm window lighting, heavy shadows, charcoal and deep shadow palette, cinematic medium shot, photorealistic textures, film grain, shallow depth of field, 4k, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 13,
+      "setting": "Snow-covered pine forest at night — Wolf Clan hunting ground, pack moving through dense trees, full moonlight",
+      "action": "A wolf pack — real wolves, not warriors — moves through the dark pine forest. Then: armored Wolf Clan scouts moving in the same pattern. The pack and the clan move as one organism. The lead scout stops. Raises a fist. The entire group halts in silence. Somewhere in the dark ahead — a sound. A branch. Not wind.",
+      "narration": "The pack knew before the scouts did. Something was already watching.",
+      "image_prompt": "snow-covered pine forest at night, real wolves and armored wolf clan scouts moving in formation together, moonlight through tree canopy, breath visible in freezing air, scout raises fist, group halts in silence, photorealistic wolves with realistic fur movement, practical moonlight only, desaturated cool blue-silver palette, deep tree shadows, emotional tension, cinematic tracking shot, film grain, shallow depth of field, 4k, realistic textures, NO anime, NO glow",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 14,
+      "setting": "Ancient Gorilla Titans temple ruins — overgrown jungle fog, shattered colossal stone statues, glowing rune carvings in crumbling walls",
+      "action": "VARN stands motionless before a wall of rune carvings. Ancient. Impossibly large. He reaches out — one finger touching a rune. It pulses faintly. Not magic. Recognition. The rune is a map. And at its center: the Hollow Gate. He pulls his hand back slowly. The rune fades.",
+      "narration": "VARN had seen this map before. In a dream he could not explain. In a language no one taught him.",
+      "image_prompt": "ancient crumbling temple ruins, massive shattered stone statues, dense jungle fog, VARN in ancient stone-plate cracked glowing rune armor, amber pulsing rune carved into wall, realistic rune glow subtle not fantasy, VARN touching rune with one finger, emotional recognition expression, amber rune-pulse lighting, ochre and deep forest green palette, heavy mist, moss-covered stone, cinematic medium wide shot, photorealistic textures, film grain, shallow depth of field, 4k, NO anime shading, realistic rune texture",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 13,
+      "setting": "The Hollow Gate — ancient stone archway in a high mountain pass, barely visible purple atmospheric distortion, ash falling like snow",
+      "action": "The Hollow Gate in the dark. Not glowing. Not dramatic. Just present. Ancient stone arch. Carvings worn nearly smooth by centuries. A faint distortion in the air — like heat shimmer but cold. A raven feather drifts through the arch and simply... disappears. No flash. No sound. It just stops existing on the other side.",
+      "narration": "The Hollow Gate was never a door. It was a question. And someone was about to answer it.",
+      "image_prompt": "ancient stone archway in dark mountain pass, worn carved stone nearly smooth with age, faint cold atmospheric distortion like heat shimmer, raven feather drifting through arch and vanishing, ash falling like snow in still air, practical ambient moonlight, no dramatic glow, deep shadow palette, desaturated cool greys, subtle supernatural presence without effects, cinematic wide shot, film grain, shallow depth of field, 4k, realistic stone texture, NO anime, NO fantasy glow, NO lens flare",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 12,
+      "setting": "Burned battlefield from Scene 1 — predawn light now, snow still falling, a child warrior standing alone amid the wreckage",
+      "action": "RETURN TO: the battlefield. Predawn. Snow has partially covered the ash. A child — no more than ten — stands in full Wolf Clan armor two sizes too large. Holding a broken sword. Staring at where RAIZEN's boot prints lead off into the dark mountains. The camera slowly pushes to the child's face. Eyes: silver. Not scared. Waiting. A single whisper — barely audible under the wind: 'It begins again.'",
+      "narration": "It begins again.",
+      "image_prompt": "burned battlefield predawn, fresh snow partially covering ash, small child in oversized Wolf Clan iron armor, holding broken sword, silver glowing eyes subtle emotional realism, staring into dark mountain distance, cinematic slow push to face close-up, emotional weight not fear, visible breath in freezing air, practical predawn ambient light, desaturated blue-silver, film grain, 1-2 frame anime flicker on eyes only during supernatural moment, shallow depth of field, 4k, realistic child armor texture, NO cartoon, cinematic realism",
+      "faction": "Wolf Clan"
+    }
+  ],
+  "narrator_outro": "RAIZEN walked into exile. KURO filed it away. VARN felt the gate pulse. And a child who had no name yet... began to remember. Next: what KURO sent into the mountains. And why RAIZEN was supposed to be there when it arrived.",
+  "shorts_hook": "He refused the order. They exiled him. The war was already planned.",
+  "youtube_title": "The Night the Wolf Clan Exiled Their Best Warrior | SHADOW CLANS Ep. 1",
+  "youtube_description": "Before the Hollow Gate opened. Before the three factions fractured. There was one night. One refusal. One exile that set everything in motion.\n\nSHADOW CLANS is an original dark cinematic fantasy universe — grounded, suspenseful, and built for binge-watching.\n\nEpisode 1: The Night He Refused\n\nWolf Clan. Raven Order. Gorilla Titans. The Hollow Gate awaits.\n\n#shadowclans #darkfantasy #cinematic #wolfclan #shorts #animation #lore #storytelling #fantasy #viral"
+}

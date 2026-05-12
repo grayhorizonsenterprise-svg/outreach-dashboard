@@ -19,7 +19,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-CALENDLY_URL  = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
+"https://calendly.com/grayhorizonsenterprise/30min"  = os.getenv(""https://calendly.com/grayhorizonsenterprise/30min"", "https://calendly.com/grayhorizonsenterprise/30min")
 DATA_DIR      = os.path.dirname(os.path.abspath(__file__))
 QUEUE_FILE    = os.path.join(DATA_DIR, "social_queue.csv")
 LOG_FILE      = os.path.join(DATA_DIR, "social_sent_log.csv")
@@ -192,7 +192,7 @@ def run():
         company = str(row.get("company", "")).strip()
         niche   = str(row.get("niche", "business")).strip()
         subject = random.choice(SUBJECTS).format(niche=niche)
-        message = random.choice(MESSAGES).format(niche=niche, calendly=CALENDLY_URL)
+        message = random.choice(MESSAGES).format(niche=niche, calendly="https://calendly.com/grayhorizonsenterprise/30min")
         ok = send_email(email, company, niche, subject, message)
         log.append({"email": email, "company": company, "niche": niche, "sent": ok,
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M")})

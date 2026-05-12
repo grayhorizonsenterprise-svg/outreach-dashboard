@@ -42,6 +42,7 @@ POSTED_LOG = DATA_DIR / "twitter_posted.json"
 
 SIGNALS_LINK = os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
 GUMROAD_LINK = "https://horizons56.gumroad.com"
+WHOP_LINK    = os.getenv("WHOP_INDICATORS_LINK", "https://whop.com/ghe-indicators")
 
 # ─── Content Pools ────────────────────────────────────────────────────────────
 
@@ -70,6 +71,19 @@ SIGNALS_POSTS = [
     f"Crypto alert went out at 7:42am.\n\nAsset moved 14% by noon.\n\nThat's why people subscribe.\n\n{SIGNALS_LINK}",
 ]
 
+INDICATOR_POSTS = [
+    f"Most traders use 14 indicators.\n\nWe use 3.\n\nEdge Scanner + Kelly Sizer + Congressional Tracker.\n\nAll 3 on TradingView. $79 one-time.\n\n{WHOP_LINK}",
+    f"RSI alone is noise.\nVolume alone is noise.\nEMA alone is noise.\n\nAll 3 at the same time = signal.\n\nThe GHE Edge Scanner scores this 0-100 on every bar.\n\n{WHOP_LINK}",
+    f"Congress disclosed $315M in trades last year.\n\nMost traders never see it coming.\n\nWe built an indicator that shows the volume patterns before disclosure.\n\n{WHOP_LINK}",
+    f"The #1 reason traders blow up:\n\nNot bad entries.\nBad position sizing.\n\nKelly Criterion with Quarter-Kelly fractional sizing.\nBuilt into TradingView.\n\n{WHOP_LINK}",
+    f"High-confidence signal = RSI 45-70 + Volume >2× avg + EMA crossover all on the same bar.\n\nMomentum score: 70+.\n\nThe GHE Edge Scanner labels only these.\n\n{WHOP_LINK}",
+    f"3 TradingView indicators that cover the full trade:\n\n1. When to enter (Edge Scanner)\n2. How much to risk (Kelly Sizer)\n3. What insiders are doing (Congressional Tracker)\n\n$79 one-time: {WHOP_LINK}",
+    f"Pine Script v5. Overlay charts. Real-time momentum scoring.\n\nWorks on stocks, crypto, forex — any asset on TradingView.\n\nGHE Indicator Suite: {WHOP_LINK}",
+    f"Position sizing question I see constantly:\n\"How many shares should I buy?\"\n\nThe answer is math, not gut feeling.\n\nKelly Criterion. $79 one-time for the full suite.\n\n{WHOP_LINK}",
+    f"Alert fatigue is real.\n\n200 signals a day → you act on garbage.\n3-5 high-confidence signals a day → you act on edges.\n\nThe GHE Edge Scanner scores 0-100. You only trade 70+.\n\n{WHOP_LINK}",
+    f"Launched the GHE Indicator Suite on Whop.\n\n$49/month or $79 lifetime for all 3 TradingView indicators.\n\nEdge Scanner • Kelly Sizer • Congressional Tracker\n\n{WHOP_LINK}",
+]
+
 BUSINESS_TIP_POSTS = [
     "Most small businesses lose 30% of inbound calls to voicemail.\n\nThe customer doesn't leave a message.\n\nThey call the next result on Google.\n\n#SmallBusiness #automation",
     "Your Google Business Profile is either making you money or losing you money.\n\nThere's no neutral.\n\n#LocalSEO #smallbusiness",
@@ -86,13 +100,16 @@ BUSINESS_TIP_POSTS = [
 ALL_POSTS = {
     "shadow_clans": SHADOW_CLANS_POSTS,
     "signals":      SIGNALS_POSTS,
+    "indicators":   INDICATOR_POSTS,
     "business_tip": BUSINESS_TIP_POSTS,
 }
 
 DAILY_SCHEDULE = [
     ("shadow_clans", "08:00"),
-    ("business_tip", "12:00"),
-    ("signals",      "17:00"),
+    ("indicators",   "10:00"),
+    ("signals",      "13:00"),
+    ("business_tip", "17:00"),
+    ("indicators",   "20:00"),
 ]
 
 

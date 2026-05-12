@@ -1,0 +1,89 @@
+SHADOW CLANS — Episode 1: The Night He Refused
+Generated: 2026-05-12
+Runtime: ~90 seconds | 8 scenes
+============================================================
+
+VISUAL MANDATE (apply to ALL prompts):
+70% cinematic live-action realism | 20% dark fantasy atmosphere | 10% retro anime flicker
+Reduce by 45%: bloom glow, cartoon shading, game-engine lighting, oversaturation, anime proportions
+Camera: handheld documentary, rack focus, shallow depth of field, slight lens grain
+Lighting: practical only — torchlight, moonlight, distant fire. NO lens flares.
+Color: desaturated, high contrast, filmic. NOT vibrant HDR, NOT painted.
+TARGET: a lost cinematic fantasy film from the early 2000s.
+
+============================================================
+
+SCENE 1 (12s)
+Action: Slow aerial push over burned battlefield — broken weapons in ash-darkened snow, distant dying fires, lone boot prints
+Narration: "After every battle, the silence lied. This one told the truth."
+
+IMAGE PROMPT:
+burned battlefield, collapsed snow-dusted banners, distant dying fires, ash-darkened snowfield, broken iron weapons half-buried in snow, cinematic aerial angle descending, practical natural lighting from distant fire glow, heavy mist, visible snowfall, no survivors, single boot track in ash-snow, photorealistic textures, film grain, desaturated blue-grey palette, shallow depth of field, handheld slight movement, cinematic film still, 4k realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (13s)
+Action: RAIZEN stands on frozen outcrop, back to camera — turns to reveal silver eyes, grief not anger
+Narration: "RAIZEN had followed every order. Until the one that demanded he become something unrecognizable."
+
+IMAGE PROMPT:
+lone armored wolf warrior standing on frozen rocky outcrop, back to camera, snow-dusted fur pauldrons, scarred dark iron plate with claw marks, moonlit tundra below, visible breath in freezing air, slow cinematic push, silver glowing eyes subtle moonlight reflection, emotional grief expression, photorealistic skin and armor texture, desaturated silver-blue palette, shallow depth of field, film grain, practical moonlight only, NO lens flares, NO fantasy glow, cinematic realism, 4k, realistic textures, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (11s) — FLASHBACK
+Action: War council chamber — elder slides kill order across stone table, RAIZEN reads it, slides it back, room goes still
+Narration: "The kill order bore a civilian name. He read it once. And refused."
+
+IMAGE PROMPT:
+torch-lit stone war council chamber, heavy smoke, animal skull mounted above rough map table, three elder warriors in scarred armor around table, RAIZEN reading sealed parchment order, jaw tight, visible emotional tension, practical torch-only lighting, warm amber shadows, stone texture, animal fur on walls, cinematic medium shot, photorealistic facial detail, desaturated tone with amber torch warmth, film grain, shallow depth of field, 4k, NO anime shading, NO glow, realistic textures
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: KURO in Raven Order tower — surveillance wall, pins RAIZEN's exile order, cold smile. He made this happen.
+Narration: "Somewhere else, the Raven Order had already filed the outcome."
+
+IMAGE PROMPT:
+ruined stone tower interior, twilight storm light through cracked windows, vast wall covered in pinned documents maps and surveillance sketches, KURO in black feather-plated cloak obsidian half-mask, cold glowing blue eyes unblinking, pinning exile document, faint cold expression, dim blue-grey atmospheric fog, practical storm window lighting, heavy shadows, charcoal and deep shadow palette, cinematic medium shot, photorealistic textures, film grain, shallow depth of field, 4k, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (13s)
+Action: Real wolves and Wolf Clan scouts move as one through dark pine forest — all halt suddenly, something is watching
+Narration: "The pack knew before the scouts did. Something was already watching."
+
+IMAGE PROMPT:
+snow-covered pine forest at night, real wolves and armored wolf clan scouts moving in formation together, moonlight through tree canopy, breath visible in freezing air, scout raises fist, group halts in silence, photorealistic wolves with realistic fur movement, practical moonlight only, desaturated cool blue-silver palette, deep tree shadows, emotional tension, cinematic tracking shot, film grain, shallow depth of field, 4k, realistic textures, NO anime, NO glow
+
+----------------------------------------
+
+SCENE 6 (14s)
+Action: VARN touches rune map in ancient temple — it pulses once and shows the Hollow Gate at center. He pulls back.
+Narration: "VARN had seen this map before. In a dream he could not explain. In a language no one taught him."
+
+IMAGE PROMPT:
+ancient crumbling temple ruins, massive shattered stone statues, dense jungle fog, VARN in ancient stone-plate cracked glowing rune armor, amber pulsing rune carved into wall, realistic rune glow subtle not fantasy, VARN touching rune with one finger, emotional recognition expression, amber rune-pulse lighting, ochre and deep forest green palette, heavy mist, moss-covered stone, cinematic medium wide shot, photorealistic textures, film grain, shallow depth of field, 4k, NO anime shading, realistic rune texture
+
+----------------------------------------
+
+SCENE 7 (13s)
+Action: The Hollow Gate at night — no glow, just a faint cold distortion. A raven feather drifts through and vanishes silently.
+Narration: "The Hollow Gate was never a door. It was a question. And someone was about to answer it."
+
+IMAGE PROMPT:
+ancient stone archway in dark mountain pass, worn carved stone nearly smooth with age, faint cold atmospheric distortion like heat shimmer, raven feather drifting through arch and vanishing, ash falling like snow in still air, practical ambient moonlight, no dramatic glow, deep shadow palette, desaturated cool greys, subtle supernatural presence without effects, cinematic wide shot, film grain, shallow depth of field, 4k, realistic stone texture, NO anime, NO fantasy glow, NO lens flare
+
+----------------------------------------
+
+SCENE 8 (12s) — FINAL / HOOK
+Action: Return to battlefield, predawn. Child in oversized Wolf Clan armor holds broken sword, silver eyes, staring toward RAIZEN's tracks. Whisper: "It begins again."
+Narration: "It begins again."
+
+IMAGE PROMPT:
+burned battlefield predawn, fresh snow partially covering ash, small child in oversized Wolf Clan iron armor, holding broken sword, silver glowing eyes subtle emotional realism, staring into dark mountain distance, cinematic slow push to face close-up, emotional weight not fear, visible breath in freezing air, practical predawn ambient light, desaturated blue-silver, film grain, 1-2 frame anime flicker on eyes only during supernatural moment, shallow depth of field, 4k, realistic child armor texture, NO cartoon, cinematic realism
+
+============================================================
+SHORTS HOOK TEXT: "He refused the order. They exiled him. The war was already planned."
+YOUTUBE TITLE:    "The Night the Wolf Clan Exiled Their Best Warrior | SHADOW CLANS Ep. 1"
+============================================================

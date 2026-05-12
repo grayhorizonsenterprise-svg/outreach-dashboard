@@ -6,7 +6,7 @@ import os
 DATA_DIR      = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 INPUT_FILE    = os.path.join(DATA_DIR, "prospects_raw.csv")
 OUTPUT_FILE   = os.path.join(DATA_DIR, "outreach_queue.csv")
-CALENDLY_URL  = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
+CALENDLY_URL  = "https://calendly.com/grayhorizonsenterprise/30min"
 STRIPE_LINK   = os.getenv("STRIPE_PAYMENT_LINK", "https://grayhorizonsenterprise.com")
 GUMROAD_STORE = "horizons56.gumroad.com"
 
@@ -765,7 +765,7 @@ def generate_subject(company, niche):
     return subject.replace("{company}", display)
 
 def _add_periods(msg):
-    skip = {"hey", "hi", "alex", "gray horizons enterprise", "https://grayhorizonsenterprise.com"}
+    skip = {"hey", "hi", "alex", "gray horizons enterprise", "https://calendly.com/grayhorizonsenterprise/30min"}
     lines = msg.split("\n")
     out = []
     for line in lines:
@@ -781,11 +781,11 @@ def generate_message(company, niche):
     template  = random.choice(templates)
     display   = company if is_clean_name(company) else "your team"
     msg = template.replace("{company}", display)
-    msg = msg.replace("{calendly}", CALENDLY_URL)
+    msg = msg.replace("{calendly}", "https://calendly.com/grayhorizonsenterprise/30min")
     msg = msg.replace("{stripe}", STRIPE_LINK)
     msg = _add_periods(msg)
-    if "grayhorizonsenterprise.com" not in msg and CALENDLY_URL not in msg:
-        msg += "\nhttps://grayhorizonsenterprise.com"
+    if "grayhorizonsenterprise.com" not in msg and "https://calendly.com/grayhorizonsenterprise/30min" not in msg:
+        msg += "\nhttps://calendly.com/grayhorizonsenterprise/30min"
     return msg
 
 def run():

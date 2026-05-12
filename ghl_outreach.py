@@ -20,7 +20,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 SENDGRID_KEY = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL   = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-CALENDLY     = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
+CALENDLY     = os.getenv(""https://calendly.com/grayhorizonsenterprise/30min"", "https://calendly.com/grayhorizonsenterprise/30min")
 DATA_DIR     = os.path.dirname(os.path.abspath(__file__))
 QUEUE_FILE   = os.path.join(DATA_DIR, "ghl_queue.csv")
 LOG_FILE     = os.path.join(DATA_DIR, "ghl_blast_log.csv")
