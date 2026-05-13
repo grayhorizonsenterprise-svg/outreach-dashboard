@@ -27,7 +27,7 @@ QUEUE_FILE    = os.path.join(DATA_DIR, "signals_queue.csv")
 LOG_FILE      = os.path.join(DATA_DIR, "signals_sent_log.csv")
 FOLLOWUP_LOG  = os.path.join(DATA_DIR, "signals_followup_log.csv")
 UNSUB_FILE    = os.path.join(DATA_DIR, "unsubscribe_list.csv")
-DAILY_LIMIT   = 200
+DAILY_LIMIT   = 500
 
 SUBJECTS = [
     "{ticker} setup fired at 8am, up 7.4% by 2pm",

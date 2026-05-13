@@ -176,34 +176,57 @@ def is_interested(subject, body):
     return any(k in text for k in INTEREST_KEYWORDS)
 
 
-def build_reply(sender_name, niche="hvac"):
-    niche_line = {
-        "hvac":        "the missed call recovery and lead follow-up system for HVAC companies",
-        "dental":      "the automated new patient follow-up system for dental practices",
-        "hoa":         "the violation tracking and follow-up automation for HOA teams",
-        "plumbing":    "the emergency call capture and dispatch system for plumbing companies",
-        "contractor":  "the estimate follow-up and lead recovery system for contractors",
-        "landscaping": "the overflow lead capture system for landscaping companies",
-        "roofing":     "the storm call management and estimate follow-up system for roofers",
-    }.get(niche, "the automated lead follow-up system")
+STRIPE_SETUP_LINK = os.getenv("STRIPE_SETUP_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
+SIGNALS_LINK      = os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
 
+
+def build_reply(sender_name, niche="hvac"):
+    niche_value = {
+        "hvac":        ("missed calls and slow follow-up are costing you 10-15 jobs a month",
+                        "missed call recovery + automated follow-up for HVAC"),
+        "dental":      ("slow new patient response is costing your practice $10k+/month in lost lifetime value",
+                        "automated new patient follow-up for dental practices"),
+        "hoa":         ("violations getting lost in the handoff between report and resolution",
+                        "violation tracking + automated follow-up for HOA teams"),
+        "plumbing":    ("missed calls during peak hours are your biggest revenue leak",
+                        "emergency call capture + automated dispatch for plumbing"),
+        "contractor":  ("estimates going cold because follow-up doesn't happen consistently",
+                        "estimate follow-up + lead recovery for contractors"),
+        "landscaping": ("overflow leads and seasonal clients going quiet between services",
+                        "overflow lead capture + client retention for landscaping"),
+        "roofing":     ("storm call volume spikes overwhelming your intake process",
+                        "storm call management + estimate follow-up for roofers"),
+        "gym":         ("new members churning in month 2 from zero follow-up",
+                        "automated member retention + rebooking for gyms"),
+        "restaurant":  ("customers not coming back because there's no follow-up system",
+                        "guest retention + loyalty automation for restaurants"),
+        "mortgage":    ("rate-shopping leads going cold before your team calls back",
+                        "instant lead response + nurture for mortgage brokers"),
+    }.get(niche, ("leads going cold from slow follow-up",
+                  "automated lead follow-up system"))
+
+    pain, system_name = niche_value
     name = sender_name.split()[0] if sender_name else "there"
 
     return f"""\
 Hey {name},
 
-Thanks for getting back to me — glad it resonated.
+Thanks for getting back to me.
 
-I'd love to walk you through {niche_line} and show you exactly what it looks like for a business your size. It's a 20-minute call and I'll have specific numbers ready for your market.
+Here's the short version: {pain}. We fix that with {system_name} — fully automated, set up in about a week.
 
-Grab a time that works for you here:
+Two ways to move forward:
+
+1. Get started now — flat $497 setup, no call needed:
+{STRIPE_SETUP_LINK}
+
+2. See it first — 20-minute walkthrough, I'll show you exactly what it looks like for your business:
 {CALENDLY_URL}
 
-Looking forward to it.
+Either way works. Most people who want to move fast just go straight to option 1.
 
 Alex
-Gray Horizons Enterprise
-https://grayhorizonsenterprise.com"""
+Gray Horizons Enterprise"""
 
 
 def send_reply(service, message_id, thread_id, to_email, sender_name, niche):
