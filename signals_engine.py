@@ -18,7 +18,8 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SIGNALS_LINK  = os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
+SIGNALS_LINK     = os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
+INDICATORS_LINK  = os.getenv("INDICATORS_LINK", "https://horizons56.gumroad.com/l/ghe-indicators")
 DRAFTKINGS_URL = os.getenv("DRAFTKINGS_AFFILIATE_URL", "")
 FANDUEL_URL   = os.getenv("FANDUEL_AFFILIATE_URL", "")
 DATA_DIR      = os.path.dirname(os.path.abspath(__file__))
@@ -112,7 +113,9 @@ $49/month. Most traders say the congressional tracker alone is worth it.
 
 {signals_link}
 
-Alex | Gray Horizons"""
+Alex | Gray Horizons
+
+P.S. We also sell the TradingView indicators directly — Edge Scanner, Kelly Sizer, Congressional Tracker as Pine Script files. $49 one-time: {indicators_link}"""
 
 SAMPLE_TICKERS = ["NVDA", "TSLA", "SPY", "META", "AAPL", "AMD", "MSFT", "AMZN"]
 
@@ -190,6 +193,7 @@ def run():
         ticker  = random.choice(SAMPLE_TICKERS)
         message = random.choice(MESSAGES).format(
             signals_link=SIGNALS_LINK,
+            indicators_link=INDICATORS_LINK,
             ticker=ticker,
         )
 

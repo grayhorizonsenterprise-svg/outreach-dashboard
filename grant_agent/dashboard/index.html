@@ -258,6 +258,7 @@
     <button class="tab-btn active" onclick="switchTab('grants')">🔍 Grants</button>
     <button class="tab-btn" onclick="switchTab('applications')">📋 Applications</button>
     <button class="tab-btn" onclick="switchTab('profile')">⚙️ Profile</button>
+    <button class="tab-btn" onclick="switchTab('alerts')" id="alertsTabBtn">🔔 Alerts <span id="alertBadge" style="display:none;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
   </div>
 
   <!-- ── GRANTS TAB ── -->
@@ -336,6 +337,72 @@
   <div class="tab-panel" id="tab-profile">
     <div class="profile-grid" id="profileGrid">
       <div class="loading-row" style="padding:48px;text-align:center;color:var(--muted);grid-column:span 2"><span class="spinner"></span>Loading profile…</div>
+    </div>
+  </div>
+
+  <!-- ── ALERTS TAB ── -->
+  <div class="tab-panel" id="tab-alerts">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div style="font-size:14px;font-weight:600;">Live Alerts <span style="font-size:12px;color:var(--muted);font-weight:400;">— refreshes every 60s</span></div>
+      <button class="btn-secondary btn-sm" onclick="loadAlerts()">↻ Refresh</button>
+    </div>
+
+    <!-- Hot Leads -->
+    <div style="margin-bottom:22px;">
+      <div class="sec-hdr">
+        <div class="sec-title" style="color:var(--green);">🔥 Hot Leads <span style="font-size:11px;color:var(--muted);font-weight:400;">(email replies needing follow-up)</span></div>
+        <div class="sec-count" id="hotLeadsCount"></div>
+      </div>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Niche</th><th>Auto-Replied</th><th>Time</th></tr></thead>
+          <tbody id="hotLeadsBody"><tr class="loading-row"><td colspan="6"><span class="spinner"></span>Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Reddit Queue -->
+    <div style="margin-bottom:22px;">
+      <div class="sec-hdr">
+        <div class="sec-title" style="color:var(--orange);">💬 Reddit Comments Needing Reply</div>
+        <div class="sec-count" id="redditCount"></div>
+      </div>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Subreddit</th><th>Post Title</th><th>Comment</th><th>Link</th><th>Time</th></tr></thead>
+          <tbody id="redditBody"><tr class="loading-row"><td colspan="5"><span class="spinner"></span>Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Summary Row -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;">
+      <div class="stat-card blue">
+        <div class="lbl">Signals Emails (24h)</div>
+        <div class="val" id="signalsSent24h">—</div>
+        <div class="sub" id="signalsFailed24h"></div>
+      </div>
+      <div class="stat-card green">
+        <div class="lbl">Grant Outreach Sent</div>
+        <div class="val" id="grantSent">—</div>
+        <div class="sub" id="grantPending"></div>
+      </div>
+      <div class="stat-card purple">
+        <div class="lbl">Twitter Last Posted</div>
+        <div class="val" id="twitterLastCount">—</div>
+        <div class="sub" id="twitterLastCat"></div>
+      </div>
+    </div>
+
+    <!-- Twitter recent posts -->
+    <div>
+      <div class="sec-hdr"><div class="sec-title" style="color:var(--purple);">🐦 Twitter Recent Posts</div></div>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Category</th><th>Text</th></tr></thead>
+          <tbody id="twitterBody"><tr class="loading-row"><td colspan="2"><span class="spinner"></span>Loading…</td></tr></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -498,14 +565,102 @@ function showToast(msg, type = 'success') {
 
 function switchTab(id) {
   document.querySelectorAll('.tab-btn').forEach((b,i) => {
-    const ids = ['grants','applications','profile'];
+    const ids = ['grants','applications','profile','alerts'];
     b.classList.toggle('active', ids[i] === id);
   });
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   if (id === 'applications') loadApplications();
   if (id === 'profile') loadProfile();
+  if (id === 'alerts') loadAlerts();
 }
+
+// ── Alerts ──────────────────────────────────────────────
+
+let alertsInterval = null;
+
+async function loadAlerts() {
+  try {
+    const d = await fetch(`${API}/alerts`).then(r => r.json());
+
+    // Badge
+    const badge = document.getElementById('alertBadge');
+    if (d.total_alerts > 0) {
+      badge.textContent = d.total_alerts;
+      badge.style.display = 'inline';
+    } else {
+      badge.style.display = 'none';
+    }
+
+    // Hot Leads
+    const leadsBody = document.getElementById('hotLeadsBody');
+    document.getElementById('hotLeadsCount').textContent = `${d.hot_leads.length} lead(s)`;
+    if (!d.hot_leads.length) {
+      leadsBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">No hot leads yet</td></tr>';
+    } else {
+      leadsBody.innerHTML = d.hot_leads.map(l => `
+        <tr>
+          <td>${esc(l.name||'—')}</td>
+          <td><a href="mailto:${esc(l.email)}">${esc(l.email)}</a></td>
+          <td>${esc(l.subject||'—')}</td>
+          <td><span class="status-pill s-draft">${esc(l.niche||'—')}</span></td>
+          <td><span class="status-pill ${l.replied ? 's-submitted' : 's-rejected'}">${l.replied ? 'YES' : 'MANUAL'}</span></td>
+          <td style="color:var(--muted);font-size:12px;">${esc((l.timestamp||'').slice(0,16))}</td>
+        </tr>`).join('');
+    }
+
+    // Reddit queue
+    const redditBody = document.getElementById('redditBody');
+    document.getElementById('redditCount').textContent = `${d.reddit_queue.length} pending`;
+    if (!d.reddit_queue.length) {
+      redditBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">No Reddit replies queued</td></tr>';
+    } else {
+      redditBody.innerHTML = d.reddit_queue.map(r => `
+        <tr>
+          <td>r/${esc(r.subreddit||'—')}</td>
+          <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(r.post_title||'—')}</td>
+          <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(r.comment_body||'—')}</td>
+          <td>${r.permalink ? `<a href="https://reddit.com${esc(r.permalink)}" target="_blank">View</a>` : '—'}</td>
+          <td style="color:var(--muted);font-size:12px;">${esc((r.created_utc||'').slice(0,16))}</td>
+        </tr>`).join('');
+    }
+
+    // Signals summary
+    document.getElementById('signalsSent24h').textContent = d.signals_summary.sent;
+    document.getElementById('signalsFailed24h').textContent = `${d.signals_summary.failed} failed`;
+
+    // Grant summary
+    document.getElementById('grantSent').textContent = d.grant_summary.sent;
+    document.getElementById('grantPending').textContent = `${d.grant_summary.pending} pending`;
+
+    // Twitter
+    document.getElementById('twitterLastCount').textContent = d.twitter_posts.length;
+    document.getElementById('twitterLastCat').textContent = d.twitter_posts.length ? d.twitter_posts[d.twitter_posts.length-1].category : '—';
+    const twBody = document.getElementById('twitterBody');
+    if (!d.twitter_posts.length) {
+      twBody.innerHTML = '<tr><td colspan="2" style="text-align:center;color:var(--muted);padding:24px;">No posts logged yet</td></tr>';
+    } else {
+      twBody.innerHTML = d.twitter_posts.map(p => `
+        <tr>
+          <td><span class="status-pill s-draft">${esc(p.category)}</span></td>
+          <td style="font-size:12px;color:var(--muted);">${esc(p.text)}…</td>
+        </tr>`).join('');
+    }
+
+  } catch(e) {
+    console.error('[Alerts]', e);
+  }
+}
+
+// Poll alerts badge every 60s even when on other tabs
+setInterval(async () => {
+  try {
+    const d = await fetch(`${API}/alerts`).then(r => r.json());
+    const badge = document.getElementById('alertBadge');
+    if (d.total_alerts > 0) { badge.textContent = d.total_alerts; badge.style.display = 'inline'; }
+    else { badge.style.display = 'none'; }
+  } catch(e) {}
+}, 60000);
 
 // ── Stats ───────────────────────────────────────────────
 

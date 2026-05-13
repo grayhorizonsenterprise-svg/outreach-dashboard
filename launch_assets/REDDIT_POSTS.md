@@ -100,7 +100,7 @@ Paired it with a momentum scorer and a Kelly position sizer. The whole suite is 
 
 Not financial advice, congress is just playing a different game than us and leaving footprints.
 
-Link: [your Whop URL here]
+Link: https://horizons56.gumroad.com/l/ghe-indicators
 
 ---
 

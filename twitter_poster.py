@@ -42,7 +42,7 @@ POSTED_LOG = DATA_DIR / "twitter_posted.json"
 
 SIGNALS_LINK = os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
 GUMROAD_LINK = "https://horizons56.gumroad.com"
-WHOP_LINK    = os.getenv("WHOP_INDICATORS_LINK", "https://whop.com/ghe-indicators")
+WHOP_LINK    = os.getenv("WHOP_INDICATORS_LINK", "https://horizons56.gumroad.com/l/ghe-indicators")
 
 # ─── Content Pools ────────────────────────────────────────────────────────────
 

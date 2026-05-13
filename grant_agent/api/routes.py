@@ -337,3 +337,86 @@ def get_stats():
         "recent_scans":        [dict(r) for r in recent_scans],
         "top_grants":          [dict(r) for r in top_grants],
     }
+
+
+# ─── Alerts ───────────────────────────────────────────────────────────────────
+
+@router.get("/alerts")
+def get_alerts():
+    """Return hot leads, Reddit reply queue, and outreach summary for the Alerts tab."""
+    import csv
+    import datetime
+
+    base = Path(__file__).parent.parent.parent  # project root
+
+    # Hot leads from Gmail monitor
+    hot_leads = []
+    hot_file = base / "hot_leads.json"
+    if hot_file.exists():
+        try:
+            hot_leads = json.loads(hot_file.read_text())[-20:]  # last 20
+        except Exception:
+            pass
+
+    # Reddit reply queue
+    reddit_queue = []
+    reddit_file = base / "reddit_reply_queue.json"
+    if reddit_file.exists():
+        try:
+            items = json.loads(reddit_file.read_text())
+            reddit_queue = [i for i in items if not i.get("replied")][-20:]
+        except Exception:
+            pass
+
+    # Signals email summary (last 24h)
+    signals_summary = {"sent": 0, "failed": 0, "total": 0}
+    signals_file = base / "signals_sent_log.csv"
+    if signals_file.exists():
+        try:
+            cutoff = (datetime.datetime.utcnow() - datetime.timedelta(hours=24)).strftime("%Y-%m-%d")
+            with open(signals_file, newline="", encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    ts = row.get("timestamp", "")
+                    if ts[:10] >= cutoff:
+                        signals_summary["total"] += 1
+                        if str(row.get("sent", "")).lower() in ("true", "1"):
+                            signals_summary["sent"] += 1
+                        else:
+                            signals_summary["failed"] += 1
+        except Exception:
+            pass
+
+    # Twitter last posts
+    twitter_posts = []
+    twitter_file = base / "twitter_posted.json"
+    if twitter_file.exists():
+        try:
+            data = json.loads(twitter_file.read_text())
+            for cat, posts in data.items():
+                for p in posts[-2:]:
+                    twitter_posts.append({"category": cat, "text": p[:120]})
+        except Exception:
+            pass
+
+    # Grant outreach summary
+    grant_summary = {"sent": 0, "pending": 0}
+    grant_log = base / "grant_sent_log.csv"
+    if grant_log.exists():
+        try:
+            with open(grant_log, newline="", encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    if str(row.get("sent", "")).lower() in ("true", "1"):
+                        grant_summary["sent"] += 1
+                    else:
+                        grant_summary["pending"] += 1
+        except Exception:
+            pass
+
+    return {
+        "hot_leads":       hot_leads,
+        "reddit_queue":    reddit_queue,
+        "signals_summary": signals_summary,
+        "twitter_posts":   twitter_posts,
+        "grant_summary":   grant_summary,
+        "total_alerts":    len(hot_leads) + len(reddit_queue),
+    }

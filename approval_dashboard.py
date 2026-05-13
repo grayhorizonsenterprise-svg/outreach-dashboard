@@ -34,7 +34,19 @@ URL_PLUMBING   = os.getenv("PLUMBING_URL", "#")
 EDGE_ENGINE_URL = os.getenv("EDGE_ENGINE_URL", "https://outreach-dashboard-production-6894.up.railway.app")
 URL_GRANTS       = "https://ghe-grant-agent-production.up.railway.app"
 URL_VOICE_SERVER = os.getenv("VOICE_SERVER_URL", "https://ghe-voice-production.up.railway.app")
-PIPELINE_SCRIPTS = ["prospect_finder.py", "yellowpages_scraper.py", "superpages_scraper.py", "manta_scraper.py", "hotfrog_scraper.py", "chamberofcommerce_scraper.py", "bark_scraper.py", "yelp_scraper.py", "linkedin_scraper.py", "prospect_enricher.py", "prospect_qualifier.py", "outreach_generator.py"]
+PIPELINE_SCRIPTS = [
+    "hotfrog_scraper.py",
+    "chamberofcommerce_scraper.py",
+    "bark_scraper.py",
+    "yelp_scraper.py",
+    "apollo_scraper.py",
+    "hunter_scraper.py",
+    "prospect_enricher.py",
+    "prospect_qualifier.py",
+    "email_verifier.py",
+    "outreach_generator.py",
+    "outreach_sender.py",
+]
 
 DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "1000"))
 batch_running     = False
@@ -102,6 +114,115 @@ def keep_alive():
         time.sleep(600)
 
 threading.Thread(target=keep_alive, daemon=True).start()
+
+# =========================
+# REVENUE ENGINE SCHEDULER
+# Runs all money-making engines 24/7 on Railway — no computer needed
+# =========================
+
+def _run_engine(label: str, script: str):
+    """Run a script from the project root. Non-fatal if missing."""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), script)
+    if not os.path.exists(path):
+        print(f"[ENGINE] {label}: script not found ({script})", flush=True)
+        return
+    print(f"[ENGINE] Starting: {label}", flush=True)
+    try:
+        subprocess.run(
+            [sys.executable, "-u", path],
+            env={**os.environ, "PYTHONUNBUFFERED": "1"},
+            timeout=3600,
+        )
+        print(f"[ENGINE] Done: {label}", flush=True)
+    except Exception as e:
+        print(f"[ENGINE] Error in {label}: {e}", flush=True)
+
+
+def _signals_engine_daily():
+    """Sends 200 targeted emails/day to traders. Runs at 8am UTC."""
+    import datetime as _dt
+    time.sleep(120)  # let app stabilize
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 8 and now.minute < 10:
+            _run_engine("Signals Email Blast", "signals_engine.py")
+            time.sleep(600)  # prevent double-fire within same hour
+        time.sleep(60)
+
+
+def _grant_pipeline_daily():
+    """Scrapes nonprofits → verifies → generates messages → blasts. Runs at 9am UTC."""
+    import datetime as _dt
+    time.sleep(180)
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 9 and now.minute < 10:
+            _run_engine("Nonprofit Scraper (ProPublica)", "nonprofitscraper_propublica.py")
+            _run_engine("Email Verifier", "email_verifier.py")
+            _run_engine("Grant Outreach Generator", "grant_outreach_generator.py")
+            _run_engine("Grant Email Blast", "grant_blast.py")
+            time.sleep(600)
+        time.sleep(60)
+
+
+def _twitter_scheduler():
+    """Posts to Twitter 5x/day at 8am, 10am, 1pm, 5pm, 8pm UTC."""
+    import datetime as _dt
+    POST_HOURS = {8, 10, 13, 17, 20}
+    fired = set()
+    time.sleep(240)
+    while True:
+        now = _dt.datetime.utcnow()
+        key = (now.date(), now.hour)
+        if now.hour in POST_HOURS and key not in fired and now.minute < 10:
+            _run_engine("Twitter Post", "twitter_poster.py")
+            fired.add(key)
+            # Keep fired set small
+            if len(fired) > 20:
+                fired = set(list(fired)[-10:])
+        time.sleep(60)
+
+
+def _gmail_monitor_thread():
+    """Monitors Gmail for hot leads every 5 minutes."""
+    time.sleep(300)
+    while True:
+        _run_engine("Gmail Reply Monitor", "gmail_reply_monitor.py")
+        time.sleep(300)
+
+
+def _reddit_monitor_thread():
+    """Checks Reddit for comments needing replies every hour."""
+    time.sleep(600)
+    while True:
+        _run_engine("Reddit Monitor", "reddit_monitor.py")
+        time.sleep(3600)
+
+
+def _shadow_clans_nightly():
+    """Generates one Shadow Clans episode per night at 11pm UTC."""
+    import datetime as _dt
+    time.sleep(360)
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 23 and now.minute < 10:
+            _run_engine("Shadow Clans Episode Generator", "shadow_clans_engine.py")
+            time.sleep(600)
+        time.sleep(60)
+
+
+# Start all revenue engine threads
+for _fn in [
+    _signals_engine_daily,
+    _grant_pipeline_daily,
+    _twitter_scheduler,
+    _gmail_monitor_thread,
+    _reddit_monitor_thread,
+    _shadow_clans_nightly,
+]:
+    threading.Thread(target=_fn, daemon=True).start()
+
+print("[ENGINES] All 6 revenue engine schedulers started", flush=True)
 
 CSV_FILE    = os.path.join(DATA_DIR, "outreach_queue.csv")
 SOCIAL_FILE = os.path.join(DATA_DIR, "social_pipeline.csv")

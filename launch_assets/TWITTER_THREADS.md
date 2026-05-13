@@ -1,7 +1,7 @@
 # Twitter/X Threads — GHE Indicator Suite
 
 10 threads ready to post. Space them 12-24 hours apart.
-Replace [WHOP_URL] with your actual Whop link once live.
+Replace https://horizons56.gumroad.com/l/ghe-indicators with your actual Whop link once live.
 
 ---
 
@@ -41,7 +41,7 @@ All three at the same time = high-probability setup.
 
 3-5 high-confidence signals per day instead of 50 alerts that mean nothing.
 
-Access: [WHOP_URL]
+Access: https://horizons56.gumroad.com/l/ghe-indicators
 
 ---
 
@@ -84,7 +84,7 @@ Updates in real time as price moves.
 
 The math does it.
 
-Part of the GHE suite: [WHOP_URL]
+Part of the GHE suite: https://horizons56.gumroad.com/l/ghe-indicators
 
 ---
 
@@ -122,7 +122,7 @@ You still do your own research. But it's a filter worth having.
 
 $49/month or $79 one-time for all 3:
 
-[WHOP_URL]
+https://horizons56.gumroad.com/l/ghe-indicators
 
 ---
 
@@ -160,7 +160,7 @@ Most traders override this. That's when they get hurt.
 
 High-confidence labels only appear on 70+ setups.
 
-Try it: [WHOP_URL]
+Try it: https://horizons56.gumroad.com/l/ghe-indicators
 
 ---
 
@@ -196,7 +196,7 @@ Less noise. More signal.
 
 5/ $49/month for the full 3-indicator suite:
 
-[WHOP_URL]
+https://horizons56.gumroad.com/l/ghe-indicators
 
 ---
 
@@ -227,7 +227,7 @@ Signal only fires when vol_surge = true AND trend and RSI confirm.
 
 No surge = no signal. Simple.
 
-5/ The indicator: [WHOP_URL]
+5/ The indicator: https://horizons56.gumroad.com/l/ghe-indicators
 
 $49/month, all 3 tools included.
 
@@ -257,7 +257,7 @@ Monthly subscribers get updates too, obviously.
 
 5/ Both options here:
 
-[WHOP_URL]
+https://horizons56.gumroad.com/l/ghe-indicators
 
 Under $100 for tools a trading desk would charge $500/month for.
 
@@ -281,7 +281,7 @@ Here's what's included: 🧵
 
 This price goes up after Friday.
 
-[WHOP_URL]
+https://horizons56.gumroad.com/l/ghe-indicators
 
 ---
 
@@ -311,7 +311,7 @@ The ones who treat it as a magic button: struggle.
 
 5/ If you want a tool that reduces noise and gives you a mathematical edge:
 
-[WHOP_URL]
+https://horizons56.gumroad.com/l/ghe-indicators
 
 $49/month or $79 one-time. No auto-renew on the lifetime plan.
 
@@ -339,7 +339,7 @@ We built it directly into TradingView as an overlay.
 
 All on one chart.
 
-[WHOP_URL]
+https://horizons56.gumroad.com/l/ghe-indicators
 
 $49/month or $79 one-time.
 
