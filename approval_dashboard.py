@@ -47,7 +47,7 @@ PIPELINE_SCRIPTS = [
     # outreach_sender.py intentionally excluded — sending is manual-only via dashboard buttons
 ]
 
-DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "1000"))
+DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "2000"))
 batch_running     = False
 batch_sent_count  = 0
 
@@ -170,18 +170,21 @@ def _grant_pipeline_daily():
 
 
 def _twitter_scheduler():
-    """Posts to Twitter 5x/day at 8am, 10am, 1pm, 5pm, 8pm UTC."""
+    """Posts to Twitter 5x/day at 8am, 10am, 1pm, 5pm, 8pm UTC.
+    Also fires one post immediately on startup so deploys never go dark."""
     import datetime as _dt
     POST_HOURS = {8, 10, 13, 17, 20}
     fired = set()
-    time.sleep(240)
+    time.sleep(120)  # let app stabilize
+    # Fire immediately on startup regardless of hour
+    _run_engine("Twitter Post (startup)", "twitter_poster.py")
+    fired.add((_dt.datetime.utcnow().date(), _dt.datetime.utcnow().hour))
     while True:
         now = _dt.datetime.utcnow()
         key = (now.date(), now.hour)
         if now.hour in POST_HOURS and key not in fired and now.minute < 10:
             _run_engine("Twitter Post", "twitter_poster.py")
             fired.add(key)
-            # Keep fired set small
             if len(fired) > 20:
                 fired = set(list(fired)[-10:])
         time.sleep(60)
