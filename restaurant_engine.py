@@ -17,7 +17,7 @@ SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
 SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
 CALENDLY      = "https://calendly.com/grayhorizonsenterprise/30min"
-DAILY_LIMIT   = int(os.getenv("RESTAURANT_DAILY_LIMIT", "300"))
+DAILY_LIMIT   = int(os.getenv("DAILY_LIMIT_NICHE", "500"))
 REFILL_BELOW  = 200
 
 EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")

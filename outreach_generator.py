@@ -729,6 +729,427 @@ Gray Horizons Enterprise
 To opt out of future emails, reply with REMOVE.""",
 ]
 
+# ── 16 additional niche templates ─────────────────────────────────────────────
+
+NICHE_MESSAGES["electrician"] = [
+    """\
+Hey,
+
+When a homeowner calls for an electrical emergency and your line is busy, what happens?
+
+Most electricians lose those calls. The customer books the first company that picks up.
+
+We built a system that captures every missed call and follows up automatically so you stop losing jobs to whoever answers first.
+
+Happy to show you how it works this week.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Estimate follow-up is where most electrical contractors lose jobs. Quote goes out, no response, the homeowner went with someone else.
+
+We built a system that follows up on every open estimate automatically until you get an answer.
+
+I can get you set up in about a week.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["pest_control"] = [
+    """\
+Hey,
+
+When a homeowner calls about an infestation and gets your voicemail, 80% of them call the next company before you call back.
+
+We built a system that captures every missed inquiry and responds automatically so you're always the first pest control company they hear back from.
+
+Worth a quick look?
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Recurring service customers who miss a scheduled treatment and don't reschedule are revenue that most pest control companies never recover.
+
+We built an automated re-engagement system that follows up with lapsed customers and gets them back on the schedule.
+
+Happy to walk you through it.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["veterinary"] = [
+    """\
+Hey,
+
+When a pet owner calls your clinic after hours about an emergency, what happens to that call?
+
+If it goes to voicemail, they're already searching for an emergency vet. We built a system that captures those calls and directs them appropriately so you never lose an emergency case to a missed call.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Clients who haven't brought their pet in for 6-12 months are your highest-value lapsed customers.
+
+We built a reactivation system that reaches out to those clients automatically with wellness reminders timed to their pet's care history.
+
+I can show you what it looks like this week.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["optometry"] = [
+    """\
+Hey,
+
+Patients who are due for an annual exam but haven't scheduled yet — is there anything reaching out to them automatically, or does it depend on them calling in?
+
+That gap is usually worth $800-$1,200 per patient per year in missed exams and lens sales.
+
+We built an automated recall system that handles exactly that. Happy to show you how it works.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+When a new patient calls to book an exam and you can't answer, do they get a callback automatically or does it depend on someone at the front desk remembering?
+
+Most practices lose 20-30% of new patient calls that way.
+
+We built a system that captures every missed inquiry and books them automatically.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["cleaning"] = [
+    """\
+Hey,
+
+When someone fills out a quote request on your website at 9pm, what happens to it?
+
+If it sits until morning, they've already booked another cleaning company.
+
+We built a system that responds instantly and captures the booking automatically — after hours, weekends, whenever.
+
+Happy to show you how it works.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Clients who used your service once and never rebooked — do you have anything reaching back out to them automatically?
+
+Most cleaning companies have 50-100 of these lapsed clients sitting in their records. We built a reactivation system that converts a percentage of them back every month.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["painting"] = [
+    """\
+Hey,
+
+After you send a quote, what does your follow-up process look like? Is there a system tracking open bids or does it depend on someone remembering to follow up?
+
+Most painting contractors lose 30-40% of their estimates to slow follow-up.
+
+We built a system that tracks every open quote and follows up automatically until you get a yes or a no.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+After-hours and weekend calls for painting projects — when they come in and nobody picks up, do those get captured somewhere or do they usually go cold?
+
+We built a system that responds to every inquiry automatically so you're always first to reply.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["flooring"] = [
+    """\
+Hey,
+
+When a homeowner submits a flooring quote request and you don't hear back from them, what does your follow-up look like?
+
+That gap between the estimate and the decision is where most flooring companies lose jobs.
+
+We built a system that follows up on every open quote automatically so you stop losing installs to competitors who follow up faster.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Referrals from past flooring customers are your best leads. Most companies never ask for them systematically.
+
+We built a post-install follow-up system that collects reviews and asks for referrals automatically after every completed job.
+
+Worth a quick look?
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["moving"] = [
+    """\
+Hey,
+
+Moving leads are time-sensitive — the customer gets 3-5 quotes and goes with the first company that responds.
+
+When someone requests a moving quote on your site after hours, how fast does your team follow up?
+
+We built a system that responds instantly and locks in the booking before your competitors call back.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Most moving companies have no system to follow up with leads who got a quote but didn't book.
+
+We built an automated sequence that follows up with those leads at the right intervals — and converts a percentage of them without anyone on your team having to track it manually.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["medspa"] = [
+    """\
+Hey,
+
+After a client's first treatment, what does your follow-up look like?
+
+Most med spas send nothing. That's why 60% of first-time clients don't come back.
+
+We build automated retention systems: post-treatment follow-up, rebooking reminders, VIP birthday offers, and win-back campaigns for clients who've gone quiet.
+
+Happy to show you what it looks like.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Clients who came in for a consultation but never booked a treatment — is there anything following up with them automatically or does that fall off?
+
+We built a system that nurtures those consult leads with timely messages until they're ready to commit.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["insurance"] = [
+    """\
+Hey,
+
+After you send a quote, what does your follow-up sequence look like?
+
+Research shows it takes 7 touchpoints before most prospects make an insurance decision. Most agents follow up once or twice and move on.
+
+We built automated nurture sequences that keep you in front of every prospect until they're ready — without you having to track each one manually.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Policy renewal season — how are you proactively reaching out to clients before their renewal dates?
+
+We built an automated renewal pipeline that reaches out at the right intervals, flags at-risk clients, and prompts cross-sell conversations automatically.
+
+Happy to show you how it works this week.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["mortgage"] = [
+    """\
+Hey,
+
+When a borrower fills out a rate inquiry on your site at 8pm on a Friday, what happens?
+
+Rate shoppers contact 3-5 lenders simultaneously and go with whoever responds first.
+
+We build instant response systems for mortgage brokers — automated inquiry acknowledgment, pre-qual questions, and calendar booking — so you're always first in the door.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Past clients are your best source of refis and referrals. Most LOs communicate with them once a year at best.
+
+We build automated past-client pipelines: rate drop alerts, annual review outreach, referral asks timed to the right moment.
+
+Top producers we work with generate 2-4 deals per month purely from past client automation.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["gym"] = [
+    """\
+Hey,
+
+When someone signs up for a free trial at your gym, what does the follow-up look like for the next 30 days?
+
+For most gyms, the answer is not much. And that's why month-2 churn is the industry's biggest problem.
+
+We build automated onboarding and retention sequences that check in with new members, fill empty class spots, and flag members showing cancellation signals before they leave.
+
+Happy to show you what it looks like.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Slow Tuesday afternoons and empty Thursday morning classes are pure revenue left on the table.
+
+We set up automated class-fill campaigns that go out to members based on their attendance patterns — nudging the right people to book the right classes at the right time.
+
+Worth 15 minutes to see what's possible?
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["restaurant"] = [
+    """\
+Hey,
+
+After a customer dines with you, what does your follow-up look like?
+
+For most restaurants, the answer is nothing. No thank you, no birthday offer, no "we miss you" after 60 days.
+
+We build automated guest retention systems — post-visit follow-up, loyalty incentives, and win-back campaigns for guests who haven't returned.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+    """\
+Hey,
+
+Slow nights and empty reservation slots — is there anything going out automatically to your regulars when you have openings, or is it all manual?
+
+We built an automated fill system that messages your best customers at the right time to drive reservations when you need them most.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["storage"] = [
+    """\
+Hey,
+
+When someone calls about a storage unit and gets your voicemail, what happens to that inquiry?
+
+Most storage facilities lose 30-40% of phone leads this way.
+
+We built a system that captures every missed inquiry and follows up automatically with availability and pricing — before they book a competitor.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["tutoring"] = [
+    """\
+Hey,
+
+When a parent inquires about tutoring services and doesn't hear back within an hour, they usually move on to the next option.
+
+We built a system that responds to every inquiry instantly and captures the enrollment without anyone on your team having to manually follow up.
+
+Happy to show you how it works.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
+NICHE_MESSAGES["photography"] = [
+    """\
+Hey,
+
+After a consultation or inquiry, what does your follow-up look like?
+
+Most photographers send one email and hope for the best. We built a system that follows up on every open inquiry automatically — so you book more sessions without chasing leads manually.
+
+Alex
+Gray Horizons Enterprise
+
+To opt out reply REMOVE.""",
+]
+
 NICHE_SUBJECTS = {
     "hoa":          ["Quick question", "How do you handle this?", "Something we built for HOA teams", "Process question"],
     "hvac":         ["Quick question", "Something we built", "How do you handle this?", "Question for you"],
@@ -741,6 +1162,22 @@ NICHE_SUBJECTS = {
     "chiropractic": ["Quick question", "Something we built for practices", "How do you handle this?", "Question for you"],
     "realestate":   ["Quick question", "Something we built for agents", "How do you handle this?", "Question for you"],
     "salon":        ["Quick question", "Something we built for salons", "How do you handle this?", "Question for you"],
+    "electrician":  ["Quick question", "How do you handle missed calls?", "Something we built for electricians"],
+    "pest_control": ["Quick question", "How do you handle missed calls?", "Something we built for pest control"],
+    "veterinary":   ["Quick question", "Something we built for vet clinics", "How do you handle this?"],
+    "optometry":    ["Quick question", "Something we built for eye care", "How do you handle this?"],
+    "cleaning":     ["Quick question", "Something we built for cleaning companies", "How do you handle this?"],
+    "painting":     ["Quick question", "Something we built for painters", "How do you handle your estimates?"],
+    "flooring":     ["Quick question", "How do you handle your quotes?", "Something we built for flooring companies"],
+    "moving":       ["Quick question", "Something we built for movers", "How do you handle new leads?"],
+    "medspa":       ["Quick question", "Something we built for med spas", "How do you handle client retention?"],
+    "insurance":    ["Quick question", "Something we built for agents", "How do you handle quote follow-up?"],
+    "mortgage":     ["Quick question", "Something we built for LOs", "How do you handle after-hours leads?"],
+    "gym":          ["Quick question", "Something we built for gyms", "How do you handle member retention?"],
+    "restaurant":   ["Quick question", "Something we built for restaurants", "How do you get customers back?"],
+    "storage":      ["Quick question", "Something we built for storage facilities", "How do you handle missed calls?"],
+    "tutoring":     ["Quick question", "Something we built for tutors", "How do you handle new inquiries?"],
+    "photography":  ["Quick question", "Something we built for photographers", "How do you handle booking?"],
 }
 
 def is_clean_name(name: str) -> bool:
