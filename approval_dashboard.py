@@ -212,9 +212,10 @@ def _shadow_clans_nightly():
 
 
 def _realestate_engine_daily():
-    """Scrapes real estate leads + sends 300 emails/day at 7am UTC."""
+    """Fires immediately on startup then daily at 7am UTC."""
     import datetime as _dt
-    time.sleep(150)
+    time.sleep(120)
+    _run_engine("Real Estate Engine", "realestate_engine.py")
     while True:
         now = _dt.datetime.utcnow()
         if now.hour == 7 and now.minute < 10:
@@ -224,9 +225,10 @@ def _realestate_engine_daily():
 
 
 def _medspa_engine_daily():
-    """Scrapes med spa leads + sends 300 emails/day at 10am UTC."""
+    """Fires immediately on startup then daily at 10am UTC."""
     import datetime as _dt
-    time.sleep(180)
+    time.sleep(300)
+    _run_engine("Med Spa Engine", "medspa_engine.py")
     while True:
         now = _dt.datetime.utcnow()
         if now.hour == 10 and now.minute < 10:
@@ -236,9 +238,10 @@ def _medspa_engine_daily():
 
 
 def _insurance_engine_daily():
-    """Scrapes insurance leads + sends 300 emails/day at 11am UTC."""
+    """Fires immediately on startup then daily at 11am UTC."""
     import datetime as _dt
-    time.sleep(210)
+    time.sleep(480)
+    _run_engine("Insurance Engine", "insurance_engine.py")
     while True:
         now = _dt.datetime.utcnow()
         if now.hour == 11 and now.minute < 10:
@@ -248,9 +251,10 @@ def _insurance_engine_daily():
 
 
 def _ecommerce_engine_daily():
-    """Scrapes e-commerce leads + sends 300 emails/day at 12pm UTC."""
+    """Fires immediately on startup then daily at 12pm UTC."""
     import datetime as _dt
-    time.sleep(240)
+    time.sleep(660)
+    _run_engine("E-Commerce Engine", "ecommerce_engine.py")
     while True:
         now = _dt.datetime.utcnow()
         if now.hour == 12 and now.minute < 10:
@@ -260,9 +264,10 @@ def _ecommerce_engine_daily():
 
 
 def _restaurant_engine_daily():
-    """Scrapes restaurant leads + sends 300 emails/day at 2pm UTC."""
+    """Fires immediately on startup then daily at 2pm UTC."""
     import datetime as _dt
-    time.sleep(270)
+    time.sleep(840)
+    _run_engine("Restaurant Engine", "restaurant_engine.py")
     while True:
         now = _dt.datetime.utcnow()
         if now.hour == 14 and now.minute < 10:
@@ -272,9 +277,10 @@ def _restaurant_engine_daily():
 
 
 def _gym_engine_daily():
-    """Scrapes gym leads + sends 300 emails/day at 3pm UTC."""
+    """Fires immediately on startup then daily at 3pm UTC."""
     import datetime as _dt
-    time.sleep(300)
+    time.sleep(1020)
+    _run_engine("Gym Engine", "gym_engine.py")
     while True:
         now = _dt.datetime.utcnow()
         if now.hour == 15 and now.minute < 10:
@@ -284,9 +290,10 @@ def _gym_engine_daily():
 
 
 def _mortgage_engine_daily():
-    """Scrapes mortgage leads + sends 300 emails/day at 4pm UTC."""
+    """Fires immediately on startup then daily at 4pm UTC."""
     import datetime as _dt
-    time.sleep(330)
+    time.sleep(1200)
+    _run_engine("Mortgage Engine", "mortgage_engine.py")
     while True:
         now = _dt.datetime.utcnow()
         if now.hour == 16 and now.minute < 10:
@@ -296,9 +303,10 @@ def _mortgage_engine_daily():
 
 
 def _followup_engine_daily():
-    """Sends follow-ups to 3-7 day old leads at 6pm UTC."""
+    """Fires immediately on startup then daily at 6pm UTC."""
     import datetime as _dt
-    time.sleep(420)
+    time.sleep(1380)
+    _run_engine("Follow-Up Engine", "followup_engine.py")
     while True:
         now = _dt.datetime.utcnow()
         if now.hour == 18 and now.minute < 10:
@@ -1003,6 +1011,7 @@ def dashboard():
       <a href="/resend-failed" class="btn-link" style="background:#f59e0b;color:#000;">Resend Failed</a>
       <a href="/rebuild-queue" class="btn-link" style="background:#06b6d4;color:#000;font-weight:bold;">Rebuild Queue</a>
       <a href="/opt-out" class="btn-link" style="background:#7f1d1d;color:#fca5a5;font-weight:bold;">+ Opt-Out</a>
+      <a href="/run-all-engines" class="btn-link" style="background:#7c3aed;color:#fff;font-weight:bold;">Run All Engines</a>
       <a href="/refresh" class="btn-link">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
     </div>
   </div>
@@ -1789,6 +1798,37 @@ def send_batch_5k():
     if not batch_running:
         threading.Thread(target=run_batch_send, kwargs={"limit": 5000}, daemon=True).start()
     return redirect('/')
+
+@app.route('/run-all-engines')
+def run_all_engines_route():
+    """Manually trigger every outreach engine right now."""
+    engines = [
+        ("Real Estate Engine",  "realestate_engine.py"),
+        ("Med Spa Engine",      "medspa_engine.py"),
+        ("Insurance Engine",    "insurance_engine.py"),
+        ("E-Commerce Engine",   "ecommerce_engine.py"),
+        ("Restaurant Engine",   "restaurant_engine.py"),
+        ("Gym Engine",          "gym_engine.py"),
+        ("Mortgage Engine",     "mortgage_engine.py"),
+        ("Signals Blast",       "signals_engine.py"),
+        ("Follow-Up Engine",    "followup_engine.py"),
+    ]
+    stagger = 0
+    for label, script in engines:
+        def _fire(l=label, s=script, delay=stagger):
+            time.sleep(delay)
+            _run_engine(l, s)
+        threading.Thread(target=_fire, daemon=True).start()
+        stagger += 90  # 90-second stagger between engines
+    return (
+        "<html><body style='background:#0f172a;color:#e2e8f0;font-family:monospace;padding:2rem;'>"
+        f"<h2 style='color:#4ade80;'>All {len(engines)} engines queued</h2>"
+        "<p>Engines will fire 90 seconds apart to avoid overload.<br>"
+        "First engine starts in ~5 seconds. Check Railway logs for progress.</p>"
+        "<br><a href='/' style='color:#38bdf8;'>Back to Dashboard</a>"
+        "</body></html>"
+    )
+
 
 @app.route('/opt-out', methods=['GET', 'POST'])
 def opt_out_route():

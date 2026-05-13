@@ -7,6 +7,7 @@ Runs independently — no dashboard required.
 import os, sys, re, time, random, pandas as pd, requests
 from bs4 import BeautifulSoup
 from duckduckgo_search import DDGS
+from email_registry import load_global_registry, register_sent
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -228,7 +229,7 @@ def load_opt_outs() -> set:
     return out
 
 
-def scrape(seen: set) -> list:
+def scrape(seen: set, global_seen: set) -> list:
     import urllib.parse
     queries = random.sample(SEARCH_QUERIES, min(60, len(SEARCH_QUERIES)))
     new = []
@@ -245,7 +246,7 @@ def scrape(seen: set) -> list:
                 emails = fetch_emails(url)
                 time.sleep(random.uniform(0.3, 0.6))
                 for email in emails:
-                    if email in seen:
+                    if email in seen or email in global_seen:
                         continue
                     seen.add(email)
                     new.append({
@@ -296,9 +297,11 @@ def run():
 
     pending_count = len(df_existing[df_existing.get("status", pd.Series()) == "pending"]) if not df_existing.empty else 0
 
+    global_seen = load_global_registry(exclude_queue="realestate_queue.csv")
+
     if pending_count < REFILL_BELOW:
         print(f"[RE ENGINE] Queue low ({pending_count}), scraping fresh leads...")
-        new = scrape(seen)
+        new = scrape(seen, global_seen)
         if new:
             df_new = pd.DataFrame(new)
             if not df_existing.empty:
@@ -316,7 +319,6 @@ def run():
         print("[RE ENGINE] No leads to send")
         return
 
-    opt_outs = load_opt_outs()
     pending = df_combined[df_combined["status"] == "pending"]
     indices = list(pending.index)
     random.shuffle(indices)
@@ -325,7 +327,7 @@ def run():
     for idx in indices[:DAILY_LIMIT]:
         row = df_combined.loc[idx]
         email = str(row.get("email", "")).strip()
-        if not email or email.lower() in opt_outs:
+        if not email or email.lower() in global_seen:
             df_combined.at[idx, "status"] = "opted_out"
             continue
         subject = random.choice(SUBJECTS)
@@ -334,6 +336,8 @@ def run():
         df_combined.at[idx, "status"] = "sent" if ok else "failed"
         if ok:
             sent += 1
+            global_seen.add(email.lower())
+            register_sent(email, "realestate")
             print(f"  [OK] {email}")
         if sent % 50 == 0 and sent > 0:
             df_combined.to_csv(QUEUE_FILE, index=False)

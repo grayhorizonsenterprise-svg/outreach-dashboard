@@ -5,6 +5,7 @@ Standalone gym / fitness studio outreach engine.
 import os, sys, re, time, random, pandas as pd, requests
 from bs4 import BeautifulSoup
 from duckduckgo_search import DDGS
+from email_registry import load_global_registry, register_sent
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -218,7 +219,7 @@ def load_opt_outs():
     return out
 
 
-def scrape(seen):
+def scrape(seen, global_seen):
     import urllib.parse
     queries = random.sample(SEARCH_QUERIES, min(50, len(SEARCH_QUERIES)))
     new, ddgs = [], DDGS()
@@ -231,7 +232,7 @@ def scrape(seen):
                 if domain in SKIP_DOMAINS or not url:
                     continue
                 for email in fetch_emails(url):
-                    if email in seen:
+                    if email in seen or email in global_seen:
                         continue
                     seen.add(email)
                     new.append({"email": email, "name": r.get("title", "")[:80],
@@ -272,8 +273,10 @@ def run():
             pass
 
     pending_count = int((df_existing.get("status", pd.Series()) == "pending").sum()) if not df_existing.empty else 0
+    global_seen = load_global_registry(exclude_queue="gym_queue.csv")
+
     if pending_count < REFILL_BELOW:
-        new = scrape(seen)
+        new = scrape(seen, global_seen)
         df_combined = pd.concat([df_existing, pd.DataFrame(new)], ignore_index=True).drop_duplicates(subset=["email"]) if new and not df_existing.empty else (pd.DataFrame(new) if new else df_existing)
         if new:
             df_combined.to_csv(QUEUE_FILE, index=False)
@@ -283,18 +286,20 @@ def run():
     if df_combined.empty:
         return
 
-    opt_outs = load_opt_outs()
     indices = list(df_combined[df_combined["status"] == "pending"].index)
     random.shuffle(indices)
     sent = 0
     for idx in indices[:DAILY_LIMIT]:
         email = str(df_combined.loc[idx].get("email", "")).strip()
-        if not email or email.lower() in opt_outs:
+        if not email or email.lower() in global_seen:
             df_combined.at[idx, "status"] = "opted_out"; continue
         ok = send_one(email, random.choice(SUBJECTS), random.choice(MESSAGES).format(calendly=CALENDLY))
         df_combined.at[idx, "status"] = "sent" if ok else "failed"
         if ok:
-            sent += 1; print(f"  [OK] {email}")
+            sent += 1
+            global_seen.add(email.lower())
+            register_sent(email, "gym")
+            print(f"  [OK] {email}")
         if sent % 50 == 0 and sent > 0:
             df_combined.to_csv(QUEUE_FILE, index=False)
         time.sleep(random.uniform(0.3, 0.7))

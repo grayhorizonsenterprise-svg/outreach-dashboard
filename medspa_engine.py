@@ -6,6 +6,7 @@ Scrapes owners → sends targeted pitch → tracks in medspa_queue.csv
 import os, sys, re, time, random, pandas as pd, requests
 from bs4 import BeautifulSoup
 from duckduckgo_search import DDGS
+from email_registry import load_global_registry, register_sent
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -229,7 +230,7 @@ def load_opt_outs() -> set:
     return out
 
 
-def scrape(seen: set) -> list:
+def scrape(seen: set, global_seen: set) -> list:
     import urllib.parse
     queries = random.sample(SEARCH_QUERIES, min(50, len(SEARCH_QUERIES)))
     new = []
@@ -243,7 +244,7 @@ def scrape(seen: set) -> list:
                 if domain in SKIP_DOMAINS or not url:
                     continue
                 for email in fetch_emails(url):
-                    if email in seen:
+                    if email in seen or email in global_seen:
                         continue
                     seen.add(email)
                     new.append({
@@ -294,9 +295,11 @@ def run():
 
     pending_count = int((df_existing.get("status", pd.Series()) == "pending").sum()) if not df_existing.empty else 0
 
+    global_seen = load_global_registry(exclude_queue="medspa_queue.csv")
+
     if pending_count < REFILL_BELOW:
         print(f"[MED ENGINE] Queue low ({pending_count}), scraping...")
-        new = scrape(seen)
+        new = scrape(seen, global_seen)
         if new:
             df_new = pd.DataFrame(new)
             df_combined = pd.concat([df_existing, df_new], ignore_index=True).drop_duplicates(subset=["email"]) if not df_existing.empty else df_new
@@ -318,7 +321,7 @@ def run():
     for idx in indices[:DAILY_LIMIT]:
         row = df_combined.loc[idx]
         email = str(row.get("email", "")).strip()
-        if not email or email.lower() in opt_outs:
+        if not email or email.lower() in global_seen:
             df_combined.at[idx, "status"] = "opted_out"
             continue
         ok = send_one(email, random.choice(SUBJECTS),
