@@ -13,8 +13,18 @@ import time
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-DATA_DIR   = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
-QUEUE_FILE = os.path.join(DATA_DIR, "signals_queue.csv")
+DATA_DIR       = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+QUEUE_FILE     = os.path.join(DATA_DIR, "signals_queue.csv")
+OPT_OUT_FILE   = os.path.join(DATA_DIR, "unsubscribe_list.csv")
+
+def load_opt_outs() -> set:
+    try:
+        if os.path.exists(OPT_OUT_FILE):
+            df = pd.read_csv(OPT_OUT_FILE, dtype=str).fillna("")
+            return set(df["email"].str.lower().str.strip())
+    except Exception:
+        pass
+    return set()
 
 SENDGRID_KEY   = os.getenv("SENDGRID_API_KEY", "")
 SENDER_EMAIL   = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
@@ -139,6 +149,7 @@ def run():
     pending = df[df["status"] == "pending"]
     print(f"[SIGNALS SENDER] {len(pending)} pending leads, sending up to {DAILY_LIMIT} today")
 
+    opt_outs = load_opt_outs()
     sent = 0
     indices = list(pending.index)
     random.shuffle(indices)
@@ -147,6 +158,9 @@ def run():
         row    = df.loc[idx]
         email  = str(row.get("email", "")).strip()
         if not email:
+            continue
+        if email.lower() in opt_outs:
+            df.at[idx, "status"] = "opted_out"
             continue
 
         subject = random.choice(SUBJECTS)

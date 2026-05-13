@@ -224,8 +224,32 @@ for _fn in [
 
 print("[ENGINES] All 6 revenue engine schedulers started", flush=True)
 
-CSV_FILE    = os.path.join(DATA_DIR, "outreach_queue.csv")
-SOCIAL_FILE = os.path.join(DATA_DIR, "social_pipeline.csv")
+CSV_FILE      = os.path.join(DATA_DIR, "outreach_queue.csv")
+SOCIAL_FILE   = os.path.join(DATA_DIR, "social_pipeline.csv")
+OPT_OUT_FILE  = os.path.join(DATA_DIR, "unsubscribe_list.csv")
+
+def load_opt_outs() -> set:
+    """Return lowercase set of all opted-out emails."""
+    try:
+        if os.path.exists(OPT_OUT_FILE):
+            df = pd.read_csv(OPT_OUT_FILE, dtype=str).fillna("")
+            return set(df["email"].str.lower().str.strip())
+    except Exception:
+        pass
+    return set()
+
+def add_opt_out(email: str, reason: str = "requested removal"):
+    """Append an email to the opt-out list (idempotent)."""
+    email = email.lower().strip()
+    existing = load_opt_outs()
+    if email in existing:
+        return
+    row = pd.DataFrame([{"email": email, "reason": reason}])
+    if os.path.exists(OPT_OUT_FILE):
+        row.to_csv(OPT_OUT_FILE, mode="a", header=False, index=False)
+    else:
+        row.to_csv(OPT_OUT_FILE, index=False)
+    print(f"[OPT-OUT] Added {email}", flush=True)
 
 # =========================
 # POSTGRESQL — persistent queue storage
@@ -654,12 +678,15 @@ def run_batch_send(limit=None):
     mask    = (df["status"] == "pending") & (df["email"].fillna("").str.strip() != "")
     pending = df[mask]
 
-    # Deduplicate by email — only send to each address once
+    # Deduplicate by email — only send to each address once; skip opt-outs
+    opt_outs    = load_opt_outs()
     seen_emails = set()
     rows = []
     for i, row in pending.iterrows():
         email_key = str(row["email"]).strip().lower()
-        if email_key not in seen_emails:
+        if email_key in opt_outs:
+            df.at[i, "status"] = "opted_out"
+        elif email_key not in seen_emails:
             seen_emails.add(email_key)
             rows.append((i, row))
         else:
@@ -853,6 +880,7 @@ def dashboard():
       <a href="/sent" class="btn-link" style="background:#7c3aed;">View Sent</a>
       <a href="/resend-failed" class="btn-link" style="background:#f59e0b;color:#000;">Resend Failed</a>
       <a href="/rebuild-queue" class="btn-link" style="background:#06b6d4;color:#000;font-weight:bold;">Rebuild Queue</a>
+      <a href="/opt-out" class="btn-link" style="background:#7f1d1d;color:#fca5a5;font-weight:bold;">+ Opt-Out</a>
       <a href="/refresh" class="btn-link">{'Scraping...' if pipeline_running else 'Refresh Leads'}</a>
     </div>
   </div>
@@ -1639,6 +1667,31 @@ def send_batch_5k():
     if not batch_running:
         threading.Thread(target=run_batch_send, kwargs={"limit": 5000}, daemon=True).start()
     return redirect('/')
+
+@app.route('/opt-out', methods=['GET', 'POST'])
+def opt_out_route():
+    if flask_request.method == 'POST':
+        email  = flask_request.form.get("email", "").strip().lower()
+        reason = flask_request.form.get("reason", "manual entry").strip()
+        if email:
+            add_opt_out(email, reason)
+            # Also mark any pending rows for that email as opted_out
+            df = load_data()
+            mask = df["email"].str.lower().str.strip() == email
+            df.loc[mask & (df["status"] == "pending"), "status"] = "opted_out"
+            save_data(df)
+        return redirect('/')
+    return (
+        "<html><body style='background:#0f172a;color:#e2e8f0;font-family:monospace;padding:2rem;'>"
+        "<h2>Add Opt-Out</h2>"
+        "<form method='POST'>"
+        "<label>Email: <input name='email' style='width:300px;padding:6px;margin:8px;'></label><br>"
+        "<label>Reason: <input name='reason' value='requested removal' style='width:300px;padding:6px;margin:8px;'></label><br>"
+        "<button type='submit' style='padding:8px 20px;background:#dc2626;color:#fff;border:none;cursor:pointer;'>Add to Opt-Out List</button>"
+        "</form>"
+        "<br><a href='/' style='color:#38bdf8;'>Back to Dashboard</a>"
+        "</body></html>"
+    )
 
 @app.route('/social/from-sent')
 def social_from_sent():
