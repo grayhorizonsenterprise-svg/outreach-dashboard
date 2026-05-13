@@ -35,11 +35,18 @@ EDGE_ENGINE_URL = os.getenv("EDGE_ENGINE_URL", "https://outreach-dashboard-produ
 URL_GRANTS       = "https://ghe-grant-agent-production.up.railway.app"
 URL_VOICE_SERVER = os.getenv("VOICE_SERVER_URL", "https://ghe-voice-production.up.railway.app")
 PIPELINE_SCRIPTS = [
+    # DDG-based (may be rate-limited on cloud IPs — kept as fallback)
     "hotfrog_scraper.py",
     "chamberofcommerce_scraper.py",
     "bark_scraper.py",
+    # Direct directory scrapers — no DDG, hit YP/SP pages directly
+    "yellowpages_scraper.py",
+    "superpages_scraper.py",
+    # API-based (only run if keys are set in Railway env vars)
     "yelp_scraper.py",
     "hunter_scraper.py",
+    "apollo_scraper.py",
+    # Enrichment + quality + generation
     "prospect_enricher.py",
     "prospect_qualifier.py",
     "email_verifier.py",
