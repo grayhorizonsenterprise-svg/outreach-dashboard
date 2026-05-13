@@ -92,7 +92,10 @@ def run():
     import urllib.parse
     enriched = 0
 
-    for i, row in needs_email.head(45).iterrows():
+    # Free tier = 25/month. Cap at 20/run so we never accidentally blow the limit.
+    monthly_limit = int(os.getenv("HUNTER_MONTHLY_LIMIT", "25"))
+    per_run_cap   = max(1, monthly_limit // 2)
+    for i, row in needs_email.head(per_run_cap).iterrows():
         site = str(row["website"]).strip().rstrip("/")
         try:
             domain = urllib.parse.urlparse(site).netloc.replace("www.", "")
