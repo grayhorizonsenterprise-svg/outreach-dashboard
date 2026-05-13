@@ -211,6 +211,102 @@ def _shadow_clans_nightly():
         time.sleep(60)
 
 
+def _realestate_engine_daily():
+    """Scrapes real estate leads + sends 300 emails/day at 7am UTC."""
+    import datetime as _dt
+    time.sleep(150)
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 7 and now.minute < 10:
+            _run_engine("Real Estate Engine", "realestate_engine.py")
+            time.sleep(600)
+        time.sleep(60)
+
+
+def _medspa_engine_daily():
+    """Scrapes med spa leads + sends 300 emails/day at 10am UTC."""
+    import datetime as _dt
+    time.sleep(180)
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 10 and now.minute < 10:
+            _run_engine("Med Spa Engine", "medspa_engine.py")
+            time.sleep(600)
+        time.sleep(60)
+
+
+def _insurance_engine_daily():
+    """Scrapes insurance leads + sends 300 emails/day at 11am UTC."""
+    import datetime as _dt
+    time.sleep(210)
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 11 and now.minute < 10:
+            _run_engine("Insurance Engine", "insurance_engine.py")
+            time.sleep(600)
+        time.sleep(60)
+
+
+def _ecommerce_engine_daily():
+    """Scrapes e-commerce leads + sends 300 emails/day at 12pm UTC."""
+    import datetime as _dt
+    time.sleep(240)
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 12 and now.minute < 10:
+            _run_engine("E-Commerce Engine", "ecommerce_engine.py")
+            time.sleep(600)
+        time.sleep(60)
+
+
+def _restaurant_engine_daily():
+    """Scrapes restaurant leads + sends 300 emails/day at 2pm UTC."""
+    import datetime as _dt
+    time.sleep(270)
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 14 and now.minute < 10:
+            _run_engine("Restaurant Engine", "restaurant_engine.py")
+            time.sleep(600)
+        time.sleep(60)
+
+
+def _gym_engine_daily():
+    """Scrapes gym leads + sends 300 emails/day at 3pm UTC."""
+    import datetime as _dt
+    time.sleep(300)
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 15 and now.minute < 10:
+            _run_engine("Gym Engine", "gym_engine.py")
+            time.sleep(600)
+        time.sleep(60)
+
+
+def _mortgage_engine_daily():
+    """Scrapes mortgage leads + sends 300 emails/day at 4pm UTC."""
+    import datetime as _dt
+    time.sleep(330)
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 16 and now.minute < 10:
+            _run_engine("Mortgage Engine", "mortgage_engine.py")
+            time.sleep(600)
+        time.sleep(60)
+
+
+def _followup_engine_daily():
+    """Sends follow-ups to 3-7 day old leads at 6pm UTC."""
+    import datetime as _dt
+    time.sleep(420)
+    while True:
+        now = _dt.datetime.utcnow()
+        if now.hour == 18 and now.minute < 10:
+            _run_engine("Follow-Up Engine", "followup_engine.py")
+            time.sleep(600)
+        time.sleep(60)
+
+
 # Start all revenue engine threads
 for _fn in [
     _signals_engine_daily,
@@ -219,10 +315,18 @@ for _fn in [
     _gmail_monitor_thread,
     _reddit_monitor_thread,
     _shadow_clans_nightly,
+    _realestate_engine_daily,
+    _medspa_engine_daily,
+    _insurance_engine_daily,
+    _ecommerce_engine_daily,
+    _restaurant_engine_daily,
+    _gym_engine_daily,
+    _mortgage_engine_daily,
+    _followup_engine_daily,
 ]:
     threading.Thread(target=_fn, daemon=True).start()
 
-print("[ENGINES] All 6 revenue engine schedulers started", flush=True)
+print("[ENGINES] All 14 revenue engine schedulers started", flush=True)
 
 CSV_FILE      = os.path.join(DATA_DIR, "outreach_queue.csv")
 SOCIAL_FILE   = os.path.join(DATA_DIR, "social_pipeline.csv")
