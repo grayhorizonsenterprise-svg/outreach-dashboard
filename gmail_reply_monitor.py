@@ -36,12 +36,14 @@ INTEREST_KEYWORDS = [
     "interested", "tell me more", "how does this work", "sounds good", "love to",
     "would like", "more info", "set up a call", "book a call", "schedule a call",
     "let's talk", "let me know more", "sounds interesting", "how much",
-    "pricing", "cost", "what's included", "get started", "when can we",
+    "what's included", "get started", "when can we",
     "can you send", "can you show", "i'd like to", "we'd like to",
     "can we chat", "can we talk", "what does it cost", "how does it work",
+    "send me more", "walk me through", "what do you charge", "open to learning",
+    "would love to see", "can you explain", "this looks interesting",
 ]
 
-# Any of these = definitive opt-out or noise — never a hot lead
+# Any of these = definitive opt-out, noise, or counter-solicitation — never a hot lead
 IGNORE_KEYWORDS = [
     # Negative replies
     "no thanks", "no thank you", "not interested", "not for us",
@@ -49,6 +51,7 @@ IGNORE_KEYWORDS = [
     "don't need", "don't contact", "please don't", "not looking",
     "remove me", "unsubscribe", "stop emailing", "do not contact",
     "opt out", "take me off", "please remove", "stop sending",
+    "remove from", "remove me from",
     # Auto-replies / system mail
     "auto-reply", "automatic reply", "out of office", "vacation reply",
     "i am out", "i'm out of office", "i will be out", "away from",
@@ -62,6 +65,24 @@ IGNORE_KEYWORDS = [
     # System senders
     "noreply", "no-reply", "donotreply", "do-not-reply",
     "notifications@", "updates@", "alerts@",
+    # Counter-solicitations — they're selling TO us, not buying
+    "guest post", "sponsored post", "link insertion", "link placement",
+    "we are offering", "we offer", "we provide", "our service",
+    "our pricing", "our rates", "per month", "per link", "per post",
+    "payment via paypal", "payment via", "we can help you",
+    "digital marketing services", "seo package", "seo service",
+    "backlink", "we noticed your website", "i noticed your website",
+    "we specialize in", "our team can", "looking to promote",
+    "buy our", "purchase our", "subscribe to our", "sign up for our",
+    "we'd love to work with", "collaboration opportunity",
+    "partnership opportunity", "business opportunity",
+    "affiliate program", "referral program",
+    # Recruiter / job spam
+    "job opportunity", "career opportunity", "we're hiring", "open position",
+    "hiring for", "talent acquisition", "recruitment",
+    # Generic "thanks we got it" with no buying intent
+    "thank you for your email", "thanks for your inquiry",
+    "this is an automated", "auto response",
 ]
 
 # Sender is flagged as opt-out — add to unsubscribe list automatically
@@ -171,6 +192,13 @@ def is_interested(subject, body):
         return False
     # Any ignore signal = not a lead
     if any(k in text for k in IGNORE_KEYWORDS):
+        return False
+    # Block replies where body is longer than 800 chars with no question mark
+    # (counter-solicitations tend to be long pitches with no questions)
+    body_lower = body.lower()
+    if len(body) > 600 and "?" not in body and any(
+        k in body_lower for k in ["we offer", "we provide", "our service", "we are offering", "our team"]
+    ):
         return False
     # Must contain a genuine interest signal
     return any(k in text for k in INTEREST_KEYWORDS)
