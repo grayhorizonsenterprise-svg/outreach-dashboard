@@ -45,7 +45,7 @@ PIPELINE_SCRIPTS = [
     "prospect_qualifier.py",
     "email_verifier.py",
     "outreach_generator.py",
-    "outreach_sender.py",
+    # outreach_sender.py intentionally excluded — sending is manual-only via dashboard buttons
 ]
 
 DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "1000"))
@@ -453,7 +453,10 @@ def save_data(df):
                         VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
                         ON CONFLICT (email) DO UPDATE SET
                             company=EXCLUDED.company, name=EXCLUDED.name,
-                            message=EXCLUDED.message, status=EXCLUDED.status,
+                            message=EXCLUDED.message,
+                            status=CASE WHEN leads.status IN ('sent','opted_out','skipped')
+                                        THEN leads.status
+                                        ELSE EXCLUDED.status END,
                             niche=EXCLUDED.niche, subject=EXCLUDED.subject,
                             website=EXCLUDED.website
                     """, (
@@ -678,14 +681,29 @@ def run_batch_send(limit=None):
     mask    = (df["status"] == "pending") & (df["email"].fillna("").str.strip() != "")
     pending = df[mask]
 
-    # Deduplicate by email — only send to each address once; skip opt-outs
-    opt_outs    = load_opt_outs()
+    # Build global "already sent" wall from sent_log + opt-outs
+    opt_outs   = load_opt_outs()
+    ever_sent  = set()
+    try:
+        if os.path.exists(SENT_LOG):
+            sl = pd.read_csv(SENT_LOG, dtype=str).fillna("")
+            # log_sent writes column "email"; legacy rows also use "email"
+            if "email" in sl.columns:
+                ever_sent = set(
+                    sl.loc[sl.get("success", sl.get("status","")) == "True", "email"]
+                    .str.lower().str.strip()
+                )
+    except Exception:
+        pass
+
     seen_emails = set()
     rows = []
     for i, row in pending.iterrows():
         email_key = str(row["email"]).strip().lower()
         if email_key in opt_outs:
             df.at[i, "status"] = "opted_out"
+        elif email_key in ever_sent:
+            df.at[i, "status"] = "sent"   # sync DB with reality
         elif email_key not in seen_emails:
             seen_emails.add(email_key)
             rows.append((i, row))

@@ -800,13 +800,37 @@ def run():
     existing_rows = []
     if os.path.exists(OUTPUT_FILE):
         try:
-            existing = pd.read_csv(OUTPUT_FILE).fillna("")
+            existing = pd.read_csv(OUTPUT_FILE, dtype=str).fillna("")
             for _, r in existing.iterrows():
                 status = str(r.get("status", "")).strip()
                 email  = str(r.get("email",  "")).strip().lower()
-                if status in ("sent", "skipped") and email:
+                if status in ("sent", "skipped", "opted_out") and email:
                     done_emails.add(email)
                     existing_rows.append(r.to_dict())
+        except Exception:
+            pass
+
+    # Also load sent_log.csv as authoritative "never email again" source
+    _sent_log = os.path.join(os.path.dirname(os.path.abspath(OUTPUT_FILE)), "sent_log.csv")
+    if os.path.exists(_sent_log):
+        try:
+            sl = pd.read_csv(_sent_log, dtype=str).fillna("")
+            if "email" in sl.columns:
+                for e in sl["email"].str.lower().str.strip():
+                    if e:
+                        done_emails.add(e)
+        except Exception:
+            pass
+
+    # Load unsubscribe list
+    _unsub = os.path.join(os.path.dirname(os.path.abspath(OUTPUT_FILE)), "unsubscribe_list.csv")
+    if os.path.exists(_unsub):
+        try:
+            ub = pd.read_csv(_unsub, dtype=str).fillna("")
+            if "email" in ub.columns:
+                for e in ub["email"].str.lower().str.strip():
+                    if e:
+                        done_emails.add(e)
         except Exception:
             pass
 
