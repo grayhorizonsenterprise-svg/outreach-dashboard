@@ -39,7 +39,6 @@ PIPELINE_SCRIPTS = [
     "chamberofcommerce_scraper.py",
     "bark_scraper.py",
     "yelp_scraper.py",
-    "snov_scraper.py",        # replaces Apollo — no business email required
     "hunter_scraper.py",
     "prospect_enricher.py",
     "prospect_qualifier.py",

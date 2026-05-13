@@ -72,6 +72,11 @@ def run():
 
     df = pd.read_csv(INPUT_FILE).fillna("")
 
+    # Normalise: merge "domain" column into "website" if website is missing
+    if "domain" in df.columns:
+        mask = (df.get("website", pd.Series([""] * len(df))).str.strip() == "") & (df["domain"].str.strip() != "")
+        df.loc[mask, "website"] = df.loc[mask, "domain"]
+
     # Only enrich leads that have websites but no email
     needs_email = df[
         (df["email"].str.strip() == "") &
