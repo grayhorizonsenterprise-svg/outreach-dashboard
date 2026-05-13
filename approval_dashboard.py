@@ -92,12 +92,38 @@ def run_pipeline_once():
     pipeline_running = False
     print("[ENGINE] Cycle done.", flush=True)
 
+def get_pending_count():
+    """Quick check of pending lead count from DB or CSV."""
+    try:
+        conn = _get_db()
+        if conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT COUNT(*) FROM leads WHERE status='pending'")
+                count = cur.fetchone()[0]
+            conn.close()
+            return count
+    except Exception:
+        pass
+    try:
+        if os.path.exists(CSV_FILE):
+            df = pd.read_csv(CSV_FILE, dtype=str).fillna("")
+            return len(df[df["status"] == "pending"])
+    except Exception:
+        pass
+    return 0
+
 def run_pipeline_loop():
     time.sleep(600)  # wait 10 min — let gunicorn fully stabilize before pipeline starts
     while True:
         run_pipeline_once()
-        print("[ENGINE] Sleeping 4 hours until next cycle.", flush=True)
-        time.sleep(14400)
+        # Auto-refill: if pending drops below 1000, run again in 1 hour instead of 4
+        pending = get_pending_count()
+        if pending < 1000:
+            print(f"[ENGINE] Low queue ({pending} pending) — refilling in 60 min.", flush=True)
+            time.sleep(3600)
+        else:
+            print(f"[ENGINE] Queue healthy ({pending} pending) — next cycle in 4 hours.", flush=True)
+            time.sleep(14400)
 
 threading.Thread(target=run_pipeline_loop, daemon=True).start()
 
@@ -1004,6 +1030,7 @@ def dashboard():
   <a onclick="showTab('outreach')" id="tab-outreach" class="{'active' if active_tab=='outreach' else ''}">Outreach ({pending_count} pending)</a>
   <a onclick="showTab('social')"   id="tab-social"   class="{'active' if active_tab=='social' else ''}" style="color:#f97316;">Social Pipeline</a>
   <a onclick="showTab('grants')"   id="tab-grants"   class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grant Agent</a>
+  <a href="/status" style="color:#22c55e;font-weight:bold;">⚡ System Status</a>
 </div>
 
 <!-- OUTREACH TAB -->
@@ -1787,6 +1814,80 @@ def _sync_csv_to_db():
         print(f"[SYNC] {synced} pending leads pushed to DB.", flush=True)
     except Exception as e:
         print(f"[SYNC] Error: {e}", flush=True)
+
+# =========================
+# =========================
+# SYSTEM STATUS PAGE
+# =========================
+@app.route('/status')
+def status():
+    import datetime as _dt
+    pending = get_pending_count()
+
+    def _check(key, label=""):
+        val = os.getenv(key, "").strip()
+        ok = bool(val)
+        color = "#22c55e" if ok else "#ef4444"
+        text  = "SET" if ok else "MISSING"
+        return f'<tr><td style="padding:8px 16px;color:#cbd5e1;">{label or key}</td><td style="padding:8px 16px;"><span style="color:{color};font-weight:bold;">{text}</span></td></tr>'
+
+    queue_color = "#22c55e" if pending >= 1000 else ("#f97316" if pending >= 100 else "#ef4444")
+    queue_status = "HEALTHY" if pending >= 1000 else ("LOW" if pending >= 100 else "CRITICAL — REFILLING")
+
+    db_ok = bool(os.getenv("DATABASE_URL", "").strip())
+    sg_ok = bool(os.getenv("SENDGRID_API_KEY", "").strip())
+
+    return f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>GHE System Status</title>
+<meta http-equiv="refresh" content="60">
+<style>
+body{{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;margin:0;padding:24px;}}
+h1{{color:#22c55e;margin-bottom:4px;}}
+.sub{{color:#64748b;font-size:13px;margin-bottom:24px;}}
+table{{width:100%;max-width:700px;border-collapse:collapse;background:#1e293b;border-radius:10px;overflow:hidden;margin-bottom:24px;}}
+th{{background:#0f172a;color:#94a3b8;text-align:left;padding:10px 16px;font-size:11px;text-transform:uppercase;}}
+.big{{font-size:2rem;font-weight:bold;}}
+.card{{background:#1e293b;border-radius:10px;padding:20px;max-width:700px;margin-bottom:16px;}}
+a{{color:#06b6d4;text-decoration:none;}}
+</style></head>
+<body>
+<h1>GHE System Status</h1>
+<div class="sub">Auto-refreshes every 60 seconds &nbsp;|&nbsp; <a href="/">Back to Dashboard</a></div>
+
+<div class="card">
+  <div style="color:#94a3b8;font-size:12px;text-transform:uppercase;margin-bottom:8px;">Lead Queue</div>
+  <div class="big" style="color:{queue_color};">{pending} pending</div>
+  <div style="color:{queue_color};margin-top:4px;">{queue_status}</div>
+  <div style="color:#64748b;font-size:12px;margin-top:8px;">
+    Pipeline running: {'YES' if pipeline_running else 'NO'} &nbsp;|&nbsp;
+    Last run: {_dt.datetime.fromtimestamp(last_run_time).strftime('%I:%M %p') if last_run_time else 'Not yet this session'}
+  </div>
+</div>
+
+<table>
+<tr><th>System</th><th>Status</th></tr>
+{_check("SENDGRID_API_KEY", "SendGrid (Email Sending)")}
+{_check("DATABASE_URL", "PostgreSQL (Lead Storage)")}
+{_check("YELP_API_KEY", "Yelp API (500 leads/day)")}
+{_check("HUNTER_API_KEY", "Hunter.io (Email Finder)")}
+{_check("CALENDLY_URL", "Calendly Booking Link")}
+{_check("STRIPE_PAYMENT_LINK", "Stripe $497 Payment Link")}
+{_check("GMAIL_CLIENT_ID", "Gmail Reply Monitor")}
+{_check("TWITTER_API_KEY", "Twitter Auto-Poster")}
+{_check("ANTHROPIC_API_KEY", "Claude AI (Reply Generation)")}
+</table>
+
+<table>
+<tr><th>Niche Engine</th><th>Status</th></tr>
+{''.join(f'<tr><td style="padding:8px 16px;color:#cbd5e1;">{e}</td><td style="padding:8px 16px;"><span style="color:#22c55e;font-weight:bold;">RUNNING</span></td></tr>' for e in ["Real Estate","Med Spa","Insurance","Restaurant","Gym","Mortgage","E-Commerce"])}
+{''.join(f'<tr><td style="padding:8px 16px;color:#cbd5e1;">{e}</td><td style="padding:8px 16px;"><span style="color:#22c55e;font-weight:bold;">RUNNING</span></td></tr>' for e in ["Signals Blast (8am UTC)","Grant Pipeline (9am UTC)","Twitter Posts (5x/day)","Gmail Monitor (5 min)","Follow-Up Engine (6pm UTC)"])}
+</table>
+
+<div class="card" style="color:#64748b;font-size:13px;">
+  All engines run on Railway 24/7 regardless of whether your computer is on.<br>
+  Queue auto-refills when pending drops below 1,000 leads.
+</div>
+</body></html>"""
 
 # =========================
 # DEBUG CONFIG (no secrets shown)
