@@ -76,6 +76,11 @@ def run_pipeline_once():
             )
         except Exception as e:
             print(f"[ENGINE] Error in {script}: {e}", flush=True)
+    # Sync any new pending leads from CSV into PostgreSQL after generator runs
+    try:
+        _sync_csv_to_db()
+    except Exception as e:
+        print(f"[ENGINE] Sync error: {e}", flush=True)
     last_run_time = time.time()
     pipeline_running = False
     print("[ENGINE] Cycle done.", flush=True)
@@ -1718,11 +1723,60 @@ def rebuild_queue():
                 env={**os.environ, "PYTHONUNBUFFERED": "1"},
                 timeout=300
             )
-            print("[REBUILD] Done.", flush=True)
+            print("[REBUILD] Done — syncing CSV to DB...", flush=True)
+            # Generator writes to CSV only — sync pending rows into PostgreSQL
+            _sync_csv_to_db()
         except Exception as e:
             print(f"[REBUILD] Error: {e}", flush=True)
     threading.Thread(target=_run, daemon=True).start()
     return redirect('/')
+
+
+def _sync_csv_to_db():
+    """Push any pending rows from outreach_queue.csv into PostgreSQL.
+    Called after outreach_generator.py runs so new leads actually appear."""
+    if not os.path.exists(CSV_FILE):
+        return
+    try:
+        df = pd.read_csv(CSV_FILE, dtype=str).fillna("")
+        pending = df[df["status"] == "pending"]
+        if pending.empty:
+            print("[SYNC] No pending rows to sync.", flush=True)
+            return
+        # Only insert/update rows that aren't already sent in DB
+        conn = _get_db()
+        if not conn:
+            print("[SYNC] No DB — CSV is the queue.", flush=True)
+            return
+        synced = 0
+        with conn.cursor() as cur:
+            for _, row in pending.iterrows():
+                email = str(row.get("email", "")).strip().lower()
+                if not email:
+                    continue
+                cur.execute("""
+                    INSERT INTO leads (company,name,email,message,status,niche,subject,website)
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                    ON CONFLICT (email) DO UPDATE SET
+                        company=EXCLUDED.company, name=EXCLUDED.name,
+                        message=EXCLUDED.message,
+                        status=CASE WHEN leads.status IN ('sent','opted_out','skipped')
+                                    THEN leads.status
+                                    ELSE 'pending' END,
+                        niche=EXCLUDED.niche, subject=EXCLUDED.subject,
+                        website=EXCLUDED.website
+                """, (
+                    str(row.get("company","")), str(row.get("name","")),
+                    email, str(row.get("message","")), "pending",
+                    str(row.get("niche","hoa")), str(row.get("subject","")),
+                    str(row.get("website",""))
+                ))
+                synced += 1
+        conn.commit()
+        conn.close()
+        print(f"[SYNC] {synced} pending leads pushed to DB.", flush=True)
+    except Exception as e:
+        print(f"[SYNC] Error: {e}", flush=True)
 
 # =========================
 # DEBUG CONFIG (no secrets shown)
