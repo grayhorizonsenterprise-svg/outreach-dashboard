@@ -33,18 +33,42 @@ GHE_EMAIL      = os.getenv("GHE_EMAIL", "grayhorizonsenterprise@gmail.com")
 DIGEST_HOUR    = int(os.getenv("DIGEST_HOUR", "7"))   # 7am daily digest
 
 INTEREST_KEYWORDS = [
-    "interested", "tell me more", "how does", "sounds good", "love to",
-    "would like", "more info", "set up a call", "book a call", "schedule",
-    "yes", "definitely", "absolutely", "sure", "let's talk", "let me know",
-    "sounds interesting", "how much", "pricing", "cost", "what's included",
-    "sign up", "get started", "when can", "available", "reach out",
+    "interested", "tell me more", "how does this work", "sounds good", "love to",
+    "would like", "more info", "set up a call", "book a call", "schedule a call",
+    "let's talk", "let me know more", "sounds interesting", "how much",
+    "pricing", "cost", "what's included", "get started", "when can we",
+    "can you send", "can you show", "i'd like to", "we'd like to",
+    "can we chat", "can we talk", "what does it cost", "how does it work",
 ]
 
+# Any of these = definitive opt-out or noise — never a hot lead
 IGNORE_KEYWORDS = [
-    "unsubscribe", "remove me", "stop emailing", "not interested",
-    "do not contact", "opt out", "auto-reply", "out of office",
-    "vacation", "automatic reply", "delivery failure", "mailer-daemon",
-    "noreply", "no-reply", "donotreply",
+    # Negative replies
+    "no thanks", "no thank you", "not interested", "not for us",
+    "not a good fit", "not the right time", "pass on this", "no need",
+    "don't need", "don't contact", "please don't", "not looking",
+    "remove me", "unsubscribe", "stop emailing", "do not contact",
+    "opt out", "take me off", "please remove", "stop sending",
+    # Auto-replies / system mail
+    "auto-reply", "automatic reply", "out of office", "vacation reply",
+    "i am out", "i'm out of office", "i will be out", "away from",
+    "currently unavailable", "on leave", "on vacation",
+    "delivery failure", "mailer-daemon", "mail delivery", "undeliverable",
+    "returned mail", "bounce", "failed to deliver",
+    # Marketing / advertisements
+    "you have been selected", "congratulations", "special offer",
+    "click here to", "this email was sent to", "advertisement",
+    "promotional", "newsletter", "mailing list",
+    # System senders
+    "noreply", "no-reply", "donotreply", "do-not-reply",
+    "notifications@", "updates@", "alerts@",
+]
+
+# Sender is flagged as opt-out — add to unsubscribe list automatically
+OPT_OUT_TRIGGERS = [
+    "no thanks", "no thank you", "not interested", "remove me",
+    "unsubscribe", "stop emailing", "do not contact", "opt out",
+    "take me off", "please remove",
 ]
 
 HOT_LEADS_FILE = os.path.join(DATA_DIR, "hot_leads.json")
@@ -102,13 +126,53 @@ def save_hot_lead(lead):
         json.dump(leads, f, indent=2)
 
 
+def load_sent_emails() -> set:
+    """Load every email we've ever sent to — only flag replies from these people."""
+    sent = set()
+    sent_log = os.path.join(DATA_DIR, "sent_log.csv")
+    if os.path.exists(sent_log):
+        try:
+            import csv
+            with open(sent_log, newline="", encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    e = row.get("email", "").strip().lower()
+                    if e:
+                        sent.add(e)
+        except Exception:
+            pass
+    return sent
+
+
+def is_opt_out(subject, body) -> bool:
+    text = (subject + " " + body).lower()
+    return any(k in text for k in OPT_OUT_TRIGGERS)
+
+
+def add_to_unsubscribe(email: str):
+    """Append email to unsubscribe_list.csv."""
+    unsub = os.path.join(DATA_DIR, "unsubscribe_list.csv")
+    import csv
+    exists = os.path.exists(unsub)
+    try:
+        with open(unsub, "a", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=["email", "reason"])
+            if not exists:
+                w.writeheader()
+            w.writerow({"email": email.lower().strip(), "reason": "replied opt-out"})
+        print(f"[GMAIL] Auto-opted-out: {email}")
+    except Exception as e:
+        print(f"[GMAIL] Opt-out write error: {e}")
+
+
 def is_interested(subject, body):
     text = (subject + " " + body).lower()
-    if any(k in text for k in IGNORE_KEYWORDS):
-        return False
-    # Must be a reply (Re:)
+    # Must be a reply thread
     if not subject.lower().startswith("re:"):
         return False
+    # Any ignore signal = not a lead
+    if any(k in text for k in IGNORE_KEYWORDS):
+        return False
+    # Must contain a genuine interest signal
     return any(k in text for k in INTEREST_KEYWORDS)
 
 
@@ -228,6 +292,8 @@ def guess_niche_from_context(subject, body):
 
 def check_inbox(service, processed_ids):
     new_hot = []
+    sent_emails = load_sent_emails()  # only flag replies from people we emailed
+
     try:
         results = service.users().messages().list(
             userId="me",
@@ -247,29 +313,43 @@ def check_inbox(service, processed_ids):
                 continue
 
             processed_ids.add(mid)
+            sender_email = details["sender_email"].lower().strip()
 
             # Skip own emails
-            if GHE_EMAIL.lower() in details["sender_email"].lower():
+            if GHE_EMAIL.lower() in sender_email:
                 continue
 
-            if is_interested(details["subject"], details["body"]):
-                niche = guess_niche_from_context(details["subject"], details["body"])
+            # Only process replies from people we actually emailed
+            if sent_emails and sender_email not in sent_emails:
+                continue
+
+            subject = details["subject"]
+            body    = details["body"]
+
+            # Auto opt-out anyone who replied negatively
+            if is_opt_out(subject, body):
+                add_to_unsubscribe(sender_email)
+                print(f"[GMAIL] Opt-out reply from {sender_email} — added to unsubscribe list")
+                continue
+
+            if is_interested(subject, body):
+                niche = guess_niche_from_context(subject, body)
                 sent  = send_reply(
                     service, details["id"], details["thread_id"],
-                    details["sender_email"], details["sender_name"], niche
+                    sender_email, details["sender_name"], niche
                 )
                 lead = {
-                    "email":       details["sender_email"],
-                    "name":        details["sender_name"],
-                    "subject":     details["subject"],
-                    "snippet":     details["body"][:300],
-                    "niche":       niche,
-                    "replied":     sent,
-                    "timestamp":   datetime.datetime.utcnow().isoformat(),
+                    "email":     sender_email,
+                    "name":      details["sender_name"],
+                    "subject":   subject,
+                    "snippet":   body[:300],
+                    "niche":     niche,
+                    "replied":   sent,
+                    "timestamp": datetime.datetime.utcnow().isoformat(),
                 }
                 save_hot_lead(lead)
                 new_hot.append(lead)
-                print(f"[GMAIL] HOT LEAD: {details['sender_name']} <{details['sender_email']}>")
+                print(f"[GMAIL] HOT LEAD: {details['sender_name']} <{sender_email}>")
 
     except Exception as e:
         print(f"[GMAIL] Inbox check error: {e}")
