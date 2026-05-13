@@ -11,9 +11,16 @@ import random
 import os
 import sys
 import urllib.parse
+import requests
+from bs4 import BeautifulSoup
 from duckduckgo_search import DDGS
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36",
+]
 
 DATA_DIR    = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_FILE = os.path.join(DATA_DIR, "prospects_raw.csv")
@@ -79,6 +86,21 @@ def is_clean_email(email: str) -> bool:
 EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
 
 
+def fetch_emails(url: str) -> list:
+    try:
+        import urllib3; urllib3.disable_warnings()
+        r = requests.get(url, headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=8, verify=False)
+        if r.status_code != 200:
+            return []
+        text = r.text
+        for a in BeautifulSoup(text, "html.parser").find_all("a", href=True):
+            if a["href"].startswith("mailto:"):
+                text += f" {a['href'][7:].split('?')[0]}"
+        return [e.lower() for e in EMAIL_RE.findall(text) if is_clean_email(e.lower())]
+    except Exception:
+        return []
+
+
 def run():
     seen_emails = set()
     if os.path.exists(OUTPUT_FILE):
@@ -104,15 +126,13 @@ def run():
         try:
             results = list(ddgs.text(query, max_results=6))
             for r in results:
-                body   = r.get("body", "")
                 url    = r.get("href", "")
                 name   = r.get("title", "")[:60]
                 domain = urllib.parse.urlparse(url).netloc.lower().replace("www.", "")
-                if domain in SKIP_DOMAINS:
+                if domain in SKIP_DOMAINS or not url:
                     continue
-                for email in EMAIL_RE.findall(body):
-                    email = email.lower()
-                    if email in seen_emails or email.endswith((".png", ".jpg", ".gif")):
+                for email in fetch_emails(url):
+                    if email in seen_emails:
                         continue
                     seen_emails.add(email)
                     all_new[email] = {
@@ -121,9 +141,11 @@ def run():
                         "niche": niche, "phone": "",
                     }
                     niche_counts[niche] = niche_counts.get(niche, 0) + 1
-            time.sleep(random.uniform(0.5, 1.2))
+                    print(f"    [+] {email}")
+                time.sleep(random.uniform(0.3, 0.6))
+            time.sleep(random.uniform(0.5, 1.0))
         except Exception as e:
-            print(f"    [BK] Error: {e}")
+            print(f"    [BK] Error: {e}"); time.sleep(2)
 
     if not all_new:
         print("[BARK] No new leads this run.")

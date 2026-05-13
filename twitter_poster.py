@@ -166,8 +166,53 @@ def post_tweet(text: str) -> bool:
         print(f"  [TWITTER] Posted: twitter.com/i/web/status/{tweet_id}")
         return True
     except Exception as e:
+        err = str(e).lower()
         print(f"  [TWITTER] Error: {e}")
+        # Detect billing / credit exhaustion errors and email an alert
+        billing_keywords = ["payment", "billing", "credit", "funds", "balance",
+                            "403", "insufficient", "usage limit", "spending limit"]
+        if any(k in err for k in billing_keywords):
+            _send_low_credits_alert(str(e))
         return False
+
+
+ALERT_FLAG = DATA_DIR / "twitter_credits_alert_sent.flag"
+
+def _send_low_credits_alert(error_detail: str):
+    """Email a one-time alert when Twitter API billing errors are detected."""
+    if ALERT_FLAG.exists():
+        return  # already alerted — don't spam
+    sendgrid_key = os.getenv("SENDGRID_API_KEY", "")
+    sender_email = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
+    if not sendgrid_key:
+        print("[TWITTER ALERT] No SendGrid key — cannot send credit alert email")
+        return
+    import requests as _req
+    body = (
+        "Hey,\n\n"
+        "Your Twitter/X API credits are running low or exhausted. "
+        "Posts are failing.\n\n"
+        "Add credits at: https://developer.twitter.com/en/portal/dashboard\n\n"
+        f"Error detail: {error_detail}\n\n"
+        "- GHE Automation"
+    )
+    try:
+        r = _req.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            headers={"Authorization": f"Bearer {sendgrid_key}",
+                     "Content-Type": "application/json"},
+            json={
+                "personalizations": [{"to": [{"email": sender_email}]}],
+                "from": {"email": sender_email, "name": "GHE Automation"},
+                "subject": "ACTION NEEDED: Twitter credits running low",
+                "content": [{"type": "text/plain", "value": body}],
+            }, timeout=10,
+        )
+        if r.status_code in (200, 202):
+            ALERT_FLAG.write_text("alert sent")
+            print("[TWITTER ALERT] Credit alert emailed to", sender_email)
+    except Exception as ex:
+        print(f"[TWITTER ALERT] Failed to send alert: {ex}")
 
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
