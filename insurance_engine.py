@@ -221,30 +221,8 @@ def load_opt_outs() -> set:
 
 
 def scrape(seen: set, global_seen: set) -> list:
-    import urllib.parse
-    queries = random.sample(SEARCH_QUERIES, min(50, len(SEARCH_QUERIES)))
-    new, ddgs = [], DDGS()
-    for i, q in enumerate(queries):
-        print(f"  [INS {i+1}/{len(queries)}] {q[:60]}")
-        try:
-            for r in list(ddgs.text(q, max_results=6)):
-                url = r.get("href", "")
-                domain = urllib.parse.urlparse(url).netloc.lower().replace("www.", "")
-                if domain in SKIP_DOMAINS or not url:
-                    continue
-                for email in fetch_emails(url):
-                    if email in seen or email in global_seen:
-                        continue
-                    seen.add(email)
-                    new.append({"email": email, "name": r.get("title", "")[:80],
-                                "website": url, "source": q[:60],
-                                "status": "pending", "niche": "insurance"})
-                    print(f"    [+] {email}")
-                time.sleep(random.uniform(0.3, 0.6))
-            time.sleep(random.uniform(0.5, 1.0))
-        except Exception as e:
-            print(f"    [ERR] {e}"); time.sleep(2)
-    return new
+    from niche_lead_sourcer import get_leads
+    return get_leads("insurance", limit=max(REFILL_BELOW * 2, 300), seen=seen, global_seen=global_seen)
 
 
 def send_one(email, subject, body) -> bool:
