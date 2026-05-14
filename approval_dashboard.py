@@ -132,6 +132,7 @@ def run_pipeline_once():
     except Exception as e:
         print(f"[ENGINE] Sync error: {e}", flush=True)
     last_run_time = time.time()
+    _record_engine_run("Pipeline (Lead Gen)")
     pipeline_running = False
     print("[ENGINE] Cycle done.", flush=True)
 
@@ -213,6 +214,7 @@ def _run_engine(label: str, script: str):
             env={**os.environ, "PYTHONUNBUFFERED": "1"},
             timeout=3600,
         )
+        _record_engine_run(label)
         print(f"[ENGINE] Done: {label}", flush=True)
     except Exception as e:
         print(f"[ENGINE] Error in {label}: {e}", flush=True)
@@ -1878,15 +1880,61 @@ def trigger_pipeline():
     threading.Thread(target=run_pipeline_once, daemon=True).start()
     return '<html><body style="background:#0f172a;color:#22c55e;font-family:Arial;padding:40px;"><h2>Pipeline triggered!</h2><p>Scraping Yelp and enriching leads now. Leads will appear in your queue in 5-15 minutes.</p><p><a href="/status" style="color:#06b6d4;">Check status</a> &nbsp;|&nbsp; <a href="/" style="color:#06b6d4;">Back to dashboard</a></p></body></html>'
 
+# Track engine last-run times
+_engine_last_ran: dict = {}
+
+def _record_engine_run(label: str):
+    _engine_last_ran[label] = time.time()
+
 # =========================
-# =========================
-# SYSTEM STATUS PAGE
+# SYSTEM STATUS PAGE — live data
 # =========================
 @app.route('/status')
 def status():
     import datetime as _dt
-    pending = get_pending_count()
 
+    # ── Lead queue counts from DB ──
+    pending = 0; total_sent = 0; total_opted = 0; total_all = 0
+    try:
+        conn = _get_db()
+        if conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT status, COUNT(*) FROM leads GROUP BY status")
+                for st, cnt in cur.fetchall():
+                    total_all += cnt
+                    if st == 'pending':   pending    = cnt
+                    elif st == 'sent':    total_sent = cnt
+                    elif st == 'opted_out': total_opted = cnt
+            conn.close()
+    except Exception:
+        pending = get_pending_count()
+
+    # ── SendGrid stats (today) ──
+    sg_delivered = sg_bounced = sg_opens = sg_clicks = sg_requests = 0
+    sg_error = ""
+    sg_key = os.getenv("SENDGRID_API_KEY", "")
+    if sg_key:
+        try:
+            today = _dt.date.today().isoformat()
+            r = requests.get(
+                "https://api.sendgrid.com/v3/stats",
+                headers={"Authorization": f"Bearer {sg_key}"},
+                params={"start_date": today, "aggregated_by": "day"},
+                timeout=10
+            )
+            if r.status_code == 200 and r.json():
+                m = r.json()[0].get("stats", [{}])[0].get("metrics", {})
+                sg_requests  = m.get("requests", 0)
+                sg_delivered = m.get("delivered", 0)
+                sg_bounced   = m.get("bounces", 0)
+                sg_opens     = m.get("unique_opens", 0)
+                sg_clicks    = m.get("unique_clicks", 0)
+            else:
+                sg_error = f"HTTP {r.status_code}"
+        except Exception as e:
+            sg_error = str(e)[:60]
+
+    # ── Helpers ──
     def _check(key, label=""):
         val = os.getenv(key, "").strip()
         ok = bool(val)
@@ -1894,61 +1942,95 @@ def status():
         text  = "SET" if ok else "MISSING"
         return f'<tr><td style="padding:8px 16px;color:#cbd5e1;">{label or key}</td><td style="padding:8px 16px;"><span style="color:{color};font-weight:bold;">{text}</span></td></tr>'
 
-    queue_color = "#22c55e" if pending >= 1000 else ("#f97316" if pending >= 100 else "#ef4444")
-    queue_status = "HEALTHY" if pending >= 1000 else ("LOW" if pending >= 100 else "CRITICAL — REFILLING")
+    def _eng(label):
+        ts = _engine_last_ran.get(label)
+        if ts:
+            ago = int((time.time() - ts) / 60)
+            note = f"{ago}m ago" if ago < 60 else f"{ago//60}h ago"
+            color = "#22c55e"
+        else:
+            note = "not yet this session"
+            color = "#f97316"
+        return f'<tr><td style="padding:8px 16px;color:#cbd5e1;">{label}</td><td style="padding:8px 16px;color:{color};font-weight:bold;">{note}</td></tr>'
 
-    db_ok = bool(os.getenv("DATABASE_URL", "").strip())
-    sg_ok = bool(os.getenv("SENDGRID_API_KEY", "").strip())
+    queue_color = "#22c55e" if pending >= 1000 else ("#f97316" if pending >= 100 else "#ef4444")
+    queue_label = "HEALTHY" if pending >= 1000 else ("LOW — REFILLING" if pending >= 100 else "CRITICAL — PIPELINE RUNNING")
+    last_run_str = _dt.datetime.fromtimestamp(last_run_time).strftime('%I:%M %p') if last_run_time else 'Not yet'
+    open_rate = f"{round(sg_opens/sg_delivered*100,1)}%" if sg_delivered else "—"
+    bounce_rate = f"{round(sg_bounced/sg_requests*100,1)}%" if sg_requests else "—"
 
     return f"""<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>GHE System Status</title>
-<meta http-equiv="refresh" content="60">
+<html><head><meta charset="UTF-8"><title>GHE Live Status</title>
+<meta http-equiv="refresh" content="30">
 <style>
-body{{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;margin:0;padding:24px;}}
-h1{{color:#22c55e;margin-bottom:4px;}}
-.sub{{color:#64748b;font-size:13px;margin-bottom:24px;}}
-table{{width:100%;max-width:700px;border-collapse:collapse;background:#1e293b;border-radius:10px;overflow:hidden;margin-bottom:24px;}}
-th{{background:#0f172a;color:#94a3b8;text-align:left;padding:10px 16px;font-size:11px;text-transform:uppercase;}}
-.big{{font-size:2rem;font-weight:bold;}}
-.card{{background:#1e293b;border-radius:10px;padding:20px;max-width:700px;margin-bottom:16px;}}
+body{{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;margin:0;padding:20px;}}
+h1{{color:#22c55e;margin:0 0 4px;}}
+.sub{{color:#64748b;font-size:12px;margin-bottom:20px;}}
+.grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;max-width:720px;margin-bottom:20px;}}
+.stat{{background:#1e293b;border-radius:8px;padding:14px;}}
+.stat-val{{font-size:1.7rem;font-weight:bold;color:#22c55e;}}
+.stat-lbl{{font-size:11px;color:#64748b;text-transform:uppercase;margin-top:2px;}}
+table{{width:100%;max-width:720px;border-collapse:collapse;background:#1e293b;border-radius:10px;overflow:hidden;margin-bottom:20px;}}
+th{{background:#0f172a;color:#64748b;text-align:left;padding:8px 14px;font-size:11px;text-transform:uppercase;}}
 a{{color:#06b6d4;text-decoration:none;}}
+.warn{{color:#f97316;font-weight:bold;}}
 </style></head>
 <body>
-<h1>GHE System Status</h1>
-<div class="sub">Auto-refreshes every 60 seconds &nbsp;|&nbsp; <a href="/">Back to Dashboard</a></div>
+<h1>GHE Live Status</h1>
+<div class="sub">Refreshes every 30s &nbsp;|&nbsp; <a href="/">Dashboard</a> &nbsp;|&nbsp; <a href="/trigger-pipeline" onclick="return confirm('Run pipeline now?')">▶ Run Pipeline Now</a></div>
 
-<div class="card">
-  <div style="color:#94a3b8;font-size:12px;text-transform:uppercase;margin-bottom:8px;">Lead Queue</div>
-  <div class="big" style="color:{queue_color};">{pending} pending</div>
-  <div style="color:{queue_color};margin-top:4px;">{queue_status}</div>
-  <div style="color:#64748b;font-size:12px;margin-top:8px;">
-    Pipeline running: {'YES' if pipeline_running else 'NO'} &nbsp;|&nbsp;
-    Last run: {_dt.datetime.fromtimestamp(last_run_time).strftime('%I:%M %p') if last_run_time else 'Not yet this session'}
-  </div>
+<div class="grid">
+  <div class="stat"><div class="stat-val" style="color:{queue_color};">{pending}</div><div class="stat-lbl">Pending Leads</div></div>
+  <div class="stat"><div class="stat-val">{total_sent}</div><div class="stat-lbl">Total Sent (DB)</div></div>
+  <div class="stat"><div class="stat-val" style="color:#22c55e;">{sg_delivered}</div><div class="stat-lbl">Delivered Today</div></div>
+  <div class="stat"><div class="stat-val" style="color:#f97316;">{sg_bounced}</div><div class="stat-lbl">Bounced Today</div></div>
+  <div class="stat"><div class="stat-val" style="color:#06b6d4;">{sg_opens}</div><div class="stat-lbl">Opens Today</div></div>
+  <div class="stat"><div class="stat-val" style="color:#a855f7;">{sg_clicks}</div><div class="stat-lbl">Clicks Today</div></div>
+  <div class="stat"><div class="stat-val">{open_rate}</div><div class="stat-lbl">Open Rate</div></div>
+  <div class="stat"><div class="stat-val" style="color:{'#ef4444' if sg_bounced>10 else '#22c55e'};">{bounce_rate}</div><div class="stat-lbl">Bounce Rate</div></div>
+</div>
+
+<div style="background:#1e293b;border-radius:8px;padding:12px 16px;max-width:720px;margin-bottom:20px;font-size:13px;color:#94a3b8;">
+  Pipeline: <strong style="color:{'#f97316' if pipeline_running else '#22c55e'};">{'RUNNING NOW' if pipeline_running else 'IDLE'}</strong>
+  &nbsp;|&nbsp; Last run: <strong>{last_run_str}</strong>
+  &nbsp;|&nbsp; Queue: <strong style="color:{queue_color};">{queue_label}</strong>
+  {f'&nbsp;|&nbsp; <span class="warn">SendGrid error: {sg_error}</span>' if sg_error else ''}
 </div>
 
 <table>
-<tr><th>System</th><th>Status</th></tr>
+<tr><th>API / Integration</th><th>Status</th></tr>
 {_check("SENDGRID_API_KEY", "SendGrid (Email Sending)")}
 {_check("DATABASE_URL", "PostgreSQL (Lead Storage)")}
-{_check("YELP_API_KEY", "Yelp API (500 leads/day)")}
+{_check("YELP_API_KEY", "Yelp API (Leads)")}
 {_check("HUNTER_API_KEY", "Hunter.io (Email Finder)")}
-{_check("CALENDLY_URL", "Calendly Booking Link")}
-{_check("STRIPE_PAYMENT_LINK", "Stripe $497 Payment Link")}
-{_check("GMAIL_CLIENT_ID", "Gmail Reply Monitor")}
 {_check("TWITTER_API_KEY", "Twitter Auto-Poster")}
-{_check("ANTHROPIC_API_KEY", "Claude AI (Reply Generation)")}
+{_check("TWITTER_ACCESS_TOKEN", "Twitter Access Token")}
+{_check("GMAIL_CLIENT_ID", "Gmail Reply Monitor")}
+{_check("ANTHROPIC_API_KEY", "Claude AI (Auto-Reply)")}
+{_check("CALENDLY_URL", "Calendly Link")}
+{_check("STRIPE_PAYMENT_LINK", "Stripe Payment Link")}
 </table>
 
 <table>
-<tr><th>Niche Engine</th><th>Status</th></tr>
-{''.join(f'<tr><td style="padding:8px 16px;color:#cbd5e1;">{e}</td><td style="padding:8px 16px;"><span style="color:#22c55e;font-weight:bold;">RUNNING</span></td></tr>' for e in ["Real Estate","Med Spa","Insurance","Restaurant","Gym","Mortgage","E-Commerce"])}
-{''.join(f'<tr><td style="padding:8px 16px;color:#cbd5e1;">{e}</td><td style="padding:8px 16px;"><span style="color:#22c55e;font-weight:bold;">RUNNING</span></td></tr>' for e in ["Signals Blast (8am UTC)","Grant Pipeline (9am UTC)","Twitter Posts (5x/day)","Gmail Monitor (5 min)","Follow-Up Engine (6pm UTC)"])}
+<tr><th>Engine</th><th>Last Fired This Session</th></tr>
+{_eng("Pipeline (Lead Gen)")}
+{_eng("Signals Email Blast")}
+{_eng("Grant Pipeline")}
+{_eng("Twitter Post")}
+{_eng("Gmail Monitor")}
+{_eng("Follow-Up Engine")}
+{_eng("Niche: Real Estate")}
+{_eng("Niche: Gym")}
+{_eng("Niche: Mortgage")}
+{_eng("Niche: E-Commerce")}
+{_eng("Niche: Restaurant")}
+{_eng("Niche: Med Spa")}
+{_eng("Niche: Insurance")}
 </table>
 
-<div class="card" style="color:#64748b;font-size:13px;">
-  All engines run on Railway 24/7 regardless of whether your computer is on.<br>
-  Queue auto-refills when pending drops below 1,000 leads.
+<div style="background:#1e293b;border-radius:8px;padding:14px;max-width:720px;font-size:12px;color:#475569;">
+  DB totals — Pending: {pending} &nbsp;|&nbsp; Sent: {total_sent} &nbsp;|&nbsp; Opted out: {total_opted} &nbsp;|&nbsp; Total: {total_all}<br>
+  All engines run 24/7 on Railway. "Not yet this session" resets on each Railway deploy.
 </div>
 </body></html>"""
 
