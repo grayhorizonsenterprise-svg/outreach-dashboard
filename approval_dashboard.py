@@ -1117,6 +1117,8 @@ def dashboard():
   <a href="/status" style="color:#22c55e;font-weight:bold;">⚡ System Status</a>
   <a href="/trigger-pipeline" style="color:#f97316;font-weight:bold;" onclick="return confirm('Run pipeline now to fetch fresh leads?')">▶ Run Pipeline Now</a>
   <a href="/purge-bounced" style="color:#ef4444;font-weight:bold;" onclick="return confirm('Purge all role/generic emails (info@, service@, hello@) from queue? This fixes your 26.7% bounce rate.')">🧹 Purge Bounced</a>
+  <a href="/activate-leads" style="color:#22c55e;font-weight:bold;" onclick="return confirm('Activate all blank-status leads in outreach_queue.csv? This will unlock ~28,000 pending leads.')">⚡ Activate Leads</a>
+  <a href="/blast-signals-now" style="color:#a78bfa;font-weight:bold;" onclick="return confirm('Send signals blast to all unsent leads in signals_queue.csv now?')">📡 Blast Signals</a>
 </div>
 
 <!-- OUTREACH TAB -->
@@ -1862,6 +1864,12 @@ def _sync_csv_to_db():
         return
     try:
         df = pd.read_csv(CSV_FILE, dtype=str).fillna("")
+        # Convert blank status to pending (same as _clean_df)
+        blank_mask = df["status"].str.strip() == ""
+        if blank_mask.any():
+            df.loc[blank_mask, "status"] = "pending"
+            df.to_csv(CSV_FILE, index=False)
+            print(f"[SYNC] Activated {blank_mask.sum()} blank-status rows → pending", flush=True)
         pending = df[df["status"] == "pending"]
         if pending.empty:
             print("[SYNC] No pending rows to sync.", flush=True)
@@ -1900,6 +1908,37 @@ def _sync_csv_to_db():
         print(f"[SYNC] {synced} pending leads pushed to DB.", flush=True)
     except Exception as e:
         print(f"[SYNC] Error: {e}", flush=True)
+
+# =========================
+# ACTIVATE BLANK-STATUS LEADS
+# =========================
+@app.route('/activate-leads')
+def activate_leads():
+    """Convert all blank-status rows in outreach_queue.csv to pending and sync to DB."""
+    def _run():
+        try:
+            if not os.path.exists(CSV_FILE):
+                return
+            df = pd.read_csv(CSV_FILE, dtype=str).fillna("")
+            blank = df["status"].str.strip() == ""
+            count = int(blank.sum())
+            df.loc[blank, "status"] = "pending"
+            df.to_csv(CSV_FILE, index=False)
+            print(f"[ACTIVATE] {count} blank leads activated → pending", flush=True)
+            _sync_csv_to_db()
+        except Exception as e:
+            print(f"[ACTIVATE] Error: {e}", flush=True)
+    threading.Thread(target=_run, daemon=True).start()
+    return '<html><body style="background:#0f172a;color:#22c55e;font-family:Arial;padding:40px;"><h2>✅ Activating all blank-status leads!</h2><p>Converting blank status → pending and syncing to DB. Your pending count will update in ~30 seconds.</p><p><a href="/" style="color:#06b6d4;">Back to dashboard</a></p></body></html>'
+
+# =========================
+# BLAST SIGNALS NOW (manual)
+# =========================
+@app.route('/blast-signals-now')
+def blast_signals_now():
+    """Immediately run signals_engine.py to send to all unsent signals leads."""
+    threading.Thread(target=lambda: _run_engine("Signals Email Blast", "signals_engine.py"), daemon=True).start()
+    return '<html><body style="background:#0f172a;color:#a78bfa;font-family:Arial;padding:40px;"><h2>📡 Signals Blast Firing!</h2><p>Sending signals pitch to all unsent leads in signals_queue.csv now.</p><p>Check <a href="/status" style="color:#06b6d4;">System Status</a> for progress.</p><p><a href="/" style="color:#06b6d4;">Back to dashboard</a></p></body></html>'
 
 # =========================
 # TRIGGER PIPELINE MANUALLY
