@@ -221,13 +221,14 @@ def _run_engine(label: str, script: str):
 
 
 def _signals_engine_daily():
-    """Sends 200 targeted emails/day to traders. Runs at 8am UTC."""
+    """Sends 200 targeted emails/day to traders + publishes Beehiiv newsletter. Runs at 8am UTC."""
     import datetime as _dt
     time.sleep(120)  # let app stabilize
     while True:
         now = _dt.datetime.utcnow()
         if now.hour == 8 and now.minute < 10:
             _run_engine("Signals Email Blast", "signals_engine.py")
+            _run_engine("Beehiiv Newsletter", "beehiiv_broadcaster.py")
             time.sleep(600)  # prevent double-fire within same hour
         time.sleep(60)
 
@@ -1914,6 +1915,52 @@ _engine_last_ran: dict = {}
 def _record_engine_run(label: str):
     _engine_last_ran[label] = time.time()
 
+def _twitter_suggestions_panel() -> str:
+    """Render comment suggestion cards from twitter_poster's saved JSON."""
+    import json as _json
+    suggestions_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "twitter_comment_suggestions.json")
+    try:
+        if os.path.exists(suggestions_path):
+            with open(suggestions_path) as f:
+                suggestions = _json.load(f)
+        else:
+            suggestions = []
+    except Exception:
+        suggestions = []
+
+    if not suggestions:
+        return """<div style="background:#1e293b;border-radius:8px;padding:16px;max-width:720px;margin:16px 0;color:#475569;font-size:13px;">
+  <strong style="color:#94a3b8;">Twitter Comment Opportunities</strong><br>
+  No suggestions yet — fires after next Twitter post cycle (every 2 hrs).
+</div>"""
+
+    cards = ""
+    for s in suggestions[:5]:
+        tweet_url = s.get("tweet_url", "#")
+        author    = s.get("author", "")
+        text      = s.get("tweet_text", "")[:140]
+        likes     = s.get("likes", 0)
+        comment   = s.get("suggested_comment", "")
+        tweet_id  = s.get("tweet_id", "")
+        cards += f"""
+<div style="background:#0f172a;border:1px solid #334155;border-radius:6px;padding:12px 16px;margin:8px 0;">
+  <div style="font-size:12px;color:#64748b;">@{author} &nbsp;·&nbsp; ❤ {likes}</div>
+  <div style="font-size:13px;color:#94a3b8;margin:6px 0 8px;">{text}…</div>
+  <div style="font-size:12px;color:#38bdf8;font-style:italic;margin-bottom:8px;">Suggested reply: {comment[:120]}…</div>
+  <a href="{tweet_url}" target="_blank"
+     style="font-size:12px;color:#22c55e;text-decoration:none;margin-right:12px;">View tweet ↗</a>
+  <a href="/post-twitter-comment?tweet_id={tweet_id}&comment={comment[:200].replace(' ', '+')}"
+     style="font-size:12px;background:#1d4ed8;color:white;padding:4px 10px;border-radius:4px;text-decoration:none;">Post Reply</a>
+</div>"""
+
+    return f"""
+<div style="background:#1e293b;border-radius:8px;padding:16px;max-width:720px;margin:16px 0;">
+  <div style="font-size:14px;font-weight:700;color:#38bdf8;margin-bottom:8px;">
+    Twitter Comment Opportunities — grow your audience by engaging trending posts
+  </div>
+  {cards}
+</div>"""
+
 # =========================
 # SYSTEM STATUS PAGE — live data
 # =========================
@@ -2037,12 +2084,14 @@ a{{color:#06b6d4;text-decoration:none;}}
 {_check("ANTHROPIC_API_KEY", "Claude AI (Auto-Reply)")}
 {_check("CALENDLY_URL", "Calendly Link")}
 {_check("STRIPE_PAYMENT_LINK", "Stripe Payment Link")}
+{_check("BEEHIIV_API_KEY", "Beehiiv Newsletter")}
 </table>
 
 <table>
 <tr><th>Engine</th><th>Last Fired This Session</th></tr>
 {_eng("Pipeline (Lead Gen)")}
 {_eng("Signals Email Blast")}
+{_eng("Beehiiv Newsletter")}
 {_eng("Grant Pipeline")}
 {_eng("Twitter Post")}
 {_eng("Gmail Monitor")}
@@ -2055,6 +2104,8 @@ a{{color:#06b6d4;text-decoration:none;}}
 {_eng("Niche: Med Spa")}
 {_eng("Niche: Insurance")}
 </table>
+
+{_twitter_suggestions_panel()}
 
 <div style="background:#1e293b;border-radius:8px;padding:14px;max-width:720px;font-size:12px;color:#475569;">
   DB totals — Pending: {pending} &nbsp;|&nbsp; Sent: {total_sent} &nbsp;|&nbsp; Opted out: {total_opted} &nbsp;|&nbsp; Total: {total_all}<br>
@@ -2135,6 +2186,21 @@ def send_batch_5k():
     if not batch_running:
         threading.Thread(target=run_batch_send, kwargs={"limit": 5000}, daemon=True).start()
     return redirect('/')
+
+@app.route('/post-twitter-comment')
+def post_twitter_comment_route():
+    tweet_id = flask_request.args.get("tweet_id", "").strip()
+    comment  = flask_request.args.get("comment", "").strip()
+    if not tweet_id or not comment:
+        return "Missing tweet_id or comment", 400
+    try:
+        from twitter_poster import post_comment
+        ok = post_comment(tweet_id, comment)
+        msg = "Comment posted!" if ok else "Failed — check Twitter credentials"
+    except Exception as e:
+        msg = f"Error: {e}"
+    return f"<p style='font-family:Arial;padding:20px;color:{'#22c55e' if ok else '#ef4444'};'>{msg}</p><a href='/status'>← Back to Status</a>"
+
 
 @app.route('/run-all-engines')
 def run_all_engines_route():

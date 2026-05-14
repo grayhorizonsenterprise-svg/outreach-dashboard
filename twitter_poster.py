@@ -112,6 +112,42 @@ DAILY_SCHEDULE = [
     ("indicators",   "20:00"),
 ]
 
+# Finance/trading/small-biz accounts whose followers are our target audience
+FOLLOW_SEED_ACCOUNTS = [
+    "TradingView", "CNBC", "MarketWatch", "YahooFinance",
+    "Investopedia", "StockMarket", "CryptoDaily",
+    "SmallBizTrends", "entrepreneurmag", "ForbesSmallBiz",
+]
+
+FOLLOW_SEARCH_QUERIES = [
+    "stock trading tips site:twitter.com",
+    "TradingView signals",
+    "options trading alert",
+    "crypto signal",
+    "small business owner tips",
+]
+
+# Comment templates paired to tweet topics — fills {ticker} or {topic} from tweet
+COMMENT_TEMPLATES = [
+    "This is exactly why we built the Edge Engine — momentum scoring + congressional tracking before open. Worth checking out if you're active in {topic}.",
+    "Solid point. We see the same pattern in our signals feed. Kelly-sized positions on setups like this are what separate consistent traders from the rest.",
+    "Great read. For anyone who wants data-backed signals on {topic} before 8am daily — that's what we do at Gray Horizons.",
+    "This is the kind of setup our Edge Scanner flags. Volume anomaly + RSI momentum on the same bar. Most miss it without the right tools.",
+    "Exactly. Position sizing is the variable most traders skip. Kelly Criterion math does the heavy lifting once you have a proven edge.",
+    "100%. Automation is what separates 7-figure operators from the grind. Happy to share what we've built for local businesses if you're curious.",
+    "Well said. The businesses using AI for follow-up and lead capture are running laps around the ones still doing it manually.",
+]
+
+TRENDING_SEARCH_TERMS = [
+    "stock market today",
+    "trading signals",
+    "options flow",
+    "small business automation",
+    "entrepreneur growth",
+    "TradingView setup",
+    "congressional trades",
+]
+
 
 # ─── Post tracking ────────────────────────────────────────────────────────────
 
@@ -215,6 +251,191 @@ def _send_low_credits_alert(error_detail: str):
         print(f"[TWITTER ALERT] Failed to send alert: {ex}")
 
 
+# ─── Auto-Follow ──────────────────────────────────────────────────────────────
+
+FOLLOW_LOG = DATA_DIR / "twitter_follows.json"
+
+
+def _load_followed() -> set:
+    if FOLLOW_LOG.exists():
+        try:
+            return set(json.loads(FOLLOW_LOG.read_text()).get("followed", []))
+        except Exception:
+            pass
+    return set()
+
+
+def _save_followed(followed: set):
+    FOLLOW_LOG.write_text(json.dumps({"followed": list(followed)}, indent=2))
+
+
+def auto_follow_accounts(max_follows: int = 20) -> int:
+    """
+    Follow trading/finance/small-biz accounts to grow our audience.
+    Caps at max_follows per run (~20/day is safe on free tier).
+    Returns count of new follows.
+    """
+    if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
+        return 0
+    try:
+        import tweepy
+    except ImportError:
+        print("[TWITTER FOLLOW] tweepy not installed")
+        return 0
+
+    followed = _load_followed()
+    new_follows = 0
+
+    try:
+        client = tweepy.Client(
+            consumer_key=TWITTER_API_KEY,
+            consumer_secret=TWITTER_API_SECRET,
+            access_token=TWITTER_ACCESS_TOKEN,
+            access_token_secret=TWITTER_ACCESS_SECRET,
+            wait_on_rate_limit=True,
+        )
+
+        # Search recent tweets in our target niches and follow their authors
+        query = random.choice(TRENDING_SEARCH_TERMS) + " -is:retweet lang:en"
+        try:
+            results = client.search_recent_tweets(
+                query=query,
+                max_results=50,
+                expansions=["author_id"],
+                user_fields=["id", "username", "public_metrics"],
+            )
+            users = results.includes.get("users", []) if results.includes else []
+            random.shuffle(users)
+            for user in users:
+                if new_follows >= max_follows:
+                    break
+                uid = str(user.id)
+                if uid in followed:
+                    continue
+                try:
+                    client.follow_user(user.id)
+                    followed.add(uid)
+                    new_follows += 1
+                    print(f"  [TWITTER FOLLOW] +followed @{user.username}")
+                    time.sleep(random.uniform(3, 8))
+                except Exception as fe:
+                    err = str(fe).lower()
+                    if "rate limit" in err or "429" in err:
+                        print("  [TWITTER FOLLOW] Rate limit — stopping")
+                        break
+                    print(f"  [TWITTER FOLLOW] Skip @{user.username}: {fe}")
+        except Exception as e:
+            print(f"[TWITTER FOLLOW] Search error: {e}")
+
+    except Exception as e:
+        print(f"[TWITTER FOLLOW] Client error: {e}")
+
+    _save_followed(followed)
+    print(f"[TWITTER FOLLOW] {new_follows} new follows (total tracked: {len(followed)})")
+    return new_follows
+
+
+# ─── Comment Suggestions ──────────────────────────────────────────────────────
+
+SUGGESTIONS_FILE = DATA_DIR / "twitter_comment_suggestions.json"
+
+
+def fetch_comment_suggestions() -> list:
+    """
+    Search for high-engagement finance/trading tweets and generate smart
+    comment suggestions. Saved to twitter_comment_suggestions.json for
+    the dashboard to display.
+    """
+    if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
+        return []
+    try:
+        import tweepy
+    except ImportError:
+        return []
+
+    suggestions = []
+    try:
+        client = tweepy.Client(
+            consumer_key=TWITTER_API_KEY,
+            consumer_secret=TWITTER_API_SECRET,
+            access_token=TWITTER_ACCESS_TOKEN,
+            access_token_secret=TWITTER_ACCESS_SECRET,
+            wait_on_rate_limit=True,
+        )
+
+        for term in random.sample(TRENDING_SEARCH_TERMS, min(3, len(TRENDING_SEARCH_TERMS))):
+            try:
+                query = f"{term} -is:retweet lang:en min_faves:10"
+                results = client.search_recent_tweets(
+                    query=query,
+                    max_results=10,
+                    tweet_fields=["public_metrics", "author_id", "text"],
+                    expansions=["author_id"],
+                    user_fields=["username"],
+                )
+                if not results.data:
+                    continue
+
+                users_map = {}
+                if results.includes and results.includes.get("users"):
+                    for u in results.includes["users"]:
+                        users_map[str(u.id)] = u.username
+
+                for tweet in results.data:
+                    likes = tweet.public_metrics.get("like_count", 0) if tweet.public_metrics else 0
+                    retweets = tweet.public_metrics.get("retweet_count", 0) if tweet.public_metrics else 0
+                    author = users_map.get(str(tweet.author_id), "unknown")
+
+                    # Pick a relevant comment template
+                    topic = term.replace("today", "").replace("signals", "signals").strip()
+                    comment = random.choice(COMMENT_TEMPLATES).replace("{topic}", topic).replace("{ticker}", "this")
+
+                    suggestions.append({
+                        "tweet_id":   str(tweet.id),
+                        "tweet_text": tweet.text[:200],
+                        "author":     author,
+                        "likes":      likes,
+                        "retweets":   retweets,
+                        "tweet_url":  f"https://twitter.com/{author}/status/{tweet.id}",
+                        "suggested_comment": comment,
+                        "fetched_at": datetime.utcnow().isoformat(),
+                    })
+            except Exception as e:
+                print(f"[TWITTER SUGGEST] Error for '{term}': {e}")
+            time.sleep(2)
+
+    except Exception as e:
+        print(f"[TWITTER SUGGEST] Client error: {e}")
+
+    # Sort by engagement
+    suggestions.sort(key=lambda x: x["likes"] + x["retweets"] * 3, reverse=True)
+    top = suggestions[:10]
+
+    SUGGESTIONS_FILE.write_text(json.dumps(top, indent=2))
+    print(f"[TWITTER SUGGEST] {len(top)} comment opportunities saved")
+    return top
+
+
+def post_comment(tweet_id: str, comment_text: str) -> bool:
+    """Reply to a specific tweet with comment_text. Called from dashboard."""
+    if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
+        return False
+    try:
+        import tweepy
+        client = tweepy.Client(
+            consumer_key=TWITTER_API_KEY,
+            consumer_secret=TWITTER_API_SECRET,
+            access_token=TWITTER_ACCESS_TOKEN,
+            access_token_secret=TWITTER_ACCESS_SECRET,
+        )
+        response = client.create_tweet(text=comment_text[:280], in_reply_to_tweet_id=tweet_id)
+        print(f"  [TWITTER COMMENT] Posted reply to {tweet_id}")
+        return True
+    except Exception as e:
+        print(f"  [TWITTER COMMENT] Failed: {e}")
+        return False
+
+
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
 def run():
@@ -249,6 +470,18 @@ def run():
 
     save_posted(posted)
     print(f"\n[TWITTER] Done — {sent}/{len(DAILY_SCHEDULE)} posts sent today")
+
+    # Auto-follow relevant accounts to grow audience (20/run, safe for free tier)
+    try:
+        auto_follow_accounts(max_follows=20)
+    except Exception as e:
+        print(f"[TWITTER] Follow error (non-fatal): {e}")
+
+    # Fetch comment opportunities for dashboard display
+    try:
+        fetch_comment_suggestions()
+    except Exception as e:
+        print(f"[TWITTER] Suggestion fetch error (non-fatal): {e}")
 
 
 if __name__ == "__main__":
