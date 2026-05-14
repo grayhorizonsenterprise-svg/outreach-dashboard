@@ -292,7 +292,7 @@ def auto_follow_accounts(max_follows: int = 20) -> int:
             consumer_secret=TWITTER_API_SECRET,
             access_token=TWITTER_ACCESS_TOKEN,
             access_token_secret=TWITTER_ACCESS_SECRET,
-            wait_on_rate_limit=True,
+            wait_on_rate_limit=False,  # NEVER wait — skip and move on
         )
 
         # Search recent tweets in our target niches and follow their authors
@@ -300,9 +300,9 @@ def auto_follow_accounts(max_follows: int = 20) -> int:
         try:
             results = client.search_recent_tweets(
                 query=query,
-                max_results=50,
+                max_results=10,
                 expansions=["author_id"],
-                user_fields=["id", "username", "public_metrics"],
+                user_fields=["id", "username"],
             )
             users = results.includes.get("users", []) if results.includes else []
             random.shuffle(users)
@@ -317,7 +317,7 @@ def auto_follow_accounts(max_follows: int = 20) -> int:
                     followed.add(uid)
                     new_follows += 1
                     print(f"  [TWITTER FOLLOW] +followed @{user.username}")
-                    time.sleep(random.uniform(3, 8))
+                    time.sleep(random.uniform(3, 6))
                 except Exception as fe:
                     err = str(fe).lower()
                     if "rate limit" in err or "429" in err:
@@ -325,7 +325,7 @@ def auto_follow_accounts(max_follows: int = 20) -> int:
                         break
                     print(f"  [TWITTER FOLLOW] Skip @{user.username}: {fe}")
         except Exception as e:
-            print(f"[TWITTER FOLLOW] Search error: {e}")
+            print(f"[TWITTER FOLLOW] Search error (skipping): {e}")
 
     except Exception as e:
         print(f"[TWITTER FOLLOW] Client error: {e}")
@@ -360,7 +360,7 @@ def fetch_comment_suggestions() -> list:
             consumer_secret=TWITTER_API_SECRET,
             access_token=TWITTER_ACCESS_TOKEN,
             access_token_secret=TWITTER_ACCESS_SECRET,
-            wait_on_rate_limit=True,
+            wait_on_rate_limit=False,  # NEVER wait — skip and move on
         )
 
         for term in random.sample(TRENDING_SEARCH_TERMS, min(3, len(TRENDING_SEARCH_TERMS))):

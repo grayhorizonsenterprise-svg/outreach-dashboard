@@ -103,7 +103,24 @@ def _get(url: str, params: dict) -> dict | None:
 
 
 def domain_search(domain: str) -> list:
-    """Return personal emails at a domain with confidence >= MIN_CONFIDENCE."""
+    """Return personal emails at a domain with confidence >= MIN_CONFIDENCE.
+    Checks email count BEFORE spending a credit — skips domains with 0 results."""
+    # First check domain email count without spending a credit
+    try:
+        check = requests.get(
+            f"{BASE_URL}/email-count",
+            params={"domain": domain, "api_key": HUNTER_KEY},
+            timeout=10,
+        )
+        if check.status_code == 200:
+            total = check.json().get("data", {}).get("total", 0)
+            personal = check.json().get("data", {}).get("personal_emails", 0)
+            if total == 0 or personal == 0:
+                print(f"    [HUNTER] {domain} — 0 personal emails in database, skipping (no credit spent)")
+                return []
+    except Exception:
+        pass
+
     data = _get(f"{BASE_URL}/domain-search", {"domain": domain, "type": "personal", "limit": 10})
     if not data:
         return []
