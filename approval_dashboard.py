@@ -221,18 +221,16 @@ def _run_engine(label: str, script: str):
 
 
 def _signals_engine_daily():
-    """Sends 200 targeted emails/day to traders + Stocktwits posts. Runs at 8am UTC.
-    Beehiiv broadcaster disabled until real opt-in subscribers exist (not cold imports)."""
+    """Runs at 7am UTC: FINRA lead scrape → signals blast → Stocktwits post."""
     import datetime as _dt
-    time.sleep(120)  # let app stabilize
+    time.sleep(120)
     while True:
         now = _dt.datetime.utcnow()
-        if now.hour == 8 and now.minute < 10:
+        if now.hour == 7 and now.minute < 10:
+            _run_engine("FINRA Financial Advisor Leads", "finra_leads.py")
             _run_engine("Signals Email Blast", "signals_engine.py")
             _run_engine("Stocktwits Post", "stocktwits_poster.py")
-            # Beehiiv: only enable once real opt-in subscribers exist
-            # _run_engine("Beehiiv Newsletter", "beehiiv_broadcaster.py")
-            time.sleep(600)  # prevent double-fire within same hour
+            time.sleep(600)
         time.sleep(60)
 
 
@@ -2094,6 +2092,7 @@ a{{color:#06b6d4;text-decoration:none;}}
 <table>
 <tr><th>Engine</th><th>Last Fired This Session</th></tr>
 {_eng("Pipeline (Lead Gen)")}
+{_eng("FINRA Financial Advisor Leads")}
 {_eng("Signals Email Blast")}
 {_eng("Stocktwits Post")}
 {_eng("Grant Pipeline")}
