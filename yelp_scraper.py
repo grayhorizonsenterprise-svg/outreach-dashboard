@@ -145,7 +145,7 @@ def run():
     calls    = 0
 
     for niche, term in NICHE_TERMS:
-        loc_sample = random.sample(LOCATIONS, min(8, len(LOCATIONS)))
+        loc_sample = random.sample(LOCATIONS, min(20, len(LOCATIONS)))
         for location in loc_sample:
             for offset in [0, 50]:
                 if calls >= 480:

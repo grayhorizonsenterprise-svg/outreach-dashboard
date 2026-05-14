@@ -209,6 +209,40 @@ def _enrich(website: str) -> str:
     return emails[0] if emails else ""
 
 
+def _scrape_yelp_api(search_term: str, location: str) -> list:
+    """Yelp Fusion API fallback — works on cloud IPs, no scraping needed."""
+    key = os.environ.get("YELP_API_KEY", "")
+    if not key:
+        return []
+    try:
+        r = requests.get(
+            "https://api.yelp.com/v3/businesses/search",
+            headers={"Authorization": f"Bearer {key}"},
+            params={"term": search_term, "location": location, "limit": 50},
+            timeout=12,
+        )
+        if r.status_code == 200:
+            out = []
+            for biz in r.json().get("businesses", []):
+                website = biz.get("url", "")
+                if website and "yelp.com" in website:
+                    website = ""
+                out.append({
+                    "company": biz.get("name", ""),
+                    "website": website,
+                    "phone":   biz.get("phone", ""),
+                })
+            return out
+        elif r.status_code == 429:
+            print("[YELP_FB] Rate limit — sleeping 30s")
+            time.sleep(30)
+        else:
+            print(f"[YELP_FB] {r.status_code}")
+    except Exception as e:
+        print(f"[YELP_FB] Error: {e}")
+    return []
+
+
 def _scrape_yp(search_term: str, location: str) -> list:
     """Scrape one YP results page. Returns list of {company, website, phone}."""
     url = "https://www.yellowpages.com/search?" + urllib.parse.urlencode({
@@ -286,6 +320,8 @@ def get_leads(niche: str, limit: int = 300, seen: set = None, global_seen: set =
         print(f"  [SRC:{niche.upper()}] '{term}' in {city}")
 
         listings = _scrape_yp(term, city)
+        if not listings:
+            listings = _scrape_yelp_api(term, city)
         for listing in listings:
             if len(leads) >= limit:
                 break
