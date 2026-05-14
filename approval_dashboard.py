@@ -66,6 +66,8 @@ batch_sent_count  = 0
 pipeline_running = False
 last_run_time = None
 
+SYNC_AFTER = {"outreach_generator.py", "yelp_scraper.py", "apollo_scraper.py"}
+
 def run_pipeline_once():
     global pipeline_running, last_run_time
     if pipeline_running:
@@ -83,7 +85,14 @@ def run_pipeline_once():
             )
         except Exception as e:
             print(f"[ENGINE] Error in {script}: {e}", flush=True)
-    # Sync any new pending leads from CSV into PostgreSQL after generator runs
+        # Sync to DB immediately after each lead-producing script — don't wait for end
+        if script in SYNC_AFTER:
+            try:
+                _sync_csv_to_db()
+                print(f"[ENGINE] Mid-pipeline DB sync after {script}", flush=True)
+            except Exception as e:
+                print(f"[ENGINE] Mid-sync error: {e}", flush=True)
+    # Final sync to catch anything missed
     try:
         _sync_csv_to_db()
     except Exception as e:
@@ -1031,6 +1040,7 @@ def dashboard():
   <a onclick="showTab('social')"   id="tab-social"   class="{'active' if active_tab=='social' else ''}" style="color:#f97316;">Social Pipeline</a>
   <a onclick="showTab('grants')"   id="tab-grants"   class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grant Agent</a>
   <a href="/status" style="color:#22c55e;font-weight:bold;">⚡ System Status</a>
+  <a href="/trigger-pipeline" style="color:#f97316;font-weight:bold;" onclick="return confirm('Run pipeline now to fetch fresh leads?')">▶ Run Pipeline Now</a>
 </div>
 
 <!-- OUTREACH TAB -->
@@ -1814,6 +1824,16 @@ def _sync_csv_to_db():
         print(f"[SYNC] {synced} pending leads pushed to DB.", flush=True)
     except Exception as e:
         print(f"[SYNC] Error: {e}", flush=True)
+
+# =========================
+# TRIGGER PIPELINE MANUALLY
+# =========================
+@app.route('/trigger-pipeline')
+def trigger_pipeline():
+    if pipeline_running:
+        return '<html><body style="background:#0f172a;color:#f97316;font-family:Arial;padding:40px;"><h2>Pipeline already running...</h2><p>Check back in a few minutes. <a href="/" style="color:#06b6d4;">Back to dashboard</a></p></body></html>'
+    threading.Thread(target=run_pipeline_once, daemon=True).start()
+    return '<html><body style="background:#0f172a;color:#22c55e;font-family:Arial;padding:40px;"><h2>Pipeline triggered!</h2><p>Scraping Yelp and enriching leads now. Leads will appear in your queue in 5-15 minutes.</p><p><a href="/status" style="color:#06b6d4;">Check status</a> &nbsp;|&nbsp; <a href="/" style="color:#06b6d4;">Back to dashboard</a></p></body></html>'
 
 # =========================
 # =========================
