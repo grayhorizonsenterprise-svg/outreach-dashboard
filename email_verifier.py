@@ -28,6 +28,9 @@ DISPOSABLE_DOMAINS = {
 ROLE_PREFIXES = {
     "info", "contact", "support", "admin", "noreply", "no-reply",
     "hello", "team", "sales", "help", "service", "billing",
+    "office", "mail", "email", "reception", "enquiries", "enquiry",
+    "general", "business", "company", "webmaster", "postmaster",
+    "accounts", "accounting", "customerservice", "customer",
 }
 
 
@@ -74,8 +77,10 @@ def hunter_verify(email: str) -> str:
     return "unknown"
 
 
-def verify_email(email: str, use_hunter: bool = False) -> tuple[bool, str]:
-    """Returns (keep: bool, reason: str)"""
+def verify_email(email: str, use_hunter: bool = True) -> tuple[bool, str]:
+    """Returns (keep: bool, reason: str).
+    Role addresses (info@, service@, hello@, office@...) are DROPPED — they are
+    the #1 cause of bounces and spam traps. Only named personal addresses pass."""
     email = email.strip().lower()
     if not email:
         return False, "empty"
@@ -86,21 +91,22 @@ def verify_email(email: str, use_hunter: bool = False) -> tuple[bool, str]:
     if not has_mx_record(email):
         return False, "no_mx"
 
-    # Role addresses are lower priority but not invalid
+    # Drop ALL role/generic addresses — these cause bounces and spam complaints
     if is_role_address(email):
-        return True, "role_address"
+        return False, "role_dropped"
 
-    if use_hunter:
+    if use_hunter and HUNTER_KEY:
         result = hunter_verify(email)
         if result == "invalid":
             return False, "hunter_invalid"
         if result == "valid":
             return True, "hunter_verified"
+        # "unknown" = skip Hunter judgment, fall through to basic pass
 
     return True, "basic_pass"
 
 
-def run(input_file: str = None, use_hunter: bool = False):
+def run(input_file: str = None, use_hunter: bool = True):
     files_to_check = []
     if input_file:
         files_to_check = [input_file]

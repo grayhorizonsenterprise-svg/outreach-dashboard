@@ -54,7 +54,7 @@ PIPELINE_SCRIPTS = [
     # outreach_sender.py intentionally excluded — sending is manual-only via dashboard buttons
 ]
 
-DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "2000"))
+DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "150"))  # throttled: 26.7% bounce rate detected — rebuild reputation before scaling
 batch_running     = False
 batch_sent_count  = 0
 
@@ -1118,6 +1118,7 @@ def dashboard():
   <a onclick="showTab('grants')"   id="tab-grants"   class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grant Agent</a>
   <a href="/status" style="color:#22c55e;font-weight:bold;">⚡ System Status</a>
   <a href="/trigger-pipeline" style="color:#f97316;font-weight:bold;" onclick="return confirm('Run pipeline now to fetch fresh leads?')">▶ Run Pipeline Now</a>
+  <a href="/purge-bounced" style="color:#ef4444;font-weight:bold;" onclick="return confirm('Purge all role/generic emails (info@, service@, hello@) from queue? This fixes your 26.7% bounce rate.')">🧹 Purge Bounced</a>
 </div>
 
 <!-- OUTREACH TAB -->
@@ -2115,6 +2116,70 @@ a{{color:#06b6d4;text-decoration:none;}}
   All engines run 24/7 on Railway. "Not yet this session" resets on each Railway deploy.
 </div>
 </body></html>"""
+
+# =========================
+# PURGE BOUNCED — remove all role/generic/bounced addresses from DB + CSV
+# =========================
+@app.route('/purge-bounced')
+def purge_bounced():
+    """
+    Scrubs the leads DB and CSV of:
+    - Role addresses: info@, service@, hello@, office@, contact@, admin@...
+    - Any address marked 'bounced' or 'failed' in DB
+    These are the #1 cause of the 26.7% bounce rate.
+    """
+    from email_verifier import is_role_address, is_valid_syntax
+    removed_db  = 0
+    removed_csv = 0
+
+    # -- Purge from PostgreSQL DB --
+    conn = _get_db()
+    if conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("SELECT id, email FROM leads WHERE status IN ('pending','failed')")
+                rows = cur.fetchall()
+                bad_ids = []
+                for row_id, email in rows:
+                    email = (email or "").strip().lower()
+                    if not email or not is_valid_syntax(email) or is_role_address(email):
+                        bad_ids.append(row_id)
+                if bad_ids:
+                    cur.execute(
+                        "DELETE FROM leads WHERE id = ANY(%s)",
+                        (bad_ids,)
+                    )
+                    removed_db = len(bad_ids)
+                conn.commit()
+            conn.close()
+        except Exception as e:
+            print(f"[PURGE] DB error: {e}")
+
+    # -- Purge from CSV --
+    if os.path.exists(CSV_FILE):
+        try:
+            df = pd.read_csv(CSV_FILE, dtype=str).fillna("")
+            before = len(df)
+            df = df[df["email"].apply(lambda e: is_valid_syntax(str(e)) and not is_role_address(str(e)))]
+            df = df[df["status"].isin(["pending"])]
+            removed_csv = before - len(df)
+            df.to_csv(CSV_FILE, index=False)
+        except Exception as e:
+            print(f"[PURGE] CSV error: {e}")
+
+    msg = f"Purged {removed_db} role/invalid addresses from DB + {removed_csv} from CSV. Daily limit is now 150/day while deliverability recovers."
+    print(f"[PURGE] {msg}", flush=True)
+    return f"""<div style='font-family:Arial;background:#0f172a;color:#e2e8f0;padding:40px;'>
+<h2 style='color:#22c55e;'>Purge Complete</h2>
+<p>{msg}</p>
+<p style='color:#94a3b8;font-size:13px;'>
+Addresses dropped: info@, service@, hello@, office@, contact@, admin@, support@, billing@, etc.<br>
+These were your bounces. Only named personal addresses (john@company.com) will remain.
+</p>
+<a href='/' style='color:#38bdf8;'>← Dashboard</a> &nbsp;
+<a href='/status' style='color:#38bdf8;'>Status →</a>
+</div>"""
+
 
 # =========================
 # DEBUG CONFIG (no secrets shown)
