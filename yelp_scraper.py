@@ -141,6 +141,17 @@ def run():
     existing = pd.read_csv(OUTPUT_FILE).fillna("") if os.path.exists(OUTPUT_FILE) else pd.DataFrame()
     done_names = set(existing["company"].str.lower().tolist()) if len(existing) else set()
 
+    # Load skip list of already-emailed domains written by the pipeline before each run
+    skip_domains = set()
+    skip_file = os.path.join(DATA_DIR, "sent_domains.csv")
+    if os.path.exists(skip_file):
+        try:
+            skip_df = pd.read_csv(skip_file, dtype=str).fillna("")
+            skip_domains = set(skip_df["domain"].str.lower().str.strip())
+            print(f"[YELP] Skipping {len(skip_domains)} already-emailed domains")
+        except Exception:
+            pass
+
     new_rows = []
     calls    = 0
 
@@ -159,7 +170,12 @@ def run():
                         continue
                     if row["company"].lower() in done_names:
                         continue
+                    biz_domain = extract_domain(row.get("website", ""))
+                    if biz_domain and biz_domain in skip_domains:
+                        continue
                     done_names.add(row["company"].lower())
+                    if biz_domain:
+                        skip_domains.add(biz_domain)
                     new_rows.append(row)
                 time.sleep(random.uniform(0.3, 0.8))
             if calls >= 480:

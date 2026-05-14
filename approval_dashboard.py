@@ -68,12 +68,46 @@ last_run_time = None
 
 SYNC_AFTER = {"outreach_generator.py", "yelp_scraper.py", "apollo_scraper.py"}
 
+def _write_skip_list():
+    """Dump all sent/opted-out email domains to sent_domains.csv so scrapers skip them."""
+    try:
+        conn = _get_db()
+        rows = []
+        if conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT email, website FROM leads WHERE status IN ('sent','opted_out')")
+                rows = cur.fetchall()
+            conn.close()
+        domains = set()
+        for email, website in rows:
+            if email and '@' in email:
+                domains.add(email.split('@')[-1].lower().strip())
+            if website:
+                try:
+                    from urllib.parse import urlparse as _up
+                    d = _up(str(website)).netloc.lower().replace('www.', '').split(':')[0]
+                    if d and '.' in d:
+                        domains.add(d)
+                except Exception:
+                    pass
+        import csv as _csv
+        skip_path = os.path.join(DATA_DIR, 'sent_domains.csv')
+        with open(skip_path, 'w', newline='') as f:
+            w = _csv.writer(f)
+            w.writerow(['domain'])
+            for d in domains:
+                w.writerow([d])
+        print(f"[SKIP] {len(domains)} already-sent domains written — scrapers will skip these", flush=True)
+    except Exception as e:
+        print(f"[SKIP] Error writing skip list: {e}", flush=True)
+
 def run_pipeline_once():
     global pipeline_running, last_run_time
     if pipeline_running:
         return
     pipeline_running = True
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    _write_skip_list()  # tell scrapers which domains we've already emailed
     print("[ENGINE] Starting pipeline cycle...", flush=True)
     for script in PIPELINE_SCRIPTS:
         try:
@@ -824,11 +858,19 @@ def send_email(to_email, name, company, message, subject=""):
 # =========================
 # BATCH SENDER — runs in background thread
 # =========================
+_batch_started_at = 0.0
+
 def run_batch_send(limit=None):
-    global batch_running, batch_sent_count
+    global batch_running, batch_sent_count, _batch_started_at
     if batch_running:
-        return
+        # Safety: if stuck for > 45 min, auto-reset
+        if time.time() - _batch_started_at > 2700:
+            print("[BATCH] Watchdog: resetting stuck batch_running flag", flush=True)
+            batch_running = False
+        else:
+            return
     batch_running    = True
+    _batch_started_at = time.time()
     batch_sent_count = 0
 
     from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -904,6 +946,7 @@ def run_batch_send(limit=None):
 
     print(f"[BATCH] Done — {batch_sent_count} sent", flush=True)
     batch_running = False
+    _batch_started_at = 0.0
 
 
 # =========================
