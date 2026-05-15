@@ -2340,19 +2340,30 @@ def test_twitter():
         try:
             import tweepy
             lines.append("tweepy: installed OK")
-            client = tweepy.Client(
-                consumer_key=api_key, consumer_secret=api_secret,
-                access_token=acc_token, access_token_secret=acc_secret,
-            )
-            lines.append("tweepy.Client: created OK")
-            me = client.get_me()
-            lines.append(f"Auth check: OK — logged in as @{me.data.username}")
-            resp = client.create_tweet(text="GHE Edge Engine signals are live — congressional trades, volume anomalies, momentum scores. $49/month. horizons56.gumroad.com")
-            lines.append(f"TWEET POSTED: twitter.com/i/web/status/{resp.data['id']}")
+            # Try v1.1 API first (more permissive for OAuth 1.0a)
+            try:
+                auth = tweepy.OAuth1UserHandler(api_key, api_secret, acc_token, acc_secret)
+                api_v1 = tweepy.API(auth)
+                me_v1 = api_v1.verify_credentials()
+                lines.append(f"v1.1 Auth: OK — @{me_v1.screen_name}")
+                status = api_v1.update_status("GHE Edge Engine signals — congressional trades, volume anomalies, momentum scores. $49/month. horizons56.gumroad.com")
+                lines.append(f"TWEET POSTED (v1.1): twitter.com/i/web/status/{status.id}")
+            except Exception as e1:
+                lines.append(f"v1.1 failed: {e1}")
+                # Fall back to v2 API
+                client = tweepy.Client(
+                    consumer_key=api_key, consumer_secret=api_secret,
+                    access_token=acc_token, access_token_secret=acc_secret,
+                )
+                lines.append("tweepy.Client v2: created OK")
+                me = client.get_me()
+                lines.append(f"v2 Auth: OK — @{me.data.username}")
+                resp = client.create_tweet(text="GHE Edge Engine signals are live — congressional trades, volume anomalies, momentum scores. $49/month. horizons56.gumroad.com")
+                lines.append(f"TWEET POSTED (v2): twitter.com/i/web/status/{resp.data['id']}")
         except ImportError:
             lines.append("ERROR: tweepy not installed")
         except Exception as e:
-            lines.append(f"ERROR: {e}")
+            lines.append(f"ERROR: {type(e).__name__}: {e}")
     body = "<br>".join(lines)
     return f'<html><body style="background:#0f172a;color:#e2e8f0;font-family:monospace;padding:40px;font-size:14px;"><h2>Twitter Test</h2>{body}<br><br><a href="/" style="color:#06b6d4;">Back</a></body></html>'
 
