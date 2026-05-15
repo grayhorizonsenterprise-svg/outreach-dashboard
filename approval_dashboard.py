@@ -1118,6 +1118,7 @@ def dashboard():
   <a href="/status" style="color:#22c55e;font-weight:bold;">⚡ System Status</a>
   <a href="/trigger-pipeline" style="color:#f97316;font-weight:bold;" onclick="return confirm('Run pipeline now to fetch fresh leads?')">▶ Run Pipeline Now</a>
   <a href="/purge-bounced" style="color:#ef4444;font-weight:bold;" onclick="return confirm('Purge all role/generic emails (info@, service@, hello@) from queue? This fixes your 26.7% bounce rate.')">🧹 Purge Bounced</a>
+  <a href="/dedup-queue" style="color:#f59e0b;font-weight:bold;" onclick="return confirm('Remove all duplicate emails from the queue CSV?')">🔁 Dedup Queue</a>
   <a href="/activate-leads" style="color:#22c55e;font-weight:bold;" onclick="return confirm('Activate all blank-status leads in outreach_queue.csv? This will unlock ~28,000 pending leads.')">⚡ Activate Leads</a>
   <a href="/blast-signals-now" style="color:#a78bfa;font-weight:bold;" onclick="return confirm('Send signals blast to all unsent leads in signals_queue.csv now?')">📡 Blast Signals</a>
 </div>
@@ -1909,6 +1910,32 @@ def _sync_csv_to_db():
         print(f"[SYNC] {synced} pending leads pushed to DB.", flush=True)
     except Exception as e:
         print(f"[SYNC] Error: {e}", flush=True)
+
+# =========================
+# DEDUP + CLEAN QUEUE
+# =========================
+@app.route('/dedup-queue')
+def dedup_queue():
+    """Remove duplicate emails from outreach_queue.csv and sync clean list to DB."""
+    def _run():
+        try:
+            if not os.path.exists(CSV_FILE):
+                print("[DEDUP] No CSV found", flush=True)
+                return
+            df = pd.read_csv(CSV_FILE, dtype=str).fillna("")
+            before = len(df)
+            df["_email_lower"] = df["email"].str.strip().str.lower()
+            df = df[df["_email_lower"].str.contains("@")]  # drop blank/invalid
+            df = df.drop_duplicates(subset=["_email_lower"], keep="first")
+            df = df.drop(columns=["_email_lower"])
+            dupes = before - len(df)
+            df.to_csv(CSV_FILE, index=False)
+            print(f"[DEDUP] Removed {dupes} duplicates. {len(df)} clean leads remain.", flush=True)
+            _sync_csv_to_db()
+        except Exception as e:
+            print(f"[DEDUP] Error: {e}", flush=True)
+    threading.Thread(target=_run, daemon=True).start()
+    return '<html><body style="background:#0f172a;color:#22c55e;font-family:Arial;padding:40px;"><h2>Deduplicating queue...</h2><p>Removing duplicate emails from outreach_queue.csv and syncing to DB. Check Railway logs for count. <a href="/" style="color:#06b6d4;">Back</a></p></body></html>'
 
 # =========================
 # ACTIVATE BLANK-STATUS LEADS
