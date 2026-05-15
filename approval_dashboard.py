@@ -222,7 +222,7 @@ def _run_engine(label: str, script: str):
 
 
 def _signals_engine_daily():
-    """Runs at 7am UTC: FINRA lead scrape → signals blast → Stocktwits post."""
+    """Runs at 7am UTC: FINRA lead scrape → signals blast → Stocktwits post → LinkedIn post."""
     import datetime as _dt
     time.sleep(120)
     while True:
@@ -231,6 +231,7 @@ def _signals_engine_daily():
             _run_engine("FINRA Financial Advisor Leads", "finra_leads.py")
             _run_engine("Signals Email Blast", "signals_engine.py")
             _run_engine("Stocktwits Post", "stocktwits_poster.py")
+            _run_engine("LinkedIn Post", "linkedin_poster.py")
             time.sleep(600)
         time.sleep(60)
 
