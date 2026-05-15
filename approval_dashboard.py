@@ -44,6 +44,7 @@ PIPELINE_SCRIPTS = [
     "superpages_scraper.py",
     # API-based (only run if keys are set in Railway env vars)
     "yelp_scraper.py",
+    "snov_scraper.py",
     "hunter_scraper.py",
     "apollo_scraper.py",
     # Enrichment + quality + generation
