@@ -2294,6 +2294,42 @@ def send_batch_5k():
         threading.Thread(target=run_batch_send, kwargs={"limit": 5000}, daemon=True).start()
     return redirect('/')
 
+@app.route('/test-twitter')
+def test_twitter():
+    """Diagnose Twitter posting — shows exact error at each step."""
+    import os as _os
+    lines = []
+    api_key    = _os.getenv("TWITTER_API_KEY", "")
+    api_secret = _os.getenv("TWITTER_API_SECRET", "")
+    acc_token  = _os.getenv("TWITTER_ACCESS_TOKEN", "")
+    acc_secret = _os.getenv("TWITTER_ACCESS_SECRET", "")
+    lines.append(f"TWITTER_API_KEY: {'SET ('+api_key[:6]+'...)' if api_key else 'MISSING'}")
+    lines.append(f"TWITTER_API_SECRET: {'SET' if api_secret else 'MISSING'}")
+    lines.append(f"TWITTER_ACCESS_TOKEN: {'SET ('+acc_token[:18]+'...)' if acc_token else 'MISSING'}")
+    lines.append(f"TWITTER_ACCESS_SECRET: {'SET ('+acc_secret[:6]+'...)' if acc_secret else 'MISSING'}")
+    if not all([api_key, api_secret, acc_token, acc_secret]):
+        lines.append("ERROR: Missing credentials — cannot continue")
+    else:
+        try:
+            import tweepy
+            lines.append("tweepy: installed OK")
+            client = tweepy.Client(
+                consumer_key=api_key, consumer_secret=api_secret,
+                access_token=acc_token, access_token_secret=acc_secret,
+            )
+            lines.append("tweepy.Client: created OK")
+            me = client.get_me()
+            lines.append(f"Auth check: OK — logged in as @{me.data.username}")
+            resp = client.create_tweet(text="GHE Edge Engine signals are live — congressional trades, volume anomalies, momentum scores. $49/month. horizons56.gumroad.com")
+            lines.append(f"TWEET POSTED: twitter.com/i/web/status/{resp.data['id']}")
+        except ImportError:
+            lines.append("ERROR: tweepy not installed")
+        except Exception as e:
+            lines.append(f"ERROR: {e}")
+    body = "<br>".join(lines)
+    return f'<html><body style="background:#0f172a;color:#e2e8f0;font-family:monospace;padding:40px;font-size:14px;"><h2>Twitter Test</h2>{body}<br><br><a href="/" style="color:#06b6d4;">Back</a></body></html>'
+
+
 @app.route('/post-twitter-comment')
 def post_twitter_comment_route():
     tweet_id = flask_request.args.get("tweet_id", "").strip()
