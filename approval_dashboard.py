@@ -232,6 +232,7 @@ def _signals_engine_daily():
             _run_engine("Signals Email Blast", "signals_engine.py")
             _run_engine("Stocktwits Post", "stocktwits_poster.py")
             _run_engine("LinkedIn Post", "linkedin_poster.py")
+            _run_engine("LinkedIn Outreach", "linkedin_outreach.py")
             time.sleep(600)
         time.sleep(60)
 
