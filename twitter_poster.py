@@ -179,36 +179,33 @@ def pick_post(category: str, posted: dict) -> str:
 # ─── Twitter API ──────────────────────────────────────────────────────────────
 
 def post_tweet(text: str) -> bool:
-    """Post a tweet using Twitter API v2."""
+    """Post a tweet using Twitter API v2 with direct OAuth1 signing."""
     if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
         print("[TWITTER] Missing API credentials — set all 4 env vars")
         return False
 
     try:
-        import tweepy
-    except ImportError:
-        print("[TWITTER] tweepy not installed — run: pip install tweepy")
-        return False
-
-    try:
-        client = tweepy.Client(
-            consumer_key=TWITTER_API_KEY,
-            consumer_secret=TWITTER_API_SECRET,
-            access_token=TWITTER_ACCESS_TOKEN,
-            access_token_secret=TWITTER_ACCESS_SECRET,
+        from requests_oauthlib import OAuth1
+        oauth = OAuth1(TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET)
+        r = requests.post(
+            "https://api.twitter.com/2/tweets",
+            json={"text": text[:280]},
+            auth=oauth,
+            timeout=15,
         )
-        response = client.create_tweet(text=text[:280])
-        tweet_id = response.data["id"]
-        print(f"  [TWITTER] Posted: twitter.com/i/web/status/{tweet_id}")
-        return True
+        if r.status_code in (200, 201):
+            tweet_id = r.json().get("data", {}).get("id", "?")
+            print(f"  [TWITTER] Posted: twitter.com/i/web/status/{tweet_id}")
+            return True
+        else:
+            err = r.text
+            print(f"  [TWITTER] Error {r.status_code}: {err}")
+            billing_keywords = ["payment", "billing", "credit", "funds", "balance", "insufficient", "usage limit"]
+            if any(k in err.lower() for k in billing_keywords):
+                _send_low_credits_alert(err)
+            return False
     except Exception as e:
-        err = str(e).lower()
         print(f"  [TWITTER] Error: {e}")
-        # Detect billing / credit exhaustion errors and email an alert
-        billing_keywords = ["payment", "billing", "credit", "funds", "balance",
-                            "403", "insufficient", "usage limit", "spending limit"]
-        if any(k in err for k in billing_keywords):
-            _send_low_credits_alert(str(e))
         return False
 
 
