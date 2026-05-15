@@ -2338,28 +2338,21 @@ def test_twitter():
         lines.append("ERROR: Missing credentials — cannot continue")
     else:
         try:
-            import tweepy
-            lines.append("tweepy: installed OK")
-            # Skip get_me() — requires elevated access on free tier
-            # Go straight to create_tweet with OAuth 1.0a
-            client = tweepy.Client(
-                consumer_key=api_key, consumer_secret=api_secret,
-                access_token=acc_token, access_token_secret=acc_secret,
+            import tweepy, requests as _req
+            from requests_oauthlib import OAuth1 as _OAuth1
+            lines.append("libs: OK")
+            # Test with raw requests + OAuth1 (bypasses tweepy entirely)
+            oauth = _OAuth1(api_key, api_secret, acc_token, acc_secret)
+            r2 = _req.post(
+                "https://api.twitter.com/2/tweets",
+                json={"text": "GHE Edge Engine — congressional trade signals, momentum scores, volume anomalies. $49/month: horizons56.gumroad.com"},
+                auth=oauth, timeout=15,
             )
-            lines.append("tweepy.Client: created")
-            try:
-                resp = client.create_tweet(text="GHE Edge Engine — congressional trade signals, volume anomalies, momentum scores daily. $49/month: horizons56.gumroad.com")
-                lines.append(f"SUCCESS: TWEET POSTED — twitter.com/i/web/status/{resp.data['id']}")
-            except tweepy.errors.Unauthorized as e:
-                lines.append(f"401 Unauthorized: {e}")
-                lines.append("FIX: Click Show on Consumer Key in GHE Poster → verify first 6 chars match TWITTER_API_KEY in Railway")
-            except tweepy.errors.Forbidden as e:
-                lines.append(f"403 Forbidden: {e}")
-                lines.append("FIX: App permissions may not be saved — go to Authentication Settings → Save Changes")
-            except Exception as e:
-                lines.append(f"ERROR {type(e).__name__}: {e}")
-        except ImportError:
-            lines.append("ERROR: tweepy not installed")
+            lines.append(f"Direct API call: HTTP {r2.status_code}")
+            lines.append(f"Response: {r2.text[:300]}")
+            if r2.status_code in (200, 201):
+                tid = r2.json().get("data", {}).get("id", "?")
+                lines.append(f"SUCCESS: twitter.com/i/web/status/{tid}")
         except Exception as e:
             lines.append(f"ERROR: {type(e).__name__}: {e}")
     body = "<br>".join(lines)
