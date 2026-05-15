@@ -2340,26 +2340,24 @@ def test_twitter():
         try:
             import tweepy
             lines.append("tweepy: installed OK")
-            # Try v1.1 API first (more permissive for OAuth 1.0a)
+            # Skip get_me() — requires elevated access on free tier
+            # Go straight to create_tweet with OAuth 1.0a
+            client = tweepy.Client(
+                consumer_key=api_key, consumer_secret=api_secret,
+                access_token=acc_token, access_token_secret=acc_secret,
+            )
+            lines.append("tweepy.Client: created")
             try:
-                auth = tweepy.OAuth1UserHandler(api_key, api_secret, acc_token, acc_secret)
-                api_v1 = tweepy.API(auth)
-                me_v1 = api_v1.verify_credentials()
-                lines.append(f"v1.1 Auth: OK — @{me_v1.screen_name}")
-                status = api_v1.update_status("GHE Edge Engine signals — congressional trades, volume anomalies, momentum scores. $49/month. horizons56.gumroad.com")
-                lines.append(f"TWEET POSTED (v1.1): twitter.com/i/web/status/{status.id}")
-            except Exception as e1:
-                lines.append(f"v1.1 failed: {e1}")
-                # Fall back to v2 API
-                client = tweepy.Client(
-                    consumer_key=api_key, consumer_secret=api_secret,
-                    access_token=acc_token, access_token_secret=acc_secret,
-                )
-                lines.append("tweepy.Client v2: created OK")
-                me = client.get_me()
-                lines.append(f"v2 Auth: OK — @{me.data.username}")
-                resp = client.create_tweet(text="GHE Edge Engine signals are live — congressional trades, volume anomalies, momentum scores. $49/month. horizons56.gumroad.com")
-                lines.append(f"TWEET POSTED (v2): twitter.com/i/web/status/{resp.data['id']}")
+                resp = client.create_tweet(text="GHE Edge Engine — congressional trade signals, volume anomalies, momentum scores daily. $49/month: horizons56.gumroad.com")
+                lines.append(f"SUCCESS: TWEET POSTED — twitter.com/i/web/status/{resp.data['id']}")
+            except tweepy.errors.Unauthorized as e:
+                lines.append(f"401 Unauthorized: {e}")
+                lines.append("FIX: Click Show on Consumer Key in GHE Poster → verify first 6 chars match TWITTER_API_KEY in Railway")
+            except tweepy.errors.Forbidden as e:
+                lines.append(f"403 Forbidden: {e}")
+                lines.append("FIX: App permissions may not be saved — go to Authentication Settings → Save Changes")
+            except Exception as e:
+                lines.append(f"ERROR {type(e).__name__}: {e}")
         except ImportError:
             lines.append("ERROR: tweepy not installed")
         except Exception as e:
