@@ -62,39 +62,276 @@ SHADOW_CLANS_POSTS = [
 ]
 
 SIGNALS_POSTS = [
-    f"AI scanned the market before you woke up.\n\nTop setups, Congress trades, Kelly-sized picks.\n\nDelivered by 8am daily.\n\n{SIGNALS_LINK}",
-    f"This week: NVDA momentum signal fired before the 8% move.\n\nWe track every setup before market open.\n\n$49/month → {SIGNALS_LINK}",
-    f"Congress disclosed 14 trades this week.\n\nWe flagged all of them within 48 hours. Subscribers saw it first.\n\n{SIGNALS_LINK}",
-    f"Sports edge this week: 3 picks, 2.8% average edge, Kelly-sized.\n\nNot picks. Probability.\n\n{SIGNALS_LINK}",
-    f"Before 8am today:\n→ 2 stock setups\n→ 1 crypto alert\n→ 1 congressional disclosure\n→ 1 sports line with edge\n\nEvery morning. $49/month.\n{SIGNALS_LINK}",
-    f"Most traders use the same information as everyone else.\n\nOur subscribers don't.\n\nEdge Engine → {SIGNALS_LINK}",
-    f"Crypto alert went out at 7:42am.\n\nAsset moved 14% by noon.\n\nThat's why people subscribe.\n\n{SIGNALS_LINK}",
+    f"AI scanned the market before you woke up.
+
+Top setups, Congress trades, Kelly-sized picks.
+
+Delivered by 8am daily.
+
+{SIGNALS_LINK}",
+    f"This week: NVDA momentum signal fired before the 8% move.
+
+We track every setup before market open.
+
+$49/month
+{SIGNALS_LINK}",
+    f"Congress disclosed 14 trades this week.
+
+We flagged all of them within 48 hours.
+
+Subscribers saw it first.
+
+{SIGNALS_LINK}",
+    f"Before 8am today:
+
+2 stock setups
+1 crypto alert
+1 congressional disclosure
+
+Every morning. $49/month.
+{SIGNALS_LINK}",
+    f"Most traders use the same information as everyone else.
+
+Our subscribers don't.
+
+Edge Engine
+{SIGNALS_LINK}",
+    f"Crypto alert went out at 7:42am.
+
+Asset moved 14% by noon.
+
+That's why people subscribe.
+
+{SIGNALS_LINK}",
+    f"The signal sheet this morning:
+
+SPY momentum score: 74
+NVDA volume anomaly: 2.3x avg
+Congressional flag: 1 active
+
+All before the open.
+
+{SIGNALS_LINK}",
+    f"What separates profitable traders from the rest:
+
+Not picks.
+Not charts.
+
+Process.
+
+We built the process into a daily email.
+
+$49/month
+{SIGNALS_LINK}",
+    f"One congress member bought $250k of stock 3 weeks before the announcement.
+
+We track every disclosure within 48 hours.
+
+Subscribers see the pattern.
+
+{SIGNALS_LINK}",
+    f"You shouldn't be checking 20 tickers every morning.
+
+You should be getting 3-5 scored setups in your inbox before 8am.
+
+{SIGNALS_LINK}",
 ]
 
 INDICATOR_POSTS = [
-    f"Most traders use 14 indicators.\n\nWe use 3.\n\nEdge Scanner + Kelly Sizer + Congressional Tracker.\n\nAll 3 on TradingView. $79 one-time.\n\n{WHOP_LINK}",
-    f"RSI alone is noise.\nVolume alone is noise.\nEMA alone is noise.\n\nAll 3 at the same time = signal.\n\nThe GHE Edge Scanner scores this 0-100 on every bar.\n\n{WHOP_LINK}",
-    f"Congress disclosed $315M in trades last year.\n\nMost traders never see it coming.\n\nWe built an indicator that shows the volume patterns before disclosure.\n\n{WHOP_LINK}",
-    f"The #1 reason traders blow up:\n\nNot bad entries.\nBad position sizing.\n\nKelly Criterion with Quarter-Kelly fractional sizing.\nBuilt into TradingView.\n\n{WHOP_LINK}",
-    f"High-confidence signal = RSI 45-70 + Volume >2× avg + EMA crossover all on the same bar.\n\nMomentum score: 70+.\n\nThe GHE Edge Scanner labels only these.\n\n{WHOP_LINK}",
-    f"3 TradingView indicators that cover the full trade:\n\n1. When to enter (Edge Scanner)\n2. How much to risk (Kelly Sizer)\n3. What insiders are doing (Congressional Tracker)\n\n$79 one-time: {WHOP_LINK}",
-    f"Pine Script v5. Overlay charts. Real-time momentum scoring.\n\nWorks on stocks, crypto, forex — any asset on TradingView.\n\nGHE Indicator Suite: {WHOP_LINK}",
-    f"Position sizing question I see constantly:\n\"How many shares should I buy?\"\n\nThe answer is math, not gut feeling.\n\nKelly Criterion. $79 one-time for the full suite.\n\n{WHOP_LINK}",
-    f"Alert fatigue is real.\n\n200 signals a day → you act on garbage.\n3-5 high-confidence signals a day → you act on edges.\n\nThe GHE Edge Scanner scores 0-100. You only trade 70+.\n\n{WHOP_LINK}",
-    f"Launched the GHE Indicator Suite on Whop.\n\n$49/month or $79 lifetime for all 3 TradingView indicators.\n\nEdge Scanner • Kelly Sizer • Congressional Tracker\n\n{WHOP_LINK}",
+    f"Most traders use 14 indicators.
+
+We use 3.
+
+Edge Scanner + Kelly Sizer + Congressional Tracker.
+
+All 3 on TradingView. $79 one-time.
+
+{WHOP_LINK}",
+    f"RSI alone is noise.
+Volume alone is noise.
+EMA alone is noise.
+
+All 3 at the same time = signal.
+
+The GHE Edge Scanner scores this 0-100 on every bar.
+
+{WHOP_LINK}",
+    f"Congress disclosed $315M in trades last year.
+
+Most traders never see it coming.
+
+We built an indicator that shows the volume patterns before disclosure.
+
+{WHOP_LINK}",
+    f"The number 1 reason traders blow up:
+
+Not bad entries.
+Bad position sizing.
+
+Kelly Criterion with Quarter-Kelly fractional sizing.
+Built into TradingView.
+
+{WHOP_LINK}",
+    f"High-confidence signal:
+
+RSI 45-70
+Volume 2x avg
+EMA crossover
+
+All 3 on the same bar. Momentum score 70+.
+
+The GHE Edge Scanner marks these automatically.
+
+{WHOP_LINK}",
+    f"3 TradingView indicators. One decision framework.
+
+1. When to enter (Edge Scanner)
+2. How much to risk (Kelly Sizer)
+3. What Congress is doing (Congressional Tracker)
+
+$79 one-time
+{WHOP_LINK}",
+    f"Position sizing question I get constantly:
+
+\"How many shares should I buy?\"
+
+It's not a guess. It's math.
+
+Kelly Criterion calculates it based on your actual edge.
+
+{WHOP_LINK}",
+    f"Alert fatigue kills accounts.
+
+200 signals a day means you act on garbage.
+
+3-5 high-confidence setups means you act on edges.
+
+GHE Edge Scanner scores 0-100. Only trade 70+.
+
+{WHOP_LINK}",
+    f"Works on stocks. Works on crypto. Works on forex.
+
+Anything tradeable on TradingView.
+
+GHE Indicator Suite - Pine Script v5, real-time scoring.
+
+{WHOP_LINK}",
+    f"Insider volume shows up on the chart before the disclosure goes public.
+
+Congress has 45 days to report.
+
+The pattern appears in week 1.
+
+We built an indicator that flags it.
+
+{WHOP_LINK}",
 ]
 
 BUSINESS_TIP_POSTS = [
-    "Most small businesses lose 30% of inbound calls to voicemail.\n\nThe customer doesn't leave a message.\n\nThey call the next result on Google.\n\n#SmallBusiness #automation",
-    "Your Google Business Profile is either making you money or losing you money.\n\nThere's no neutral.\n\n#LocalSEO #smallbusiness",
-    "SMS gets a 98% open rate.\nEmail gets 20%.\n\nIf you're a local business and you're not texting your customers, you're leaving money on the table.\n\n#marketing #smallbusiness",
-    "Dead leads aren't dead.\n\nThey're just waiting for the right message at the right time.\n\n5-15% will convert if you follow up correctly.\n\n#sales #businesstips",
-    "Every hour your website takes to load on mobile = 20% more visitors leave.\n\nMost business owners don't know their load time.\n\n#SEO #webdesign",
-    f"We wrote 5 books for small business owners.\n\nAll free this week.\n\n→ {GUMROAD_LINK}\n\n#SmallBusiness #entrepreneur",
-    "The businesses winning on Google Maps this year all have one thing in common.\n\nThey post to their Google Business Profile every single week.\n\n#LocalSEO #Google",
-    "AI doesn't replace your front desk.\n\nIt answers when your front desk can't.\n\n#AI #automation #SmallBusiness",
-    "3 posts a week on Instagram and Facebook.\n\nThat's the difference between the businesses people discover and the ones they forget.\n\n#SocialMedia #LocalBusiness",
-    "Most contractors lose their best leads in the gap between the estimate and the follow-up.\n\nThat's a system problem. Not a sales problem.\n\n#contractors #businesstips",
+    "Most small businesses lose 30% of inbound leads to voicemail.
+
+The customer doesn't leave a message.
+
+They call the next result on Google.
+
+#SmallBusiness #AI",
+    "Your Google Business Profile is either making you money or losing you money.
+
+There's no neutral.
+
+#LocalSEO #SmallBusiness",
+    "SMS gets a 98% open rate.
+Email gets 20%.
+
+If you're a local business and you're not texting your customers, you're leaving money behind.
+
+#marketing #smallbusiness",
+    "Dead leads aren't dead.
+
+They're waiting for the right message at the right time.
+
+5-15% convert if you follow up correctly.
+
+#sales #businessgrowth",
+    "AI doesn't replace your front desk.
+
+It answers when your front desk can't.
+
+Every missed call after 5pm is revenue you didn't capture.
+
+#AI #automation #SmallBusiness",
+    "The businesses winning on Google Maps right now all do one thing.
+
+They post to their Google Business Profile every single week.
+
+Most competitors post zero times.
+
+#LocalSEO",
+    "Most contractors lose their best leads in the gap between the estimate and the follow-up.
+
+That's a system problem. Not a sales problem.
+
+#contractors #businesstips",
+    "You built a great service.
+
+Then you trusted word of mouth to scale it.
+
+That's the ceiling most small businesses hit.
+
+#entrepreneur #smallbusiness",
+    "The first business to respond to an inbound lead wins 78% of the time.
+
+Not the best price. Not the best reviews.
+
+The fastest response.
+
+#sales #automation",
+    "What's actually working in 2026:
+
+AI answering calls 24/7
+Automated follow-up sequences
+Systems that run while you sleep
+
+What's not: hoping referrals keep coming.
+
+#SmallBusiness",
+    "One closed deal from automation pays for a year of the system.
+
+Most business owners wait until they're desperate to build it.
+
+The ones winning built it first.
+
+#businessgrowth",
+]
+
+ENGAGEMENT_POSTS = [
+    "What's the biggest time waster in your business right now?
+
+Be specific.
+
+#entrepreneur #SmallBusiness",
+    "Traders: what's the one indicator you refuse to trade without?
+
+#trading #TradingView #stocks",
+    "HOA managers: what takes the most time on your team every week?
+
+#propertymanagement #HOA",
+    "What would you automate first if you had the tool?
+
+Reply below.
+
+#automation #AI #smallbusiness",
+    "Real question for traders:
+
+Do you have a written position sizing rule or do you decide in the moment?
+
+#trading #riskmanagement",
+    "HVAC owners: what happens to calls that come in after 5pm?
+
+#HVAC #contractor #smallbusiness",
+    "What's the last thing you manually do that you know should be automated?
+
+#entrepreneur #productivity",
 ]
 
 ALL_POSTS = {
@@ -102,14 +339,15 @@ ALL_POSTS = {
     "signals":      SIGNALS_POSTS,
     "indicators":   INDICATOR_POSTS,
     "business_tip": BUSINESS_TIP_POSTS,
+    "engagement":   ENGAGEMENT_POSTS,
 }
 
 DAILY_SCHEDULE = [
-    ("shadow_clans", "08:00"),
-    ("indicators",   "10:00"),
     ("signals",      "13:00"),
-    ("business_tip", "17:00"),
-    ("indicators",   "20:00"),
+    ("business_tip", "15:00"),
+    ("indicators",   "18:00"),
+    ("engagement",   "21:00"),
+    ("shadow_clans", "01:00"),
 ]
 
 # Finance/trading/small-biz accounts whose followers are our target audience
