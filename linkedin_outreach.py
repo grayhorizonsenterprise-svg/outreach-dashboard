@@ -92,46 +92,75 @@ def get_headers() -> dict:
 
 def search_people(query: str, start: int = 0) -> list:
     """Search LinkedIn for people matching query."""
-    try:
-        params = {
-            "decorationId": "com.linkedin.voyager.deco.jserp.WebJobPostingWithSalary-26",
-            "q": "blended",
-            "query": f"(keywords:{query},flagshipSearchIntent:SEARCH_SRP,queryParameters:List((key:resultType,value:List(PEOPLE))),includeFiltersInResponse:false)",
-            "start": start,
-            "count": 10,
-        }
-        r = requests.get(
-            "https://www.linkedin.com/voyager/api/search/blended",
-            params={"keywords": query, "q": "blended", "start": start, "count": 10,
-                    "filters": "List((key:resultType,value:List(PEOPLE)))"},
-            headers=get_headers(),
-            timeout=15,
-        )
-        if r.status_code == 200:
-            data = r.json()
-            elements = data.get("elements", [])
-            people = []
-            for el in elements:
-                items = el.get("elements", [])
-                for item in items:
-                    entity = item.get("hitInfo", {}).get("com.linkedin.voyager.search.SearchProfile", {})
-                    if not entity:
-                        continue
-                    member = entity.get("miniProfile", {})
-                    if not member:
-                        continue
-                    people.append({
-                        "id":         member.get("entityUrn", "").replace("urn:li:fs_miniProfile:", ""),
-                        "first_name": member.get("firstName", ""),
-                        "last_name":  member.get("lastName", ""),
-                        "headline":   member.get("occupation", ""),
-                        "public_id":  member.get("publicIdentifier", ""),
-                    })
-            return people
-        else:
-            print(f"[LI SEARCH] {r.status_code}: {r.text[:100]}")
-    except Exception as e:
-        print(f"[LI SEARCH] Error: {e}")
+    # Try GraphQL-based endpoint first (current as of 2025)
+    endpoints = [
+        {
+            "url": "https://www.linkedin.com/voyager/api/graphql",
+            "params": {
+                "variables": f"(start:{start},origin:GLOBAL_SEARCH_HEADER,query:(keywords:{query},flagshipSearchIntent:SEARCH_SRP,queryParameters:List((key:resultType,value:List(PEOPLE))),includeFiltersInResponse:false))",
+                "queryId": "voyagerSearchDashClusters.02af3bc5ca7e4fdd4d70b3f792d51313",
+            },
+        },
+        {
+            "url": "https://www.linkedin.com/voyager/api/search/blended",
+            "params": {
+                "keywords": query, "q": "blended", "origin": "GLOBAL_SEARCH_HEADER",
+                "start": start, "count": 10,
+                "filters": "List((key:resultType,value:List(PEOPLE)))",
+            },
+        },
+    ]
+    for ep in endpoints:
+        try:
+            r = requests.get(ep["url"], params=ep["params"], headers=get_headers(), timeout=15)
+            if r.status_code == 200:
+                data = r.json()
+                people = []
+                # GraphQL response structure
+                clusters = (data.get("data", {})
+                               .get("searchDashClustersByAll", {})
+                               .get("elements", []))
+                for cluster in clusters:
+                    for item in cluster.get("items", {}).get("elements", []):
+                        entity = item.get("item", {}).get("entityResult", {})
+                        if not entity:
+                            continue
+                        urn = entity.get("entityUrn", "")
+                        title = entity.get("title", {}).get("text", "")
+                        subtitle = entity.get("primarySubtitle", {}).get("text", "")
+                        nav = entity.get("navigationUrl", "")
+                        pub_id = nav.split("/in/")[-1].strip("/") if "/in/" in nav else ""
+                        parts = title.split(" ", 1)
+                        people.append({
+                            "id":         urn.replace("urn:li:fsd_profile:", "").replace("urn:li:fs_miniProfile:", ""),
+                            "first_name": parts[0] if parts else title,
+                            "last_name":  parts[1] if len(parts) > 1 else "",
+                            "headline":   subtitle,
+                            "public_id":  pub_id,
+                        })
+                # Legacy blended response structure
+                if not people:
+                    for el in data.get("elements", []):
+                        for item in el.get("elements", []):
+                            entity = item.get("hitInfo", {}).get("com.linkedin.voyager.search.SearchProfile", {})
+                            if not entity:
+                                continue
+                            member = entity.get("miniProfile", {})
+                            if not member:
+                                continue
+                            people.append({
+                                "id":         member.get("entityUrn", "").replace("urn:li:fs_miniProfile:", ""),
+                                "first_name": member.get("firstName", ""),
+                                "last_name":  member.get("lastName", ""),
+                                "headline":   member.get("occupation", ""),
+                                "public_id":  member.get("publicIdentifier", ""),
+                            })
+                if people:
+                    return people
+            else:
+                print(f"[LI SEARCH] {ep['url'].split('/')[-1]} → {r.status_code}: {r.text[:80]}")
+        except Exception as e:
+            print(f"[LI SEARCH] Error on {ep['url'].split('/')[-1]}: {e}")
     return []
 
 

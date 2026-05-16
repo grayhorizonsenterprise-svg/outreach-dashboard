@@ -1997,16 +1997,19 @@ def test_linkedin():
                 "Referer": "https://www.linkedin.com/",
             }
             r = _req.get(
-                "https://www.linkedin.com/voyager/api/search/blended",
-                params={"keywords": "HOA property manager", "q": "blended", "start": 0, "count": 3,
-                        "filters": "List((key:resultType,value:List(PEOPLE)))"},
+                "https://www.linkedin.com/voyager/api/graphql",
+                params={
+                    "variables": "(start:0,origin:GLOBAL_SEARCH_HEADER,query:(keywords:HOA property manager,flagshipSearchIntent:SEARCH_SRP,queryParameters:List((key:resultType,value:List(PEOPLE))),includeFiltersInResponse:false))",
+                    "queryId": "voyagerSearchDashClusters.02af3bc5ca7e4fdd4d70b3f792d51313",
+                },
                 headers=headers, timeout=12,
             )
             lines.append(f"LinkedIn API search status: HTTP {r.status_code}")
             if r.status_code == 200:
                 data = r.json()
-                count = sum(len(el.get("elements", [])) for el in data.get("elements", []))
-                lines.append(f"Search returned {count} profiles — credentials are VALID")
+                clusters = data.get("data", {}).get("searchDashClustersByAll", {}).get("elements", [])
+                count = sum(len(c.get("items", {}).get("elements", [])) for c in clusters)
+                lines.append(f"Search returned {count} profiles - credentials are VALID")
             elif r.status_code == 401:
                 lines.append("401 Unauthorized — li_at cookie is expired. Refresh it from Chrome DevTools.")
             elif r.status_code == 403:
