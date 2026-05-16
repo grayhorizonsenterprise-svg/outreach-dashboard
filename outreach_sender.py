@@ -5,10 +5,24 @@ Used by approval_queue.py for manual-review send flow.
 """
 
 import os
+import re
 import smtplib
 import requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
+_URL_RE = re.compile(r'(https?://[^\s<>"{}|\\^`\[\]]+)')
+
+def _linkify(text: str) -> str:
+    """Wrap bare URLs in anchor tags so they render as clean clickable links."""
+    def _replace(m):
+        url = m.group(1)
+        if "calendly.com" in url:
+            label = "Schedule a call"
+        else:
+            label = url
+        return f'<a href="{url}" style="color:#0ea5e9;text-decoration:none;">{label}</a>'
+    return _URL_RE.sub(_replace, text)
 
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
@@ -21,7 +35,7 @@ def send_email(to_email: str, subject: str, body: str) -> str:
 
     paragraphs = body.strip().split("\n\n")
     html = "".join(
-        f"<p style='margin:0 0 14px 0'>{p.replace(chr(10), '<br>')}</p>"
+        f"<p style='margin:0 0 14px 0'>{_linkify(p.replace(chr(10), '<br>'))}</p>"
         for p in paragraphs
     )
     html_body = f"""<!DOCTYPE html>

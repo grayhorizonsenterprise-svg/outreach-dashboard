@@ -1123,6 +1123,7 @@ def dashboard():
   <a href="/dedup-queue" style="color:#f59e0b;font-weight:bold;" onclick="return confirm('Remove all duplicate emails from the queue CSV?')">🔁 Dedup Queue</a>
   <a href="/activate-leads" style="color:#22c55e;font-weight:bold;" onclick="return confirm('Activate all blank-status leads in outreach_queue.csv? This will unlock ~28,000 pending leads.')">⚡ Activate Leads</a>
   <a href="/blast-signals-now" style="color:#a78bfa;font-weight:bold;" onclick="return confirm('Send signals blast to all unsent leads in signals_queue.csv now?')">📡 Blast Signals</a>
+  <a href="/test-linkedin" style="color:#0ea5e9;font-weight:bold;">🔗 Test LinkedIn</a>
 </div>
 
 <!-- OUTREACH TAB -->
@@ -1969,6 +1970,56 @@ def blast_signals_now():
     """Immediately run signals_engine.py to send to all unsent signals leads."""
     threading.Thread(target=lambda: _run_engine("Signals Email Blast", "signals_engine.py"), daemon=True).start()
     return '<html><body style="background:#0f172a;color:#a78bfa;font-family:Arial;padding:40px;"><h2>📡 Signals Blast Firing!</h2><p>Sending signals pitch to all unsent leads in signals_queue.csv now.</p><p>Check <a href="/status" style="color:#06b6d4;">System Status</a> for progress.</p><p><a href="/" style="color:#06b6d4;">Back to dashboard</a></p></body></html>'
+
+# =========================
+# TEST LINKEDIN OUTREACH
+# =========================
+@app.route('/test-linkedin')
+def test_linkedin():
+    """Check LinkedIn credentials and attempt a dry-run search."""
+    import subprocess, sys
+    li_at = os.getenv("LINKEDIN_LI_AT", "")
+    csrf  = os.getenv("LINKEDIN_CSRF_TOKEN", "")
+    lines = []
+    lines.append(f"LINKEDIN_LI_AT set: {'YES (' + str(len(li_at)) + ' chars)' if li_at else 'NO - add to Railway vars'}")
+    lines.append(f"LINKEDIN_CSRF_TOKEN set: {'YES (' + str(len(csrf)) + ' chars)' if csrf else 'NO - add to Railway vars'}")
+
+    if li_at and csrf:
+        try:
+            import requests as _req
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                "Accept": "application/vnd.linkedin.normalized+json+2.1",
+                "Cookie": f"li_at={li_at}; JSESSIONID=\"{csrf}\"",
+                "Csrf-Token": csrf,
+                "X-Li-Lang": "en_US",
+                "X-RestLi-Protocol-Version": "2.0.0",
+                "Referer": "https://www.linkedin.com/",
+            }
+            r = _req.get(
+                "https://www.linkedin.com/voyager/api/search/blended",
+                params={"keywords": "HOA property manager", "q": "blended", "start": 0, "count": 3,
+                        "filters": "List((key:resultType,value:List(PEOPLE)))"},
+                headers=headers, timeout=12,
+            )
+            lines.append(f"LinkedIn API search status: HTTP {r.status_code}")
+            if r.status_code == 200:
+                data = r.json()
+                count = sum(len(el.get("elements", [])) for el in data.get("elements", []))
+                lines.append(f"Search returned {count} profiles — credentials are VALID")
+            elif r.status_code == 401:
+                lines.append("401 Unauthorized — li_at cookie is expired. Refresh it from Chrome DevTools.")
+            elif r.status_code == 403:
+                lines.append("403 Forbidden — CSRF token mismatch. Re-copy JSESSIONID from Chrome.")
+            else:
+                lines.append(f"Response: {r.text[:200]}")
+        except Exception as e:
+            lines.append(f"Error: {e}")
+    else:
+        lines.append("Cannot test — missing credentials above.")
+
+    body = "<br>".join(f"<p>{l}</p>" for l in lines)
+    return f'<html><body style="background:#0f172a;color:#e2e8f0;font-family:Arial;padding:40px;max-width:700px;"><h2 style="color:#0ea5e9;">LinkedIn Outreach Check</h2>{body}<br><p><a href="/" style="color:#06b6d4;">Back to dashboard</a></p></body></html>'
 
 # =========================
 # TRIGGER PIPELINE MANUALLY

@@ -6,6 +6,7 @@ Completely separate from the main AI system pipeline.
 Writes to signals_queue.csv, signals_sent_log.csv.
 """
 
+import re
 import requests
 import pandas as pd
 import os
@@ -13,6 +14,18 @@ import sys
 import time
 import random
 from datetime import datetime
+
+_URL_RE = re.compile(r'(https?://[^\s<>"{}|\\^`\[\]]+)')
+
+def _linkify(text: str) -> str:
+    def _replace(m):
+        url = m.group(1)
+        if "calendly.com" in url:
+            return f'<a href="{url}" style="color:#0ea5e9;text-decoration:none;">Schedule a call</a>'
+        if "buy.stripe.com" in url or "gumroad.com" in url:
+            return f'<a href="{url}" style="color:#0ea5e9;font-weight:bold;text-decoration:none;">Get access  - $49/month</a>'
+        return f'<a href="{url}" style="color:#0ea5e9;text-decoration:none;">{url}</a>'
+    return _URL_RE.sub(_replace, text)
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -115,7 +128,7 @@ $49/month. Most traders say the congressional tracker alone is worth it.
 
 Alex | Gray Horizons
 
-P.S. We also sell the TradingView indicators directly — Edge Scanner, Kelly Sizer, Congressional Tracker as Pine Script files. $49 one-time: {indicators_link}"""
+P.S. We also sell the TradingView indicators directly  - Edge Scanner, Kelly Sizer, Congressional Tracker as Pine Script files. $49 one-time: {indicators_link}"""
 
 SAMPLE_TICKERS = ["NVDA", "TSLA", "SPY", "META", "AAPL", "AMD", "MSFT", "AMZN"]
 
@@ -131,7 +144,7 @@ def build_html(message: str) -> str:
         affiliate_block = f'<p style="margin-top:20px;">{links}</p>'
 
     paragraphs = message.strip().split("\n\n")
-    body = "".join(f"<p style='margin:0 0 14px 0;'>{p.replace(chr(10), '<br>')}</p>" for p in paragraphs)
+    body = "".join(f"<p style='margin:0 0 14px 0;'>{_linkify(p.replace(chr(10), '<br>'))}</p>" for p in paragraphs)
     return f"""<!DOCTYPE html>
 <html><head><meta charset="UTF-8"></head>
 <body style="font-family:Arial,sans-serif;max-width:520px;margin:32px auto;color:#1e293b;line-height:1.7;">

@@ -1,43 +1,133 @@
 {
   "niches": {
     "hoa": {
-      "sent": 3787,
+      "sent": 5398,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
     "hvac": {
-      "sent": 4608,
+      "sent": 6714,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
     "dental": {
-      "sent": 4380,
+      "sent": 6301,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
     "plumbing": {
-      "sent": 3711,
+      "sent": 5133,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
     "contractor": {
-      "sent": 3777,
+      "sent": 5287,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
     "landscaping": {
-      "sent": 1891,
+      "sent": 2696,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
     },
     "roofing": {
-      "sent": 1838,
+      "sent": 2610,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "salon": {
+      "sent": 13,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "pest_control": {
+      "sent": 6,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "cleaning": {
+      "sent": 2,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "storage": {
+      "sent": 2,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "veterinary": {
+      "sent": 2,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "chiropractic": {
+      "sent": 6,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "restaurant": {
+      "sent": 8,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "tutoring": {
+      "sent": 2,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "realestate": {
+      "sent": 4,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "optometry": {
+      "sent": 2,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "insurance": {
+      "sent": 2,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "electrician": {
+      "sent": 6,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "auto": {
+      "sent": 8,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "moving": {
+      "sent": 2,
+      "replies": 0,
+      "payments": 0,
+      "revenue": 0.0
+    },
+    "flooring": {
+      "sent": 4,
       "replies": 0,
       "payments": 0,
       "revenue": 0.0
@@ -45,49 +135,101 @@
   },
   "subjects": {
     "How do you handle this?": {
-      "sent": 4598,
+      "sent": 6548,
       "replies": 0
     },
     "Something we built for HOA teams": {
-      "sent": 964,
+      "sent": 1365,
       "replies": 0
     },
     "Process question": {
-      "sent": 991,
+      "sent": 1408,
       "replies": 0
     },
     "Quick question": {
-      "sent": 6071,
+      "sent": 8718,
       "replies": 0
     },
     "Something we built": {
-      "sent": 2711,
+      "sent": 3892,
       "replies": 0
     },
     "Question for you": {
-      "sent": 4598,
+      "sent": 6490,
       "replies": 0
     },
     "Something we built for practices": {
-      "sent": 1105,
+      "sent": 1603,
       "replies": 0
     },
     "How do you handle missed calls?": {
-      "sent": 902,
+      "sent": 1271,
       "replies": 0
     },
     "Something we built for contractors": {
-      "sent": 922,
+      "sent": 1306,
       "replies": 0
     },
     "How do you handle overflow leads?": {
-      "sent": 645,
+      "sent": 913,
       "replies": 0
     },
     "Something we built for roofers": {
-      "sent": 485,
+      "sent": 670,
+      "replies": 0
+    },
+    "Something we built for storage facilities": {
+      "sent": 2,
+      "replies": 0
+    },
+    "Something we built for tutors": {
+      "sent": 2,
+      "replies": 0
+    },
+    "Something we built for restaurants": {
+      "sent": 2,
+      "replies": 0
+    },
+    "How do you get customers back?": {
+      "sent": 4,
+      "replies": 0
+    },
+    "Something we built for pest control": {
+      "sent": 3,
+      "replies": 0
+    },
+    "Something we built for salons": {
+      "sent": 2,
+      "replies": 0
+    },
+    "Something we built for electricians": {
+      "sent": 2,
+      "replies": 0
+    },
+    "Something we built for movers": {
+      "sent": 1,
+      "replies": 0
+    },
+    "Something we built for flooring companies": {
+      "sent": 1,
+      "replies": 0
+    },
+    "Something we built for cleaning companies": {
+      "sent": 1,
+      "replies": 0
+    },
+    "How do you handle quote follow-up?": {
+      "sent": 1,
+      "replies": 0
+    },
+    "Something we built for shops": {
+      "sent": 2,
+      "replies": 0
+    },
+    "How do you handle new leads?": {
+      "sent": 1,
       "replies": 0
     }
   },
-  "last_updated": "2026-05-12T20:35:06.803430"
+  "last_updated": "2026-05-15T15:23:30.466138"
 }

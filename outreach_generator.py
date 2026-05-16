@@ -822,7 +822,7 @@ NICHE_MESSAGES["optometry"] = [
     """\
 Hey,
 
-Patients who are due for an annual exam but haven't scheduled yet — is there anything reaching out to them automatically, or does it depend on them calling in?
+Patients who are due for an annual exam but haven't scheduled yet  - is there anything reaching out to them automatically, or does it depend on them calling in?
 
 That gap is usually worth $800-$1,200 per patient per year in missed exams and lens sales.
 
@@ -855,7 +855,7 @@ When someone fills out a quote request on your website at 9pm, what happens to i
 
 If it sits until morning, they've already booked another cleaning company.
 
-We built a system that responds instantly and captures the booking automatically — after hours, weekends, whenever.
+We built a system that responds instantly and captures the booking automatically  - after hours, weekends, whenever.
 
 Happy to show you how it works.
 
@@ -866,7 +866,7 @@ To opt out reply REMOVE.""",
     """\
 Hey,
 
-Clients who used your service once and never rebooked — do you have anything reaching back out to them automatically?
+Clients who used your service once and never rebooked  - do you have anything reaching back out to them automatically?
 
 Most cleaning companies have 50-100 of these lapsed clients sitting in their records. We built a reactivation system that converts a percentage of them back every month.
 
@@ -893,7 +893,7 @@ To opt out reply REMOVE.""",
     """\
 Hey,
 
-After-hours and weekend calls for painting projects — when they come in and nobody picks up, do those get captured somewhere or do they usually go cold?
+After-hours and weekend calls for painting projects  - when they come in and nobody picks up, do those get captured somewhere or do they usually go cold?
 
 We built a system that responds to every inquiry automatically so you're always first to reply.
 
@@ -936,7 +936,7 @@ NICHE_MESSAGES["moving"] = [
     """\
 Hey,
 
-Moving leads are time-sensitive — the customer gets 3-5 quotes and goes with the first company that responds.
+Moving leads are time-sensitive  - the customer gets 3-5 quotes and goes with the first company that responds.
 
 When someone requests a moving quote on your site after hours, how fast does your team follow up?
 
@@ -951,7 +951,7 @@ Hey,
 
 Most moving companies have no system to follow up with leads who got a quote but didn't book.
 
-We built an automated sequence that follows up with those leads at the right intervals — and converts a percentage of them without anyone on your team having to track it manually.
+We built an automated sequence that follows up with those leads at the right intervals  - and converts a percentage of them without anyone on your team having to track it manually.
 
 Alex
 Gray Horizons Enterprise
@@ -978,7 +978,7 @@ To opt out reply REMOVE.""",
     """\
 Hey,
 
-Clients who came in for a consultation but never booked a treatment — is there anything following up with them automatically or does that fall off?
+Clients who came in for a consultation but never booked a treatment  - is there anything following up with them automatically or does that fall off?
 
 We built a system that nurtures those consult leads with timely messages until they're ready to commit.
 
@@ -996,7 +996,7 @@ After you send a quote, what does your follow-up sequence look like?
 
 Research shows it takes 7 touchpoints before most prospects make an insurance decision. Most agents follow up once or twice and move on.
 
-We built automated nurture sequences that keep you in front of every prospect until they're ready — without you having to track each one manually.
+We built automated nurture sequences that keep you in front of every prospect until they're ready  - without you having to track each one manually.
 
 Alex
 Gray Horizons Enterprise
@@ -1005,7 +1005,7 @@ To opt out reply REMOVE.""",
     """\
 Hey,
 
-Policy renewal season — how are you proactively reaching out to clients before their renewal dates?
+Policy renewal season  - how are you proactively reaching out to clients before their renewal dates?
 
 We built an automated renewal pipeline that reaches out at the right intervals, flags at-risk clients, and prompts cross-sell conversations automatically.
 
@@ -1025,7 +1025,7 @@ When a borrower fills out a rate inquiry on your site at 8pm on a Friday, what h
 
 Rate shoppers contact 3-5 lenders simultaneously and go with whoever responds first.
 
-We build instant response systems for mortgage brokers — automated inquiry acknowledgment, pre-qual questions, and calendar booking — so you're always first in the door.
+We build instant response systems for mortgage brokers  - automated inquiry acknowledgment, pre-qual questions, and calendar booking  - so you're always first in the door.
 
 Alex
 Gray Horizons Enterprise
@@ -1067,7 +1067,7 @@ Hey,
 
 Slow Tuesday afternoons and empty Thursday morning classes are pure revenue left on the table.
 
-We set up automated class-fill campaigns that go out to members based on their attendance patterns — nudging the right people to book the right classes at the right time.
+We set up automated class-fill campaigns that go out to members based on their attendance patterns  - nudging the right people to book the right classes at the right time.
 
 Worth 15 minutes to see what's possible?
 
@@ -1085,7 +1085,7 @@ After a customer dines with you, what does your follow-up look like?
 
 For most restaurants, the answer is nothing. No thank you, no birthday offer, no "we miss you" after 60 days.
 
-We build automated guest retention systems — post-visit follow-up, loyalty incentives, and win-back campaigns for guests who haven't returned.
+We build automated guest retention systems  - post-visit follow-up, loyalty incentives, and win-back campaigns for guests who haven't returned.
 
 Alex
 Gray Horizons Enterprise
@@ -1094,7 +1094,7 @@ To opt out reply REMOVE.""",
     """\
 Hey,
 
-Slow nights and empty reservation slots — is there anything going out automatically to your regulars when you have openings, or is it all manual?
+Slow nights and empty reservation slots  - is there anything going out automatically to your regulars when you have openings, or is it all manual?
 
 We built an automated fill system that messages your best customers at the right time to drive reservations when you need them most.
 
@@ -1112,7 +1112,7 @@ When someone calls about a storage unit and gets your voicemail, what happens to
 
 Most storage facilities lose 30-40% of phone leads this way.
 
-We built a system that captures every missed inquiry and follows up automatically with availability and pricing — before they book a competitor.
+We built a system that captures every missed inquiry and follows up automatically with availability and pricing  - before they book a competitor.
 
 Alex
 Gray Horizons Enterprise
@@ -1142,7 +1142,7 @@ Hey,
 
 After a consultation or inquiry, what does your follow-up look like?
 
-Most photographers send one email and hope for the best. We built a system that follows up on every open inquiry automatically — so you book more sessions without chasing leads manually.
+Most photographers send one email and hope for the best. We built a system that follows up on every open inquiry automatically  - so you book more sessions without chasing leads manually.
 
 Alex
 Gray Horizons Enterprise
