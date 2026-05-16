@@ -256,7 +256,7 @@ def _twitter_scheduler():
     """Posts to Twitter 5x/day at 8am, 10am, 1pm, 5pm, 8pm UTC.
     Also fires one post immediately on startup so deploys never go dark."""
     import datetime as _dt
-    POST_HOURS = {8, 10, 13, 17, 20}
+    POST_HOURS = {13, 15, 18, 21, 1}
     fired = set()
     time.sleep(120)  # let app stabilize
     # Fire immediately on startup regardless of hour

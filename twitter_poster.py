@@ -661,8 +661,27 @@ def post_comment(tweet_id: str, comment_text: str) -> bool:
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
+def get_due_categories() -> list[str]:
+    """Return categories whose scheduled time is within 45 min of now (UTC)."""
+    now_h = datetime.utcnow().hour
+    now_m = datetime.utcnow().minute
+    now_total = now_h * 60 + now_m
+    due = []
+    for category, t in DAILY_SCHEDULE:
+        h, m = int(t.split(":")[0]), int(t.split(":")[1])
+        sched_total = h * 60 + m
+        # handle midnight wrap
+        diff = abs(now_total - sched_total)
+        if diff > 720:
+            diff = 1440 - diff
+        if diff <= 45:
+            due.append(category)
+    return due
+
+
 def run():
-    print("[TWITTER] Starting daily post cycle...")
+    now_utc = datetime.utcnow().strftime("%H:%M UTC")
+    print(f"[TWITTER] Checking schedule at {now_utc}...")
 
     if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
         print("[TWITTER] Not configured. To activate:")
@@ -671,28 +690,26 @@ def run():
         print("  3. Generate API Key, API Secret, Access Token, Access Token Secret")
         print("  4. Add to Railway env vars:")
         print("     TWITTER_API_KEY / TWITTER_API_SECRET / TWITTER_ACCESS_TOKEN / TWITTER_ACCESS_SECRET")
-        print("\n[TWITTER] Printing today's posts (would post when keys are set):")
-        posted = load_posted()
-        for category, _ in DAILY_SCHEDULE:
-            text = pick_post(category, posted)
-            print(f"\n  [{category.upper()}]")
-            print("  " + text.replace("\n", "\n  "))
-        save_posted(posted)
         return
 
-    posted  = load_posted()
-    sent    = 0
+    due = get_due_categories()
+    if not due:
+        print(f"[TWITTER] Nothing scheduled within 45 min of {now_utc} — done")
+        return
 
-    for category, scheduled_time in DAILY_SCHEDULE:
+    posted = load_posted()
+    sent   = 0
+
+    for category in due:
         text = pick_post(category, posted)
-        print(f"\n[{category.upper()}] Posting...")
+        print(f"\n[{category.upper()}] Posting ({datetime.utcnow().strftime('%H:%M UTC')})...")
         ok = post_tweet(text)
         if ok:
             sent += 1
-        time.sleep(random.uniform(60, 180))  # space posts out to avoid rate limits
+        time.sleep(random.uniform(10, 20))
 
     save_posted(posted)
-    print(f"\n[TWITTER] Done — {sent}/{len(DAILY_SCHEDULE)} posts sent today")
+    print(f"\n[TWITTER] Done — {sent}/{len(due)} posts sent")
 
     # Auto-follow relevant accounts to grow audience (20/run, safe for free tier)
     try:
