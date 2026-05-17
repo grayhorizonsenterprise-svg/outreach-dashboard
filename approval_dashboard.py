@@ -223,17 +223,23 @@ def _run_engine(label: str, script: str, extra_args: list = None):
 
 
 def _signals_engine_daily():
-    """Runs at 7am UTC: FINRA lead scrape → signals blast → Stocktwits post → LinkedIn post."""
+    """Runs once per day: FINRA → signals blast → Stocktwits → LinkedIn outreach."""
     import datetime as _dt
+    _last_ran = [None]
     time.sleep(120)
+    # Fire LinkedIn immediately on startup so restarts don't miss the day
+    _run_engine("LinkedIn Outreach (startup)", "linkedin_outreach.py")
+    _last_ran[0] = _dt.datetime.utcnow().date()
     while True:
         now = _dt.datetime.utcnow()
-        if now.hour == 7 and now.minute < 10:
+        today = now.date()
+        if today != _last_ran[0] and now.hour >= 7:
             _run_engine("FINRA Financial Advisor Leads", "finra_leads.py")
             _run_engine("Signals Email Blast", "signals_engine.py")
             _run_engine("Stocktwits Post", "stocktwits_poster.py")
             _run_engine("LinkedIn Post", "linkedin_poster.py")
             _run_engine("LinkedIn Outreach", "linkedin_outreach.py")
+            _last_ran[0] = today
             time.sleep(600)
         time.sleep(60)
 
@@ -2024,6 +2030,44 @@ def test_linkedin():
 
     body = "<br>".join(f"<p>{l}</p>" for l in lines)
     return f'<html><body style="background:#0f172a;color:#e2e8f0;font-family:Arial;padding:40px;max-width:700px;"><h2 style="color:#0ea5e9;">LinkedIn Outreach Check</h2>{body}<br><p><a href="/" style="color:#06b6d4;">Back to dashboard</a></p></body></html>'
+
+# =========================
+# TEST TWITTER
+# =========================
+@app.route('/test-twitter')
+def test_twitter():
+    import requests as _req
+    from requests_oauthlib import OAuth1
+    api_key    = os.getenv("TWITTER_API_KEY", "")
+    api_secret = os.getenv("TWITTER_API_SECRET", "")
+    acc_token  = os.getenv("TWITTER_ACCESS_TOKEN", "")
+    acc_secret = os.getenv("TWITTER_ACCESS_SECRET", "")
+    lines = []
+    lines.append(f"TWITTER_API_KEY: {'SET (' + str(len(api_key)) + ' chars)' if api_key else 'MISSING'}")
+    lines.append(f"TWITTER_API_SECRET: {'SET' if api_secret else 'MISSING'}")
+    lines.append(f"TWITTER_ACCESS_TOKEN: {'SET' if acc_token else 'MISSING'}")
+    lines.append(f"TWITTER_ACCESS_SECRET: {'SET' if acc_secret else 'MISSING'}")
+    if all([api_key, api_secret, acc_token, acc_secret]):
+        try:
+            oauth = OAuth1(api_key, api_secret, acc_token, acc_secret)
+            r = _req.get("https://api.twitter.com/2/users/me", auth=oauth, timeout=10)
+            lines.append(f"Twitter API status: HTTP {r.status_code}")
+            if r.status_code == 200:
+                data = r.json().get("data", {})
+                lines.append(f"Authenticated as: @{data.get('username','?')} (id: {data.get('id','?')})")
+                lines.append("Credentials VALID - posting should work")
+            elif r.status_code == 401:
+                lines.append("401 Unauthorized - API keys are wrong or expired. Regenerate in Twitter Developer Portal.")
+            elif r.status_code == 403:
+                lines.append("403 Forbidden - App permissions not set to Read+Write. Fix in Twitter Developer Portal → App Settings → Permissions.")
+            else:
+                lines.append(f"Error response: {r.text[:300]}")
+        except Exception as e:
+            lines.append(f"Exception: {e}")
+    else:
+        lines.append("Cannot test - set all 4 Twitter env vars in Railway first.")
+    body = "".join(f"<p style='margin:8px 0;'>{l}</p>" for l in lines)
+    return f'<html><body style="background:#0f172a;color:#e2e8f0;font-family:Arial;padding:40px;max-width:700px;"><h2 style="color:#1d9bf0;">Twitter Credential Check</h2>{body}<br><a href="/" style="color:#06b6d4;">Back to dashboard</a></body></html>'
 
 # =========================
 # TRIGGER PIPELINE MANUALLY
