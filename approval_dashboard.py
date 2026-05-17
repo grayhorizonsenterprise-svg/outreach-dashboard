@@ -202,16 +202,17 @@ threading.Thread(target=keep_alive, daemon=True).start()
 # Runs all money-making engines 24/7 on Railway — no computer needed
 # =========================
 
-def _run_engine(label: str, script: str):
+def _run_engine(label: str, script: str, extra_args: list = None):
     """Run a script from the project root. Non-fatal if missing."""
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), script)
     if not os.path.exists(path):
         print(f"[ENGINE] {label}: script not found ({script})", flush=True)
         return
     print(f"[ENGINE] Starting: {label}", flush=True)
+    cmd = [sys.executable, "-u", path] + (extra_args or [])
     try:
         subprocess.run(
-            [sys.executable, "-u", path],
+            cmd,
             env={**os.environ, "PYTHONUNBUFFERED": "1"},
             timeout=3600,
         )
@@ -260,7 +261,7 @@ def _twitter_scheduler():
     fired = set()
     time.sleep(120)  # let app stabilize
     # Fire immediately on startup regardless of hour
-    _run_engine("Twitter Post (startup)", "twitter_poster.py")
+    _run_engine("Twitter Post (startup)", "twitter_poster.py", extra_args=["--force"])
     fired.add((_dt.datetime.utcnow().date(), _dt.datetime.utcnow().hour))
     while True:
         now = _dt.datetime.utcnow()

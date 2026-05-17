@@ -679,23 +679,25 @@ def get_due_categories() -> list[str]:
     return due
 
 
-def run():
+def run(force: bool = False):
     now_utc = datetime.utcnow().strftime("%H:%M UTC")
     print(f"[TWITTER] Checking schedule at {now_utc}...")
 
     if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
-        print("[TWITTER] Not configured. To activate:")
-        print("  1. Go to developer.twitter.com → Create App")
-        print("  2. Set permissions to 'Read and Write'")
-        print("  3. Generate API Key, API Secret, Access Token, Access Token Secret")
-        print("  4. Add to Railway env vars:")
-        print("     TWITTER_API_KEY / TWITTER_API_SECRET / TWITTER_ACCESS_TOKEN / TWITTER_ACCESS_SECRET")
+        print("[TWITTER] Not configured — missing API credentials")
         return
 
     due = get_due_categories()
+
+    # force=True used on startup: always post one item so restarts never go silent
     if not due:
-        print(f"[TWITTER] Nothing scheduled within 45 min of {now_utc} — done")
-        return
+        if force:
+            category = random.choice(list(ALL_POSTS.keys()))
+            due = [category]
+            print(f"[TWITTER] Startup force-post: {category}")
+        else:
+            print(f"[TWITTER] Nothing scheduled within 45 min of {now_utc} — done")
+            return
 
     posted = load_posted()
     sent   = 0
@@ -725,4 +727,8 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--force", action="store_true", help="Post immediately regardless of schedule")
+    args = parser.parse_args()
+    run(force=args.force)

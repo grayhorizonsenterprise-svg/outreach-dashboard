@@ -1274,6 +1274,8 @@ def run():
     rows        = []
     skipped     = 0
     seen_emails = set(done_emails)
+    # Domain-level dedup: if ANY email at a domain was contacted, skip all future emails from that domain
+    seen_domains = set(e.split("@")[-1] for e in done_emails if "@" in e)
     niche_count: dict[str, int] = {}
 
     junk_patterns = [
