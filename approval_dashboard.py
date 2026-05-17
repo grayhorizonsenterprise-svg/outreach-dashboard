@@ -2469,11 +2469,16 @@ def opt_out_route():
         reason = flask_request.form.get("reason", "manual entry").strip()
         if email:
             add_opt_out(email, reason)
-            # Also mark any pending rows for that email as opted_out
-            df = load_data()
-            mask = df["email"].str.lower().str.strip() == email
-            df.loc[mask & (df["status"] == "pending"), "status"] = "opted_out"
-            save_data(df)
+            # Update DB in background so page responds immediately
+            def _bg_update(e=email):
+                try:
+                    df = load_data()
+                    mask = df["email"].str.lower().str.strip() == e
+                    df.loc[mask & (df["status"] == "pending"), "status"] = "opted_out"
+                    save_data(df)
+                except Exception:
+                    pass
+            threading.Thread(target=_bg_update, daemon=True).start()
         return redirect('/')
     return (
         "<html><body style='background:#0f172a;color:#e2e8f0;font-family:monospace;padding:2rem;'>"
