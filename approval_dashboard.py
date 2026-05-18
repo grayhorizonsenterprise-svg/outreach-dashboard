@@ -926,31 +926,57 @@ def run_batch_send(limit=None):
     mask    = (df["status"] == "pending") & (df["email"].fillna("").str.strip() != "")
     pending = df[mask]
 
-    # Build global "already sent" wall from sent_log + opt-outs
-    opt_outs   = load_opt_outs()
-    ever_sent  = set()
+    # Build global "already sent" wall — email + domain level, CSV + DB
+    opt_outs      = load_opt_outs()
+    ever_sent     = set()
+    ever_domains  = set()
+
+    # 1. Load from PostgreSQL (persistent across redeploys — authoritative source)
+    try:
+        _conn = _get_db()
+        if _conn:
+            with _conn.cursor() as _cur:
+                _cur.execute("SELECT email FROM leads WHERE status IN ('sent','opted_out','skipped')")
+                for (_e,) in _cur.fetchall():
+                    if _e:
+                        _em = str(_e).strip().lower()
+                        ever_sent.add(_em)
+                        if "@" in _em:
+                            ever_domains.add(_em.split("@")[-1])
+            _conn.close()
+    except Exception as _ex:
+        print(f"[BATCH] DB dedup load error (non-fatal): {_ex}", flush=True)
+
+    # 2. Also load sent_log.csv as backup
     try:
         if os.path.exists(SENT_LOG):
             sl = pd.read_csv(SENT_LOG, dtype=str).fillna("")
-            # log_sent writes column "email"; legacy rows also use "email"
             if "email" in sl.columns:
-                ever_sent = set(
-                    sl.loc[sl.get("success", sl.get("status","")) == "True", "email"]
-                    .str.lower().str.strip()
-                )
+                for _e in sl.loc[sl.get("success", sl.get("status","")) == "True", "email"].str.lower().str.strip():
+                    ever_sent.add(_e)
+                    if "@" in _e:
+                        ever_domains.add(_e.split("@")[-1])
     except Exception:
         pass
+
+    # 3. Opt-outs add to domain block too
+    for _e in opt_outs:
+        if "@" in _e:
+            ever_domains.add(_e.split("@")[-1])
+
+    print(f"[BATCH] Dedup wall: {len(ever_sent)} emails, {len(ever_domains)} domains blocked", flush=True)
 
     seen_emails = set()
     rows = []
     for i, row in pending.iterrows():
-        email_key = str(row["email"]).strip().lower()
-        if email_key in opt_outs:
-            df.at[i, "status"] = "opted_out"
-        elif email_key in ever_sent:
-            df.at[i, "status"] = "sent"   # sync DB with reality
+        email_key  = str(row["email"]).strip().lower()
+        domain_key = email_key.split("@")[-1] if "@" in email_key else ""
+        if email_key in opt_outs or email_key in ever_sent or domain_key in ever_domains:
+            df.at[i, "status"] = "sent"   # already contacted — sync status
         elif email_key not in seen_emails:
             seen_emails.add(email_key)
+            if domain_key:
+                ever_domains.add(domain_key)  # block rest of run from same company
             rows.append((i, row))
         else:
             df.at[i, "status"] = "skipped"

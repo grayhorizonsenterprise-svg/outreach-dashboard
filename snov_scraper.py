@@ -242,6 +242,37 @@ def run(max_contacts: int = 300):
         except Exception:
             pass
 
+    # Load already-sent domains from DB skip list (never re-scrape contacted companies)
+    _skip_path = os.path.join(DATA_DIR, "sent_domains.csv")
+    if os.path.exists(_skip_path):
+        try:
+            import csv as _csv
+            with open(_skip_path, newline="") as _f:
+                for row in _csv.DictReader(_f):
+                    d = row.get("domain", "").strip().lower()
+                    if d:
+                        existing_domains.add(d)
+            print(f"  Skip list: {len(existing_domains)} total domains blocked (incl. already-sent)")
+        except Exception:
+            pass
+
+    # Also query PostgreSQL directly for already-sent domains (survives redeploys)
+    _db_url = os.getenv("DATABASE_URL", "")
+    if _db_url:
+        try:
+            import psycopg2
+            _conn = psycopg2.connect(_db_url, sslmode="require")
+            with _conn.cursor() as _cur:
+                _cur.execute("SELECT email FROM leads WHERE status IN ('sent','opted_out','skipped')")
+                for (_e,) in _cur.fetchall():
+                    if _e and "@" in str(_e):
+                        existing_emails.add(str(_e).strip().lower())
+                        existing_domains.add(str(_e).strip().lower().split("@")[-1])
+            _conn.close()
+            print(f"  DB dedup: {len(existing_emails)} emails, {len(existing_domains)} domains blocked total")
+        except Exception as _ex:
+            print(f"  DB dedup skipped: {_ex}")
+
     new_count = 0
     credits_exhausted = False
 
