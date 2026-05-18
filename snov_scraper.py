@@ -28,8 +28,9 @@ SNOV_CLIENT_ID = os.getenv("SNOV_CLIENT_ID", "")
 SNOV_SECRET    = os.getenv("SNOV_CLIENT_SECRET", "")
 DB_URL         = os.getenv("DATABASE_URL", "")
 
-TOKEN_URL  = "https://api.snov.io/v1/oauth/access_token"
-DOMAIN_URL = "https://api.snov.io/v1/get-domain-emails-with-info"
+TOKEN_URL         = "https://api.snov.io/v1/oauth/access_token"
+DOMAIN_START_URL  = "https://api.snov.io/v2/domain-search/start"
+DOMAIN_RESULT_URL = "https://api.snov.io/v2/domain-search/result/"
 
 OWNER_TITLES = {
     "owner", "co-owner", "ceo", "chief executive", "founder", "co-founder",
@@ -133,24 +134,55 @@ def get_token() -> str:
 
 
 def domain_search(token: str, domain: str) -> list:
-    """Find decision-maker emails at a company domain."""
+    """Find decision-maker emails at a company domain (v2 async: start → poll)."""
+    headers = {"Authorization": f"Bearer {token}"}
     try:
-        # v1 endpoints require access_token in POST body, not Authorization header
+        # Step 1: start the search
         r = requests.post(
-            DOMAIN_URL,
-            data={"access_token": token, "domain": domain, "type": "personal", "limit": 10, "lastId": 0},
+            DOMAIN_START_URL,
+            json={"domain": domain},
+            headers=headers,
             timeout=15,
         )
-        if r.status_code == 200:
-            return r.json().get("emails", [])
-        elif r.status_code == 402:
+        if r.status_code == 402:
             print("[SNOV] Credits exhausted")
             return None
-        elif r.status_code == 401:
+        if r.status_code == 401:
             print("[SNOV] Token expired")
             return None
-        else:
-            print(f"[SNOV] Domain search {r.status_code}: {r.text[:80]}")
+        if r.status_code != 200:
+            print(f"[SNOV] Start {r.status_code}: {r.text[:100]}")
+            return []
+
+        task_hash = r.json().get("task_hash") or r.json().get("taskHash", "")
+        if not task_hash:
+            print(f"[SNOV] No task_hash in response: {r.text[:100]}")
+            return []
+
+        # Step 2: poll until complete (max ~30s)
+        for attempt in range(10):
+            time.sleep(3)
+            rr = requests.get(
+                f"{DOMAIN_RESULT_URL}{task_hash}",
+                headers=headers,
+                timeout=15,
+            )
+            if rr.status_code == 402:
+                print("[SNOV] Credits exhausted")
+                return None
+            if rr.status_code != 200:
+                print(f"[SNOV] Poll {rr.status_code}: {rr.text[:80]}")
+                return []
+            data = rr.json()
+            status = data.get("status", "")
+            if status in ("done", "complete", "completed", "finished"):
+                return data.get("emails", [])
+            if status in ("error", "failed"):
+                print(f"[SNOV] Task failed for {domain}")
+                return []
+            # still processing — continue polling
+
+        print(f"[SNOV] Timeout polling {domain}")
     except Exception as e:
         print(f"[SNOV] Error: {e}")
     return []
