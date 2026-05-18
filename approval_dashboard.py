@@ -2433,10 +2433,9 @@ def test_snov():
             return "<br>".join(lines)
         token = r.json().get("access_token", "")
         lines.append(f"<b>Token:</b> {token[:20]}...")
-        # Test domain email lookup with a known indexed company
+        # Test domain email lookup — v1 needs access_token in POST body
         r2 = _req.post("https://api.snov.io/v1/get-domain-emails-with-info",
-            data={"domain": "associa.com", "type": "personal", "limit": 5, "lastId": 0},
-            headers={"Authorization": f"Bearer {token}"},
+            data={"access_token": token, "domain": "associa.com", "type": "personal", "limit": 5, "lastId": 0},
             timeout=20)
         lines.append(f"<b>Domain search request:</b> HTTP {r2.status_code}")
         if r2.status_code == 200:

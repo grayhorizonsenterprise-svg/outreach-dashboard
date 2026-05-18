@@ -135,10 +135,10 @@ def get_token() -> str:
 def domain_search(token: str, domain: str) -> list:
     """Find decision-maker emails at a company domain."""
     try:
+        # v1 endpoints require access_token in POST body, not Authorization header
         r = requests.post(
             DOMAIN_URL,
-            data={"domain": domain, "type": "personal", "limit": 10, "lastId": 0},
-            headers={"Authorization": f"Bearer {token}"},
+            data={"access_token": token, "domain": domain, "type": "personal", "limit": 10, "lastId": 0},
             timeout=15,
         )
         if r.status_code == 200:
