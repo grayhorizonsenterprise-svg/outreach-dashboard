@@ -2513,7 +2513,10 @@ def test_snov():
                 if r3.status_code != 200:
                     break
                 if st in ("done", "complete", "completed", "finished"):
-                    emails = r3.json().get("emails", [])
+                    raw = r3.json()
+                    lines.append(f"&nbsp;&nbsp;<b>RAW RESULT:</b> {str(raw)[:600]}")
+                    emails = (raw.get("emails") or raw.get("data") or
+                              raw.get("result") or raw.get("items") or [])
                     break
             lines.append(f"&nbsp;&nbsp;<b style=color:#22c55e>Emails found: {len(emails)}</b>")
             for e in emails[:3]:
