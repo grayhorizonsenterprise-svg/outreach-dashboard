@@ -1247,6 +1247,22 @@ def run():
         except Exception:
             pass
 
+    # Query PostgreSQL for already-sent/opted-out emails (persistent across redeploys)
+    _db_url = os.getenv("DATABASE_URL", "")
+    if _db_url:
+        try:
+            import psycopg2
+            _conn = psycopg2.connect(_db_url, sslmode="require")
+            with _conn.cursor() as _cur:
+                _cur.execute("SELECT email FROM leads WHERE status IN ('sent','opted_out','skipped')")
+                for (_e,) in _cur.fetchall():
+                    if _e:
+                        done_emails.add(str(_e).strip().lower())
+            _conn.close()
+            print(f"[OUTREACH] Loaded {len(done_emails)} already-contacted emails from DB")
+        except Exception as _ex:
+            print(f"[OUTREACH] DB load skipped: {_ex}")
+
     # Also load sent_log.csv as authoritative "never email again" source
     _sent_log = os.path.join(os.path.dirname(os.path.abspath(OUTPUT_FILE)), "sent_log.csv")
     if os.path.exists(_sent_log):
