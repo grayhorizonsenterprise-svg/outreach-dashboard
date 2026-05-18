@@ -2453,7 +2453,7 @@ def send_batch_5k():
 
 @app.route('/test-snov')
 def test_snov():
-    """Live Snov.io v2 async API test — start domain search, poll for result."""
+    """Live Snov.io v2 async API test — credit balance + 3 test domains."""
     import os as _os, time as _time
     client_id  = _os.getenv("SNOV_CLIENT_ID", "")
     client_sec = _os.getenv("SNOV_CLIENT_SECRET", "")
@@ -2463,7 +2463,6 @@ def test_snov():
         return "<br>".join(lines)
     try:
         import requests as _req
-        # Step 1: get token
         r = _req.post("https://api.snov.io/v1/oauth/access_token", data={
             "grant_type": "client_credentials",
             "client_id": client_id,
@@ -2477,56 +2476,53 @@ def test_snov():
         lines.append(f"<b>Token:</b> {token[:20]}...")
         hdrs = {"Authorization": f"Bearer {token}"}
 
-        # Step 2: start domain search (v2 async)
-        r2 = _req.post("https://api.snov.io/v2/domain-search/start",
-                       json={"domain": "associa.com"}, headers=hdrs, timeout=15)
-        lines.append(f"<b>Domain search start:</b> HTTP {r2.status_code}")
-        if r2.status_code == 402:
-            lines.append("<span style=color:red>Credits exhausted</span>")
-            return "<br>".join(lines)
-        if r2.status_code not in (200, 202):
-            lines.append(f"<span style=color:orange>{r2.text[:300]}</span>")
-            return "<br>".join(lines)
-        d0 = r2.json()
-        task_hash = (d0.get("task_hash") or d0.get("taskHash")
-                     or (d0.get("meta") or {}).get("task_hash", ""))
-        lines.append(f"<b>Full start response:</b> {str(d0)[:300]}")
-        lines.append(f"<b>task_hash:</b> {task_hash}")
+        # Credit balance check
+        rb = _req.get("https://api.snov.io/v1/user-balance", headers=hdrs, timeout=10)
+        lines.append(f"<br><b>Credit balance check:</b> HTTP {rb.status_code}")
+        if rb.status_code == 200:
+            bd = rb.json()
+            lines.append(f"<b>Credits remaining:</b> {bd.get('credits_left', bd)}")
 
-        # Step 3: poll for result
-        emails = []
-        for attempt in range(8):
-            _time.sleep(3)
-            r3 = _req.get(f"https://api.snov.io/v2/domain-search/result/{task_hash}",
-                          headers=hdrs, timeout=15)
-            lines.append(f"<b>Poll #{attempt+1}:</b> HTTP {r3.status_code} | status={r3.json().get('status','?')}")
-            if r3.status_code != 200:
+        # Try 3 different company domains — mix of large and small
+        test_domains = ["airriteairconditioning.com", "coolrayhvac.com", "aceplumbing.com"]
+        lines.append("<br><b>Testing 3 domains for email coverage:</b>")
+        for test_domain in test_domains:
+            r2 = _req.post("https://api.snov.io/v2/domain-search/start",
+                           json={"domain": test_domain}, headers=hdrs, timeout=15)
+            lines.append(f"<br>&nbsp;&nbsp;<b>{test_domain}</b> — start HTTP {r2.status_code}")
+            if r2.status_code == 402:
+                lines.append("&nbsp;&nbsp;<span style=color:red>Credits exhausted</span>")
                 break
-            data = r3.json()
-            st = data.get("status", "")
-            if st in ("done", "complete", "completed", "finished"):
-                emails = data.get("emails", [])
-                break
+            if r2.status_code not in (200, 202):
+                lines.append(f"&nbsp;&nbsp;<span style=color:orange>{r2.text[:150]}</span>")
+                continue
+            d0 = r2.json()
+            task_hash = (d0.get("task_hash") or d0.get("taskHash")
+                         or (d0.get("meta") or {}).get("task_hash", ""))
+            if not task_hash:
+                lines.append(f"&nbsp;&nbsp;<span style=color:orange>No task_hash: {str(d0)[:150]}</span>")
+                continue
+            lines.append(f"&nbsp;&nbsp;task_hash: {task_hash[:20]}...")
+            emails = []
+            for attempt in range(6):
+                _time.sleep(3)
+                r3 = _req.get(f"https://api.snov.io/v2/domain-search/result/{task_hash}",
+                              headers=hdrs, timeout=15)
+                st = r3.json().get("status", "?") if r3.status_code == 200 else "err"
+                lines.append(f"&nbsp;&nbsp;Poll #{attempt+1}: HTTP {r3.status_code} status={st}")
+                if r3.status_code != 200:
+                    break
+                if st in ("done", "complete", "completed", "finished"):
+                    emails = r3.json().get("emails", [])
+                    break
+            lines.append(f"&nbsp;&nbsp;<b style=color:#22c55e>Emails found: {len(emails)}</b>")
+            for e in emails[:3]:
+                nm = f"{e.get('firstName','') or e.get('first_name','')} {e.get('lastName','') or e.get('last_name','')}".strip()
+                lines.append(f"&nbsp;&nbsp;&nbsp;&nbsp;{nm} | {e.get('position') or e.get('title','')} | {e.get('value','')}")
 
-        lines.append(f"<b>Emails found:</b> {len(emails)}")
-        for e in emails[:5]:
-            name = f"{e.get('firstName','') or e.get('first_name','')} {e.get('lastName','') or e.get('last_name','')}".strip()
-            lines.append(f"  &nbsp;&nbsp;{name} | {e.get('position') or e.get('title','')} | {e.get('value','')}")
-
-        # Hunter.io check
+        # Hunter.io status
         hunter_key = _os.getenv("HUNTER_API_KEY", "")
-        lines.append(f"<br><b>Hunter.io key:</b> {'SET' if hunter_key else '<span style=color:red>NOT SET</span>'}")
-        if hunter_key:
-            rh = _req.get("https://api.hunter.io/v2/domain-search",
-                params={"domain": "associa.com", "api_key": hunter_key, "limit": 3}, timeout=15)
-            lines.append(f"<b>Hunter domain search:</b> HTTP {rh.status_code}")
-            if rh.status_code == 200:
-                hem = rh.json().get("data", {}).get("emails", [])
-                lines.append(f"<b>Hunter emails:</b> {len(hem)}")
-                for e in hem[:3]:
-                    lines.append(f"  &nbsp;&nbsp;{e.get('first_name','')} {e.get('last_name','')} | {e.get('value','')}")
-            else:
-                lines.append(f"<span style=color:orange>Hunter: {rh.text[:200]}</span>")
+        lines.append(f"<br><b>Hunter.io key:</b> {'SET (resets May 22)' if hunter_key else '<span style=color:red>NOT SET</span>'}")
     except Exception as ex:
         lines.append(f"<span style=color:red>Exception: {ex}</span>")
     style = "background:#0f172a;color:#e2e8f0;font-family:monospace;padding:40px;line-height:2"
