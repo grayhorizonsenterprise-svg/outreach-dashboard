@@ -2433,9 +2433,9 @@ def test_snov():
             return "<br>".join(lines)
         token = r.json().get("access_token", "")
         lines.append(f"<b>Token:</b> {token[:20]}...")
-        # Test domain email lookup (correct endpoint for this plan)
+        # Test domain email lookup with a known indexed company
         r2 = _req.post("https://api.snov.io/v1/get-domain-emails-with-info",
-            data={"domain": "hvacpros.com", "type": "personal", "limit": 5, "lastId": 0},
+            data={"domain": "associa.com", "type": "personal", "limit": 5, "lastId": 0},
             headers={"Authorization": f"Bearer {token}"},
             timeout=20)
         lines.append(f"<b>Domain search request:</b> HTTP {r2.status_code}")
