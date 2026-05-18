@@ -39,6 +39,8 @@ PIPELINE_SCRIPTS = [
     "hotfrog_scraper.py",
     "chamberofcommerce_scraper.py",
     "bark_scraper.py",
+    # Google Maps scraper — no API key, finds real local business websites
+    "gmaps_scraper.py",
     # Direct directory scrapers — no DDG, hit YP/SP pages directly
     "yellowpages_scraper.py",
     "superpages_scraper.py",
