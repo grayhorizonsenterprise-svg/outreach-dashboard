@@ -2433,22 +2433,21 @@ def test_snov():
             return "<br>".join(lines)
         token = r.json().get("access_token", "")
         lines.append(f"<b>Token:</b> {token[:20]}...")
-        # Test one search
-        r2 = _req.post("https://api.snov.io/v2/prospect-search",
-            json={"position": "Owner", "companyType": "HVAC", "location": "Texas, United States",
-                  "companySize": "1-10", "page": 1, "perPage": 10},
-            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        # Test domain email lookup (correct endpoint for this plan)
+        r2 = _req.post("https://api.snov.io/v1/get-domain-emails-with-info",
+            data={"domain": "hvacpros.com", "type": "personal", "limit": 5, "lastId": 0},
+            headers={"Authorization": f"Bearer {token}"},
             timeout=20)
-        lines.append(f"<b>Search request:</b> HTTP {r2.status_code}")
+        lines.append(f"<b>Domain search request:</b> HTTP {r2.status_code}")
         if r2.status_code == 200:
-            prospects = r2.json().get("data", {}).get("prospects", [])
-            lines.append(f"<b>Results returned:</b> {len(prospects)}")
-            for p in prospects[:3]:
-                lines.append(f"  &nbsp;&nbsp;{p.get('firstName','')} {p.get('lastName','')} | {p.get('position','')} | {p.get('companyName','')} | {p.get('email','no email')}")
+            emails = r2.json().get("emails", [])
+            lines.append(f"<b>Emails found:</b> {len(emails)}")
+            for e in emails[:3]:
+                lines.append(f"  &nbsp;&nbsp;{e.get('firstName','')} {e.get('lastName','')} | {e.get('position','')} | {e.get('value','no email')}")
+            if not emails:
+                lines.append("&nbsp;&nbsp;(domain has no indexed emails — this is normal, scraper rotates through many domains)")
         elif r2.status_code == 402:
-            lines.append("<span style=color:red>402 — Credits exhausted or plan does not include prospect search</span>")
-        elif r2.status_code == 403:
-            lines.append("<span style=color:red>403 — This endpoint requires a higher Snov.io plan</span>")
+            lines.append("<span style=color:red>402 — Credits exhausted</span>")
         else:
             lines.append(f"<span style=color:red>Search failed: {r2.text[:300]}</span>")
     except Exception as ex:
