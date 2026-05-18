@@ -714,17 +714,12 @@ def run(force: bool = False):
     save_posted(posted)
     print(f"\n[TWITTER] Done — {sent}/{len(due)} posts sent")
 
-    # Auto-follow relevant accounts to grow audience (20/run, safe for free tier)
-    try:
-        auto_follow_accounts(max_follows=20)
-    except Exception as e:
-        print(f"[TWITTER] Follow error (non-fatal): {e}")
-
-    # Fetch comment opportunities for dashboard display
-    try:
-        fetch_comment_suggestions()
-    except Exception as e:
-        print(f"[TWITTER] Suggestion fetch error (non-fatal): {e}")
+    # Auto-follow disabled — preserving API credits ($3.53 remaining)
+    # Re-enable once credits are topped up
+    # try:
+    #     auto_follow_accounts(max_follows=20)
+    # except Exception as e:
+    #     print(f"[TWITTER] Follow error (non-fatal): {e}")
 
 
 if __name__ == "__main__":
