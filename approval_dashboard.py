@@ -2433,22 +2433,38 @@ def test_snov():
             return "<br>".join(lines)
         token = r.json().get("access_token", "")
         lines.append(f"<b>Token:</b> {token[:20]}...")
-        # Test domain email lookup — v1 needs access_token in POST body
-        r2 = _req.post("https://api.snov.io/v1/get-domain-emails-with-info",
-            data={"access_token": token, "domain": "associa.com", "type": "personal", "limit": 5, "lastId": 0},
-            timeout=20)
-        lines.append(f"<b>Domain search request:</b> HTTP {r2.status_code}")
-        if r2.status_code == 200:
-            emails = r2.json().get("emails", [])
-            lines.append(f"<b>Emails found:</b> {len(emails)}")
-            for e in emails[:3]:
-                lines.append(f"  &nbsp;&nbsp;{e.get('firstName','')} {e.get('lastName','')} | {e.get('position','')} | {e.get('value','no email')}")
-            if not emails:
-                lines.append("&nbsp;&nbsp;(domain has no indexed emails — this is normal, scraper rotates through many domains)")
-        elif r2.status_code == 402:
-            lines.append("<span style=color:red>402 — Credits exhausted</span>")
-        else:
-            lines.append(f"<span style=color:red>Search failed: {r2.text[:300]}</span>")
+        # Test domain email lookup — try both auth methods
+        for auth_method, payload in [
+            ("body token", {"access_token": token, "domain": "associa.com", "type": "personal", "limit": 5, "lastId": 0}),
+            ("header token", {"domain": "associa.com", "type": "personal", "limit": 5, "lastId": 0}),
+        ]:
+            hdrs = {"Authorization": f"Bearer {token}"} if auth_method == "header token" else {}
+            r2 = _req.post("https://api.snov.io/v1/get-domain-emails-with-info", data=payload, headers=hdrs, timeout=20)
+            lines.append(f"<b>Domain search ({auth_method}):</b> HTTP {r2.status_code}")
+            if r2.status_code == 200:
+                emails = r2.json().get("emails", [])
+                lines.append(f"<b>Emails found:</b> {len(emails)}")
+                for e in emails[:3]:
+                    lines.append(f"  &nbsp;&nbsp;{e.get('firstName','')} {e.get('lastName','')} | {e.get('value','no email')}")
+                break
+            else:
+                lines.append(f"<span style=color:orange>{r2.text[:200]}</span>")
+
+        # Also test Hunter.io as backup
+        hunter_key = _os.getenv("HUNTER_API_KEY", "")
+        lines.append(f"<br><b>Hunter.io key:</b> {'SET' if hunter_key else '<span style=color:red>NOT SET</span>'}")
+        if hunter_key:
+            rh = _req.get("https://api.hunter.io/v2/domain-search",
+                params={"domain": "associa.com", "api_key": hunter_key, "limit": 3}, timeout=15)
+            lines.append(f"<b>Hunter domain search:</b> HTTP {rh.status_code}")
+            if rh.status_code == 200:
+                data = rh.json().get("data", {})
+                emails = data.get("emails", [])
+                lines.append(f"<b>Hunter emails found:</b> {len(emails)}")
+                for e in emails[:3]:
+                    lines.append(f"  &nbsp;&nbsp;{e.get('first_name','')} {e.get('last_name','')} | {e.get('position','')} | {e.get('value','')}")
+            else:
+                lines.append(f"<span style=color:red>Hunter failed: {rh.text[:200]}</span>")
     except Exception as ex:
         lines.append(f"<span style=color:red>Exception: {ex}</span>")
     style = "background:#0f172a;color:#e2e8f0;font-family:monospace;padding:40px;line-height:2"
