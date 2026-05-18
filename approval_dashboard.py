@@ -2283,11 +2283,31 @@ def purge_bounced():
     Scrubs the leads DB and CSV of:
     - Role addresses: info@, service@, hello@, office@, contact@, admin@...
     - Any address marked 'bounced' or 'failed' in DB
-    These are the #1 cause of the 26.7% bounce rate.
+    - All addresses in SendGrid's bounce/block/spam suppression lists
     """
     from email_verifier import is_role_address, is_valid_syntax
     removed_db  = 0
     removed_csv = 0
+
+    # -- Pull SendGrid suppression lists (bounces, blocks, spam reports, invalids) --
+    sg_bad_emails = set()
+    sg_key = os.getenv("SENDGRID_API_KEY", "")
+    if sg_key:
+        try:
+            for endpoint in ["suppression/bounces", "suppression/blocks",
+                             "suppression/spam_reports", "suppression/invalid_emails"]:
+                r = requests.get(
+                    f"https://api.sendgrid.com/v3/{endpoint}?limit=500",
+                    headers={"Authorization": f"Bearer {sg_key}"}, timeout=15
+                )
+                if r.status_code == 200:
+                    for item in r.json():
+                        e = (item.get("email") or "").strip().lower()
+                        if e:
+                            sg_bad_emails.add(e)
+            print(f"[PURGE] SendGrid suppressions: {len(sg_bad_emails)} emails to block", flush=True)
+        except Exception as ex:
+            print(f"[PURGE] SendGrid fetch error: {ex}", flush=True)
 
     # -- Purge from PostgreSQL DB --
     conn = _get_db()
@@ -2299,13 +2319,10 @@ def purge_bounced():
                 bad_ids = []
                 for row_id, email in rows:
                     email = (email or "").strip().lower()
-                    if not email or not is_valid_syntax(email) or is_role_address(email):
+                    if not email or not is_valid_syntax(email) or is_role_address(email) or email in sg_bad_emails:
                         bad_ids.append(row_id)
                 if bad_ids:
-                    cur.execute(
-                        "DELETE FROM leads WHERE id = ANY(%s)",
-                        (bad_ids,)
-                    )
+                    cur.execute("DELETE FROM leads WHERE id = ANY(%s)", (bad_ids,))
                     removed_db = len(bad_ids)
                 conn.commit()
             conn.close()
