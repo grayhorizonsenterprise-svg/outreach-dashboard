@@ -29,8 +29,8 @@ SNOV_SECRET    = os.getenv("SNOV_CLIENT_SECRET", "")
 DB_URL         = os.getenv("DATABASE_URL", "")
 
 TOKEN_URL         = "https://api.snov.io/v1/oauth/access_token"
-DOMAIN_START_URL  = "https://api.snov.io/v2/domain-search/start"
-DOMAIN_RESULT_URL = "https://api.snov.io/v2/domain-search/result/"
+DOMAIN_START_URL  = "https://api.snov.io/v2/domain-search/domain-emails/start"
+DOMAIN_RESULT_URL = "https://api.snov.io/v2/domain-search/domain-emails/result/"
 
 OWNER_TITLES = {
     "owner", "co-owner", "ceo", "chief executive", "founder", "co-founder",
@@ -137,10 +137,9 @@ def domain_search(token: str, domain: str) -> list:
     """Find decision-maker emails at a company domain (v2 async: start → poll)."""
     headers = {"Authorization": f"Bearer {token}"}
     try:
-        # Step 1: start the search
+        # Step 1: start the search — domain goes in query string per Snov.io support
         r = requests.post(
-            DOMAIN_START_URL,
-            json={"domain": domain},
+            f"{DOMAIN_START_URL}?domain={domain}",
             headers=headers,
             timeout=15,
         )

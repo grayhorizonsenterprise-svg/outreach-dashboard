@@ -2487,8 +2487,8 @@ def test_snov():
         test_domains = ["airriteairconditioning.com", "coolrayhvac.com", "aceplumbing.com"]
         lines.append("<br><b>Testing 3 domains for email coverage:</b>")
         for test_domain in test_domains:
-            r2 = _req.post("https://api.snov.io/v2/domain-search/start",
-                           json={"domain": test_domain}, headers=hdrs, timeout=15)
+            r2 = _req.post(f"https://api.snov.io/v2/domain-search/domain-emails/start?domain={test_domain}",
+                           headers=hdrs, timeout=15)
             lines.append(f"<br>&nbsp;&nbsp;<b>{test_domain}</b> — start HTTP {r2.status_code}")
             if r2.status_code == 402:
                 lines.append("&nbsp;&nbsp;<span style=color:red>Credits exhausted</span>")
@@ -2506,7 +2506,7 @@ def test_snov():
             emails = []
             for attempt in range(6):
                 _time.sleep(3)
-                r3 = _req.get(f"https://api.snov.io/v2/domain-search/result/{task_hash}",
+                r3 = _req.get(f"https://api.snov.io/v2/domain-search/domain-emails/result/{task_hash}",
                               headers=hdrs, timeout=15)
                 st = r3.json().get("status", "?") if r3.status_code == 200 else "err"
                 lines.append(f"&nbsp;&nbsp;Poll #{attempt+1}: HTTP {r3.status_code} status={st}")
