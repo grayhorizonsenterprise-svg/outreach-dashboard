@@ -207,6 +207,21 @@ def run(max_contacts: int = 400):
         print("[SNOV] Auth failed")
         return
 
+    # Merge seed_companies.csv into NICHE_DOMAINS if available
+    seed_path = os.path.join(DATA_DIR, "seed_companies.csv")
+    if os.path.exists(seed_path):
+        try:
+            seed_df = pd.read_csv(seed_path, dtype=str).fillna("")
+            for _, row in seed_df.iterrows():
+                niche  = row.get("niche", "").strip().lower()
+                domain = row.get("domain", "").strip().lower()
+                if niche and domain and niche in NICHE_DOMAINS:
+                    if domain not in NICHE_DOMAINS[niche]:
+                        NICHE_DOMAINS[niche].append(domain)
+            print(f"[SNOV] Loaded seed_companies.csv — {len(seed_df)} additional domains")
+        except Exception as ex:
+            print(f"[SNOV] Seed load skipped: {ex}")
+
     print(f"[SNOV] Authenticated. Searching {len(NICHE_DOMAINS)} niches via domain lookup...")
 
     # Load already-contacted emails + domains from DB
