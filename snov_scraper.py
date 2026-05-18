@@ -150,11 +150,13 @@ def domain_search(token: str, domain: str) -> list:
         if r.status_code == 401:
             print("[SNOV] Token expired")
             return None
-        if r.status_code != 200:
+        if r.status_code not in (200, 202):
             print(f"[SNOV] Start {r.status_code}: {r.text[:100]}")
             return []
 
-        task_hash = r.json().get("task_hash") or r.json().get("taskHash", "")
+        data0 = r.json()
+        task_hash = (data0.get("task_hash") or data0.get("taskHash")
+                     or (data0.get("meta") or {}).get("task_hash", ""))
         if not task_hash:
             print(f"[SNOV] No task_hash in response: {r.text[:100]}")
             return []

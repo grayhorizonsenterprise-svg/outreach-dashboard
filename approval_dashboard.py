@@ -761,7 +761,6 @@ SENT_LOG = os.path.join(DATA_DIR, "sent_log.csv")
 
 def log_sent(to_email, name, company, subject, success, error=""):
     import csv
-    from datetime import datetime
     row = {
         "timestamp": now_pacific().strftime("%Y-%m-%d %I:%M %p PT"),
         "company": company,
@@ -777,6 +776,24 @@ def log_sent(to_email, name, company, subject, success, error=""):
         if not file_exists:
             writer.writeheader()
         writer.writerow(row)
+
+    # Immediately persist to DB so redeploys don't lose sent records
+    if success and to_email:
+        try:
+            _c = _get_db()
+            if _c:
+                with _c.cursor() as _cur:
+                    _cur.execute(
+                        """INSERT INTO leads (company,name,email,message,status,niche,subject,website)
+                           VALUES (%s,%s,%s,%s,'sent',%s,%s,%s)
+                           ON CONFLICT (email) DO UPDATE SET status='sent'""",
+                        (company or "", name or "", str(to_email).strip().lower(),
+                         "", "", subject or "", "")
+                    )
+                _c.commit()
+                _c.close()
+        except Exception:
+            pass
 
 def _build_html_body(name, sender_name, message):
     # Normalize line endings before any processing
@@ -938,13 +955,18 @@ def run_batch_send(limit=None):
         _conn = _get_db()
         if _conn:
             with _conn.cursor() as _cur:
-                _cur.execute("SELECT email FROM leads WHERE status IN ('sent','opted_out','skipped')")
-                for (_e,) in _cur.fetchall():
+                _cur.execute("SELECT email, website FROM leads WHERE status IN ('sent','opted_out','skipped')")
+                for (_e, _w) in _cur.fetchall():
                     if _e:
                         _em = str(_e).strip().lower()
                         ever_sent.add(_em)
                         if "@" in _em:
                             ever_domains.add(_em.split("@")[-1])
+                    # Also block by website domain so same company ≠ re-emailed via different address
+                    if _w:
+                        _wd = str(_w).strip().lower().replace("https://","").replace("http://","").replace("www.","").split("/")[0]
+                        if _wd and "." in _wd:
+                            ever_domains.add(_wd)
             _conn.close()
     except Exception as _ex:
         print(f"[BATCH] DB dedup load error (non-fatal): {_ex}", flush=True)
@@ -2462,10 +2484,13 @@ def test_snov():
         if r2.status_code == 402:
             lines.append("<span style=color:red>Credits exhausted</span>")
             return "<br>".join(lines)
-        if r2.status_code != 200:
+        if r2.status_code not in (200, 202):
             lines.append(f"<span style=color:orange>{r2.text[:300]}</span>")
             return "<br>".join(lines)
-        task_hash = r2.json().get("task_hash") or r2.json().get("taskHash", "")
+        d0 = r2.json()
+        task_hash = (d0.get("task_hash") or d0.get("taskHash")
+                     or (d0.get("meta") or {}).get("task_hash", ""))
+        lines.append(f"<b>Full start response:</b> {str(d0)[:300]}")
         lines.append(f"<b>task_hash:</b> {task_hash}")
 
         # Step 3: poll for result
