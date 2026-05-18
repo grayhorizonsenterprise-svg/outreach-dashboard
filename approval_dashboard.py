@@ -2410,6 +2410,53 @@ def send_batch_5k():
         threading.Thread(target=run_batch_send, kwargs={"limit": 5000}, daemon=True).start()
     return redirect('/')
 
+@app.route('/test-snov')
+def test_snov():
+    """Live Snov.io API test — shows token, one search result, credit status."""
+    import os as _os
+    client_id  = _os.getenv("SNOV_CLIENT_ID", "")
+    client_sec = _os.getenv("SNOV_CLIENT_SECRET", "")
+    lines = [f"<b>SNOV_CLIENT_ID:</b> {'SET (' + client_id[:8] + '...)' if client_id else '<span style=color:red>NOT SET</span>'}",
+             f"<b>SNOV_CLIENT_SECRET:</b> {'SET (' + client_sec[:8] + '...)' if client_sec else '<span style=color:red>NOT SET</span>'}"]
+    if not client_id or not client_sec:
+        return "<br>".join(lines)
+    try:
+        import requests as _req
+        r = _req.post("https://api.snov.io/v1/oauth/access_token", data={
+            "grant_type": "client_credentials",
+            "client_id": client_id,
+            "client_secret": client_sec,
+        }, timeout=15)
+        lines.append(f"<b>Token request:</b> HTTP {r.status_code}")
+        if r.status_code != 200:
+            lines.append(f"<span style=color:red>Auth failed: {r.text[:300]}</span>")
+            return "<br>".join(lines)
+        token = r.json().get("access_token", "")
+        lines.append(f"<b>Token:</b> {token[:20]}...")
+        # Test one search
+        r2 = _req.post("https://api.snov.io/v2/prospect-search",
+            json={"position": "Owner", "companyType": "HVAC", "location": "Texas, United States",
+                  "companySize": "1-10", "page": 1, "perPage": 10},
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            timeout=20)
+        lines.append(f"<b>Search request:</b> HTTP {r2.status_code}")
+        if r2.status_code == 200:
+            prospects = r2.json().get("data", {}).get("prospects", [])
+            lines.append(f"<b>Results returned:</b> {len(prospects)}")
+            for p in prospects[:3]:
+                lines.append(f"  &nbsp;&nbsp;{p.get('firstName','')} {p.get('lastName','')} | {p.get('position','')} | {p.get('companyName','')} | {p.get('email','no email')}")
+        elif r2.status_code == 402:
+            lines.append("<span style=color:red>402 — Credits exhausted or plan does not include prospect search</span>")
+        elif r2.status_code == 403:
+            lines.append("<span style=color:red>403 — This endpoint requires a higher Snov.io plan</span>")
+        else:
+            lines.append(f"<span style=color:red>Search failed: {r2.text[:300]}</span>")
+    except Exception as ex:
+        lines.append(f"<span style=color:red>Exception: {ex}</span>")
+    style = "background:#0f172a;color:#e2e8f0;font-family:monospace;padding:40px;line-height:2"
+    return f'<html><body style="{style}"><h2 style="color:#22c55e">Snov.io API Test</h2>' + "<br>".join(lines) + '<br><br><a href="/" style="color:#06b6d4">Back</a></body></html>'
+
+
 @app.route('/test-twitter')
 def test_twitter():
     """Diagnose Twitter posting — shows exact error at each step."""
