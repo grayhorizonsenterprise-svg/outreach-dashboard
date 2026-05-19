@@ -41,6 +41,8 @@ PIPELINE_SCRIPTS = [
     "bark_scraper.py",
     # Google Maps scraper — no API key, finds real local business websites
     "gmaps_scraper.py",
+    # Scrape emails directly from company websites (free, no API)
+    "website_email_scraper.py",
     # Direct directory scrapers — no DDG, hit YP/SP pages directly
     "yellowpages_scraper.py",
     "superpages_scraper.py",
