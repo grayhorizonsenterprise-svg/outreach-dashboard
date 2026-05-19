@@ -1,0 +1,87 @@
+// GHE Edge Scanner — Gray Horizons Enterprise
+// Scores every bar 0-100 using RSI, volume surge, and EMA confluence.
+// Only labels high-confidence setups (70+). Works on stocks, crypto, forex.
+//@version=5
+indicator("GHE Edge Scanner", overlay=true, max_labels_count=500)
+
+// ── Inputs ─────────────────────────────────────────────────────────────────
+rsi_len       = input.int(14,  "RSI Length",        group="RSI")
+rsi_bull      = input.int(55,  "RSI Bull Threshold", group="RSI")
+rsi_bear      = input.int(45,  "RSI Bear Threshold", group="RSI")
+
+vol_mult      = input.float(1.5, "Volume Surge Multiplier (vs 20-bar avg)", group="Volume", step=0.1)
+vol_len       = input.int(20,    "Volume Average Length", group="Volume")
+
+ema_fast      = input.int(9,   "EMA Fast",   group="EMA Confluence")
+ema_mid       = input.int(21,  "EMA Mid",    group="EMA Confluence")
+ema_slow      = input.int(50,  "EMA Slow",   group="EMA Confluence")
+
+signal_min    = input.int(70,  "Min Score to Label (0-100)", group="Signal")
+show_score    = input.bool(true, "Show Score Label",          group="Signal")
+
+bull_col      = input.color(color.new(#00e676, 0),  "Bull Signal Color", group="Display")
+bear_col      = input.color(color.new(#ff1744, 0),  "Bear Signal Color", group="Display")
+
+// ── Calculations ───────────────────────────────────────────────────────────
+rsi_val  = ta.rsi(close, rsi_len)
+vol_avg  = ta.sma(volume, vol_len)
+vol_up   = volume > vol_avg * vol_mult
+
+ema_f    = ta.ema(close, ema_fast)
+ema_m    = ta.ema(close, ema_mid)
+ema_s    = ta.ema(close, ema_slow)
+
+// EMA confluence: all aligned bullish or bearish
+bull_ema = ema_f > ema_m and ema_m > ema_s
+bear_ema = ema_f < ema_m and ema_m < ema_s
+
+// Score components (each worth up to ~33 pts)
+// RSI component (0-33)
+rsi_score = rsi_val >= rsi_bull ? math.min(33, math.round((rsi_val - rsi_bull) / (100 - rsi_bull) * 33 + 22)) :
+            rsi_val <= rsi_bear ? math.min(33, math.round((rsi_bear - rsi_val) / rsi_bear * 33 + 22)) : 0
+
+// Volume component (0-34)
+vol_score = vol_up ? 34 : math.round(volume / vol_avg * 17)
+vol_score := math.min(34, math.max(0, vol_score))
+
+// EMA component (0-33)
+ema_score = bull_ema ? 33 : bear_ema ? 33 : math.round(17 * (close > ema_s ? 1 : 0) + 8 * (close > ema_m ? 1 : 0))
+
+total_score = rsi_score + vol_score + ema_score
+total_score := math.min(100, math.max(0, total_score))
+
+// ── Direction ──────────────────────────────────────────────────────────────
+is_bull = rsi_val >= rsi_bull and bull_ema and vol_up
+is_bear = rsi_val <= rsi_bear and bear_ema and vol_up
+
+// ── Signals ────────────────────────────────────────────────────────────────
+bull_signal = is_bull and total_score >= signal_min
+bear_signal = is_bear and total_score >= signal_min
+
+// ── Plot ───────────────────────────────────────────────────────────────────
+plot(ema_f, "EMA Fast", color=color.new(color.yellow,  60), linewidth=1)
+plot(ema_m, "EMA Mid",  color=color.new(color.orange,  60), linewidth=1)
+plot(ema_s, "EMA Slow", color=color.new(color.red,     60), linewidth=2)
+
+// Labels
+if bull_signal and show_score
+    label.new(bar_index, low - ta.atr(14),
+      text="▲ " + str.tostring(total_score),
+      style=label.style_label_up,
+      color=bull_col,
+      textcolor=color.white,
+      size=size.small)
+
+if bear_signal and show_score
+    label.new(bar_index, high + ta.atr(14),
+      text="▼ " + str.tostring(total_score),
+      style=label.style_label_down,
+      color=bear_col,
+      textcolor=color.white,
+      size=size.small)
+
+// Background tint on high-confidence bars
+bgcolor(bull_signal ? color.new(bull_col, 88) : bear_signal ? color.new(bear_col, 88) : na)
+
+// ── Score Panel (data window) ──────────────────────────────────────────────
+plot(total_score, "GHE Score (0-100)", display=display.data_window)

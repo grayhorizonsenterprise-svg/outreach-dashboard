@@ -1,0 +1,83 @@
+// GHE Kelly Position Sizer — Gray Horizons Enterprise
+// Enter account size, win rate, and stop loss. Get exact share count
+// and dollar risk in real time. Institutional-grade Quarter-Kelly sizing.
+//@version=5
+indicator("GHE Kelly Position Sizer", overlay=true)
+
+// ── Inputs ─────────────────────────────────────────────────────────────────
+account_size  = input.float(25000, "Account Size ($)",         step=500,   group="Account")
+win_rate      = input.float(55,    "Win Rate (%)",             step=1,     group="Kelly", minval=1, maxval=99)
+avg_win       = input.float(2.0,   "Avg Win / Avg Loss Ratio", step=0.1,   group="Kelly", minval=0.1)
+stop_pct      = input.float(2.0,   "Stop Loss (% from entry)", step=0.1,   group="Risk",  minval=0.1)
+max_risk_pct  = input.float(2.0,   "Max Risk Per Trade (%)",   step=0.1,   group="Risk")
+kelly_frac    = input.float(0.25,  "Kelly Fraction (0.25 = Quarter-Kelly)", step=0.05, group="Kelly", minval=0.05, maxval=1.0)
+
+tbl_pos       = input.string("Top Right", "Table Position", options=["Top Right","Top Left","Bottom Right","Bottom Left"], group="Display")
+tbl_col       = input.color(color.new(#0d1117, 90), "Table Background", group="Display")
+head_col      = input.color(color.new(#1e88e5, 100), "Header Color",    group="Display")
+
+// ── Kelly Formula ─────────────────────────────────────────────────────────
+// Full Kelly = W - (1-W)/R  where W=win rate, R=win/loss ratio
+w = win_rate / 100
+r = avg_win
+full_kelly = w - (1 - w) / r
+adj_kelly  = full_kelly * kelly_frac
+adj_kelly  := math.max(0, adj_kelly)   // never negative
+
+// ── Position Sizing ────────────────────────────────────────────────────────
+kelly_dollars   = account_size * adj_kelly
+max_risk_dollar = account_size * (max_risk_pct / 100)
+risk_dollars    = math.min(kelly_dollars, max_risk_dollar)
+
+stop_per_share  = close * (stop_pct / 100)
+shares          = stop_per_share > 0 ? math.floor(risk_dollars / stop_per_share) : 0
+position_value  = shares * close
+actual_risk     = shares * stop_per_share
+stop_price      = close - stop_per_share
+target_price    = close + (stop_per_share * avg_win)
+
+// ── Table Position ─────────────────────────────────────────────────────────
+pos = tbl_pos == "Top Right"    ? position.top_right :
+      tbl_pos == "Top Left"     ? position.top_left  :
+      tbl_pos == "Bottom Right" ? position.bottom_right : position.bottom_left
+
+// ── Draw Table ─────────────────────────────────────────────────────────────
+var table t = table.new(pos, 2, 12, border_width=1, border_color=color.new(color.gray, 70), frame_width=1, frame_color=color.new(color.gray, 50))
+
+if barstate.islast
+    // Header
+    table.cell(t, 0, 0,  "GHE KELLY SIZER",        bgcolor=head_col, text_color=color.white, text_size=size.small, text_halign=text.align_center)
+    table.cell(t, 1, 0,  "VALUE",                   bgcolor=head_col, text_color=color.white, text_size=size.small, text_halign=text.align_center)
+
+    table.cell(t, 0, 1,  "Entry Price",   bgcolor=tbl_col, text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 1,  "$" + str.tostring(close, "#.##"),  bgcolor=tbl_col, text_color=color.yellow, text_size=size.small)
+
+    table.cell(t, 0, 2,  "Stop Loss",    bgcolor=tbl_col, text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 2,  "$" + str.tostring(stop_price, "#.##") + " (-" + str.tostring(stop_pct, "#.#") + "%)", bgcolor=tbl_col, text_color=color.red, text_size=size.small)
+
+    table.cell(t, 0, 3,  "Target",       bgcolor=tbl_col, text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 3,  "$" + str.tostring(target_price, "#.##"), bgcolor=tbl_col, text_color=color.green, text_size=size.small)
+
+    table.cell(t, 0, 4,  "Shares",       bgcolor=tbl_col, text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 4,  str.tostring(shares), bgcolor=tbl_col, text_color=color.aqua, text_size=size.normal)
+
+    table.cell(t, 0, 5,  "Position Size", bgcolor=tbl_col, text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 5,  "$" + str.tostring(position_value, "#,###"), bgcolor=tbl_col, text_color=color.white, text_size=size.small)
+
+    table.cell(t, 0, 6,  "$ At Risk",    bgcolor=tbl_col, text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 6,  "$" + str.tostring(actual_risk, "#.##"), bgcolor=tbl_col, text_color=color.orange, text_size=size.small)
+
+    table.cell(t, 0, 7,  "% of Account", bgcolor=tbl_col, text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 7,  str.tostring(actual_risk / account_size * 100, "#.##") + "%", bgcolor=tbl_col, text_color=color.orange, text_size=size.small)
+
+    table.cell(t, 0, 8,  "Full Kelly",   bgcolor=tbl_col, text_color=color.gray, text_size=size.tiny)
+    table.cell(t, 1, 8,  str.tostring(full_kelly * 100, "#.#") + "%", bgcolor=tbl_col, text_color=color.gray, text_size=size.tiny)
+
+    table.cell(t, 0, 9,  "Adj Kelly (" + str.tostring(kelly_frac * 100, "#") + "%)", bgcolor=tbl_col, text_color=color.gray, text_size=size.tiny)
+    table.cell(t, 1, 9,  str.tostring(adj_kelly * 100, "#.##") + "%", bgcolor=tbl_col, text_color=color.gray, text_size=size.tiny)
+
+    table.cell(t, 0, 10, "Win Rate",     bgcolor=tbl_col, text_color=color.gray, text_size=size.tiny)
+    table.cell(t, 1, 10, str.tostring(win_rate, "#") + "%", bgcolor=tbl_col, text_color=color.gray, text_size=size.tiny)
+
+    table.cell(t, 0, 11, "Account",      bgcolor=tbl_col, text_color=color.gray, text_size=size.tiny)
+    table.cell(t, 1, 11, "$" + str.tostring(account_size, "#,###"), bgcolor=tbl_col, text_color=color.gray, text_size=size.tiny)
