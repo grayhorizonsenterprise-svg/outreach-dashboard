@@ -21,7 +21,7 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request as flask_request
 from config import (
     STOCKS, CRYPTOS, SPORTS, SPACEX_ECOSYSTEM, CATEGORIES,
     ODDS_KEY, QUIVER_KEY, MIN_SIGNAL_SCORE
@@ -399,6 +399,297 @@ def api_ticker(ticker: str):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+MEMBER_KEY = os.getenv("MEMBER_KEY", "ghe2025")
+
+@app.route("/member")
+def member_dashboard():
+    """Read-only subscriber dashboard — shows Today's Plays, Power Plays, Compound Growth Projection."""
+    key = flask_request.args.get("key", "")
+    if key != MEMBER_KEY:
+        return """<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>GHE Edge Engine — Member Access</title>
+<style>body{background:#0a0e1a;color:#e5e7eb;font-family:'Segoe UI',system-ui,sans-serif;
+display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;}
+.box{text-align:center;padding:40px;max-width:380px;}
+h2{color:#06b6d4;margin-bottom:12px;}p{color:#6b7280;font-size:13px;}
+input{background:#111827;border:1px solid #1f2937;color:#e5e7eb;padding:10px 14px;
+border-radius:6px;width:100%;margin:16px 0 8px;font-size:14px;box-sizing:border-box;}
+button{background:#06b6d4;color:#000;border:none;border-radius:6px;padding:10px 24px;
+font-weight:700;cursor:pointer;font-size:14px;width:100%;}
+</style></head><body><div class="box">
+<h2>GHE Edge Engine</h2>
+<p>Enter your subscriber access key to view today's signals.</p>
+<form method="get">
+<input type="text" name="key" placeholder="Access key" autofocus>
+<button type="submit">Access Dashboard</button>
+</form>
+<p style="margin-top:20px;font-size:11px">Access key included in your Gumroad receipt.<br>
+Questions? grayhorizonsenterprise@gmail.com</p>
+</div></body></html>""", 401
+
+    import json as _json
+    with CACHE_LOCK:
+        plan    = dict(CACHE.get("action_plan") or {})
+        regime  = CACHE.get("regime", "UNKNOWN")
+        updated = CACHE.get("last_updated", "")
+        loading = CACHE.get("loading", True)
+    plan_json = _json.dumps(plan)
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="900">
+<title>GHE Edge Engine — Member Dashboard</title>
+<style>
+:root{{--bg:#0a0e1a;--panel:#111827;--border:#1f2937;--text:#e5e7eb;--muted:#6b7280;
+--green:#10b981;--yellow:#f59e0b;--orange:#f97316;--red:#ef4444;--blue:#3b82f6;
+--purple:#8b5cf6;--cyan:#06b6d4;}}
+*{{box-sizing:border-box;margin:0;padding:0;}}
+body{{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;}}
+.header{{background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);border-bottom:1px solid var(--border);
+padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}}
+.header h1{{font-size:18px;font-weight:700;letter-spacing:1px;color:#fff;}}
+.header h1 span{{color:var(--cyan);}}
+.badge{{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;}}
+.regime-BULL{{background:#064e3b;color:var(--green);border:1px solid var(--green);}}
+.regime-BEAR{{background:#450a0a;color:var(--red);border:1px solid var(--red);}}
+.regime-CHOP{{background:#451a03;color:var(--yellow);border:1px solid var(--yellow);}}
+.regime-UNKNOWN{{background:#1f2937;color:var(--muted);border:1px solid var(--border);}}
+.sub-badge{{background:#0c2a36;color:var(--cyan);border:1px solid var(--cyan);padding:4px 10px;
+border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;}}
+.updated{{font-size:11px;color:var(--muted);}}
+.action-center{{background:linear-gradient(135deg,#0d1f0d 0%,#0a1628 100%);
+border-bottom:2px solid var(--green);padding:16px 24px;}}
+.ac-title{{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;
+letter-spacing:2px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}}
+.pulse-dot{{width:8px;height:8px;border-radius:50%;background:var(--green);
+animation:pulse 1.5s ease-in-out infinite;}}
+@keyframes pulse{{0%,100%{{opacity:.4}}50%{{opacity:1}}}}
+.plays-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;}}
+.play-card{{background:rgba(0,0,0,.4);border-radius:10px;padding:14px 16px;
+border:1px solid rgba(255,255,255,.06);}}
+.play-card-header{{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}}
+.play-type{{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}}
+.play-ticker{{font-size:20px;font-weight:800;color:#fff;}}
+.play-sub{{font-size:11px;color:var(--muted);margin-top:1px;}}
+.play-action{{display:inline-block;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;
+background:var(--green);color:#000;}}
+.play-action.crypto{{background:var(--purple);color:#fff;}}
+.play-action.bet{{background:var(--yellow);color:#000;}}
+.play-rows{{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;}}
+.play-stat-label{{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}}
+.play-stat-value{{font-size:13px;font-weight:700;color:var(--text);margin-top:1px;}}
+.play-stat-value.green{{color:var(--green);}}
+.play-stat-value.red{{color:var(--red);}}
+.play-stat-value.yellow{{color:var(--yellow);}}
+.play-reason{{font-size:10px;color:var(--muted);margin-top:8px;
+border-top:1px solid rgba(255,255,255,.05);padding-top:6px;}}
+.proj-row{{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6;}}
+.proj-val{{color:var(--green);font-weight:700;}}
+.pp-header{{font-size:10px;font-weight:700;color:var(--yellow);text-transform:uppercase;
+letter-spacing:1px;padding:8px 0 4px;border-top:1px solid var(--border);}}
+.pp-badge{{display:inline-block;background:#451a03;color:var(--yellow);padding:2px 8px;
+border-radius:4px;font-size:9px;font-weight:700;margin-bottom:6px;}}
+.no-plays{{color:var(--muted);font-size:13px;padding:16px 0;}}
+.footer{{text-align:center;padding:28px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);}}
+.loading-msg{{text-align:center;padding:60px;color:var(--muted);font-size:14px;}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>GRAY HORIZONS <span>EDGE ENGINE</span></h1>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span class="badge regime-{regime}">{regime}</span>
+    <span class="sub-badge">MEMBER</span>
+    <span class="updated">Updated: {updated or 'loading...'}</span>
+  </div>
+</div>
+
+<div class="action-center">
+  <div class="ac-title">
+    <div class="pulse-dot"></div>
+    TODAY'S PLAYS — EXACT DOLLAR ACTIONS
+    <span style="margin-left:auto;font-size:10px;color:var(--muted)" id="gen-time">
+      {(plan.get('summary') or {}).get('generated', '')}
+    </span>
+  </div>
+  <div class="plays-grid" id="plays-grid">
+    {"<div class='loading-msg'>Signals loading — refresh in 2 minutes.</div>" if loading or not plan else ""}
+  </div>
+</div>
+
+<div class="footer">
+  Gray Horizons Edge Engine &mdash; Member Access &mdash; Page auto-refreshes every 15 min.<br>
+  Not financial advice. AI-generated signals for informational purposes only.
+</div>
+
+<script>
+const plan = {plan_json};
+
+function renderPlays() {{
+  const grid = document.getElementById('plays-grid');
+  if (!plan || !plan.summary) return;
+  let html = '';
+
+  (plan.stocks || []).forEach((p, i) => {{
+    const proj = p.proj || {{}};
+    const projRow = (proj.profit_100 !== undefined) ? `
+      <div class="proj-row">If you invest &rarr;
+        <strong>$100</strong>: <span class="proj-val">+$${{(+proj.profit_100||0).toFixed(2)}}</span> &nbsp;|&nbsp;
+        <strong>$500</strong>: <span class="proj-val">+$${{(+proj.profit_500||0).toFixed(2)}}</span> &nbsp;|&nbsp;
+        <strong>$1,000</strong>: <span class="proj-val">+$${{(+proj.profit_1000||0).toFixed(2)}}</span>
+        &mdash; ~${{proj.weeks_est||'?'}} wks
+      </div>` : '';
+    html += `<div class="play-card">
+      <div class="play-card-header">
+        <div>
+          <div class="play-type">Stock #${{p.rank}} &bull; Robinhood</div>
+          <div class="play-ticker">${{p.ticker}}</div>
+          <div class="play-sub">Score ${{p.score}} &bull; Entry $${{(+p.entry||0).toFixed(2)}}</div>
+        </div>
+        <span class="play-action">BUY NOW</span>
+      </div>
+      <div class="play-rows">
+        <div class="play-stat"><div class="play-stat-label">Invest</div>
+          <div class="play-stat-value yellow">$${{p.dollar_in}}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Target</div>
+          <div class="play-stat-value green">$${{p.target}} (+${{p.target_pct}}%)</div></div>
+        <div class="play-stat"><div class="play-stat-label">Stop Loss</div>
+          <div class="play-stat-value red">$${{p.stop}} (-${{p.stop_pct}}%)</div></div>
+        <div class="play-stat"><div class="play-stat-label">Risk/Reward</div>
+          <div class="play-stat-value">${{p.rr}}:1</div></div>
+        <div class="play-stat"><div class="play-stat-label">Profit at Target</div>
+          <div class="play-stat-value green">+$${{p.profit}}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Shares (~)</div>
+          <div class="play-stat-value">${{p.shares}}</div></div>
+      </div>
+      <div class="play-reason">Signal: ${{p.reason}}</div>
+      ${{projRow}}
+    </div>`;
+  }});
+
+  (plan.crypto || []).forEach(p => {{
+    html += `<div class="play-card">
+      <div class="play-card-header">
+        <div>
+          <div class="play-type">Crypto #${{p.rank}} &bull; Coinbase / CashApp</div>
+          <div class="play-ticker">${{p.symbol}}</div>
+          <div class="play-sub">${{p.coin}} &bull; Entry $${{(+p.entry||0).toLocaleString()}}</div>
+        </div>
+        <span class="play-action crypto">BUY NOW</span>
+      </div>
+      <div class="play-rows">
+        <div class="play-stat"><div class="play-stat-label">Invest</div>
+          <div class="play-stat-value yellow">$${{p.dollar_in}}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Target</div>
+          <div class="play-stat-value green">+${{p.target_pct}}%</div></div>
+        <div class="play-stat"><div class="play-stat-label">Stop Loss</div>
+          <div class="play-stat-value red">-${{p.stop_pct}}%</div></div>
+        <div class="play-stat"><div class="play-stat-label">Risk/Reward</div>
+          <div class="play-stat-value">${{p.rr}}:1</div></div>
+        <div class="play-stat"><div class="play-stat-label">Profit at Target</div>
+          <div class="play-stat-value green">+$${{p.profit}}</div></div>
+      </div>
+      <div class="play-reason">Signal: ${{p.reason}}</div>
+    </div>`;
+  }});
+
+  (plan.bets || []).forEach(p => {{
+    html += `<div class="play-card">
+      <div class="play-card-header">
+        <div>
+          <div class="play-type">Bet #${{p.rank}} &bull; ${{p.platform}}</div>
+          <div class="play-ticker" style="font-size:14px">${{p.bet_on}}</div>
+          <div class="play-sub">${{p.game}}</div>
+        </div>
+        <span class="play-action bet">BET</span>
+      </div>
+      <div class="play-rows">
+        <div class="play-stat"><div class="play-stat-label">Wager</div>
+          <div class="play-stat-value yellow">$${{p.wager}}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Odds</div>
+          <div class="play-stat-value">${{p.odds_str}}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Win Probability</div>
+          <div class="play-stat-value green">${{p.win_pct}}%</div></div>
+        <div class="play-stat"><div class="play-stat-label">Payout if Win</div>
+          <div class="play-stat-value green">+$${{p.payout}}</div></div>
+        <div class="play-stat"><div class="play-stat-label">Edge</div>
+          <div class="play-stat-value">+${{p.edge}}%</div></div>
+        <div class="play-stat"><div class="play-stat-label">Confidence</div>
+          <div class="play-stat-value">${{p.confidence}}</div></div>
+      </div>
+    </div>`;
+  }});
+
+  if (plan.power_plays && plan.power_plays.length) {{
+    html += `<div style="grid-column:1/-1;margin-top:4px">
+      <div class="pp-header">&#9889; Power Plays &mdash; Max Return Bets ($100-$200 in)</div>
+    </div>`;
+    plan.power_plays.forEach((pp, i) => {{
+      const raw = +pp.payout || 0;
+      const payFmt = raw >= 1000 ? '$' + (raw/1000).toFixed(1) + 'K' : '$' + raw.toFixed(2);
+      html += `<div class="play-card" style="border-color:#f59e0b30">
+        <div class="pp-badge">Power Play #${{i+1}}</div>
+        <div class="play-card-header">
+          <div>
+            <div class="play-type">${{pp.sport||'BET'}} &bull; ${{pp.book||'Sportsbook'}}</div>
+            <div class="play-ticker" style="font-size:15px;line-height:1.2">${{pp.bet_on}}</div>
+            <div class="play-sub" style="max-width:220px;white-space:normal">${{pp.game}}</div>
+          </div>
+          <span class="play-action bet">BET $${{pp.wager}}</span>
+        </div>
+        <div class="play-rows">
+          <div class="play-stat"><div class="play-stat-label">Entry Wager</div>
+            <div class="play-stat-value yellow">$${{pp.wager}}</div></div>
+          <div class="play-stat"><div class="play-stat-label">Potential Payout</div>
+            <div class="play-stat-value" style="color:#fcd34d;font-size:20px;font-weight:800">${{payFmt}}</div></div>
+          <div class="play-stat"><div class="play-stat-label">Odds</div>
+            <div class="play-stat-value">${{pp.odds_str}}</div></div>
+          <div class="play-stat"><div class="play-stat-label">Win %</div>
+            <div class="play-stat-value green">${{pp.win_pct}}%</div></div>
+          <div class="play-stat"><div class="play-stat-label">Confidence</div>
+            <div class="play-stat-value">${{pp.confidence}}</div></div>
+        </div>
+      </div>`;
+    }});
+  }}
+
+  if (!html) {{
+    html = `<div class="no-plays">No high-confidence plays right now — signals refresh every 30 min. Check back after market open.</div>`;
+  }}
+
+  const s = plan.summary || {{}};
+  const proj = s.projection_13w || [];
+  html += `<div class="play-card" style="border-color:#06b6d430;background:rgba(6,182,212,.05);grid-column:1/-1">
+    <div class="play-type" style="color:var(--cyan)">Compound Growth Projection (18% avg weekly gain)</div>
+    <div class="play-rows" style="margin-top:10px">
+      <div class="play-stat"><div class="play-stat-label">Bankroll</div>
+        <div class="play-stat-value">$${{s.bankroll||'--'}}</div></div>
+      <div class="play-stat"><div class="play-stat-label">Week 4</div>
+        <div class="play-stat-value green">$${{(proj[3]||{{}}).balance||'--'}}</div></div>
+      <div class="play-stat"><div class="play-stat-label">Week 8</div>
+        <div class="play-stat-value green">$${{(proj[7]||{{}}).balance||'--'}}</div></div>
+      <div class="play-stat"><div class="play-stat-label">Week 12</div>
+        <div class="play-stat-value green">$${{(proj[11]||{{}}).balance||'--'}}</div></div>
+      <div class="play-stat"><div class="play-stat-label">Max Upside Today</div>
+        <div class="play-stat-value green">+$${{s.max_upside||'--'}}</div></div>
+    </div>
+    <div class="play-reason" style="margin-top:8px">
+      Pull profits at $1,000+ milestone. Reinvest 70%, pocket 30%. Bi-weekly rebalance.
+    </div>
+  </div>`;
+
+  grid.innerHTML = html;
+}}
+
+renderPlays();
+</script>
+</body>
+</html>"""
 
 # ══════════════════════════════════════════════════════════════════════════════
 # STARTUP
