@@ -177,7 +177,7 @@ def domain_search(token: str, domain: str) -> list:
             data = rr.json()
             status = data.get("status", "")
             if status in ("done", "complete", "completed", "finished"):
-                return data.get("emails", [])
+                return data.get("data") or data.get("emails") or []
             if status in ("error", "failed"):
                 print(f"[SNOV] Task failed for {domain}")
                 return []
@@ -197,7 +197,7 @@ def is_decision_maker(title: str) -> bool:
 
 
 def parse_email_record(rec: dict, domain: str, niche: str) -> dict | None:
-    email = (rec.get("value") or "").strip().lower()
+    email = (rec.get("email") or rec.get("value") or "").strip().lower()
     if not email or "@" not in email:
         return None
 
@@ -209,7 +209,7 @@ def parse_email_record(rec: dict, domain: str, niche: str) -> dict | None:
     if prefix in role:
         return None
 
-    status = (rec.get("emailStatus") or rec.get("email_status") or "").lower()
+    status = (rec.get("emailStatus") or rec.get("email_status") or rec.get("status") or "").lower()
     if status in ("invalid", "bounced", "unverifiable"):
         return None
 

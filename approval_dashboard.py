@@ -2514,14 +2514,12 @@ def test_snov():
                     break
                 if st in ("done", "complete", "completed", "finished"):
                     raw = r3.json()
-                    lines.append(f"&nbsp;&nbsp;<b>RAW RESULT:</b> {str(raw)[:600]}")
-                    emails = (raw.get("emails") or raw.get("data") or
-                              raw.get("result") or raw.get("items") or [])
+                    emails = raw.get("data") or raw.get("emails") or []
                     break
             lines.append(f"&nbsp;&nbsp;<b style=color:#22c55e>Emails found: {len(emails)}</b>")
-            for e in emails[:3]:
-                nm = f"{e.get('firstName','') or e.get('first_name','')} {e.get('lastName','') or e.get('last_name','')}".strip()
-                lines.append(f"&nbsp;&nbsp;&nbsp;&nbsp;{nm} | {e.get('position') or e.get('title','')} | {e.get('value','')}")
+            for e in emails[:5]:
+                addr = e.get("email") or e.get("value", "")
+                lines.append(f"&nbsp;&nbsp;&nbsp;&nbsp;{addr}")
 
         # Hunter.io status
         hunter_key = _os.getenv("HUNTER_API_KEY", "")
