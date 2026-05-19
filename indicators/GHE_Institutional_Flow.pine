@@ -1,0 +1,238 @@
+// GHE Institutional Flow — Gray Horizons Enterprise
+// Smart Money Concepts: Order Blocks, Fair Value Gaps, Liquidity Levels,
+// Break of Structure, and Market Structure Shift — all in one indicator.
+// Built on ICT methodology. Works on any market, any timeframe.
+//@version=5
+indicator("GHE Institutional Flow", overlay=true, max_lines_count=500, max_labels_count=500, max_boxes_count=500)
+
+// ══════════════════════════════════════════════════════════════════════════════
+// INPUTS
+// ══════════════════════════════════════════════════════════════════════════════
+grp_ob   = "Order Blocks"
+grp_fvg  = "Fair Value Gaps"
+grp_liq  = "Liquidity Levels"
+grp_bos  = "Structure"
+grp_ui   = "Display"
+
+show_bull_ob  = input.bool(true,  "Show Bullish Order Blocks",  group=grp_ob)
+show_bear_ob  = input.bool(true,  "Show Bearish Order Blocks",  group=grp_ob)
+ob_lookback   = input.int(10,     "OB Lookback Bars",           group=grp_ob, minval=3, maxval=50)
+ob_extend     = input.int(20,     "Extend OB Boxes (bars)",     group=grp_ob, minval=1)
+bull_ob_col   = input.color(color.new(#00e676, 80), "Bullish OB Color", group=grp_ob)
+bear_ob_col   = input.color(color.new(#ff1744, 80), "Bearish OB Color", group=grp_ob)
+
+show_fvg      = input.bool(true,  "Show Fair Value Gaps",       group=grp_fvg)
+fvg_min_pct   = input.float(0.05, "Min FVG Size (% of price)",  group=grp_fvg, step=0.01)
+fvg_extend    = input.int(15,     "Extend FVG Boxes (bars)",    group=grp_fvg, minval=1)
+bull_fvg_col  = input.color(color.new(#00bcd4, 85), "Bullish FVG Color", group=grp_fvg)
+bear_fvg_col  = input.color(color.new(#ff9800, 85), "Bearish FVG Color", group=grp_fvg)
+
+show_liq      = input.bool(true,  "Show Liquidity Levels",      group=grp_liq)
+liq_lookback  = input.int(20,     "Liquidity Lookback",         group=grp_liq, minval=5)
+liq_tolerance = input.float(0.1,  "Equal High/Low Tolerance (%)",group=grp_liq, step=0.05)
+liq_col       = input.color(color.new(#ffd600, 70), "Liquidity Color", group=grp_liq)
+
+show_bos      = input.bool(true,  "Show Break of Structure",    group=grp_bos)
+show_choch    = input.bool(true,  "Show Market Structure Shift (ChoCH)", group=grp_bos)
+swing_len     = input.int(10,     "Swing Detection Length",     group=grp_bos, minval=3)
+bos_col       = input.color(color.new(#00e676, 0),  "BOS Color",   group=grp_bos)
+choch_col     = input.color(color.new(#e040fb, 0),  "ChoCH Color", group=grp_bos)
+
+show_dash     = input.bool(true,  "Show Dashboard",             group=grp_ui)
+dash_pos      = input.string("Top Right", "Dashboard Position", group=grp_ui,
+                  options=["Top Right","Top Left","Bottom Right","Bottom Left"])
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SWING POINTS
+// ══════════════════════════════════════════════════════════════════════════════
+swing_high = ta.pivothigh(high, swing_len, swing_len)
+swing_low  = ta.pivotlow(low,  swing_len, swing_len)
+
+var float last_sh = na
+var float last_sl = na
+var int   last_sh_bar = na
+var int   last_sl_bar = na
+
+if not na(swing_high)
+    last_sh     := swing_high
+    last_sh_bar := bar_index - swing_len
+
+if not na(swing_low)
+    last_sl     := swing_low
+    last_sl_bar := bar_index - swing_len
+
+// ══════════════════════════════════════════════════════════════════════════════
+// BREAK OF STRUCTURE + CHOCH
+// ══════════════════════════════════════════════════════════════════════════════
+var bool bull_trend = true
+
+bos_bull  = show_bos  and close > last_sh and bull_trend  == false and not na(last_sh)
+bos_bear  = show_bos  and close < last_sl and bull_trend  == true  and not na(last_sl)
+choch_up  = show_choch and close > last_sh and bull_trend == false and not na(last_sh)
+choch_dn  = show_choch and close < last_sl and bull_trend == true  and not na(last_sl)
+
+// Detect ChoCH (first break after trend shift) vs BOS (continuation)
+var bool first_break = true
+
+if bos_bull or choch_up
+    if first_break
+        if show_choch
+            line.new(last_sh_bar, last_sh, bar_index, last_sh,
+              color=choch_col, width=2, style=line.style_dashed)
+            label.new(bar_index, last_sh, "ChoCH",
+              style=label.style_label_left, color=choch_col,
+              textcolor=color.white, size=size.tiny)
+        first_break := false
+    else
+        if show_bos
+            line.new(last_sh_bar, last_sh, bar_index, last_sh,
+              color=bos_col, width=1)
+            label.new(bar_index, last_sh, "BOS",
+              style=label.style_label_left, color=bos_col,
+              textcolor=color.black, size=size.tiny)
+    bull_trend := true
+
+if bos_bear or choch_dn
+    if first_break
+        if show_choch
+            line.new(last_sl_bar, last_sl, bar_index, last_sl,
+              color=choch_col, width=2, style=line.style_dashed)
+            label.new(bar_index, last_sl, "ChoCH",
+              style=label.style_label_right, color=choch_col,
+              textcolor=color.white, size=size.tiny)
+        first_break := false
+    else
+        if show_bos
+            line.new(last_sl_bar, last_sl, bar_index, last_sl,
+              color=bos_col, width=1)
+            label.new(bar_index, last_sl, "BOS",
+              style=label.style_label_right, color=bos_col,
+              textcolor=color.black, size=size.tiny)
+    bull_trend := false
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ORDER BLOCKS
+// ══════════════════════════════════════════════════════════════════════════════
+// Bullish OB: last bearish candle before a strong bullish move (displacement)
+is_displacement_up = close > close[1] and (close - open) > ta.atr(14) * 1.2
+is_displacement_dn = close < close[1] and (open - close) > ta.atr(14) * 1.2
+
+// Bearish OB: last bullish candle before a strong bearish displacement
+bull_ob_cond = show_bull_ob and is_displacement_up and open[1] > close[1]  // prev bar was bearish
+bear_ob_cond = show_bear_ob and is_displacement_dn and open[1] < close[1]  // prev bar was bullish
+
+if bull_ob_cond
+    box.new(bar_index - 1, high[1], bar_index + ob_extend, low[1],
+      bgcolor=bull_ob_col, border_color=color.new(#00e676, 40),
+      border_width=1)
+
+if bear_ob_cond
+    box.new(bar_index - 1, high[1], bar_index + ob_extend, low[1],
+      bgcolor=bear_ob_col, border_color=color.new(#ff1744, 40),
+      border_width=1)
+
+// ══════════════════════════════════════════════════════════════════════════════
+// FAIR VALUE GAPS
+// ══════════════════════════════════════════════════════════════════════════════
+// Bullish FVG: low[0] > high[2] — gap left between candle 2 and candle 0
+// Bearish FVG: high[0] < low[2]
+fvg_min_size = close * (fvg_min_pct / 100)
+
+bull_fvg = show_fvg and low > high[2] and (low - high[2]) >= fvg_min_size
+bear_fvg = show_fvg and high < low[2] and (low[2] - high) >= fvg_min_size
+
+if bull_fvg
+    box.new(bar_index - 2, low, bar_index + fvg_extend, high[2],
+      bgcolor=bull_fvg_col, border_color=color.new(#00bcd4, 50),
+      border_width=1, border_style=line.style_dotted)
+
+if bear_fvg
+    box.new(bar_index - 2, low[2], bar_index + fvg_extend, high,
+      bgcolor=bear_fvg_col, border_color=color.new(#ff9800, 50),
+      border_width=1, border_style=line.style_dotted)
+
+// ══════════════════════════════════════════════════════════════════════════════
+// LIQUIDITY LEVELS (Equal Highs / Equal Lows)
+// ══════════════════════════════════════════════════════════════════════════════
+if show_liq
+    tol = high * (liq_tolerance / 100)
+    // Check if current pivot high matches a previous one (equal highs = liquidity above)
+    if not na(swing_high)
+        for i = 1 to math.min(liq_lookback, bar_index - swing_len - 1)
+            past_high = ta.pivothigh(high, swing_len, swing_len + i)
+            if not na(past_high) and math.abs(swing_high - past_high) <= tol
+                line.new(bar_index - swing_len - i, past_high,
+                         bar_index - swing_len, swing_high,
+                         color=liq_col, width=1, style=line.style_dotted)
+                label.new(bar_index - swing_len, swing_high + tol * 0.5,
+                  "EQH", style=label.style_none,
+                  textcolor=liq_col, size=size.tiny)
+                break
+
+    if not na(swing_low)
+        for i = 1 to math.min(liq_lookback, bar_index - swing_len - 1)
+            past_low = ta.pivotlow(low, swing_len, swing_len + i)
+            if not na(past_low) and math.abs(swing_low - past_low) <= tol
+                line.new(bar_index - swing_len - i, past_low,
+                         bar_index - swing_len, swing_low,
+                         color=liq_col, width=1, style=line.style_dotted)
+                label.new(bar_index - swing_len, swing_low - tol * 0.5,
+                  "EQL", style=label.style_none,
+                  textcolor=liq_col, size=size.tiny)
+                break
+
+// ══════════════════════════════════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════════════════════════════════
+dp = dash_pos == "Top Right"    ? position.top_right :
+     dash_pos == "Top Left"     ? position.top_left  :
+     dash_pos == "Bottom Right" ? position.bottom_right : position.bottom_left
+
+var table dash = table.new(dp, 2, 7, border_width=1,
+  border_color=color.new(color.gray, 60),
+  frame_color=color.new(color.gray, 40), frame_width=1)
+
+if show_dash and barstate.islast
+    hc = color.new(#1a237e, 0)
+    bc = color.new(#0d1117, 88)
+
+    table.cell(dash, 0, 0, "GHE INSTITUTIONAL FLOW", bgcolor=hc,
+      text_color=color.white, text_size=size.tiny, text_halign=text.align_center)
+    table.cell(dash, 1, 0, syminfo.ticker + " " + timeframe.period,
+      bgcolor=hc, text_color=color.yellow, text_size=size.tiny)
+
+    table.cell(dash, 0, 1, "Trend Bias", bgcolor=bc, text_color=color.white, text_size=size.tiny)
+    table.cell(dash, 1, 1, bull_trend ? "BULLISH" : "BEARISH",
+      bgcolor=bc, text_color=bull_trend ? color.new(#00e676,0) : color.new(#ff1744,0), text_size=size.tiny)
+
+    table.cell(dash, 0, 2, "Last OB", bgcolor=bc, text_color=color.white, text_size=size.tiny)
+    table.cell(dash, 1, 2, bull_ob_cond ? "BULL OB" : bear_ob_cond ? "BEAR OB" : "--",
+      bgcolor=bc, text_color=bull_ob_cond ? color.green : bear_ob_cond ? color.red : color.gray, text_size=size.tiny)
+
+    table.cell(dash, 0, 3, "FVG", bgcolor=bc, text_color=color.white, text_size=size.tiny)
+    table.cell(dash, 1, 3, bull_fvg ? "BULL GAP" : bear_fvg ? "BEAR GAP" : "--",
+      bgcolor=bc, text_color=bull_fvg ? color.aqua : bear_fvg ? color.orange : color.gray, text_size=size.tiny)
+
+    table.cell(dash, 0, 4, "Structure", bgcolor=bc, text_color=color.white, text_size=size.tiny)
+    table.cell(dash, 1, 4, bos_bull or bos_bear ? "BOS" : choch_up or choch_dn ? "ChoCH" : "--",
+      bgcolor=bc, text_color=bos_bull or choch_up ? bos_col : bos_bear or choch_dn ? choch_col : color.gray, text_size=size.tiny)
+
+    table.cell(dash, 0, 5, "Last Swing H", bgcolor=bc, text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 5, not na(last_sh) ? str.tostring(last_sh, "#.##") : "--",
+      bgcolor=bc, text_color=color.gray, text_size=size.tiny)
+
+    table.cell(dash, 0, 6, "Last Swing L", bgcolor=bc, text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 6, not na(last_sl) ? str.tostring(last_sl, "#.##") : "--",
+      bgcolor=bc, text_color=color.gray, text_size=size.tiny)
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ALERTS
+// ══════════════════════════════════════════════════════════════════════════════
+alertcondition(bull_ob_cond,  "GHE: Bullish Order Block",  "Bullish OB detected — potential institutional demand zone")
+alertcondition(bear_ob_cond,  "GHE: Bearish Order Block",  "Bearish OB detected — potential institutional supply zone")
+alertcondition(bull_fvg,      "GHE: Bullish FVG",          "Bullish Fair Value Gap — imbalance above price")
+alertcondition(bear_fvg,      "GHE: Bearish FVG",          "Bearish Fair Value Gap — imbalance below price")
+alertcondition(bos_bull,      "GHE: Bullish BOS",          "Break of Structure — bullish continuation confirmed")
+alertcondition(bos_bear,      "GHE: Bearish BOS",          "Break of Structure — bearish continuation confirmed")
+alertcondition(choch_up,      "GHE: ChoCH Bullish",        "Market Structure Shift — potential trend reversal UP")
+alertcondition(choch_dn,      "GHE: ChoCH Bearish",        "Market Structure Shift — potential trend reversal DOWN")
