@@ -947,28 +947,42 @@ def run_batch_send(limit=None):
     mask    = (df["status"] == "pending") & (df["email"].fillna("").str.strip() != "")
     pending = df[mask]
 
-    # Build global "already sent" wall — email + domain level, CSV + DB
+    # Build global "already sent" wall — email + domain + company name level, CSV + DB
     opt_outs      = load_opt_outs()
     ever_sent     = set()
     ever_domains  = set()
+    ever_companies = set()  # company name dedup — catches same company with different emails
+
+    def _norm_company(c):
+        """Normalize company name for dedup — lowercase, strip punctuation/suffixes."""
+        import re
+        c = str(c).strip().lower()
+        c = re.sub(r'\b(inc|llc|ltd|corp|co|management|services|solutions|group|associates|properties|property)\b', '', c)
+        c = re.sub(r'[^a-z0-9 ]', '', c)
+        return re.sub(r'\s+', ' ', c).strip()
 
     # 1. Load from PostgreSQL (persistent across redeploys — authoritative source)
     try:
         _conn = _get_db()
         if _conn:
             with _conn.cursor() as _cur:
-                _cur.execute("SELECT email, website FROM leads WHERE status IN ('sent','opted_out','skipped')")
-                for (_e, _w) in _cur.fetchall():
+                _cur.execute("SELECT email, website, company FROM leads WHERE status IN ('sent','opted_out','skipped')")
+                for (_e, _w, _c) in _cur.fetchall():
                     if _e:
                         _em = str(_e).strip().lower()
                         ever_sent.add(_em)
                         if "@" in _em:
                             ever_domains.add(_em.split("@")[-1])
-                    # Also block by website domain so same company ≠ re-emailed via different address
+                    # Block by website domain so same company ≠ re-emailed via different address
                     if _w:
                         _wd = str(_w).strip().lower().replace("https://","").replace("http://","").replace("www.","").split("/")[0]
                         if _wd and "." in _wd:
                             ever_domains.add(_wd)
+                    # Block by normalized company name — catches same company, different email/domain
+                    if _c:
+                        _nc = _norm_company(_c)
+                        if _nc:
+                            ever_companies.add(_nc)
             _conn.close()
     except Exception as _ex:
         print(f"[BATCH] DB dedup load error (non-fatal): {_ex}", flush=True)
@@ -995,14 +1009,23 @@ def run_batch_send(limit=None):
     seen_emails = set()
     rows = []
     for i, row in pending.iterrows():
-        email_key  = str(row["email"]).strip().lower()
-        domain_key = email_key.split("@")[-1] if "@" in email_key else ""
-        if email_key in opt_outs or email_key in ever_sent or domain_key in ever_domains:
+        email_key   = str(row["email"]).strip().lower()
+        domain_key  = email_key.split("@")[-1] if "@" in email_key else ""
+        company_key = _norm_company(row.get("company", "") or "")
+        already_contacted = (
+            email_key in opt_outs
+            or email_key in ever_sent
+            or domain_key in ever_domains
+            or (company_key and company_key in ever_companies)
+        )
+        if already_contacted:
             df.at[i, "status"] = "sent"   # already contacted — sync status
         elif email_key not in seen_emails:
             seen_emails.add(email_key)
             if domain_key:
-                ever_domains.add(domain_key)  # block rest of run from same company
+                ever_domains.add(domain_key)  # block rest of run from same domain
+            if company_key:
+                ever_companies.add(company_key)  # block rest of run from same company name
             rows.append((i, row))
         else:
             df.at[i, "status"] = "skipped"
