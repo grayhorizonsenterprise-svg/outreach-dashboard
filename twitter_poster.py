@@ -1,9 +1,10 @@
 """
 twitter_poster.py — Gray Horizons Enterprise
-Auto-posts to Twitter/X daily. Three content streams:
-  1. Shadow Clans lore drops + episode teasers (builds audience/IP brand)
-  2. Edge Engine signal previews (drives Signals subscriptions)
-  3. Business tip hooks (drives AI System / service engine leads)
+Auto-posts to Twitter/X daily. Four content streams:
+  1. Edge Engine signal previews (drives $29/mo membership)
+  2. TradingView indicator posts (drives $67 + $79 Gumroad sales)
+  3. Business tip hooks (drives AI automation service leads)
+  4. Engagement questions (builds audience, drives replies)
 
 Setup (one-time, 10 minutes):
   1. Go to developer.twitter.com → Sign in → Create Project → Create App
@@ -47,20 +48,6 @@ WHOP_LINK    = os.getenv("WHOP_INDICATORS_LINK", "https://horizons56.gumroad.com
 
 # ─── Content Pools ────────────────────────────────────────────────────────────
 
-SHADOW_CLANS_POSTS = [
-    "RAIZEN didn't choose exile. He chose something harder.\n\nHonor.\n\n#ShadowClans #darkfantasy #lore",
-    "Three factions. One gate. And the one thing none of them will say out loud.\n\nThey all know what's on the other side.\n\n#ShadowClans #WorldBuilding",
-    "KURO doesn't fight wars.\n\nHe ends them before they start.\n\n#ShadowClans #RavenOrder #darkfantasy",
-    "The Hollow Gate wasn't built to be opened.\n\nVARN opened it anyway.\n\n#ShadowClans #GorillaTitans #lore",
-    "Episode drops this week. The night RAIZEN walked away from everything.\n\n#ShadowClans #cinematic #fantasy",
-    "Wolf Clan. Raven Order. Gorilla Titans.\n\nThree wars. One cause. And one man who knows the truth.\n\n#ShadowClans",
-    "KURO has never lost a war.\n\nBecause he's never fought one.\n\n#ShadowClans #RavenOrder",
-    "The gate is open. The question isn't what came through.\n\nIt's what VARN gave to open it.\n\n#ShadowClans #HollowGate",
-    "Episode 1 drops soon. Follow before the lore starts.\n\n#ShadowClans #darkfantasy #anime #cinematic",
-    "Honor means nothing if you don't have anyone left to protect.\n\nRAIZEN learned that the hard way.\n\n#ShadowClans #WolfClan",
-    "The Raven Order doesn't leave footprints.\n\nThey leave questions.\n\n#ShadowClans #lore #fantasy",
-    "VARN was the strongest warrior in the world.\n\nThe gate changed that definition entirely.\n\n#ShadowClans",
-]
 
 SIGNALS_POSTS = [
     f"""AI scanned the market before you woke up.
@@ -336,7 +323,6 @@ Do you have a written position sizing rule or do you decide in the moment?
 ]
 
 ALL_POSTS = {
-    "shadow_clans": SHADOW_CLANS_POSTS,
     "signals":      SIGNALS_POSTS,
     "indicators":   INDICATOR_POSTS,
     "business_tip": BUSINESS_TIP_POSTS,
@@ -344,11 +330,10 @@ ALL_POSTS = {
 }
 
 DAILY_SCHEDULE = [
-    ("signals",      "13:00"),
-    ("business_tip", "15:00"),
-    ("indicators",   "18:00"),
-    ("engagement",   "21:00"),
-    ("shadow_clans", "01:00"),
+    ("signals",      "13:00"),   # 8am ET — morning signal preview
+    ("business_tip", "15:00"),   # 10am ET — business automation hook
+    ("indicators",   "18:00"),   # 1pm ET — TradingView product post
+    ("engagement",   "21:00"),   # 4pm ET — engagement/question
 ]
 
 # Finance/trading/small-biz accounts whose followers are our target audience
@@ -396,7 +381,7 @@ def load_posted() -> dict:
             return json.loads(POSTED_LOG.read_text())
         except Exception:
             pass
-    return {"shadow_clans": [], "signals": [], "business_tip": []}
+    return {"signals": [], "indicators": [], "business_tip": [], "engagement": []}
 
 
 def save_posted(data: dict):

@@ -270,8 +270,24 @@ def _twitter_scheduler():
     POST_HOURS = {13, 15, 18, 21, 1}
     fired = set()
     time.sleep(120)  # let app stabilize
-    # Fire immediately on startup regardless of hour
-    _run_engine("Twitter Post (startup)", "twitter_poster.py", extra_args=["--force"])
+    # Fire startup post only if we haven't posted in the last 4 hours (prevents redeploy spam)
+    import datetime as _dt2
+    _startup_log = os.path.join(DATA_DIR, "twitter_startup.txt")
+    _do_startup = True
+    try:
+        if os.path.exists(_startup_log):
+            _last = float(open(_startup_log).read().strip())
+            if (time.time() - _last) < 14400:  # 4 hours
+                _do_startup = False
+                print("[TWITTER] Skipping startup post — posted within last 4 hours", flush=True)
+    except Exception:
+        pass
+    if _do_startup:
+        _run_engine("Twitter Post (startup)", "twitter_poster.py", extra_args=["--force"])
+        try:
+            open(_startup_log, "w").write(str(time.time()))
+        except Exception:
+            pass
     fired.add((_dt.datetime.utcnow().date(), _dt.datetime.utcnow().hour))
     while True:
         now = _dt.datetime.utcnow()
