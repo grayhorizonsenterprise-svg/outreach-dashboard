@@ -1,15 +1,12 @@
 """
 snov_scraper.py - Gray Horizons Enterprise
-Snov.io Pro — domain email finder across all niches.
-Reads companies with websites from prospects_raw.csv (no email yet),
-finds decision-maker emails via Snov.io domain search, appends results.
-Runs automatically every 6 hours as part of the main pipeline.
+Uses Snov.io Prospect Search (Find People) to pull Owner/CEO/President
+contacts filtered by industry and company size. No domain guessing.
+Only verified decision-maker emails enter the pipeline.
 
-Setup (one time):
-  1. snov.io → Settings → API → copy API User ID + API Secret
-  2. Add to Railway: SNOV_CLIENT_ID, SNOV_CLIENT_SECRET
-
-Credits: ~1 per email found. 5,000/month = ~5,000 verified leads.
+Railway env vars required:
+  SNOV_CLIENT_ID
+  SNOV_CLIENT_SECRET
 """
 
 import requests
@@ -28,91 +25,49 @@ SNOV_CLIENT_ID = os.getenv("SNOV_CLIENT_ID", "")
 SNOV_SECRET    = os.getenv("SNOV_CLIENT_SECRET", "")
 DB_URL         = os.getenv("DATABASE_URL", "")
 
-TOKEN_URL         = "https://api.snov.io/v1/oauth/access_token"
-DOMAIN_START_URL  = "https://api.snov.io/v2/domain-search/domain-emails/start"
-DOMAIN_RESULT_URL = "https://api.snov.io/v2/domain-search/domain-emails/result/"
+TOKEN_URL      = "https://api.snov.io/v1/oauth/access_token"
+SEARCH_URL     = "https://api.snov.io/v2/prospect-searches"
+VERIFY_URL     = "https://api.snov.io/v1/get-emails-verification-status"
 
-OWNER_TITLES = {
-    "owner", "co-owner", "ceo", "chief executive", "founder", "co-founder",
-    "president", "partner", "principal", "managing director", "general manager",
-    "practice owner", "office manager", "director", "proprietor",
-}
+# Decision maker titles only
+TARGET_TITLES = [
+    "Owner", "CEO", "President", "Co-Owner",
+    "Founder", "Principal", "Managing Director",
+    "General Manager", "Practice Owner",
+]
 
-# Seed domains per niche — real local business websites Snov searches for decision-makers
-NICHE_DOMAINS = {
-    "hoa": [
-        "associa.com","firstservice.com","cmcrealestate.com","amg-fl.com",
-        "wallickandvolk.com","ppminc.com","gradymanagement.com","recon.com",
-        "seabreezecm.com","keystonepacific.com","ccmcnet.com","acm.com",
-        "spectrumam.com","towerhouston.com","globalpropertymanagement.net",
-    ],
-    "hvac": [
-        "airriteairconditioning.com","petrosheating.com","abilenehvac.com",
-        "airandenergyoftampa.com","beehiveac.com","bergelectric.com",
-        "brookstonehvac.com","callashvac.com","cantexinc.com","climatedoctors.com",
-        "comfortairco.com","coolrayhvac.com","dayandnite.net","deltaairconditioning.com",
-        "eagleairconditioning.com","emeraldhvac.com","familyhvac.com",
-    ],
-    "roofing": [
-        "absolutelyroofing.com","aceroofingco.com","advancedroofing.com",
-        "allstatesroofing.com","ameristarroofing.com","arceroofing.com",
-        "atlasroofing.com","aztecroofing.com","barefootroofing.com",
-        "bestroofingcompany.com","blueridgeroofing.com","buildrightroofing.com",
-        "capitalroofing.com","certifiedroofing.com","civilizedroofing.com",
-    ],
-    "plumbing": [
-        "aaaplumbingandheating.com","abcplumbing.com","aceplumbing.com",
-        "actionplumbing.com","advancedplumbing.com","allcityplumbing.com",
-        "alliedplumbing.com","allproserv.com","allstarplumbing.com",
-        "alphaplumbing.com","alwaysreadyplumbing.com","americanplumbing.com",
-        "anytimeplumbing.com","apolloplumbing.com","arrowplumbing.com",
-    ],
-    "landscaping": [
-        "acapulcolandscaping.com","acculawn.com","accuratelawn.com",
-        "aceslandscaping.com","actionlandscaping.com","adamslawncare.com",
-        "addisontreeexperts.com","adelaidelandscaping.com","admirallawn.com",
-        "advancedlawncare.com","agreenthumb.com","alawncare.com",
-        "albertsonlandscaping.com","aldrichlawncare.com","alexanderlawn.com",
-    ],
-    "contractor": [
-        "absoluteconstruction.com","aceconstruction.com","achievebuilders.com",
-        "acmeconstruction.com","acornconstruction.com","actionbuilders.com",
-        "acuitybuilders.com","adamsconstruction.com","adaptivebuilders.com",
-        "adelaideconstruction.com","admiralconstruction.com","advancedbuilders.com",
-        "aegisbuilders.com","aetnabuilding.com","affordablebuilders.com",
-    ],
-    "dental": [
-        "aadentistry.com","abcdental.com","absolutedental.com","accessdental.com",
-        "achievedental.com","acorndental.com","actiondental.com","adamsdds.com",
-        "adelaidedental.com","admiraldental.com","advanceddentistry.com",
-        "aegisdental.com","affordabledental.com","agapedental.com","aglessdental.com",
-    ],
-    "auto": [
-        "aaautorepair.com","abcautorepair.com","absoluteauto.com","accessauto.com",
-        "accurateauto.com","acuteauto.com","adamautorepair.com","adelaideauto.com",
-        "admiralauto.com","advancedauto.com","aegisauto.com","affordableauto.com",
-        "agileauto.com","agmauto.com","airportautorepair.com",
-    ],
-    "pest_control": [
-        "aapestcontrol.com","abcpest.com","absolutepest.com","accesspest.com",
-        "accuratepest.com","acepestcontrol.com","actionpest.com","adapestcontrol.com",
-        "adelaidepest.com","admiralpest.com","advancedpestcontrol.com",
-        "aegispest.com","affordablepest.com","agapepest.com","aggressivepest.com",
-    ],
-    "electrician": [
-        "aaelectrical.com","abcelectrical.com","absoluteelectrical.com",
-        "accesselectrical.com","accurateelectrical.com","aceelectrical.com",
-        "actionelectrical.com","adamelectrical.com","adelaideelectric.com",
-        "admiralelectrical.com","advancedelectrical.com","aegiselectric.com",
-        "affordableelectrical.com","agapeelectrical.com","airportelectric.com",
-    ],
-    "financial": [
-        "aadvisors.com","abcfinancial.com","absolutefinancial.com",
-        "accessfinancial.com","accuratefinancial.com","acefinancial.com",
-        "actionfinancial.com","adamfinancial.com","adelaidefinancial.com",
-        "admiralfinancial.com","advancedfinancial.com","aegisfinancial.com",
-        "affordablefinancial.com","agapefinancial.com","agentfinancial.com",
-    ],
+# Snov.io industry filters mapped to our niches
+NICHE_SEARCHES = [
+    {
+        "niche":    "hoa",
+        "industry": "Real Estate",
+        "keywords": ["HOA", "homeowners association", "community management",
+                     "property management", "association management"],
+        "employees_min": 2,
+        "employees_max": 50,
+    },
+    {
+        "niche":    "hvac",
+        "industry": "Construction",
+        "keywords": ["HVAC", "heating cooling", "air conditioning",
+                     "mechanical contractor", "refrigeration"],
+        "employees_min": 2,
+        "employees_max": 75,
+    },
+    {
+        "niche":    "dental",
+        "industry": "Medical Practice",
+        "keywords": ["dental", "dentistry", "orthodontics",
+                     "oral health", "dental practice"],
+        "employees_min": 2,
+        "employees_max": 30,
+    },
+]
+
+ROLE_PREFIXES = {
+    "info", "contact", "admin", "support", "hello", "office",
+    "sales", "help", "team", "marketing", "noreply", "no-reply",
+    "billing", "accounts", "service", "care", "reception", "front",
 }
 
 
@@ -133,106 +88,142 @@ def get_token() -> str:
     return ""
 
 
-def domain_search(token: str, domain: str) -> list:
-    """Find decision-maker emails at a company domain (v2 async: start → poll)."""
-    headers = {"Authorization": f"Bearer {token}"}
+def search_prospects(token: str, niche_cfg: dict, title: str,
+                     page: int = 1, per_page: int = 50) -> dict:
+    """Search Snov.io for decision makers by title + industry keyword."""
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+    keyword = random.choice(niche_cfg["keywords"])
+    payload = {
+        "jobTitle":        title,
+        "keyword":         keyword,
+        "employeesFrom":   niche_cfg["employees_min"],
+        "employeesTo":     niche_cfg["employees_max"],
+        "page":            page,
+        "perPage":         per_page,
+        "hasEmail":        True,
+    }
     try:
-        # Step 1: start the search — domain goes in query string per Snov.io support
-        r = requests.post(
-            f"{DOMAIN_START_URL}?domain={domain}",
-            headers=headers,
-            timeout=15,
-        )
+        r = requests.post(SEARCH_URL, json=payload, headers=headers, timeout=20)
         if r.status_code == 402:
             print("[SNOV] Credits exhausted")
-            return None
+            return {"exhausted": True}
         if r.status_code == 401:
             print("[SNOV] Token expired")
-            return None
-        if r.status_code not in (200, 202):
-            print(f"[SNOV] Start {r.status_code}: {r.text[:100]}")
-            return []
-
-        data0 = r.json()
-        task_hash = (data0.get("task_hash") or data0.get("taskHash")
-                     or (data0.get("meta") or {}).get("task_hash", ""))
-        if not task_hash:
-            print(f"[SNOV] No task_hash in response: {r.text[:100]}")
-            return []
-
-        # Step 2: poll until complete (max ~30s)
-        for attempt in range(10):
-            time.sleep(3)
-            rr = requests.get(
-                f"{DOMAIN_RESULT_URL}{task_hash}",
-                headers=headers,
-                timeout=15,
-            )
-            if rr.status_code == 402:
-                print("[SNOV] Credits exhausted")
-                return None
-            if rr.status_code != 200:
-                print(f"[SNOV] Poll {rr.status_code}: {rr.text[:80]}")
-                return []
-            data = rr.json()
-            status = data.get("status", "")
-            if status in ("done", "complete", "completed", "finished"):
-                return data.get("data") or data.get("emails") or []
-            if status in ("error", "failed"):
-                print(f"[SNOV] Task failed for {domain}")
-                return []
-            # still processing — continue polling
-
-        print(f"[SNOV] Timeout polling {domain}")
+            return {"expired": True}
+        if r.status_code != 200:
+            print(f"[SNOV] Search error {r.status_code}: {r.text[:150]}")
+            return {}
+        return r.json()
     except Exception as e:
-        print(f"[SNOV] Error: {e}")
-    return []
+        print(f"[SNOV] Search exception: {e}")
+        return {}
 
 
-def is_decision_maker(title: str) -> bool:
-    if not title:
-        return False
-    t = title.lower()
-    return any(o in t for o in OWNER_TITLES)
+def verify_email(token: str, email: str) -> bool:
+    """Returns True if email is valid/deliverable."""
+    headers = {"Authorization": f"Bearer {token}"}
+    try:
+        r = requests.post(VERIFY_URL,
+                          json={"emails": [email]},
+                          headers=headers, timeout=15)
+        if r.status_code != 200:
+            return True  # assume valid if verify fails — don't discard
+        data = r.json()
+        statuses = data.get("data", [])
+        if not statuses:
+            return True
+        status = str(statuses[0].get("status", "")).lower()
+        return status not in ("invalid", "bounced", "undeliverable", "spam")
+    except Exception:
+        return True
 
 
-def parse_email_record(rec: dict, domain: str, niche: str) -> dict | None:
-    email = (rec.get("email") or rec.get("value") or "").strip().lower()
+def parse_prospect(rec: dict, niche: str) -> dict | None:
+    """Extract and validate a single prospect record."""
+    email = str(rec.get("email") or "").strip().lower()
     if not email or "@" not in email:
         return None
 
-    # Skip role/generic addresses
     prefix = email.split("@")[0]
-    role = {"info", "contact", "admin", "support", "hello", "office",
-            "sales", "help", "team", "marketing", "noreply", "no-reply",
-            "billing", "accounts", "service", "care"}
-    if prefix in role:
+    if prefix in ROLE_PREFIXES:
         return None
 
-    status = (rec.get("emailStatus") or rec.get("email_status") or rec.get("status") or "").lower()
-    if status in ("invalid", "bounced", "unverifiable"):
-        return None
-
-    first = (rec.get("firstName") or rec.get("first_name") or "").strip()
-    last  = (rec.get("lastName")  or rec.get("last_name")  or "").strip()
-    name  = f"{first} {last}".strip()
-    title = (rec.get("position") or rec.get("title") or "").strip()
+    first  = str(rec.get("firstName") or rec.get("first_name") or "").strip()
+    last   = str(rec.get("lastName")  or rec.get("last_name")  or "").strip()
+    name   = f"{first} {last}".strip()
+    title  = str(rec.get("jobTitle") or rec.get("position") or rec.get("title") or "").strip()
+    company = str(rec.get("companyName") or rec.get("company") or "").strip()
+    website = str(rec.get("companyWebsite") or rec.get("website") or "").strip()
+    if website and not website.startswith("http"):
+        website = f"https://{website}"
 
     return {
         "email":   email,
         "name":    name,
-        "company": domain,
+        "company": company,
         "title":   title,
         "niche":   niche,
-        "website": f"https://{domain}",
-        "source":  "snov_domain",
+        "website": website,
+        "source":  "snov_prospect_search",
         "status":  "pending",
     }
 
 
-def run(max_contacts: int = 400):
+def load_existing(rows: list) -> tuple[set, set, set]:
+    """Load already-contacted emails, domains, and companies from DB + CSV."""
+    emails    = set()
+    domains   = set()
+    companies = set()
+
+    import re
+    def norm_company(c):
+        c = str(c).strip().lower()
+        c = re.sub(r'\b(inc|llc|ltd|corp|co|management|services|solutions|group|associates|properties|property)\b', '', c)
+        c = re.sub(r'[^a-z0-9 ]', '', c)
+        return re.sub(r'\s+', ' ', c).strip()
+
+    if DB_URL:
+        try:
+            conn = psycopg2.connect(DB_URL, sslmode="require")
+            with conn.cursor() as cur:
+                cur.execute("SELECT email, website, company FROM leads WHERE status IN ('sent','opted_out','skipped')")
+                for (e, w, c) in cur.fetchall():
+                    if e:
+                        em = str(e).strip().lower()
+                        emails.add(em)
+                        if "@" in em:
+                            domains.add(em.split("@")[-1])
+                    if w:
+                        wd = str(w).strip().lower().replace("https://","").replace("http://","").replace("www.","").split("/")[0]
+                        if wd and "." in wd:
+                            domains.add(wd)
+                    if c:
+                        nc = norm_company(c)
+                        if nc:
+                            companies.add(nc)
+            conn.close()
+            print(f"[SNOV] Blocking {len(emails)} emails / {len(domains)} domains / {len(companies)} companies")
+        except Exception as ex:
+            print(f"[SNOV] DB load skipped: {ex}")
+
+    for row in rows:
+        e = str(row.get("email", "")).strip().lower()
+        if e:
+            emails.add(e)
+            if "@" in e:
+                domains.add(e.split("@")[-1])
+        c = row.get("company", "")
+        if c:
+            nc = norm_company(c)
+            if nc:
+                companies.add(nc)
+
+    return emails, domains, companies
+
+
+def run(max_contacts: int = 300):
     if not SNOV_CLIENT_ID or not SNOV_SECRET:
-        print("[SNOV] Credentials not set — add SNOV_CLIENT_ID + SNOV_CLIENT_SECRET to Railway")
+        print("[SNOV] Missing SNOV_CLIENT_ID / SNOV_CLIENT_SECRET in Railway env vars")
         return
 
     token = get_token()
@@ -240,107 +231,106 @@ def run(max_contacts: int = 400):
         print("[SNOV] Auth failed")
         return
 
-    # Merge seed_companies.csv into NICHE_DOMAINS if available
-    seed_path = os.path.join(DATA_DIR, "seed_companies.csv")
-    if os.path.exists(seed_path):
-        try:
-            seed_df = pd.read_csv(seed_path, dtype=str).fillna("")
-            for _, row in seed_df.iterrows():
-                niche  = row.get("niche", "").strip().lower()
-                domain = row.get("domain", "").strip().lower()
-                if niche and domain and niche in NICHE_DOMAINS:
-                    if domain not in NICHE_DOMAINS[niche]:
-                        NICHE_DOMAINS[niche].append(domain)
-            print(f"[SNOV] Loaded seed_companies.csv — {len(seed_df)} additional domains")
-        except Exception as ex:
-            print(f"[SNOV] Seed load skipped: {ex}")
+    print(f"[SNOV] Authenticated. Searching for Owner/CEO/President in HOA, HVAC, Dental...")
 
-    print(f"[SNOV] Authenticated. Searching {len(NICHE_DOMAINS)} niches via domain lookup...")
-
-    # Load already-contacted emails + domains from DB
-    existing_emails:  set = set()
-    existing_domains: set = set()
-    if DB_URL:
-        try:
-            conn = psycopg2.connect(DB_URL, sslmode="require")
-            with conn.cursor() as cur:
-                cur.execute("SELECT email FROM leads WHERE status IN ('sent','opted_out','skipped')")
-                for (e,) in cur.fetchall():
-                    if e:
-                        em = str(e).strip().lower()
-                        existing_emails.add(em)
-                        if "@" in em:
-                            existing_domains.add(em.split("@")[-1])
-            conn.close()
-            print(f"  Blocking {len(existing_emails)} already-contacted emails / {len(existing_domains)} domains")
-        except Exception as ex:
-            print(f"  DB load skipped: {ex}")
-
-    # Also load from existing prospects_raw.csv
+    # Load existing pipeline
     rows: list = []
     if os.path.exists(OUT_FILE):
         try:
-            df_exist = pd.read_csv(OUT_FILE, dtype=str).fillna("")
-            for e in df_exist.get("email", pd.Series(dtype=str)).str.lower().str.strip():
-                if e:
-                    existing_emails.add(e)
-                    if "@" in e:
-                        existing_domains.add(e.split("@")[-1])
-            rows = df_exist.to_dict("records")
+            rows = pd.read_csv(OUT_FILE, dtype=str).fillna("").to_dict("records")
         except Exception:
             pass
+
+    existing_emails, existing_domains, existing_companies = load_existing(rows)
+
+    import re
+    def norm_company(c):
+        c = str(c).strip().lower()
+        c = re.sub(r'\b(inc|llc|ltd|corp|co|management|services|solutions|group|associates|properties|property)\b', '', c)
+        c = re.sub(r'[^a-z0-9 ]', '', c)
+        return re.sub(r'\s+', ' ', c).strip()
 
     new_count = 0
     credits_exhausted = False
 
-    # Shuffle niches + domains each run for variety
-    niches = list(NICHE_DOMAINS.items())
-    random.shuffle(niches)
+    random.shuffle(NICHE_SEARCHES)
 
-    for niche, domains in niches:
+    for niche_cfg in NICHE_SEARCHES:
         if credits_exhausted or new_count >= max_contacts:
             break
-        random.shuffle(domains)
-        for domain in domains:
+
+        niche = niche_cfg["niche"]
+        print(f"\n[SNOV] Searching niche: {niche.upper()}")
+
+        titles = TARGET_TITLES.copy()
+        random.shuffle(titles)
+
+        for title in titles:
             if credits_exhausted or new_count >= max_contacts:
                 break
-            if domain in existing_domains:
-                print(f"  [SKIP] {domain} already contacted")
-                continue
 
-            print(f"  [SNOV] {niche.upper()} | {domain}")
-            emails = domain_search(token, domain)
-
-            if emails is None:
-                credits_exhausted = True
-                break
-
-            for rec in emails:
-                if new_count >= max_contacts:
+            for page in range(1, 4):  # up to 3 pages per title
+                if credits_exhausted or new_count >= max_contacts:
                     break
-                result = parse_email_record(rec, domain, niche)
-                if not result:
-                    continue
-                email  = result["email"]
-                dom    = email.split("@")[-1]
-                if email in existing_emails or dom in existing_domains:
-                    continue
-                existing_emails.add(email)
-                existing_domains.add(dom)
-                rows.append(result)
-                new_count += 1
-                print(f"    [+] {result['name'] or 'Unknown'} | {result['title'] or 'No title'} | {email}")
 
-            time.sleep(random.uniform(1.0, 2.5))
+                print(f"  [{niche.upper()}] {title} — page {page}")
+                result = search_prospects(token, niche_cfg, title, page=page)
 
-    if not rows:
-        print("[SNOV] No new contacts found")
-        return
+                if result.get("exhausted"):
+                    credits_exhausted = True
+                    break
+                if result.get("expired"):
+                    token = get_token()
+                    if not token:
+                        credits_exhausted = True
+                    break
 
-    pd.DataFrame(rows).to_csv(OUT_FILE, index=False)
-    print(f"\n[SNOV] Done. +{new_count} new contacts. Total pipeline: {len(rows)}")
+                prospects = result.get("data") or result.get("prospects") or []
+                if not prospects:
+                    break  # no more pages
+
+                for rec in prospects:
+                    if new_count >= max_contacts:
+                        break
+
+                    parsed = parse_prospect(rec, niche)
+                    if not parsed:
+                        continue
+
+                    email      = parsed["email"]
+                    domain     = email.split("@")[-1] if "@" in email else ""
+                    company_nc = norm_company(parsed["company"])
+
+                    if (email in existing_emails
+                            or domain in existing_domains
+                            or (company_nc and company_nc in existing_companies)):
+                        continue
+
+                    # Verify email is deliverable before adding
+                    if not verify_email(token, email):
+                        print(f"    [INVALID] {email} — skipped")
+                        continue
+
+                    existing_emails.add(email)
+                    if domain:
+                        existing_domains.add(domain)
+                    if company_nc:
+                        existing_companies.add(company_nc)
+
+                    rows.append(parsed)
+                    new_count += 1
+                    print(f"    [+] {parsed['name']} | {parsed['title']} | {parsed['company']} | {email}")
+
+                time.sleep(random.uniform(1.5, 3.0))
+
+    if new_count == 0:
+        print("[SNOV] No new decision-maker contacts found this run")
+    else:
+        pd.DataFrame(rows).to_csv(OUT_FILE, index=False)
+        print(f"\n[SNOV] Done. +{new_count} verified Owner/CEO contacts added. Total pipeline: {len(rows)}")
+
     if credits_exhausted:
-        print("  Credits exhausted — will resume next billing cycle")
+        print("[SNOV] Credits exhausted — will resume next cycle")
 
 
 if __name__ == "__main__":
