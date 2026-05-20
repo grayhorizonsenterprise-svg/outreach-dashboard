@@ -50,77 +50,106 @@ WHOP_LINK    = os.getenv("WHOP_INDICATORS_LINK", "https://horizons56.gumroad.com
 
 
 SIGNALS_POSTS = [
-    f"""AI scanned the market before you woke up.
+    f"""Congress bought $87M in defense stocks 3 weeks before the contract announcement.
 
-Top setups, Congress trades, Kelly-sized picks.
+That's not coincidence.
 
-Delivered by 8am daily.
+They have 45 days to report. The volume pattern shows up in week 1.
 
-{SIGNALS_LINK}""",
-    f"""This week: NVDA momentum signal fired before the 8% move.
-
-We track every setup before market open.
-
-$49/month
-{SIGNALS_LINK}""",
-    f"""Congress disclosed 14 trades this week.
-
-We flagged all of them within 48 hours.
-
-Subscribers saw it first.
+Most traders never see it coming. We track every disclosure as it drops.
 
 {SIGNALS_LINK}""",
-    f"""Before 8am today:
 
-2 stock setups
-1 crypto alert
-1 congressional disclosure
+    f"""Unpopular trading truth:
 
-Every morning. $49/month.
-{SIGNALS_LINK}""",
-    f"""Most traders use the same information as everyone else.
+Your entry matters less than your position size.
 
-Our subscribers don't.
+97% of blown accounts die from overleveraging a losing trade, not from a bad pick.
 
-Edge Engine
-{SIGNALS_LINK}""",
-    f"""Crypto alert went out at 7:42am.
-
-Asset moved 14% by noon.
-
-That's why people subscribe.
+We built a Kelly Criterion calculator that tells you exactly how many shares to hold based on your real edge. Not a guess.
 
 {SIGNALS_LINK}""",
-    f"""The signal sheet this morning:
 
-SPY momentum score: 74
-NVDA volume anomaly: 2.3x avg
-Congressional flag: 1 active
+    f"""I got tired of checking 30 tickers every morning before the open.
 
-All before the open.
+So I built a scoring system.
 
-{SIGNALS_LINK}""",
-    f"""What separates profitable traders from the rest:
+RSI + volume anomaly + EMA cross = one number, 0 to 100.
 
-Not picks.
-Not charts.
+70 or above, I look closer. Below 70, I skip it.
 
-Process.
-
-We built the process into a daily email.
-
-$49/month
-{SIGNALS_LINK}""",
-    f"""One congress member bought $250k of stock 3 weeks before the announcement.
-
-We track every disclosure within 48 hours.
-
-Subscribers see the pattern.
+Simpler. Faster. More consistent.
 
 {SIGNALS_LINK}""",
-    f"""You shouldn't be checking 20 tickers every morning.
 
-You should be getting 3-5 scored setups in your inbox before 8am.
+    f"""NVDA showed a 2.3x volume anomaly 6 hours before the 8% move.
+
+Volume tells you something is happening before price confirms it.
+
+Most retail traders see the move after it's already over.
+
+{SIGNALS_LINK}""",
+
+    f"""Most traders have an entry strategy.
+
+Almost nobody has a position sizing strategy.
+
+That's why the same person can nail 7 trades in a row and still blow their account on trade 8.
+
+Kelly Criterion fixes that. It sizes each position based on your actual win rate and edge.
+
+{SIGNALS_LINK}""",
+
+    f"""The market doesn't care about your analysis.
+
+It cares about order flow, institutional positioning, and congressional insider timing.
+
+Three things most retail traders have zero visibility into.
+
+We built alerts for all three. Daily. Before the open.
+
+{SIGNALS_LINK}""",
+
+    f"""Here's what a profitable trading morning looks like:
+
+6:45am: Signal sheet hits inbox
+- 3 setups scored 70+
+- 1 congressional flag active
+- 1 crypto volume alert
+
+7:30am: Position sized. Orders placed.
+8am: Market opens. No scrambling.
+
+That's the system.
+
+{SIGNALS_LINK}""",
+
+    f"""Retail traders lose because they react.
+
+Institutional traders win because they position ahead of the move.
+
+Congressional disclosures, volume anomalies, and momentum scoring are the three signals that let you stop reacting and start positioning.
+
+{SIGNALS_LINK}""",
+
+    f"""Stop asking "what should I buy?"
+
+Start asking "what's the asymmetric setup right now?"
+
+A setup with a 2.3x volume anomaly + RSI building in the 50-65 zone + a congressional disclosure in the last 3 weeks is not random.
+
+That's a pattern worth tracking.
+
+{SIGNALS_LINK}""",
+
+    f"""The difference between a trader who breaks even and one who compounds:
+
+Not stock picks.
+Not secret indicators.
+
+Consistent position sizing on high-probability setups.
+
+That's it. That's the whole thing.
 
 {SIGNALS_LINK}""",
 ]
