@@ -433,30 +433,10 @@ def _followup_engine_daily():
 
 
 def _auto_blast_scheduler():
-    """Auto-sends main outreach queue 3x/day: 10am, 2pm, 6pm UTC.
-    Sends up to DAILY_EMAIL_LIMIT total, split across the 3 windows.
-    Only fires if there are pending leads — never double-sends."""
-    import datetime as _dt
-    BLAST_HOURS = {10, 14, 18}
-    fired_today: set = set()
-    time.sleep(300)  # let pipeline stabilize first
-    while True:
-        now = _dt.datetime.utcnow()
-        key = (now.date(), now.hour)
-        if now.hour in BLAST_HOURS and key not in fired_today and now.minute < 15:
-            pending = get_pending_count()
-            sent_today = count_sent_today()
-            remaining = max(0, DAILY_EMAIL_LIMIT - sent_today)
-            if pending > 0 and remaining > 0:
-                cap = min(pending, remaining, 700)  # max 700 per window
-                print(f"[AUTO-BLAST] {pending} pending, {remaining} daily remaining — sending {cap}", flush=True)
-                threading.Thread(target=run_batch_send, kwargs={"limit": cap}, daemon=True).start()
-            else:
-                print(f"[AUTO-BLAST] Skipping — pending={pending}, remaining={remaining}", flush=True)
-            fired_today.add(key)
-            if len(fired_today) > 10:
-                fired_today = set(list(fired_today)[-5:])
-        time.sleep(60)
+    """AUTO-BLAST DISABLED — bad data quality burning SendGrid reputation.
+    Manual sends only via dashboard buttons until lead data quality improves."""
+    print("[AUTO-BLAST] Disabled — manual sends only.", flush=True)
+    return
 
 
 # Start all revenue engine threads
