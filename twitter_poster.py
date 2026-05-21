@@ -426,55 +426,67 @@ The ones winning built it first.
 ]
 
 ENGAGEMENT_POSTS = [
-    """What's the biggest time waster in your business right now?
-
-Be specific.
-
-#entrepreneur #SmallBusiness""",
     """Traders: what's the one indicator you refuse to trade without?
 
 #trading #TradingView #stocks""",
-    """HOA managers: what takes the most time on your team every week?
-
-#propertymanagement #HOA""",
-    """What would you automate first if you had the tool?
-
-Reply below.
-
-#automation #AI #smallbusiness""",
     """Real question for traders:
 
 Do you have a written position sizing rule or do you decide in the moment?
 
 #trading #riskmanagement""",
-    """HVAC owners: what happens to calls that come in after 5pm?
-
-#HVAC #contractor #smallbusiness""",
-    """What's the last thing you manually do that you know should be automated?
-
-#entrepreneur #productivity""",
-    """Contractors: if you got 3 new inbound leads today and were on a job site all day, what happens to them?
-
-#contractor #construction #smallbusiness""",
     """Serious question for traders: what's your rule for cutting a losing position?
 
 Most people don't have one. That's the problem.
 
 #trading #riskmanagement #stocks""",
-    """Small business owners: how many hours a week do you spend on tasks a system could handle?
-
-Be honest.
-
-#entrepreneur #automation""",
-    """Roofing and HVAC owners: do you actually know your lead-to-close ratio, or are you estimating?
-
-#roofing #HVAC #contractor""",
-    """What's the fastest you've ever turned a cold lead into a closed deal?
-
-#sales #entrepreneur #smallbusiness""",
-    """Traders: what's your process when a trade is up 15% - do you have a rule for taking profit or do you wing it?
+    """Traders: what's your process when a trade is up 15% — do you have a rule for taking profit or do you wing it?
 
 #trading #stocks #options""",
+    """Do you trade pre-market or wait for the open?
+
+Why?
+
+#trading #stocks #daytrading""",
+    """What's your max loss per day before you stop trading?
+
+Most people don't have a number. The ones who do last longer.
+
+#trading #riskmanagement""",
+    """Congressional stock disclosures — do you actually track them or ignore them?
+
+Because the volume pattern shows up before the disclosure goes public.
+
+#stocks #trading #congress""",
+    """What's your biggest trading mistake in the last 6 months?
+
+Be honest. We all have one.
+
+#trading #stocks #options""",
+    """RSI, MACD, or volume — if you could only watch one, which one?
+
+#TradingView #trading #technicalanalysis""",
+    """Crypto or stocks?
+
+Which one are you more consistent with and why.
+
+#crypto #stocks #trading""",
+    """What's the cleanest setup you've ever taken?
+
+Describe it.
+
+#trading #stocks #technicalanalysis""",
+    """Do you backtest your strategies or just trade live and learn?
+
+#trading #backtesting #strategy""",
+    """Biggest myth in trading:
+
+"You need to be glued to the screen to make money."
+
+The best traders I know place their orders before 8am and walk away.
+
+What's a trading myth you've seen blown up?
+
+#trading #stocks #mindset""",
 ]
 
 RESULTS_POSTS = [
@@ -664,22 +676,18 @@ Missed call rate: down 90%.
 ALL_POSTS = {
     "signals":      SIGNALS_POSTS,
     "indicators":   INDICATOR_POSTS,
-    "business_tip": BUSINESS_TIP_POSTS,
-    "engagement":   ENGAGEMENT_POSTS,
     "results":      RESULTS_POSTS,
-    "case_study":   CASE_STUDY_POSTS,
+    "engagement":   ENGAGEMENT_POSTS,
 }
 
 # Image-attached categories — get a generated card PNG attached to the tweet
 IMAGE_CATEGORIES = {"results", "signals"}
 
 DAILY_SCHEDULE = [
-    ("signals",      "13:00"),   # 8am ET  — morning signal preview (image card)
-    ("business_tip", "14:30"),   # 9:30am ET — business automation hook
-    ("results",      "17:00"),   # 12pm ET — results/scorecard (image card)
-    ("indicators",   "19:00"),   # 2pm ET  — TradingView product post
-    ("case_study",   "21:00"),   # 4pm ET  — client case study
-    ("engagement",   "23:00"),   # 6pm ET  — engagement question
+    ("signals",    "13:00"),   # 8am ET  — morning signal preview (image card)
+    ("results",    "17:00"),   # 12pm ET — weekly scorecard (image card)
+    ("indicators", "20:00"),   # 3pm ET  — TradingView Pine Script product post
+    ("engagement", "23:00"),   # 6pm ET  — trading question / engagement
 ]
 
 # Finance/trading/small-biz accounts whose followers are our target audience
