@@ -690,40 +690,45 @@ DAILY_SCHEDULE = [
     ("engagement", "23:00"),   # 6pm ET  — trading question / engagement
 ]
 
-# Finance/trading/small-biz accounts whose followers are our target audience
+# Trading/finance accounts whose followers are our target audience
 FOLLOW_SEED_ACCOUNTS = [
-    "TradingView", "CNBC", "MarketWatch", "YahooFinance",
-    "Investopedia", "StockMarket", "CryptoDaily",
-    "SmallBizTrends", "entrepreneurmag", "ForbesSmallBiz",
+    "TradingView", "MarketWatch", "YahooFinance", "Investopedia",
+    "unusual_whales", "StockMarket", "OptionsFlow", "CryptoDaily",
+    "zerohedge", "SquawkCNBC", "MorningBrew", "WSJmarkets",
+    "RealVision", "tastytrade", "ThinkOrSwim",
 ]
 
 FOLLOW_SEARCH_QUERIES = [
-    "stock trading tips site:twitter.com",
     "TradingView signals",
-    "options trading alert",
-    "crypto signal",
-    "small business owner tips",
+    "options flow alert",
+    "congressional trades stocks",
+    "stock momentum scanner",
+    "crypto trading signals",
+    "position sizing Kelly",
+    "RSI divergence setup",
+    "Pine Script indicator",
 ]
 
 # Comment templates paired to tweet topics — fills {ticker} or {topic} from tweet
 COMMENT_TEMPLATES = [
     "This is exactly why we built the Edge Engine — momentum scoring + congressional tracking before open. Worth checking out if you're active in {topic}.",
     "Solid point. We see the same pattern in our signals feed. Kelly-sized positions on setups like this are what separate consistent traders from the rest.",
-    "Great read. For anyone who wants data-backed signals on {topic} before 8am daily — that's what we do at Gray Horizons.",
     "This is the kind of setup our Edge Scanner flags. Volume anomaly + RSI momentum on the same bar. Most miss it without the right tools.",
     "Exactly. Position sizing is the variable most traders skip. Kelly Criterion math does the heavy lifting once you have a proven edge.",
-    "100%. Automation is what separates 7-figure operators from the grind. Happy to share what we've built for local businesses if you're curious.",
-    "Well said. The businesses using AI for follow-up and lead capture are running laps around the ones still doing it manually.",
+    "Congressional volume pattern is already showing in week 1 of the disclosure window. Retail doesn't see it until week 3. That gap is the edge.",
+    "The 0-100 scoring system we built for this does exactly that — filters noise, surfaces only the 70+ setups. Game changer for consistency.",
+    "Agree. Entry matters less than most people think. Size your position right on a mediocre setup vs. full send on a great one — size wins every time.",
 ]
 
 TRENDING_SEARCH_TERMS = [
     "stock market today",
     "trading signals",
     "options flow",
-    "small business automation",
-    "entrepreneur growth",
     "TradingView setup",
     "congressional trades",
+    "RSI momentum stocks",
+    "Pine Script indicator",
+    "position sizing trading",
 ]
 
 
