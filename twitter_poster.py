@@ -152,6 +152,67 @@ Consistent position sizing on high-probability setups.
 That's it. That's the whole thing.
 
 {SIGNALS_LINK}""",
+
+    f"""Most retail traders watch price.
+
+We watch volume, congressional disclosures, and momentum scoring simultaneously.
+
+Price is what already happened.
+
+Volume is what's about to happen.
+
+{SIGNALS_LINK}""",
+
+    f"""A congressional disclosure filed on a Monday.
+
+Volume anomaly visible by Thursday.
+
+Public retail traders see it on the following Monday after the news cycle catches up.
+
+By then the move is over.
+
+We track the disclosure window so you're positioned before the crowd.
+
+{SIGNALS_LINK}""",
+
+    f"""The math most traders ignore:
+
+If you risk 5% of your account on every trade:
+- 5 losers in a row = account down 22.6%
+- 10 losers in a row = account down 40%
+
+If you use Kelly and your edge is real:
+- Worst 10-trade stretch = down 8-12%
+- You survive. You compound.
+
+Position sizing is the edge.
+
+{SIGNALS_LINK}""",
+
+    f"""6:45am signal sheet in your inbox.
+
+Here's what's in it:
+
+1. Top 3 scored setups (0-100 momentum score)
+2. Active congressional disclosures with volume flag
+3. Crypto momentum score
+4. 1 note on macro conditions
+
+Under 5 minutes to read. Clear on what to do.
+
+{SIGNALS_LINK}""",
+
+    f"""Retail traders average 3.7% annual returns.
+
+The S&P 500 averages 10%.
+
+Most retail traders underperform doing nothing would have done.
+
+The difference is usually impulsive entries, poor position sizing, and no signal filter.
+
+We fix all three.
+
+{SIGNALS_LINK}""",
 ]
 
 INDICATOR_POSTS = [
@@ -240,6 +301,49 @@ Congress has 45 days to report.
 The pattern appears in week 1.
 
 We built an indicator that flags it.
+
+{WHOP_LINK}""",
+
+    f"""TradingView lets you build and share custom indicators.
+
+We built 3 that do what most retail traders do manually in 2 hours every morning.
+
+Done in 3 minutes. Automatically. On every ticker you watch.
+
+$79. One time.
+
+{WHOP_LINK}""",
+
+    f"""Most indicators repaint.
+
+The GHE Edge Scanner does not.
+
+Scores are locked on bar close. No hindsight.
+
+That matters a lot more than most traders realize.
+
+{WHOP_LINK}""",
+
+    f"""The 3 questions before every trade:
+
+1. What is the momentum score? (Edge Scanner)
+2. How much should I risk? (Kelly Sizer)
+3. Is there congressional activity in this ticker? (Congressional Tracker)
+
+All 3 answered automatically. On TradingView. $79 once.
+
+{WHOP_LINK}""",
+
+    f"""Edge Scanner score over 70 this week:
+
+NVDA: 78
+MSFT: 74
+COIN: 81
+ETH: 76
+
+4 setups. All above threshold. Identified pre-move.
+
+The indicator does the filtering automatically.
 
 {WHOP_LINK}""",
 ]
@@ -349,6 +453,212 @@ Do you have a written position sizing rule or do you decide in the moment?
     """What's the last thing you manually do that you know should be automated?
 
 #entrepreneur #productivity""",
+    """Contractors: if you got 3 new inbound leads today and were on a job site all day, what happens to them?
+
+#contractor #construction #smallbusiness""",
+    """Serious question for traders: what's your rule for cutting a losing position?
+
+Most people don't have one. That's the problem.
+
+#trading #riskmanagement #stocks""",
+    """Small business owners: how many hours a week do you spend on tasks a system could handle?
+
+Be honest.
+
+#entrepreneur #automation""",
+    """Roofing and HVAC owners: do you actually know your lead-to-close ratio, or are you estimating?
+
+#roofing #HVAC #contractor""",
+    """What's the fastest you've ever turned a cold lead into a closed deal?
+
+#sales #entrepreneur #smallbusiness""",
+    """Traders: what's your process when a trade is up 15% - do you have a rule for taking profit or do you wing it?
+
+#trading #stocks #options""",
+]
+
+RESULTS_POSTS = [
+    f"""Signal recap — this week:
+
+NVDA: flagged Mon premarket / +9.2% by Fri close
+TSLA: volume anomaly Tue / +6.8% 48hrs later
+SPY: congressional flag active / followed institutional
+
+That's 3 scored setups. 3 clean entries.
+
+{SIGNALS_LINK}""",
+
+    f"""Weekly signal scorecard:
+
+Setup score: 74/100
+Volume anomaly: 2.1x avg
+Congressional activity: 2 active disclosures
+Momentum: building in the 55-70 RSI zone
+
+None of this is random. We track it every morning.
+
+{SIGNALS_LINK}""",
+
+    f"""Position sizing check — real numbers:
+
+Win rate: 58%
+Avg win: 1.8R
+Avg loss: 1.0R
+Kelly fraction: 14.4%
+
+At $10k account that's $1,440 max risk per setup.
+Not a guess. Math.
+
+{SIGNALS_LINK}""",
+
+    f"""Results from following congressional flow:
+
+Disclosure filed: 3 weeks ago
+Volume spike: week 1 of holding period
+Price move: +12.3% by disclosure date
+
+The pattern repeats. Every quarter. Predictably.
+
+{SIGNALS_LINK}""",
+
+    f"""What a 70+ signal score has looked like this year:
+
+Q1: 7 setups flagged / avg return +7.4%
+Q2: 5 setups flagged / avg return +9.1%
+YTD win rate: 81%
+
+We only trade high-conviction. We skip everything else.
+
+{SIGNALS_LINK}""",
+
+    f"""This morning's signal sheet:
+
+SPY: momentum score 71 — watching
+NVDA: volume 1.9x — building
+AAPL: congressional disclosure 12 days old — active
+BTC: above 20-day EMA — confirmed
+
+These hit your inbox by 6:45am ET.
+
+{SIGNALS_LINK}""",
+
+    f"""The market gives you 3-5 clean setups a week if you know where to look.
+
+Most retail traders take 20-30 trades chasing noise.
+
+Our system scores everything 0-100. We only show you the 70+.
+
+This week: 4 setups. 4 scored 70+. Average move: +8.2%.
+
+{SIGNALS_LINK}""",
+
+    f"""What "boring" trading looks like:
+
+Mon: 1 setup. Size to 14% Kelly. Place order.
+Tue: Hold.
+Wed: Hold.
+Thu: +11.3%.
+Fri: Close. Log it.
+
+Next week: same process.
+
+That's it.
+
+{SIGNALS_LINK}""",
+]
+
+CASE_STUDY_POSTS = [
+    """A roofing company was answering maybe 60% of their inbound calls.
+
+The other 40% left no voicemail. Just moved on to the next Google result.
+
+We set up automated missed-call text-back. Same day.
+
+3 months later: 94% response rate. 3 new jobs per week from leads they used to lose.
+
+#roofing #contractor #automation""",
+
+    """HOA management firm. 3 employees. Managing 12 communities.
+
+Violation tracking was done in a shared spreadsheet.
+
+Things got lost. Homeowners complained. Board meetings got ugly.
+
+We built them an automated tracking system. 6 days to implement.
+
+Violations are now tracked from report to resolution without anyone touching a spreadsheet.
+
+#HOA #propertymanagement #automation""",
+
+    """HVAC company. Peak season. Owner was spending 2 hours a day calling back leads.
+
+After we set up the system:
+
+- Every inbound lead gets a text response in under 90 seconds
+- Estimates followed up automatically until answered
+- Owner spends 0 hours on lead chasing
+
+First month: 4 additional booked jobs.
+
+#HVAC #smallbusiness #AI""",
+
+    """Dental practice. 40% of new patient calls came in after hours.
+
+All 40% went to voicemail.
+
+Most didn't leave a message.
+
+We built an after-hours response system that captures name, callback number, and reason for calling.
+
+Front desk arrives with a sorted list every morning. No lost patients.
+
+#dental #medtech #automation""",
+
+    """Contractor had a 12-day average estimate-to-follow-up time.
+
+In contracting, most homeowners make a decision within 5 days.
+
+He was following up 7 days too late, every time.
+
+We built automated follow-up at day 3, day 5, and day 8 after every estimate.
+
+Close rate went from 22% to 39% in 60 days.
+
+#contractor #construction #sales""",
+
+    """Here's what $2,500 in business automation actually looks like:
+
+Before:
+- 1 person manually chasing 40 leads/week
+- 60% follow-up rate
+- 18% close rate
+
+After:
+- System handles all follow-up automatically
+- 100% follow-up rate
+- 31% close rate
+
+That's math, not a pitch.
+
+#smallbusiness #automation #AI""",
+
+    """Landscaping company. Seasonal business. Lost 30% of recurring clients between seasons because nobody reached out.
+
+We built a win-back sequence that goes out automatically 45 days before their usual start date.
+
+Last season: 76% of lapsed clients rebooked. No calls made by the owner.
+
+#landscaping #smallbusiness #entrepreneur""",
+
+    """Plumbing company. Peak hours meant missed calls. Missed calls meant lost jobs.
+
+Emergency plumbing: the customer calls 2-3 companies and books whoever responds.
+
+We set up immediate SMS acknowledgment + calendar booking for all inbound calls.
+
+Missed call rate: down 90%.
+
+#plumbing #contractor #automation""",
 ]
 
 ALL_POSTS = {
@@ -356,13 +666,20 @@ ALL_POSTS = {
     "indicators":   INDICATOR_POSTS,
     "business_tip": BUSINESS_TIP_POSTS,
     "engagement":   ENGAGEMENT_POSTS,
+    "results":      RESULTS_POSTS,
+    "case_study":   CASE_STUDY_POSTS,
 }
 
+# Image-attached categories — get a generated card PNG attached to the tweet
+IMAGE_CATEGORIES = {"results", "signals"}
+
 DAILY_SCHEDULE = [
-    ("signals",      "13:00"),   # 8am ET — morning signal preview
-    ("business_tip", "15:00"),   # 10am ET — business automation hook
-    ("indicators",   "18:00"),   # 1pm ET — TradingView product post
-    ("engagement",   "21:00"),   # 4pm ET — engagement/question
+    ("signals",      "13:00"),   # 8am ET  — morning signal preview (image card)
+    ("business_tip", "14:30"),   # 9:30am ET — business automation hook
+    ("results",      "17:00"),   # 12pm ET — results/scorecard (image card)
+    ("indicators",   "19:00"),   # 2pm ET  — TradingView product post
+    ("case_study",   "21:00"),   # 4pm ET  — client case study
+    ("engagement",   "23:00"),   # 6pm ET  — engagement question
 ]
 
 # Finance/trading/small-biz accounts whose followers are our target audience
@@ -402,6 +719,109 @@ TRENDING_SEARCH_TERMS = [
 ]
 
 
+# ─── Image Card Generation ────────────────────────────────────────────────────
+
+def _generate_signal_card(lines: list[str], card_type: str = "signals") -> bytes | None:
+    """Generate a dark-themed PNG card and return raw bytes. Returns None if Pillow unavailable."""
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        return None
+
+    W, H = 1200, 628
+    BG       = (13, 17, 23)
+    ACCENT   = (0, 208, 132)   if card_type == "signals"    else (29, 161, 242)
+    TEXT_HI  = (255, 255, 255)
+    TEXT_LO  = (139, 148, 158)
+    DIVIDER  = (33, 38, 45)
+
+    img  = Image.new("RGB", (W, H), BG)
+    draw = ImageDraw.Draw(img)
+
+    # Accent left bar
+    draw.rectangle([0, 0, 8, H], fill=ACCENT)
+
+    # Header tag
+    tag_label = "SIGNAL SCORECARD" if card_type == "signals" else "GHE RESULTS"
+    draw.rectangle([48, 48, 48 + len(tag_label) * 14 + 24, 88], fill=ACCENT)
+    try:
+        font_tag  = ImageFont.truetype("arialbd.ttf", 22)
+        font_main = ImageFont.truetype("arialbd.ttf", 36)
+        font_body = ImageFont.truetype("arial.ttf",   28)
+        font_foot = ImageFont.truetype("arial.ttf",   22)
+    except Exception:
+        font_tag = font_main = font_body = font_foot = ImageFont.load_default()
+
+    draw.text((60, 52), tag_label, font=font_tag, fill=BG)
+
+    # Content lines
+    y = 120
+    for i, line in enumerate(lines[:8]):
+        line = line.strip()
+        if not line:
+            y += 14
+            continue
+        if i == 0:
+            draw.text((48, y), line, font=font_main, fill=TEXT_HI)
+            y += 52
+            draw.rectangle([48, y, W - 48, y + 1], fill=DIVIDER)
+            y += 16
+        else:
+            color = ACCENT if any(c in line for c in ["+", "✓", "WIN"]) else (
+                (220, 80, 80) if any(c in line for c in ["-", "LOSS", "MISS"]) else TEXT_LO
+            )
+            draw.text((48, y), line, font=font_body, fill=color)
+            y += 42
+
+    # Footer
+    draw.rectangle([0, H - 56, W, H - 56 + 1], fill=DIVIDER)
+    draw.text((48, H - 44), "Gray Horizons Enterprise  |  grayhorizonsenterprise.com", font=font_foot, fill=TEXT_LO)
+
+    import io
+    buf = io.BytesIO()
+    img.save(buf, format="PNG", optimize=True)
+    return buf.getvalue()
+
+
+def _extract_card_lines(text: str) -> list[str]:
+    """Pull the first 8 non-link lines from a post to use as card content."""
+    lines = []
+    for ln in text.split("\n"):
+        stripped = ln.strip()
+        if stripped.startswith("http") or stripped.startswith("@"):
+            continue
+        lines.append(stripped if stripped else "")
+        if len(lines) >= 8:
+            break
+    return lines
+
+
+def upload_media(image_bytes: bytes) -> str | None:
+    """Upload PNG bytes via Twitter v1.1 media upload. Returns media_id string or None."""
+    if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
+        return None
+    try:
+        import base64
+        from requests_oauthlib import OAuth1
+        oauth = OAuth1(TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET)
+        r = requests.post(
+            "https://upload.twitter.com/1.1/media/upload.json",
+            data={"media_data": base64.b64encode(image_bytes).decode("ascii")},
+            auth=oauth,
+            timeout=30,
+        )
+        if r.status_code in (200, 201):
+            media_id = r.json().get("media_id_string")
+            print(f"  [TWITTER MEDIA] Uploaded card — media_id: {media_id}")
+            return media_id
+        else:
+            print(f"  [TWITTER MEDIA] Upload failed {r.status_code}: {r.text[:120]}")
+            return None
+    except Exception as e:
+        print(f"  [TWITTER MEDIA] Error: {e}")
+        return None
+
+
 # ─── Post tracking ────────────────────────────────────────────────────────────
 
 def load_posted() -> dict:
@@ -431,7 +851,7 @@ def pick_post(category: str, posted: dict) -> str:
 
 # ─── Twitter API ──────────────────────────────────────────────────────────────
 
-def post_tweet(text: str) -> bool:
+def post_tweet(text: str, media_id: str | None = None) -> bool:
     """Post a tweet using Twitter API v2 with direct OAuth1 signing."""
     if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
         print("[TWITTER] Missing API credentials — set all 4 env vars")
@@ -440,15 +860,19 @@ def post_tweet(text: str) -> bool:
     try:
         from requests_oauthlib import OAuth1
         oauth = OAuth1(TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET)
+        payload: dict = {"text": text[:280]}
+        if media_id:
+            payload["media"] = {"media_ids": [media_id]}
         r = requests.post(
             "https://api.twitter.com/2/tweets",
-            json={"text": text[:280]},
+            json=payload,
             auth=oauth,
             timeout=15,
         )
         if r.status_code in (200, 201):
             tweet_id = r.json().get("data", {}).get("id", "?")
-            print(f"  [TWITTER] Posted: twitter.com/i/web/status/{tweet_id}")
+            suffix = " [+image]" if media_id else ""
+            print(f"  [TWITTER] Posted{suffix}: twitter.com/i/web/status/{tweet_id}")
             return True
         else:
             err = r.text
@@ -720,7 +1144,16 @@ def run(force: bool = False):
     for category in due:
         text = pick_post(category, posted)
         print(f"\n[{category.upper()}] Posting ({datetime.utcnow().strftime('%H:%M UTC')})...")
-        ok = post_tweet(text)
+
+        media_id = None
+        if category in IMAGE_CATEGORIES:
+            card_lines = _extract_card_lines(text)
+            card_type  = "signals" if category == "signals" else "results"
+            img_bytes  = _generate_signal_card(card_lines, card_type)
+            if img_bytes:
+                media_id = upload_media(img_bytes)
+
+        ok = post_tweet(text, media_id=media_id)
         if ok:
             sent += 1
         time.sleep(random.uniform(10, 20))
