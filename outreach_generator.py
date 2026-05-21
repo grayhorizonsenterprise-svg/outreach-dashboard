@@ -1213,6 +1213,8 @@ def _add_periods(msg):
         out.append(line)
     return "\n".join(out)
 
+FREE_TRIAL_LINE = "\nWe offer a 7-day free trial. No cost, no contract. You see it running before committing to anything.\n"
+
 def generate_message(company, niche):
     templates = NICHE_MESSAGES.get(niche, NICHE_MESSAGES["hoa"])
     template  = random.choice(templates)
@@ -1221,6 +1223,10 @@ def generate_message(company, niche):
     msg = msg.replace("{calendly}", "https://calendly.com/grayhorizonsenterprise/30min")
     msg = msg.replace("{stripe}", STRIPE_LINK)
     msg = _add_periods(msg)
+    # Inject free trial before signature
+    sig = "Alex\nGray Horizons Enterprise"
+    if sig in msg and FREE_TRIAL_LINE.strip() not in msg:
+        msg = msg.replace(sig, FREE_TRIAL_LINE + sig, 1)
     if "grayhorizonsenterprise.com" not in msg and "https://calendly.com/grayhorizonsenterprise/30min" not in msg:
         msg += "\nhttps://calendly.com/grayhorizonsenterprise/30min"
     return msg
@@ -1287,6 +1293,8 @@ def run():
         except Exception:
             pass
 
+    BLOCKED_NICHES = {"medspa", "salon", "restaurant", "tutoring", "photography", "storage", "moving", "mortgage", "insurance", "gym", "chiropractic", "realestate", "veterinary", "optometry", "flooring", "painting", "auto", "electrician", "pest_control", "cleaning"}
+
     rows        = []
     skipped     = 0
     seen_emails = set(done_emails)
@@ -1297,7 +1305,11 @@ def run():
     junk_patterns = [
         "email@email", "@email.com", "example", "test@", "noreply",
         "placeholder", "demo@", "fake@", "domain.com", "company.com",
-        "yourname", "sample@", "null@", "none@", "@mailinator", "@tempmail"
+        "yourname", "sample@", "null@", "none@", "@mailinator", "@tempmail",
+        "@zhihu.com", "@crash2.", "@qq.com", "@163.com", "@126.com",
+        "@sina.com", "@weibo.com", "@baidu.com", "@alibaba.com",
+        ".sentry.io", "@sentry.io", "ingest.us.sentry", "wedding",
+        "kvvu.com", "ktnv.com", "@fox", "@nbc", "@abc", "@cbs",
     ]
 
     # Block ticket/system email prefixes, these are never real decision makers
@@ -1315,8 +1327,9 @@ def run():
         "insurance", "insure", "underwrite",
         "bcbs", "bluecross", "blueshield", "aetna", "cigna", "humana",
         "anthem", "molina", "kaiser", "unitedhealthcare",
-        # Government
-        ".gov", ".edu", ".mil",
+        # Government / city / utilities
+        ".gov", ".edu", ".mil", "fontana.org", "cityof", "utility",
+        "utilities", "municipal", "county.", "district.",
     ]
 
     # Block these company name patterns, wrong targets entirely
@@ -1344,6 +1357,8 @@ def run():
         "malpractice", "litigation", "lawyers",
         # Tech/SaaS/Directories
         "software", "platform", "saas", "tech solutions", "technologies",
+        "roblox", "google", "facebook", "meta ", "amazon", "microsoft",
+        "apple ", "netflix", "twitter", "instagram", "tiktok", "youtube",
         "smugmug", "squarespace", "wix", "shopify", "hubspot", "salesforce",
         "photography studio", "media group", "digital agency",
         "hosting", "cloud services", "it services", "managed services",
@@ -1356,8 +1371,10 @@ def run():
         "national association", "association of ", " association",
         "chamber of commerce", "nonprofit", "non-profit", "foundation",
         "nationwide", "national chain", "franchise",
-        # Media
+        # Media / News
         "magazine", "publisher", "broadcasting", "newspaper",
+        "news", "ktnv", "nbc", "abc", "cbs", "fox news", "cnn", "channel ",
+        "tv station", "radio", "herald", "tribune", "gazette", "journal",
     ]
 
     for _, row in df.iterrows():
@@ -1389,6 +1406,9 @@ def run():
             continue
 
         niche   = str(row.get("niche",   "hoa")).strip().lower()
+        if niche in BLOCKED_NICHES:
+            skipped += 1
+            continue
         if niche not in NICHE_MESSAGES:
             # best-effort mapping for alternate spellings
             if niche in ("landscape", "lawn", "lawn care"):
