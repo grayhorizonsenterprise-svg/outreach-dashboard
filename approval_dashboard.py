@@ -1195,6 +1195,7 @@ def dashboard():
   <a onclick="showTab('outreach')" id="tab-outreach" class="{'active' if active_tab=='outreach' else ''}">Outreach ({pending_count} pending)</a>
   <a onclick="showTab('social')"   id="tab-social"   class="{'active' if active_tab=='social' else ''}" style="color:#f97316;">Social Pipeline</a>
   <a onclick="showTab('grants')"   id="tab-grants"   class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grant Agent</a>
+  <a onclick="showTab('twitter')"  id="tab-twitter"  class="{'active' if active_tab=='twitter' else ''}" style="color:#1d9bf0;font-weight:bold;">🐦 Twitter</a>
   <a href="/status" style="color:#22c55e;font-weight:bold;">⚡ System Status</a>
   <a href="/trigger-pipeline" style="color:#f97316;font-weight:bold;" onclick="return confirm('Run pipeline now to fetch fresh leads?')">▶ Run Pipeline Now</a>
   <a href="/purge-bounced" style="color:#ef4444;font-weight:bold;" onclick="return confirm('Purge all role/generic emails (info@, service@, hello@) from queue? This fixes your 26.7% bounce rate.')">🧹 Purge Bounced</a>
@@ -1400,6 +1401,79 @@ function showTab(name) {{
   document.querySelectorAll('.nav a[id^="tab-"]').forEach(function(el){{ el.classList.remove('active'); }});
   document.getElementById('content-' + name).classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'twitter') {{ loadTwitterSuggestions(); }}
+}}
+
+function loadTwitterSuggestions() {{
+  fetch('/twitter-suggestions-json')
+    .then(r => r.json())
+    .then(data => {{ renderTwitterCards(data); }})
+    .catch(e => console.log('Twitter load error', e));
+}}
+
+function renderTwitterCards(suggestions) {{
+  var container = document.getElementById('twitter-cards');
+  if (!suggestions || suggestions.length === 0) {{
+    container.innerHTML = '<div style="color:#475569;padding:20px;text-align:center;">No suggestions yet. Click Fetch Tweets to load opportunities.</div>';
+    return;
+  }}
+  var html = '';
+  suggestions.forEach(function(s) {{
+    var choices = s.reply_choices || [];
+    var choiceHtml = '';
+    choices.forEach(function(c, i) {{
+      var colors = ['#1d4ed8','#7c3aed','#0f766e','#b45309'];
+      var labels = ['Value Add','Ask Question','Authority','Product Hook'];
+      choiceHtml += '<button onclick="postReply(\\'' + s.tweet_id + '\\',\\'' + encodeURIComponent(c) + '\\')" style="background:' + colors[i] + ';color:#fff;border:none;padding:7px 12px;border-radius:6px;cursor:pointer;font-size:12px;margin:4px 4px 4px 0;">' + labels[i] + '</button>';
+    }});
+    html += '<div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:14px 16px;margin:10px 0;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+      '<span style="color:#1d9bf0;font-weight:bold;font-size:13px;">@' + (s.author||'') + '</span>' +
+      '<span style="color:#475569;font-size:12px;">❤ ' + (s.likes||0) + ' &nbsp; 🔁 ' + (s.retweets||0) + '</span>' +
+      '</div>' +
+      '<div style="color:#94a3b8;font-size:13px;line-height:1.5;margin-bottom:10px;">' + (s.tweet_text||'').substring(0,180) + '...</div>' +
+      '<div style="margin-bottom:10px;">' + choiceHtml + '</div>' +
+      '<div id="reply-status-' + s.tweet_id + '" style="font-size:12px;color:#22c55e;display:none;">Posted!</div>' +
+      '<a href="' + (s.tweet_url||'#') + '" target="_blank" style="font-size:12px;color:#475569;text-decoration:none;">View tweet ↗</a>' +
+      '</div>';
+  }});
+  container.innerHTML = html;
+}}
+
+function postReply(tweetId, encodedComment) {{
+  var comment = decodeURIComponent(encodedComment);
+  var statusEl = document.getElementById('reply-status-' + tweetId);
+  fetch('/post-twitter-reply', {{
+    method: 'POST',
+    headers: {{'Content-Type': 'application/json'}},
+    body: JSON.stringify({{tweet_id: tweetId, comment: comment}})
+  }}).then(r => r.json()).then(data => {{
+    if (statusEl) {{
+      statusEl.style.display = 'block';
+      statusEl.textContent = data.ok ? 'Reply posted!' : 'Failed: ' + (data.error||'unknown');
+      statusEl.style.color = data.ok ? '#22c55e' : '#ef4444';
+    }}
+  }}).catch(e => {{
+    if (statusEl) {{ statusEl.style.display='block'; statusEl.textContent='Error: '+e; statusEl.style.color='#ef4444'; }}
+  }});
+}}
+
+function triggerFollow() {{
+  var max = document.getElementById('follow-max').value || 20;
+  var terms = document.getElementById('follow-terms').value || '';
+  fetch('/twitter-auto-follow?max=' + max + '&terms=' + encodeURIComponent(terms))
+    .then(r => r.json())
+    .then(data => {{
+      document.getElementById('follow-status').textContent = 'Followed ' + (data.new_follows||0) + ' new accounts.';
+    }});
+}}
+
+function fetchTweets() {{
+  document.getElementById('twitter-cards').innerHTML = '<div style="color:#94a3b8;padding:20px;text-align:center;">Fetching tweet opportunities...</div>';
+  fetch('/twitter-fetch-suggestions')
+    .then(r => r.json())
+    .then(data => {{ renderTwitterCards(data); }})
+    .catch(e => {{ document.getElementById('twitter-cards').innerHTML = '<div style="color:#ef4444;padding:20px;">Error fetching tweets.</div>'; }});
 }}
 
 function filterNiche(niche, btn) {{
@@ -1413,6 +1487,64 @@ function filterNiche(niche, btn) {{
     }}
   }});
 }}
+</script>
+
+<!-- TWITTER TAB -->
+<div id="content-twitter" class="tab-content {'active' if active_tab=='twitter' else ''}">
+  <div style="max-width:760px;margin:0 auto;padding:20px 16px;">
+
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div>
+        <div style="font-size:18px;font-weight:bold;color:#1d9bf0;">Twitter Growth Center</div>
+        <div style="font-size:12px;color:#475569;margin-top:2px;">Reply to trending posts, grow followers, post content</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="fetchTweets()" style="background:#1d9bf0;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:bold;">Fetch Tweet Opportunities</button>
+        <a href="/twitter-post-now" style="background:#22c55e;color:#000;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:bold;text-decoration:none;">Post Now</a>
+      </div>
+    </div>
+
+    <!-- Auto-Follow Controls -->
+    <div style="background:#1e293b;border-radius:10px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:14px;font-weight:bold;color:#94a3b8;margin-bottom:12px;">Auto-Follow Settings</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
+        <div>
+          <div style="font-size:11px;color:#475569;margin-bottom:4px;">Max follows per run</div>
+          <input id="follow-max" type="number" value="20" min="1" max="50"
+            style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:6px 10px;width:80px;font-size:13px;">
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <div style="font-size:11px;color:#475569;margin-bottom:4px;">Search terms (comma separated, leave blank for defaults)</div>
+          <input id="follow-terms" type="text" placeholder="e.g. trading signals, RSI stocks, position sizing"
+            style="background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;padding:6px 10px;width:100%;font-size:13px;">
+        </div>
+        <button onclick="triggerFollow()" style="background:#7c3aed;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:bold;">Run Auto-Follow</button>
+      </div>
+      <div id="follow-status" style="font-size:12px;color:#22c55e;margin-top:8px;"></div>
+      <div style="margin-top:10px;font-size:11px;color:#475569;">
+        Default target accounts: TradingView, MarketWatch, unusual_whales, OptionsFlow, CryptoDaily, tastytrade +20 more<br>
+        Safe limit: 20 follows/day on free API tier
+      </div>
+    </div>
+
+    <!-- Reply Choice Explanation -->
+    <div style="background:#1e293b;border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="font-size:12px;color:#94a3b8;">Reply styles:</div>
+      <span style="background:#1d4ed8;color:#fff;padding:3px 10px;border-radius:4px;font-size:11px;">Value Add — share insight</span>
+      <span style="background:#7c3aed;color:#fff;padding:3px 10px;border-radius:4px;font-size:11px;">Ask Question — drive engagement</span>
+      <span style="background:#0f766e;color:#fff;padding:3px 10px;border-radius:4px;font-size:11px;">Authority — position as expert</span>
+      <span style="background:#b45309;color:#fff;padding:3px 10px;border-radius:4px;font-size:11px;">Product Hook — subtle mention</span>
+    </div>
+
+    <!-- Tweet Cards -->
+    <div id="twitter-cards">
+      <div style="color:#475569;padding:40px;text-align:center;">Click "Fetch Tweet Opportunities" to load trending posts to reply to.</div>
+    </div>
+
+  </div>
+</div><!-- end twitter tab -->
+
 </script>
 </body>
 </html>"""
@@ -2602,6 +2734,106 @@ def post_twitter_comment_route():
     except Exception as e:
         msg = f"Error: {e}"
     return f"<p style='font-family:Arial;padding:20px;color:{'#22c55e' if ok else '#ef4444'};'>{msg}</p><a href='/status'>← Back to Status</a>"
+
+
+@app.route('/twitter-suggestions-json')
+def twitter_suggestions_json():
+    """Return saved comment suggestions as JSON for the Twitter tab."""
+    from flask import jsonify
+    import json as _json
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "twitter_comment_suggestions.json")
+    try:
+        if os.path.exists(path):
+            with open(path) as f:
+                data = _json.load(f)
+            # Attach 4 reply choices to each suggestion
+            for s in data:
+                topic = s.get("tweet_text","")[:40].replace('"','')
+                author = s.get("author","someone")
+                s["reply_choices"] = [
+                    # Value Add
+                    f"Good point. The pattern we track is volume anomaly plus RSI momentum on the same bar — when both align above threshold the setup quality is completely different. Most miss it without the right filter.",
+                    # Ask Question
+                    f"Curious — do you use any scoring system to filter setups or do you evaluate each one manually? Finding that a 0-100 score cuts the noise significantly.",
+                    # Authority
+                    f"We built a congressional disclosure tracker that flags volume patterns before the disclosure goes public. Retail sees the move 2-3 weeks after the pattern is already visible. The edge is in the timing.",
+                    # Product Hook
+                    f"This is exactly why we built the Edge Scanner — momentum scoring plus congressional tracking before the open. If you want to see how it works: horizons56.gumroad.com",
+                ]
+        else:
+            data = []
+    except Exception:
+        data = []
+    return jsonify(data)
+
+
+@app.route('/twitter-fetch-suggestions')
+def twitter_fetch_suggestions_route():
+    """Trigger a live fetch of comment suggestions and return results."""
+    from flask import jsonify
+    try:
+        from twitter_poster import fetch_comment_suggestions
+        results = fetch_comment_suggestions()
+        # Attach reply choices
+        for s in results:
+            s["reply_choices"] = [
+                "Good point. The pattern we track is volume anomaly plus RSI momentum on the same bar — when both align above threshold the setup quality is completely different. Most miss it without the right filter.",
+                "Curious — do you use any scoring system to filter setups or evaluate each one manually? Finding that a 0-100 score cuts the noise significantly.",
+                "We built a congressional disclosure tracker that flags volume patterns before the disclosure goes public. Retail sees the move 2-3 weeks after the pattern is already visible. The edge is in the timing.",
+                "This is exactly why we built the Edge Scanner — momentum scoring plus congressional tracking before the open. If you want to see how it works: horizons56.gumroad.com",
+            ]
+        return jsonify(results)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/post-twitter-reply', methods=['POST'])
+def post_twitter_reply_route():
+    """Post a reply from the Twitter tab choice buttons."""
+    from flask import jsonify, request as _req
+    import json as _json
+    data = _req.get_json(force=True, silent=True) or {}
+    tweet_id = str(data.get("tweet_id","")).strip()
+    comment  = str(data.get("comment","")).strip()
+    if not tweet_id or not comment:
+        return jsonify({"ok": False, "error": "Missing tweet_id or comment"}), 400
+    try:
+        from twitter_poster import post_comment
+        ok = post_comment(tweet_id, comment)
+        return jsonify({"ok": ok})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route('/twitter-auto-follow')
+def twitter_auto_follow_route():
+    """Trigger auto-follow with optional custom search terms."""
+    from flask import jsonify, request as _req
+    max_follows = int(_req.args.get("max", 20))
+    terms_raw   = _req.args.get("terms", "").strip()
+    try:
+        from twitter_poster import auto_follow_accounts, TRENDING_SEARCH_TERMS
+        import twitter_poster as _tp
+        if terms_raw:
+            custom = [t.strip() for t in terms_raw.split(",") if t.strip()]
+            _tp.TRENDING_SEARCH_TERMS = custom + TRENDING_SEARCH_TERMS
+        new_follows = auto_follow_accounts(max_follows=max_follows)
+        return jsonify({"ok": True, "new_follows": new_follows})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e), "new_follows": 0}), 500
+
+
+@app.route('/twitter-post-now')
+def twitter_post_now_route():
+    """Force post one tweet immediately."""
+    def _bg():
+        _run_engine("Twitter Force Post", "twitter_poster.py", extra_args=["--force"])
+    threading.Thread(target=_bg, daemon=True).start()
+    return ("<html><body style='background:#0f172a;color:#e2e8f0;font-family:Arial;padding:2rem;'>"
+            "<h2 style='color:#1d9bf0;'>Tweet queued</h2>"
+            "<p>Post will go out in ~10 seconds. Check Twitter to confirm.</p>"
+            "<br><a href='/?tab=twitter' style='color:#38bdf8;'>Back to Twitter Tab</a>"
+            "</body></html>")
 
 
 @app.route('/run-all-engines')
