@@ -673,11 +673,65 @@ Missed call rate: down 90%.
 #plumbing #contractor #automation""",
 ]
 
+# Portfolio showcase posts — paired with real screenshots from indicators/ folder
+_PORTFOLIO_ITEMS = [
+    ("""Built a full lead automation workflow inside GoHighLevel for a home services client.
+
+New lead comes in from a web form. Immediate SMS fires. System waits for reply. No response in 30 min triggers an email. 24 hours later a second SMS goes out. Task created for manual outreach.
+
+Zero manual steps. Zero missed leads.
+
+This is what I build for clients.
+
+#GoHighLevel #CRM #Automation #HomeServices""",
+     "indicators/ghl-automation-demo.png"),
+
+    ("""GHL pipeline dashboard for a home services client.
+
+Opportunity status, conversion rates, revenue value, stage distribution — live and updating automatically.
+
+Clients stop guessing where their leads are. The system tells them.
+
+#GoHighLevel #CRM #LeadManagement #Automation""",
+     "indicators/ghl-dashboard-demo.png"),
+
+    ("""Built a contractor intake system that handles both sides of the operation.
+
+Client submits a job request. Gets an immediate confirmation. Request routes automatically to the right contractor.
+
+Contractor gets notified instantly. No phone tag. No lost jobs.
+
+#Contractors #Automation #HomeServices #SmallBusiness""",
+     "indicators/contractor intake dashboard client side.png"),
+
+    ("""The contractor side of the intake system.
+
+Every job request logged, prioritized, and tracked in real time. Status updates automatically as jobs move through the pipeline.
+
+Built in Python and deployed live. No spreadsheets. No manual tracking.
+
+#Automation #ContractorTech #Python #BuildersOfTwitter""",
+     "indicators/contractor intake dashboard contractor side.png"),
+
+    ("""Automated outreach dashboard pulling live data from multiple sources.
+
+Lead status, pipeline value, outreach history — one view, no manual data entry.
+
+Built for lead generation at scale. Same system can be built for any service business in under a week.
+
+#Automation #LeadGeneration #AITools #BusinessIntelligence""",
+     "dashboard_populated.png"),
+]
+
+PORTFOLIO_POSTS    = [item[0] for item in _PORTFOLIO_ITEMS]
+PORTFOLIO_IMAGE_MAP = {item[0]: item[1] for item in _PORTFOLIO_ITEMS}
+
 ALL_POSTS = {
     "signals":      SIGNALS_POSTS,
     "indicators":   INDICATOR_POSTS,
     "results":      RESULTS_POSTS,
     "engagement":   ENGAGEMENT_POSTS,
+    "portfolio":    PORTFOLIO_POSTS,
 }
 
 # Image-attached categories — get a generated card PNG attached to the tweet
@@ -687,6 +741,7 @@ DAILY_SCHEDULE = [
     ("signals",    "13:00"),   # 8am ET  — morning signal preview (image card)
     ("results",    "17:00"),   # 12pm ET — weekly scorecard (image card)
     ("indicators", "20:00"),   # 3pm ET  — TradingView Pine Script product post
+    ("portfolio",  "21:00"),   # 4pm ET  — portfolio showcase with real screenshot
     ("engagement", "23:00"),   # 6pm ET  — trading question / engagement
 ]
 
@@ -1165,6 +1220,14 @@ def run(force: bool = False):
             img_bytes  = _generate_signal_card(card_lines, card_type)
             if img_bytes:
                 media_id = upload_media(img_bytes)
+        elif category == "portfolio":
+            img_rel = PORTFOLIO_IMAGE_MAP.get(text)
+            if img_rel:
+                img_path = DATA_DIR / img_rel
+                if img_path.exists():
+                    media_id = upload_media(img_path.read_bytes())
+                else:
+                    print(f"  [PORTFOLIO] Image not found: {img_path}")
 
         ok = post_tweet(text, media_id=media_id)
         if ok:
