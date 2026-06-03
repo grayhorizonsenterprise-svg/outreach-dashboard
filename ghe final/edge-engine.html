@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge Engine | Gray Horizons Enterprise</title>
+<meta name="description" content="AI-powered trading signals. Congressional flow tracking, momentum scoring, Kelly Criterion position sizing. Stop guessing. Start trading with an actual edge.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#071426;--panel:#0c1b33;--panel2:#0f2040;--border:rgba(255,255,255,0.08);--text:#e2e8f0;--muted:#64748b;--blue:#4f9cff;--cyan:#22d3ee;--green:#00d084;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:clip;-webkit-font-smoothing:antialiased;}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:70px 70px;}
+.wrap{position:relative;z-index:2;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 36px;background:rgba(7,20,38,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.logo{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--text);}
+.logo span{background:linear-gradient(90deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-links{display:flex;gap:4px;align-items:center;}
+.nav-link{padding:6px 12px;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;border-radius:6px;transition:color .15s,background .15s;}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,.05);}
+.nav-cta{padding:7px 16px;font-size:13px;font-weight:700;text-decoration:none;border-radius:6px;border:1px solid rgba(0,208,132,.35);background:rgba(0,208,132,.08);color:var(--green);transition:background .15s;}
+.nav-cta:hover{background:rgba(0,208,132,.18);}
+section{max-width:900px;margin:0 auto;padding:0 24px;}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:24px;}
+.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);}
+h1{font-size:clamp(30px,5vw,54px);font-weight:900;line-height:1.07;letter-spacing:-.04em;margin-bottom:20px;}
+.grad{background:linear-gradient(90deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:18px;color:var(--muted);line-height:1.7;margin-bottom:36px;max-width:560px;}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;font-size:15px;font-weight:800;font-family:inherit;border-radius:8px;cursor:pointer;text-decoration:none;border:none;transition:transform .18s,box-shadow .18s;}
+.btn-p{background:linear-gradient(90deg,#065f46,#059669);color:#fff;border:2px solid #047857;box-shadow:0 0 0 3px rgba(5,150,105,.3),0 4px 18px rgba(6,95,70,.5);}
+.btn-p:hover{transform:translateY(-2px);}
+.btn-s{background:#1a2d4a;color:#f0f6ff;border:1px solid rgba(255,255,255,.2);font-size:14px;font-weight:600;}
+.btn-s:hover{background:#223660;transform:translateY(-2px);}
+.stat-row{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-top:48px;}
+.stat{text-align:center;}
+.stat-num{font-size:36px;font-weight:900;background:linear-gradient(90deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px;}
+.features{padding:80px 0;}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:12px;}
+h2{font-size:clamp(24px,4vw,40px);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:16px;}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:40px;}
+.feat-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:28px;}
+.feat-icon{font-size:28px;margin-bottom:14px;}
+.feat-card h3{font-size:16px;font-weight:700;margin-bottom:8px;}
+.feat-card p{font-size:14px;color:var(--muted);line-height:1.6;}
+.signal-preview{padding:80px 0;border-top:1px solid var(--border);}
+.signal-box{background:var(--panel);border:1px solid rgba(0,208,132,.2);border-radius:16px;padding:32px;max-width:640px;margin:40px auto 0;}
+.signal-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px;}
+.signal-row:last-child{border-bottom:none;}
+.signal-ticker{font-weight:800;color:var(--text);}
+.signal-score{font-weight:700;color:var(--green);}
+.signal-label{font-size:12px;color:var(--muted);}
+.pricing{padding:80px 0;border-top:1px solid var(--border);text-align:center;}
+.price-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:720px;margin:40px auto 0;}
+.price-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:32px;}
+.price-card.featured{border-color:rgba(0,208,132,.4);}
+.price-tag{font-size:40px;font-weight:900;background:linear-gradient(90deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.price-period{font-size:14px;color:var(--muted);}
+.price-name{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:16px;}
+.price-features{text-align:left;display:flex;flex-direction:column;gap:8px;margin:20px 0 24px;}
+.pfeat{display:flex;align-items:center;gap:8px;font-size:13px;}
+.pfeat::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
+.cta-strip{padding:80px 0;border-top:1px solid var(--border);text-align:center;}
+.cta-strip p{font-size:16px;color:var(--muted);margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;}
+footer{border-top:1px solid var(--border);padding:32px 24px;text-align:center;}
+.footer-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;}
+.footer-links a:hover{color:var(--blue);}
+.footer-copy{font-size:12px;color:var(--muted);}
+@media(max-width:640px){nav{padding:0 16px;}.nav-links{display:none;}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="wrap">
+<nav>
+  <a href="index.html" class="logo">Gray Horizons <span>Enterprise</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="grant-ai.html" class="nav-link">Grant AI</a>
+  </div>
+  <a href="https://horizons56.gumroad.com" class="nav-cta">Get Access</a>
+</nav>
+
+<div class="hero">
+  <div class="eyebrow">Edge Engine Trading System</div>
+  <h1>Stop Guessing.<br><span class="grad">Trade With an Edge.</span></h1>
+  <p class="hero-sub">Congressional flow tracking, momentum scoring, and Kelly Criterion position sizing. Three signals most retail traders never see. One system that puts them together every morning before the open.</p>
+  <div class="btn-row">
+    <a href="https://horizons56.gumroad.com" class="btn btn-p">Get Access Now</a>
+    <a href="#how-it-works" class="btn btn-s">See How It Works</a>
+  </div>
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">0-100</div><div class="stat-label">Daily momentum score per ticker</div></div>
+    <div class="stat"><div class="stat-num">70+</div><div class="stat-label">Score required before we look</div></div>
+    <div class="stat"><div class="stat-num">45 days</div><div class="stat-label">Congressional disclosure window we track</div></div>
+  </div>
+</div>
+
+<section class="features">
+  <div class="section-label">The System</div>
+  <h2>Three Signals. <span class="grad">One Score.</span></h2>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">📊</div>
+      <h3>Momentum Scoring</h3>
+      <p>RSI, volume anomaly, and EMA cross combined into one number from 0 to 100. We only look at setups scoring 70 or above. Everything below gets filtered out automatically.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🏛️</div>
+      <h3>Congressional Flow Tracking</h3>
+      <p>Congress members have 45 days to disclose trades. Volume patterns appear in week one. We track every disclosure as it drops and flag tickers with active congressional activity.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📐</div>
+      <h3>Kelly Criterion Position Sizing</h3>
+      <p>Your entry matters less than how much you put on. The Kelly formula sizes every position to your actual win rate and edge so you never overleverage a losing trade again.</p>
+    </div>
+  </div>
+</section>
+
+<section class="signal-preview" id="how-it-works">
+  <div class="section-label" style="text-align:center;">Sample Signal Sheet</div>
+  <h2 style="text-align:center;">What You Get <span class="grad">Every Morning</span></h2>
+  <div class="signal-box">
+    <div class="signal-row">
+      <span class="signal-ticker">NVDA</span>
+      <span class="signal-label">Momentum score</span>
+      <span class="signal-score">82 / 100</span>
+    </div>
+    <div class="signal-row">
+      <span class="signal-ticker">SPY</span>
+      <span class="signal-label">Congressional flag active</span>
+      <span class="signal-score">74 / 100</span>
+    </div>
+    <div class="signal-row">
+      <span class="signal-ticker">AAPL</span>
+      <span class="signal-label">Volume anomaly 2.1x</span>
+      <span class="signal-score">71 / 100</span>
+    </div>
+    <div class="signal-row">
+      <span class="signal-ticker">BTC</span>
+      <span class="signal-label">Above 20-day EMA confirmed</span>
+      <span class="signal-score">78 / 100</span>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:20px;text-align:center;">Sample only. Real sheet delivered daily to active members.</p>
+  </div>
+</section>
+
+<section class="pricing">
+  <div class="section-label">Pricing</div>
+  <h2>Pick Your <span class="grad">Access Level</span></h2>
+  <div class="price-row">
+    <div class="price-card">
+      <div class="price-name">Indicators Only</div>
+      <div class="price-tag">$67</div>
+      <div class="price-period">one-time</div>
+      <div class="price-features">
+        <div class="pfeat">Pine Script indicator suite</div>
+        <div class="pfeat">Momentum scoring overlay</div>
+        <div class="pfeat">Volume anomaly scanner</div>
+        <div class="pfeat">Works in TradingView free tier</div>
+      </div>
+      <a href="https://horizons56.gumroad.com" class="btn btn-s" style="width:100%;justify-content:center;font-size:13px;">Get Indicators</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-name">Full Edge Engine</div>
+      <div class="price-tag">$29</div>
+      <div class="price-period">per month</div>
+      <div class="price-features">
+        <div class="pfeat">Daily signal sheet before open</div>
+        <div class="pfeat">Congressional flow tracker</div>
+        <div class="pfeat">Kelly Criterion position calculator</div>
+        <div class="pfeat">All indicators included</div>
+        <div class="pfeat">Cancel anytime</div>
+      </div>
+      <a href="https://horizons56.gumroad.com" class="btn btn-p" style="width:100%;justify-content:center;font-size:13px;">Get Full Access</a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-strip">
+  <h2>Ready to Trade <span class="grad">With an Actual Edge?</span></h2>
+  <p>Get your first signal sheet free. No card required to see what the system flags.</p>
+  <a href="https://horizons56.gumroad.com" class="btn btn-p">Get Access Now</a>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="grant-ai.html">Grant AI</a>
+    <a href="hvac-ai.html">HVAC AI</a>
+    <a href="dental-ai.html">Dental AI</a>
+    <a href="mailto:grayhorizonsenterprise@gmail.com">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Gray Horizons Enterprise. All rights reserved.</div>
+</footer>
+</div>
+</body>
+</html>
