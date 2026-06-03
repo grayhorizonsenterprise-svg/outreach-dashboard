@@ -18,7 +18,7 @@ NICHE_MESSAGES = {
 
     "hoa": [
         """\
-Hey, this is Alex with Gray Horizons
+Gray Horizons Enterprise here
 
 Most HOA teams we've worked with were losing track of violations between the initial report and final resolution
 
@@ -26,13 +26,12 @@ We fixed that with a simple system that handles tracking and follow-ups automati
 
 If this is even slightly an issue on your side, I can show you exactly how we set it up this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
 
         """\
-Hey, this is Alex
+Gray Horizons Enterprise here
 
 The biggest issue we keep seeing with HOA teams is violations getting lost between report, board review, and resolution
 
@@ -40,13 +39,12 @@ We built a system that locks that entire process down so nothing slips through
 
 If you want, I can walk you through it and get something similar set up for you quickly
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
 
         """\
-Hey, this is Alex with Gray Horizons
+Gray Horizons Enterprise here
 
 HOA teams we've worked with had the same problem - violations documented at the start, then lost somewhere between board review and resolution
 
@@ -54,13 +52,12 @@ We built a system that tracks the full lifecycle automatically so nothing slips
 
 I can show you exactly how it works and get it running for your team this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
 
         """\
-Hey, this is Alex
+Gray Horizons Enterprise here
 
 Violation follow-up is where most HOA teams lose time - the documentation exists but pulling it together for a board review or audit takes way longer than it should
 
@@ -68,13 +65,12 @@ We fixed that for a handful of firms and now it runs on its own
 
 I can walk you through the setup this week and show you what it looks like in practice
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
 
         """\
-Hey, this is Alex with Gray Horizons
+Gray Horizons Enterprise here
 
 The gap between a homeowner filing a report and that violation being fully resolved is where HOA teams take on the most risk
 
@@ -82,13 +78,12 @@ We built a system that locks that gap down - every step tracked, documented, and
 
 I can get you set up in about a week. Let me know and I'll show you exactly how it works
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
 
         """\
-Hey, this is Alex
+Gray Horizons Enterprise here
 
 Straight to it - we help HOA management teams stop losing violations in the handoff between report, tracking, and resolution
 
@@ -96,7 +91,6 @@ Most teams we work with had it happening constantly and didn't realize how much 
 
 I can show you exactly how we fixed it this week if you want to see it
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -108,7 +102,6 @@ Quick question - when a violation gets reported, what does your process look lik
 
 That gap is where most HOA teams run into problems.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -120,7 +113,6 @@ When a board member asks for a status update on an open violation, how long does
 
 We've been working on cutting that time down. Happy to show you what we built if it's relevant.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -138,7 +130,6 @@ Three shops we've set this up for recovered 6-10 jobs in the first month they'd 
 
 Worth a 20-minute call to see if it fits? {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -154,7 +145,6 @@ We built a follow-up system that responds to those inquiries automatically and k
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -168,7 +158,6 @@ We built an automated system that follows up on every open estimate and every mi
 
 If that sounds like something worth looking at, grab a time here: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -182,7 +171,6 @@ We fix that. I can show you exactly what it looks like for a shop your size in 2
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -200,7 +188,6 @@ We built a follow-up system that responds to every new patient inquiry immediate
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -216,7 +203,6 @@ We fix that with an automated follow-up system. Three practices we've set this u
 
 Worth 20 minutes to see the setup? {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -230,7 +216,6 @@ We built a reactivation system that reaches back out to those patients automatic
 
 I can show you what this looks like for your practice in 20 minutes: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -242,7 +227,6 @@ Patient no-shows cost the average dental practice $50,000-$150,000 per year in l
 
 Happy to walk you through exactly how it works: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -258,7 +242,6 @@ We built a system that captures every missed call and gets it back into your pip
 
 I can show you exactly how it works this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -272,7 +255,6 @@ We built a dispatch system that routes emergency calls to the right tech instant
 
 I can walk you through it this week and show you what it looks like running
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -286,7 +268,6 @@ We fixed that with a system that keeps every job visible from dispatch to close-
 
 I can get you set up in about a week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -300,7 +281,6 @@ We built a system that captures and responds to those inquiries automatically so
 
 I can show you exactly how we set it up this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -314,7 +294,6 @@ We built that entire process into a system that runs automatically after every j
 
 I can show you what it looks like and get it running for your team this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -328,7 +307,6 @@ We built a system that handles post-job follow-up and review collection automati
 
 I can show you how it works this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -340,7 +318,6 @@ Direct question - when an emergency call comes in at night and your main line is
 
 That's usually the biggest gap I hear about from plumbing companies.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -352,7 +329,6 @@ When you finish a job, what does the follow-up process look like? Is there anyth
 
 We've built that whole post-job flow into a system. Happy to show you how it works.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -368,7 +344,6 @@ We built a system that tracks every open bid and follows up automatically until 
 
 I can show you exactly how it works and get it running for your team this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -382,7 +357,6 @@ We built a system that handles automatic follow-up so you stop losing jobs to fa
 
 I can walk you through it this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -396,7 +370,6 @@ We built a system that captures and responds to those leads automatically so you
 
 I can show you how we set it up this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -410,7 +383,6 @@ We built a system that cuts that response time down and automates the follow-up 
 
 I can get you set up in about a week. Let me know and I will show you exactly how it works
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -424,7 +396,6 @@ We fixed that for several firms with a system that tracks every estimate and fol
 
 I can show you what that looks like this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -440,7 +411,6 @@ We built a system that responds immediately and keeps them engaged until your te
 
 I can show you how it works this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -452,7 +422,6 @@ When you send out an estimate and don't hear back, what does your follow-up proc
 
 That's usually where jobs go cold.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -464,7 +433,6 @@ After-hours leads from homeowners - when they come in through your website or Go
 
 Just asking because that's usually where the fastest-responding contractor wins the job.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -480,7 +448,6 @@ We built a system that captures new inquiries and responds automatically so you 
 
 I can show you exactly how it works this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -494,7 +461,6 @@ We built a system that keeps every recurring client on schedule with automatic r
 
 I can walk you through it this week and show you what it looks like running
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -508,7 +474,6 @@ We built a system that holds every overflow lead and follows up automatically wh
 
 I can show you how we set it up this week
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -520,7 +485,6 @@ Not trying to waste your time - just wanted to ask: when you have a full schedul
 
 That overflow moment is usually where companies either grow or miss out.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -534,7 +498,6 @@ Quick one: after a storm comes through your area, how does your team handle the 
 
 We've been helping roofing companies manage exactly that.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -546,7 +509,6 @@ How are you following up on estimates that went out but never got a response? In
 
 Just curious what your current process looks like.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -558,7 +520,6 @@ Direct question: when a homeowner calls about a leak or damage and you can't get
 
 That's usually the biggest gap I hear about. Happy to share what we've built if it's useful.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -573,7 +534,6 @@ When someone calls about a repair and you're backed up, what happens to that cal
 
 That's usually where shops lose the most appointments without realizing it.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -585,7 +545,6 @@ After a repair is done, does your shop have anything that automatically follows 
 
 Most shops we've worked with said that whole process was completely manual.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -597,7 +556,6 @@ Direct question, when a customer calls for a quote and you don't hear back, how 
 
 Happy to show you what we've built for this if it's relevant.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -609,7 +567,6 @@ Missed calls during your busiest hours are probably your biggest revenue leak. T
 
 We built a system that catches those and routes them automatically. I can show you how it works.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -623,7 +580,6 @@ New patient calls that come in after hours or while the front desk is with someo
 
 That gap is where most practices lose new patients without realizing it.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -635,7 +591,6 @@ When a new patient inquiry comes in through your website or a referral calls aft
 
 The practices we've worked with said that window was their biggest drop-off point for new patients.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -647,7 +602,6 @@ Patient reactivation, reaching back out to patients who haven't been in for 3-6 
 
 We automated that entire process for a few practices. Happy to show you what it looks like.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -661,7 +615,6 @@ When a new buyer or seller inquiry comes in through your website at night or on 
 
 In real estate that response window is usually where the lead goes to whoever calls back first.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -673,7 +626,6 @@ Leads that go cold between first inquiry and first showing, how does your team t
 
 That follow-up gap is where most agencies lose deals they should have closed.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -685,7 +637,6 @@ After a showing, what does your follow-up process look like? Is there anything a
 
 We built that entire post-showing flow into a system for a few agencies. Happy to walk you through it.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -699,7 +650,6 @@ When a client tries to book online and your calendar is full, what happens to th
 
 That overflow moment is usually where salons lose their best new clients.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -711,7 +661,6 @@ Clients who haven't been in for 60-90 days, is there anything that automatically
 
 We built a reactivation system for a few salons that runs completely on its own.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -723,7 +672,6 @@ After-hours booking requests, when someone fills out your contact form at 10pm, 
 
 By morning they've usually booked somewhere else.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out of future emails, reply with REMOVE.""",
@@ -743,7 +691,6 @@ We built a system that captures every missed call and follows up automatically s
 
 Happy to show you how it works this week.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -756,7 +703,6 @@ We built a system that follows up on every open estimate automatically until you
 
 I can get you set up in about a week.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -772,7 +718,6 @@ We built a system that captures every missed inquiry and responds automatically 
 
 Worth a quick look?
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -785,7 +730,6 @@ We built an automated re-engagement system that follows up with lapsed customers
 
 Happy to walk you through it.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -799,7 +743,6 @@ When a pet owner calls your clinic after hours about an emergency, what happens 
 
 If it goes to voicemail, they're already searching for an emergency vet. We built a system that captures those calls and directs them appropriately so you never lose an emergency case to a missed call.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -812,7 +755,6 @@ We built a reactivation system that reaches out to those clients automatically w
 
 I can show you what it looks like this week.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -828,7 +770,6 @@ That gap is usually worth $800-$1,200 per patient per year in missed exams and l
 
 We built an automated recall system that handles exactly that. Happy to show you how it works.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -841,7 +782,6 @@ Most practices lose 20-30% of new patient calls that way.
 
 We built a system that captures every missed inquiry and books them automatically.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -859,7 +799,6 @@ We built a system that responds instantly and captures the booking automatically
 
 Happy to show you how it works.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -870,7 +809,6 @@ Clients who used your service once and never rebooked  - do you have anything re
 
 Most cleaning companies have 50-100 of these lapsed clients sitting in their records. We built a reactivation system that converts a percentage of them back every month.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -886,7 +824,6 @@ Most painting contractors lose 30-40% of their estimates to slow follow-up.
 
 We built a system that tracks every open quote and follows up automatically until you get a yes or a no.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -897,7 +834,6 @@ After-hours and weekend calls for painting projects  - when they come in and nob
 
 We built a system that responds to every inquiry automatically so you're always first to reply.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -913,7 +849,6 @@ That gap between the estimate and the decision is where most flooring companies 
 
 We built a system that follows up on every open quote automatically so you stop losing installs to competitors who follow up faster.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -926,7 +861,6 @@ We built a post-install follow-up system that collects reviews and asks for refe
 
 Worth a quick look?
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -942,7 +876,6 @@ When someone requests a moving quote on your site after hours, how fast does you
 
 We built a system that responds instantly and locks in the booking before your competitors call back.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -953,7 +886,6 @@ Most moving companies have no system to follow up with leads who got a quote but
 
 We built an automated sequence that follows up with those leads at the right intervals  - and converts a percentage of them without anyone on your team having to track it manually.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -971,7 +903,6 @@ We build automated retention systems: post-treatment follow-up, rebooking remind
 
 Happy to show you what it looks like.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -982,7 +913,6 @@ Clients who came in for a consultation but never booked a treatment  - is there 
 
 We built a system that nurtures those consult leads with timely messages until they're ready to commit.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -998,7 +928,6 @@ Research shows it takes 7 touchpoints before most prospects make an insurance de
 
 We built automated nurture sequences that keep you in front of every prospect until they're ready  - without you having to track each one manually.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1011,7 +940,6 @@ We built an automated renewal pipeline that reaches out at the right intervals, 
 
 Happy to show you how it works this week.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1027,7 +955,6 @@ Rate shoppers contact 3-5 lenders simultaneously and go with whoever responds fi
 
 We build instant response systems for mortgage brokers  - automated inquiry acknowledgment, pre-qual questions, and calendar booking  - so you're always first in the door.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1040,7 +967,6 @@ We build automated past-client pipelines: rate drop alerts, annual review outrea
 
 Top producers we work with generate 2-4 deals per month purely from past client automation.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1058,7 +984,6 @@ We build automated onboarding and retention sequences that check in with new mem
 
 Happy to show you what it looks like.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1071,7 +996,6 @@ We set up automated class-fill campaigns that go out to members based on their a
 
 Worth 15 minutes to see what's possible?
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1087,7 +1011,6 @@ For most restaurants, the answer is nothing. No thank you, no birthday offer, no
 
 We build automated guest retention systems  - post-visit follow-up, loyalty incentives, and win-back campaigns for guests who haven't returned.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1098,7 +1021,6 @@ Slow nights and empty reservation slots  - is there anything going out automatic
 
 We built an automated fill system that messages your best customers at the right time to drive reservations when you need them most.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1114,7 +1036,6 @@ Most storage facilities lose 30-40% of phone leads this way.
 
 We built a system that captures every missed inquiry and follows up automatically with availability and pricing  - before they book a competitor.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1130,7 +1051,6 @@ We built a system that responds to every inquiry instantly and captures the enro
 
 Happy to show you how it works.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1144,7 +1064,6 @@ After a consultation or inquiry, what does your follow-up look like?
 
 Most photographers send one email and hope for the best. We built a system that follows up on every open inquiry automatically  - so you book more sessions without chasing leads manually.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -1224,7 +1143,7 @@ def generate_message(company, niche):
     msg = msg.replace("{stripe}", STRIPE_LINK)
     msg = _add_periods(msg)
     # Inject free trial before signature
-    sig = "Alex\nGray Horizons Enterprise"
+    sig = "Gray Horizons Enterprise"
     if sig in msg and FREE_TRIAL_LINE.strip() not in msg:
         msg = msg.replace(sig, FREE_TRIAL_LINE + sig, 1)
     if "grayhorizonsenterprise.com" not in msg and "https://calendly.com/grayhorizonsenterprise/30min" not in msg:

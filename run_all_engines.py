@@ -83,24 +83,15 @@ run("Generate local biz outreach",   "outreach_generator.py",       300)
 run("Generate grant outreach",        "grant_outreach_generator.py", 300)
 
 # ── PHASE 4: SEND ─────────────────────────────────────────────────────────────
+# Local business outreach re-enabled. SendGrid is primary sender.
+# Signals sends remain paused until {ticker} template variable is fixed.
 
 print("\n" + "=" * 60)
 print("  PHASE 4 — SEND OUTREACH")
 print("=" * 60)
 
-run("Send: Signals (traders/bettors)",  "signals_sender.py",          600)
-run("Send: Local biz outreach",         "outreach_sender.py",         600)
-run("Send: Grant writing outreach",     "grant_blast.py",             600)
-run("Send: GHL agency outreach",        "ghl_outreach.py",            600)
-run("Send: Missed call pitch",          "missed_call_textback.py",    600)
-run("Send: Review generation pitch",   "review_generation.py",       600)
-run("Send: GBP optimization pitch",    "gbp_optimizer.py",           600)
-run("Send: AI chatbot pitch",          "ai_chatbot_outreach.py",     600)
-run("Send: Voice AI pitch",            "ai_voice_receptionist.py",   600)
-run("Send: Lead reactivation pitch",   "lead_reactivation.py",       600)
-run("Send: Social media mgmt pitch",   "social_media_mgmt.py",       600)
-run("Send: Website audit pitch",       "website_audit.py",           600)
-run("Send: SMS marketing pitch",       "sms_marketing.py",           600)
+run("Send local biz outreach",   "outreach_sender.py",       300)
+run("Send GHL outreach",         "ghl_outreach.py",          300)
 
 # ── PHASE 5: FOLLOW-UPS ───────────────────────────────────────────────────────
 
@@ -108,9 +99,7 @@ print("\n" + "=" * 60)
 print("  PHASE 5 — FOLLOW-UPS")
 print("=" * 60)
 
-run("Follow-up: local biz",      "followup_sender.py",   600)
-run("Follow-up: signals",        "signals_engine.py",    600)
-run("Follow-up: grant writing",  "signals_engine.py",    600)
+run("Follow-up engine",          "followup_engine.py",       300)
 
 # ── PHASE 6: CONTENT ──────────────────────────────────────────────────────────
 
@@ -119,6 +108,7 @@ print("  PHASE 6 — CONTENT + SOCIAL")
 print("=" * 60)
 
 run("Twitter auto-posts (3/day)",    "twitter_poster.py",      300)
+run("LinkedIn auto-post (1/day)",   "linkedin_poster.py",     120)
 run("Shadow Clans episode gen",      "shadow_clans_engine.py", 1200)
 run("Video pipeline",                "video_pipeline.py",      900)
 

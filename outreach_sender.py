@@ -26,7 +26,7 @@ def _linkify(text: str) -> str:
 
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
+SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 SMTP_PASSWORD = os.getenv("SENDER_APP_PASSWORD", "")
 
 

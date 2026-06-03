@@ -1,224 +1,372 @@
 """
 linkedin_poster.py — Gray Horizons Enterprise
-Posts daily content to LinkedIn using the official API.
-Posts 1x/day: alternates between signals pitch, AI automation pitch, indicators pitch.
+Auto-posts to LinkedIn once per day. Three content streams:
+  1. GHL automation tips (drives Fiverr/Upwork leads)
+  2. AI services / local business hooks (drives service inquiries)
+  3. Edge Engine / trading signals (drives Gumroad sales)
 
-Setup (one time, 10 minutes):
-  1. Go to linkedin.com/developers → Create app
-  2. Add "Share on LinkedIn" product to your app
-  3. Go to OAuth tools → Generate access token with scope: w_member_social,r_liteprofile
-  4. Copy the access token
-  5. Add to Railway: LINKEDIN_ACCESS_TOKEN=<token>
+Setup (one-time, 10 minutes):
+  1. Go to developer.linkedin.com and create an app
+  2. Add products: "Share on LinkedIn" and "Sign In with LinkedIn"
+  3. Under Auth, add redirect URL: http://localhost:8000/callback
+  4. Copy Client ID and Client Secret to env vars below
+  5. Run: python linkedin_poster.py --auth
+     Opens browser, you approve, token saved automatically
+  6. Token lasts 60 days. Re-run --auth before it expires.
 
-Token lasts 60 days — regenerate monthly.
+Railway env vars to add:
+  LINKEDIN_CLIENT_ID
+  LINKEDIN_CLIENT_SECRET
+  LINKEDIN_ACCESS_TOKEN
+  LINKEDIN_PERSON_ID  (auto-filled after --auth)
 """
 
-import requests
 import os
 import sys
 import json
 import random
-import time
+import webbrowser
+import requests
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import urlencode
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-DATA_DIR     = Path(os.path.dirname(os.path.abspath(__file__)))
-POSTED_FILE  = DATA_DIR / "linkedin_posted.json"
-ACCESS_TOKEN = os.getenv("LINKEDIN_ACCESS_TOKEN", "")
-SIGNALS_LINK = os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
-INDICATORS_LINK = os.getenv("INDICATORS_LINK", "https://horizons56.gumroad.com/l/ghe-indicators")
-CALENDLY_LINK = os.getenv("CALENDLY_LINK", "https://calendly.com/grayhorizonsenterprise")
+CLIENT_ID     = os.getenv("LINKEDIN_CLIENT_ID", "")
+CLIENT_SECRET = os.getenv("LINKEDIN_CLIENT_SECRET", "")
+ACCESS_TOKEN  = os.getenv("LINKEDIN_ACCESS_TOKEN", "")
+PERSON_ID     = os.getenv("LINKEDIN_PERSON_ID", "")
 
-POSTS = [
-    # Signals pitch
-    f"""Most traders react to the market.
+DATA_DIR   = Path(os.path.dirname(os.path.abspath(__file__)))
+POSTED_LOG = DATA_DIR / "linkedin_posted.json"
+TOKEN_FILE = DATA_DIR / "linkedin_token.json"
 
-Edge Engine subscribers see it before it moves.
+FIVERR_GHL   = "https://www.fiverr.com/s/5rYYAZQ"
+FIVERR_VOICE = "https://www.fiverr.com/s/Eg88Kld"
+FIVERR_LEAD  = "https://www.fiverr.com/s/m588eez"
+GUMROAD_LINK = "https://horizons56.gumroad.com"
 
-We track 3 things every morning before 8am:
-- Congressional disclosure patterns (45-day window)
-- Volume anomalies vs 20-day average
-- RSI + EMA momentum scores (0-100)
+# ── Content Pools ──────────────────────────────────────────────────────────────
 
-You only act on setups scored 70+.
+GHL_POSTS = [
+    f"""Most local service businesses pay for leads they never follow up on fast enough.
 
-$49/month. Every morning before open.
+The window to convert an inbound lead is under 5 minutes. After that, the conversion rate drops by over 80%.
 
-{SIGNALS_LINK}""",
+A properly built GoHighLevel automation fires an SMS within 60 seconds of a form submission. No staff required.
 
-    # AI automation pitch
-    f"""Most small businesses lose 30% of inbound leads to voicemail.
+If your CRM is sitting idle while leads go cold, that is a fixable problem.
 
-The customer doesn't leave a message.
-They call the next result on Google.
+See how it works: {FIVERR_GHL}""",
 
-We build AI systems that answer, qualify, and follow up automatically — 24/7.
+    f"""The 5 GHL automations every HVAC, dental, and contractor business needs:
 
-One system. One week to build. Pays for itself in the first closed deal.
+1. Instant SMS on new lead
+2. Missed call text-back
+3. 7-day follow-up sequence
+4. Appointment reminder 24 hours out
+5. Review request after job completion
 
-If you're losing leads to voicemail, let's talk:
-{CALENDLY_LINK}""",
+Most businesses have zero of these. The ones that do close 30 to 40 percent more leads from the same ad spend.
 
-    # Indicators pitch
-    f"""Congress members have 45 days to disclose their trades.
+Built and running in 5 days: {FIVERR_GHL}""",
 
-The volume patterns show up on the chart before disclosure goes public.
+    f"""A client was running Google Ads, getting 40 to 50 leads per month, and closing maybe 8 of them.
 
-We built a TradingView indicator that flags it — plus momentum scoring and Kelly position sizing.
+The problem was not the ads. The problem was a 4-hour average response time and no follow-up after day 1.
 
-$49 for all 3 indicators:
-{INDICATORS_LINK}""",
+We built a GHL pipeline with instant SMS, a 5-touch follow-up sequence, and a missed call bot.
 
-    # Authority/education
-    """The #1 reason traders blow up isn't bad entries.
+Next month: 21 closes from the same 47 leads.
 
-It's bad position sizing.
+Same ad budget. Better system: {FIVERR_GHL}""",
 
-Kelly Criterion says: risk a percentage of your bankroll proportional to your edge.
+    f"""GoHighLevel is one of the most powerful CRM platforms available for local service businesses.
 
-Most traders risk 10% on a coin flip.
-Kelly says risk 0%.
+Most people use 10% of it.
 
-Built this into a TradingView indicator so you never have to do the math again.""",
+Pipelines, automations, SMS sequences, appointment booking, reputation management, voice AI, and reporting are all built in.
 
-    # HOA/contractor pitch
-    f"""Most HOA teams track violations in spreadsheets.
+If you are paying for GHL and still manually following up with leads, something is wrong with the setup.
 
-Board asks for a status update.
-Manager spends 45 minutes pulling it together.
+Let us fix it: {FIVERR_GHL}""",
 
-We built a system that handles tracking, follow-ups, and board reports automatically.
+    f"""What a fully automated lead pipeline looks like in practice:
 
-If your team is still doing this manually, I can show you what we set up for similar HOAs this week:
-{CALENDLY_LINK}""",
+Lead fills out form at 11:47 PM.
+60 seconds later: Automated SMS fires. "Saw your inquiry. What is a good time to connect tomorrow?"
+Lead replies: "10 AM works."
+Calendar invite sent automatically. Owner gets a notification.
 
-    # Social proof / momentum
-    """What's working in 2026 for small businesses:
+No one touched this manually.
 
-1. AI answering inbound calls 24/7
-2. Automated follow-up sequences (not just email)
-3. Systems that work while you sleep
+That is what we build: {FIVERR_GHL}""",
 
-What's not working:
-- Hoping referrals keep coming
-- Manually tracking everything in spreadsheets
-- Paying for ads before fixing the conversion problem
+    f"""The biggest mistake I see in GHL setups: workflows that trigger but do not close the loop.
 
-The businesses winning right now built the systems first.""",
+A lead comes in. SMS fires. No reply. Nothing else happens.
+
+A proper sequence has 7 touches over 14 days across SMS, email, and voicemail drop. Most leads convert on touch 4 or 5, not touch 1.
+
+If your automation stops after the first message, you are leaving money on the table.
+
+{FIVERR_GHL}""",
 ]
 
-HASHTAGS = [
-    "#trading #stockmarket #EdgeEngine #signals #TradingView",
-    "#SmallBusiness #AI #automation #businessgrowth",
-    "#investing #stocks #crypto #momentum #Kelly",
-    "#HOA #propertymanagement #AI #automation",
-    "#entrepreneur #startup #sales #growth",
+AI_SERVICES_POSTS = [
+    f"""Most businesses that invest in AI tools end up with 10 different subscriptions and no system connecting them.
+
+The value of AI is not in the tools. It is in the workflow that ties them together.
+
+A voice AI that answers calls and books appointments. A CRM that scores leads automatically. A follow-up engine that knows when to push and when to wait.
+
+That is what we build at Gray Horizons Enterprise.
+
+{FIVERR_VOICE}""",
+
+    f"""AI voice agents are no longer a novelty. They are a competitive advantage.
+
+A dental office running an AI inbound agent:
+- Answers every call, even at 2 AM
+- Qualifies the caller in 90 seconds
+- Books directly into the calendar
+- Sends a confirmation SMS automatically
+
+First month: 14 new patient bookings that would have gone to voicemail.
+
+This is real and it is available now: {FIVERR_VOICE}""",
+
+    f"""The businesses winning right now are not the ones spending the most on ads.
+
+They are the ones with the tightest follow-up systems.
+
+Speed to lead. Consistent nurture. Automated booking.
+
+If you want to see what that looks like built for your business: {FIVERR_LEAD}""",
+
+    f"""Three questions I ask every business owner before building their automation system:
+
+1. What happens when someone fills out your contact form right now?
+2. How many times does your team follow up before giving up?
+3. What does your average lead-to-close timeline look like?
+
+Most of the time the answers reveal the same thing: the system stops too early.
+
+We fix that: {FIVERR_LEAD}""",
+
+    f"""There is a version of your business where leads never fall through the cracks.
+
+Where every inquiry gets a response in under 60 seconds.
+Where follow-ups happen automatically for 30 days.
+Where your calendar fills without your team touching a single thing manually.
+
+That version exists. We build it.
+
+Gray Horizons Enterprise. AI automation for local service businesses.
+
+{FIVERR_GHL}""",
 ]
 
+EDGE_ENGINE_POSTS = [
+    f"""Most retail traders lose not because they pick bad stocks, but because they size positions emotionally.
 
-def load_posted() -> set:
-    if POSTED_FILE.exists():
-        try:
-            return set(json.loads(POSTED_FILE.read_text()))
-        except Exception:
-            pass
-    return set()
+The Kelly Criterion removes the emotion. It tells you exactly what percentage of your capital to risk on each trade based on your actual win rate and average win/loss ratio.
 
+We built this into the Edge Engine scoring system.
 
-def save_posted(posted: set):
-    POSTED_FILE.write_text(json.dumps(list(posted)))
+{GUMROAD_LINK}""",
 
+    f"""Congressional members are required to disclose stock trades within 45 days under the STOCK Act.
 
-def get_my_id() -> str:
-    """Get LinkedIn member URN."""
+The pattern shows up before the disclosure in volume and options flow. Not always. But often enough to track.
+
+We scan every new disclosure and run it through our momentum scoring model.
+
+Edge Engine: {GUMROAD_LINK}""",
+
+    f"""A trading edge is not a hot tip. It is a repeatable process.
+
+RSI divergence. Volume anomaly relative to 30-day average. EMA cross confirmation.
+
+When all three line up, the score is above 70. That is when we look closer.
+
+When none align, we wait. That is the discipline most people cannot maintain.
+
+Edge Engine scoring system: {GUMROAD_LINK}""",
+
+    f"""The most honest thing I can tell you about trading signals:
+
+No system wins 100% of the time. The goal is a positive expected value over many trades.
+
+Win rate of 55%. Average win 2x the average loss. That math compounds into real results over time.
+
+We track every signal, every outcome. Transparency is the product.
+
+{GUMROAD_LINK}""",
+]
+
+ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS + EDGE_ENGINE_POSTS
+
+# ── Helpers ────────────────────────────────────────────────────────────────────
+
+def load_posted():
+    if POSTED_LOG.exists():
+        return json.loads(POSTED_LOG.read_text(encoding="utf-8"))
+    return []
+
+def save_posted(posted):
+    POSTED_LOG.write_text(json.dumps(posted, indent=2), encoding="utf-8")
+
+def load_token():
+    if TOKEN_FILE.exists():
+        data = json.loads(TOKEN_FILE.read_text(encoding="utf-8"))
+        return data.get("access_token", ""), data.get("person_id", "")
+    return ACCESS_TOKEN, PERSON_ID
+
+def get_person_id(token):
     r = requests.get(
         "https://api.linkedin.com/v2/userinfo",
-        headers={"Authorization": f"Bearer {ACCESS_TOKEN}"},
-        timeout=10,
+        headers={"Authorization": f"Bearer {token}"}
     )
     if r.status_code == 200:
         return r.json().get("sub", "")
-    print(f"[LINKEDIN] Could not get user ID: {r.status_code} {r.text[:100]}")
+    r2 = requests.get(
+        "https://api.linkedin.com/v2/me",
+        headers={"Authorization": f"Bearer {token}"}
+    )
+    if r2.status_code == 200:
+        return r2.json().get("id", "")
     return ""
 
-
-def post_to_linkedin(text: str) -> bool:
-    """Post a text update to LinkedIn."""
-    member_id = get_my_id()
-    if not member_id:
-        return False
-
-    hashtag = random.choice(HASHTAGS)
-    full_text = f"{text}\n\n{hashtag}"
-
+def post_to_linkedin(token, person_id, text):
     payload = {
-        "author": f"urn:li:person:{member_id}",
+        "author": f"urn:li:person:{person_id}",
         "lifecycleState": "PUBLISHED",
         "specificContent": {
             "com.linkedin.ugc.ShareContent": {
-                "shareCommentary": {"text": full_text[:3000]},
-                "shareMediaCategory": "NONE",
+                "shareCommentary": {"text": text},
+                "shareMediaCategory": "NONE"
             }
         },
-        "visibility": {"com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"},
+        "visibility": {
+            "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
+        }
     }
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+        "X-Restli-Protocol-Version": "2.0.0"
+    }
+    r = requests.post("https://api.linkedin.com/v2/ugcPosts", json=payload, headers=headers)
+    return r.status_code, r.text
 
-    r = requests.post(
-        "https://api.linkedin.com/v2/ugcPosts",
-        headers={
-            "Authorization": f"Bearer {ACCESS_TOKEN}",
-            "Content-Type": "application/json",
-            "X-Restli-Protocol-Version": "2.0.0",
-        },
-        json=payload,
-        timeout=15,
-    )
+# ── OAuth Flow ─────────────────────────────────────────────────────────────────
 
-    if r.status_code in (200, 201):
-        post_id = r.headers.get("x-restli-id", "?")
-        print(f"  [LINKEDIN] Posted: {post_id}")
-        return True
-    else:
-        print(f"  [LINKEDIN] Error {r.status_code}: {r.text[:200]}")
-        return False
-
-
-def run():
-    if not ACCESS_TOKEN:
-        print("[LINKEDIN] LINKEDIN_ACCESS_TOKEN not set.")
-        print("  1. Go to linkedin.com/developers → Create app")
-        print("  2. Add 'Share on LinkedIn' product")
-        print("  3. OAuth Tools → Generate token with w_member_social scope")
-        print("  4. Add LINKEDIN_ACCESS_TOKEN to Railway vars")
+def run_auth():
+    if not CLIENT_ID or not CLIENT_SECRET:
+        print("ERROR: Set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET first.")
         return
+
+    import http.server
+    import threading
+
+    auth_code = {}
+
+    class Handler(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            from urllib.parse import urlparse, parse_qs
+            params = parse_qs(urlparse(self.path).query)
+            if "code" in params:
+                auth_code["code"] = params["code"][0]
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write(b"Authorized. You can close this tab.")
+        def log_message(self, *args):
+            pass
+
+    server = http.server.HTTPServer(("localhost", 8000), Handler)
+    t = threading.Thread(target=server.handle_request)
+    t.start()
+
+    params = urlencode({
+        "response_type": "code",
+        "client_id": CLIENT_ID,
+        "redirect_uri": "http://localhost:8000/callback",
+        "scope": "r_liteprofile w_member_social openid profile",
+        "state": "ghe_auth"
+    })
+    webbrowser.open(f"https://www.linkedin.com/oauth/v2/authorization?{params}")
+    print("Browser opened. Approve the LinkedIn permission request...")
+    t.join(timeout=120)
+
+    if "code" not in auth_code:
+        print("ERROR: No auth code received. Try again.")
+        return
+
+    r = requests.post("https://www.linkedin.com/oauth/v2/accessToken", data={
+        "grant_type": "authorization_code",
+        "code": auth_code["code"],
+        "redirect_uri": "http://localhost:8000/callback",
+        "client_id": CLIENT_ID,
+        "client_secret": CLIENT_SECRET,
+    })
+
+    if r.status_code != 200:
+        print(f"ERROR getting token: {r.text}")
+        return
+
+    token = r.json()["access_token"]
+    person_id = get_person_id(token)
+
+    TOKEN_FILE.write_text(json.dumps({
+        "access_token": token,
+        "person_id": person_id,
+        "saved_at": datetime.now().isoformat()
+    }, indent=2), encoding="utf-8")
+
+    print(f"Token saved to {TOKEN_FILE}")
+    print(f"Person ID: {person_id}")
+    print("\nAdd these to Railway env vars:")
+    print(f"  LINKEDIN_ACCESS_TOKEN={token}")
+    print(f"  LINKEDIN_PERSON_ID={person_id}")
+
+# ── Main ───────────────────────────────────────────────────────────────────────
+
+def main():
+    token, person_id = load_token()
+
+    if not token:
+        print("[SKIP] No LinkedIn token. Run: python linkedin_poster.py --auth")
+        return
+
+    if not person_id:
+        person_id = get_person_id(token)
+        if not person_id:
+            print("[SKIP] Could not get LinkedIn person ID. Re-run --auth.")
+            return
 
     posted = load_posted()
-    today  = datetime.utcnow().strftime("%Y-%m-%d")
+    available = [p for p in ALL_POSTS if p not in posted]
 
-    if today in posted:
-        print(f"[LINKEDIN] Already posted today ({today}) — skipping")
-        return
-
-    # Pick a post not used recently
-    available = [p for p in POSTS if p[:40] not in posted]
     if not available:
-        posted = set()
-        available = POSTS
+        print("[RESET] All posts cycled. Starting over.")
+        posted = []
+        available = ALL_POSTS[:]
 
     post_text = random.choice(available)
-    print("[LINKEDIN] Posting...")
-    ok = post_to_linkedin(post_text)
+    status, response = post_to_linkedin(token, person_id, post_text)
 
-    if ok:
-        posted.add(today)
-        posted.add(post_text[:40])
+    if status in (200, 201):
+        posted.append(post_text)
         save_posted(posted)
-        print("[LINKEDIN] Done — posted 1 update today")
+        preview = post_text[:80].replace("\n", " ")
+        print(f"[POSTED] {preview}...")
     else:
-        print("[LINKEDIN] Post failed — check token or app permissions")
-
+        print(f"[ERROR] Status {status}: {response}")
 
 if __name__ == "__main__":
-    run()
+    if "--auth" in sys.argv:
+        run_auth()
+    else:
+        main()
