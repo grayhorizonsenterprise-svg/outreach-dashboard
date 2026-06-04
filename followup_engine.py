@@ -17,7 +17,7 @@ FOLLOWUP_LOG  = os.path.join(DATA_DIR, "followup_log.csv")
 OPT_OUT_FILE  = os.path.join(DATA_DIR, "unsubscribe_list.csv")
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
+SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 CALENDLY      = "https://calendly.com/grayhorizonsenterprise/30min"
 DAILY_LIMIT   = int(os.getenv("FOLLOWUP_DAILY_LIMIT", "200"))
 FOLLOWUP_AFTER_DAYS = 3
@@ -43,7 +43,6 @@ If any part of what I mentioned resonated, I'm happy to do a quick 15-minute cal
 
 No pitch. Just a conversation: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -59,7 +58,6 @@ If you're open to a quick call to see if it applies to what you're working on: {
 
 If now's not the right time, no worries at all - just reply and I'll get out of your inbox.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -75,7 +73,6 @@ I sent you a note a few days ago about how we help businesses automate their out
 
 If it's not a fit, just say the word and I won't reach out again.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -91,7 +88,6 @@ If you're curious whether that's possible for you: {calendly}
 
 Either way, hope business is going well.
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",

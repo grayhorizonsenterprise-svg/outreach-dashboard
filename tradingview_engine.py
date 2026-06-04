@@ -65,7 +65,6 @@ We just published 3 invite-only indicators:
 
 All three have free 7-day trials. Happy to add you if you want to test them on your charts.
 
-Alex
 Gray Horizons Enterprise
 grayhorizonsenterprise.com""",
 
@@ -82,7 +81,7 @@ We also have a momentum edge scanner ($29/mo) and Kelly criterion position sizer
 
 Worth a look?
 
-Alex | Gray Horizons Enterprise""",
+Gray Horizons Enterprise""",
 
     """\
 Hey,
@@ -97,7 +96,7 @@ Also have an Edge Scanner ($29/mo) and Congressional Trade Tracker ($39/mo) if e
 
 Happy to add you for a free trial week.
 
-Alex | Gray Horizons Enterprise""",
+Gray Horizons Enterprise""",
 ]
 
 
@@ -147,7 +146,7 @@ def build_html(message: str) -> str:
 def send(email: str, name: str, subject: str, message: str) -> bool:
     payload = {
         "personalizations": [{"to": [{"email": email, "name": name}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": build_html(message)}],
     }

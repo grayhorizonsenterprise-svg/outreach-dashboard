@@ -15,7 +15,7 @@ OPT_OUT_FILE  = os.path.join(DATA_DIR, "unsubscribe_list.csv")
 SENT_LOG      = os.path.join(DATA_DIR, "sent_log.csv")
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
+SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 CALENDLY      = "https://calendly.com/grayhorizonsenterprise/30min"
 DAILY_LIMIT   = int(os.getenv("DAILY_LIMIT_NICHE", "500"))
 REFILL_BELOW  = 200
@@ -110,7 +110,6 @@ We build automated onboarding and retention sequences that check in with new mem
 
 Happy to show you what it looks like for your specific setup: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -126,7 +125,6 @@ All personalized. All automated. Zero extra staff hours.
 
 15-minute call to see how it fits your operation: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -142,7 +140,6 @@ We build the retention system - automated re-engagement, milestone celebrations,
 
 Worth 15 minutes to see if the numbers make sense for you: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -158,7 +155,6 @@ One studio we work with went from 60% average class capacity to 84% within 6 wee
 
 Quick call to see what's possible for your location: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -174,7 +170,6 @@ You focus on coaching. The system handles the rest.
 
 If this sounds like something worth exploring: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",

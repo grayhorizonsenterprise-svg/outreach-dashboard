@@ -882,7 +882,7 @@ VERIFIED_SENDER = "grayhorizonsenterprise@gmail.com"
 
 def send_email(to_email, name, company, message, subject=""):
     sender_addr = VERIFIED_SENDER  # verified in SendGrid, always use this
-    sender_name = os.getenv("SENDER_NAME", "Alex")
+    sender_name = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
     subject     = subject.strip() if subject.strip() else "Quick question for your team"
 
     if not to_email or not str(to_email).strip():
@@ -3278,13 +3278,12 @@ Here's what happens next:
 
 If you have any questions before then, just reply to this email.
 
-Alex
 Gray Horizons Enterprise
 https://grayhorizonsenterprise.com"""
 
     payload = {
         "personalizations": [{"to": [{"email": email, "name": name}]}],
-        "from": {"email": from_email, "name": "Alex | Gray Horizons"},
+        "from": {"email": from_email, "name": "Gray Horizons Enterprise"},
         "subject": "You're in — here's what happens next",
         "content": [{"type": "text/plain", "value": body}],
     }

@@ -71,7 +71,6 @@ Ready to run it this week?
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -89,7 +88,7 @@ If you want, send me your list size and I'll tell you what kind of response rate
 
 {calendly}
 
-Alex | Gray Horizons""",
+Gray Horizons Enterprise""",
 
     """\
 Hey,
@@ -104,7 +103,6 @@ It takes us 48 hours to set up. $497 flat. You handle replies, we handle everyth
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 ]
 
@@ -154,7 +152,7 @@ def send_email(email, company, niche, subject, message) -> bool:
 </body></html>"""
     payload = {
         "personalizations": [{"to": [{"email": email, "name": company}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

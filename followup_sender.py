@@ -49,7 +49,6 @@ Worth a 15-minute call to see if it makes sense for you?
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -63,7 +62,6 @@ If you have 15 minutes this week I can show you exactly how it works.
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
     ]
 }
@@ -87,7 +85,6 @@ If the timing isn't right, no worries at all. But if it is, here's a link to boo
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -102,7 +99,6 @@ If you want to see it in action before committing, I'm happy to do a quick demo 
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
     ]
 }
@@ -126,7 +122,6 @@ If the timing isn't right, no worries. I'll stop following up either way.
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
         """\
@@ -142,7 +137,6 @@ If that's useful, here's how to get started:
 
 If not, I hope things are going well regardless.
 
-Alex
 Gray Horizons Enterprise""",
     ]
 }
@@ -185,7 +179,7 @@ def send_email(email: str, name: str, subject: str, message: str) -> bool:
     html = build_html(message)
     payload = {
         "personalizations": [{"to": [{"email": email, "name": name}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

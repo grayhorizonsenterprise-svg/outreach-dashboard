@@ -15,7 +15,7 @@ OPT_OUT_FILE  = os.path.join(DATA_DIR, "unsubscribe_list.csv")
 SENT_LOG      = os.path.join(DATA_DIR, "sent_log.csv")
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
+SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 CALENDLY      = "https://calendly.com/grayhorizonsenterprise/30min"
 DAILY_LIMIT   = int(os.getenv("DAILY_LIMIT_NICHE", "500"))
 REFILL_BELOW  = 200
@@ -112,7 +112,6 @@ One restaurant we work with went from 40% capacity on Tuesdays to 70% in 6 weeks
 
 Happy to show you how it works: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -128,7 +127,6 @@ No cold calling. No extra staff. Just a system running in the background.
 
 If that sounds interesting: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -144,7 +142,6 @@ Most restaurants see 15-25% increase in repeat visits within the first month.
 
 Worth a quick call: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -160,7 +157,6 @@ Simple to set up. Pays for itself in the first week.
 
 Quick call to see how it works for your setup: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -176,7 +172,6 @@ Your list, your customers, zero platform fees.
 
 If you want to see what it looks like: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",

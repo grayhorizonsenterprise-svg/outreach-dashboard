@@ -66,7 +66,6 @@ $297/month. No contracts. I can show you examples from a similar {niche} we're m
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -85,7 +84,7 @@ $297/month. First month includes a full profile cleanup and bio optimization.
 
 {calendly}
 
-Alex | Gray Horizons""",
+Gray Horizons Enterprise""",
 
     """\
 Hey,
@@ -100,7 +99,6 @@ Happy to send you examples from similar businesses we're running right now.
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 ]
 
@@ -150,7 +148,7 @@ def send_email(email, company, niche, subject, message) -> bool:
 </body></html>"""
     payload = {
         "personalizations": [{"to": [{"email": email, "name": company}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

@@ -681,10 +681,10 @@ New lead comes in from a web form. Immediate SMS fires. System waits for reply. 
 
 Zero manual steps. Zero missed leads.
 
-This is what I build for clients.
+This is what I build for clients: """ + GUMROAD_LINK + """
 
 #GoHighLevel #CRM #Automation #HomeServices""",
-     "indicators/ghl-automation-demo.png"),
+     "indicators/ghl-automation-full.png"),
 
     ("""GHL pipeline dashboard for a home services client.
 
@@ -692,8 +692,43 @@ Opportunity status, conversion rates, revenue value, stage distribution — live
 
 Clients stop guessing where their leads are. The system tells them.
 
+Need this built for your business: """ + GUMROAD_LINK + """
+
 #GoHighLevel #CRM #LeadManagement #Automation""",
      "indicators/ghl-dashboard-demo.png"),
+
+    ("""Built a Vapi AI voice agent that books HVAC appointments on inbound calls.
+
+Caller says they need AC repair. Agent collects name, address, issue, and preferred time. Books the job. No human needed.
+
+Live transcript from a real test call shown here.
+
+Build yours: """ + GUMROAD_LINK + """
+
+#VoiceAI #Vapi #HVAC #AIAutomation""",
+     "indicators/vapi-live-transcript.png"),
+
+    ("""AI voice agent dashboard — real inbound call data.
+
+Call duration, transcript, booking status, caller info — all logged automatically after every call.
+
+This is what an AI receptionist looks like in production.
+
+""" + GUMROAD_LINK + """
+
+#VoiceAI #Vapi #AIAgent #Automation""",
+     "indicators/vapi-agent-dashboard.png"),
+
+    ("""Booking confirmed. No human involved.
+
+AI voice agent took the call, qualified the lead, and completed the appointment booking start to finish.
+
+This runs 24/7. Nights, weekends, holidays.
+
+""" + GUMROAD_LINK + """
+
+#VoiceAI #AIAutomation #Vapi #SmallBusiness""",
+     "indicators/vapi-booking-complete.png"),
 
     ("""Built a contractor intake system that handles both sides of the operation.
 
@@ -701,23 +736,18 @@ Client submits a job request. Gets an immediate confirmation. Request routes aut
 
 Contractor gets notified instantly. No phone tag. No lost jobs.
 
+""" + GUMROAD_LINK + """
+
 #Contractors #Automation #HomeServices #SmallBusiness""",
      "indicators/contractor intake dashboard client side.png"),
-
-    ("""The contractor side of the intake system.
-
-Every job request logged, prioritized, and tracked in real time. Status updates automatically as jobs move through the pipeline.
-
-Built in Python and deployed live. No spreadsheets. No manual tracking.
-
-#Automation #ContractorTech #Python #BuildersOfTwitter""",
-     "indicators/contractor intake dashboard contractor side.png"),
 
     ("""Automated outreach dashboard pulling live data from multiple sources.
 
 Lead status, pipeline value, outreach history — one view, no manual data entry.
 
 Built for lead generation at scale. Same system can be built for any service business in under a week.
+
+""" + GUMROAD_LINK + """
 
 #Automation #LeadGeneration #AITools #BusinessIntelligence""",
      "dashboard_populated.png"),
@@ -797,13 +827,16 @@ def _generate_signal_card(lines: list[str], card_type: str = "signals") -> bytes
         return None
 
     W, H = 1200, 628
-    BG       = (13, 17, 23)
-    ACCENT   = (0, 208, 132)   if card_type == "signals"    else (29, 161, 242)
+    BG       = (15, 32, 65)     # navy — avoids X adult-content false positive on near-black
+    BORDER   = (255, 255, 255)
+    ACCENT   = (0, 180, 120)   if card_type == "signals"    else (29, 130, 220)
     TEXT_HI  = (255, 255, 255)
-    TEXT_LO  = (139, 148, 158)
-    DIVIDER  = (33, 38, 45)
+    TEXT_LO  = (160, 175, 200)
+    DIVIDER  = (30, 55, 100)
 
-    img  = Image.new("RGB", (W, H), BG)
+    img  = Image.new("RGB", (W, H), BORDER)   # white outer border frame
+    inner = Image.new("RGB", (W - 16, H - 16), BG)
+    img.paste(inner, (8, 8))
     draw = ImageDraw.Draw(img)
 
     # Accent left bar

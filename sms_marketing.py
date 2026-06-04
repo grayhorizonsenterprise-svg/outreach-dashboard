@@ -66,7 +66,6 @@ $147/month. We write every text, handle all compliance and opt-outs. You just se
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -86,7 +85,7 @@ $147/month, includes Twilio fees for up to 500 contacts.
 
 {calendly}
 
-Alex | Gray Horizons""",
+Gray Horizons Enterprise""",
 
     """\
 Hey,
@@ -103,7 +102,6 @@ $147/month. No contracts.
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 ]
 
@@ -153,7 +151,7 @@ def send_email(email, company, niche, subject, message) -> bool:
 </body></html>"""
     payload = {
         "personalizations": [{"to": [{"email": email, "name": company}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

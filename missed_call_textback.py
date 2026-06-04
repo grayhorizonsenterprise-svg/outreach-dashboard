@@ -67,7 +67,6 @@ Want to see it running before you commit? I can show you a live demo on a 10-min
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -87,7 +86,7 @@ $97/month. No contracts. I can get it live for you in a day.
 
 {calendly}
 
-Alex | Gray Horizons Enterprise""",
+Gray Horizons Enterprise""",
 
     """\
 Hey,
@@ -117,7 +116,7 @@ Happy to set it up with a 2-week trial so you can see the numbers before you dec
 
 {calendly}
 
-Alex | Gray Horizons Enterprise"""
+Gray Horizons Enterprise"""
 
 
 def scrape_leads(target_count: int = 300) -> list[dict]:
@@ -181,7 +180,7 @@ def send_email(email: str, company: str, niche: str, subject: str, message: str)
 
     payload = {
         "personalizations": [{"to": [{"email": email, "name": company}]}],
-        "from":    {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from":    {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

@@ -16,7 +16,7 @@ OPT_OUT_FILE  = os.path.join(DATA_DIR, "unsubscribe_list.csv")
 SENT_LOG      = os.path.join(DATA_DIR, "sent_log.csv")
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
+SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 CALENDLY      = "https://calendly.com/grayhorizonsenterprise/30min"
 DAILY_LIMIT   = int(os.getenv("DAILY_LIMIT_NICHE", "500"))
 REFILL_BELOW  = 200
@@ -114,7 +114,6 @@ No software change. No extra staff. Setup takes a few hours.
 
 Happy to walk you through how it works: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -130,7 +129,6 @@ We fix both with automated confirmation sequences, smart reminders, and instant 
 
 15 minutes to see if this fits your practice: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -146,7 +144,6 @@ We close that gap with AI-powered instant response and nurture sequences. Client
 
 If that sounds relevant to what you're working on: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -162,7 +159,6 @@ One clinic we work with added $18K in revenue in the first month just from clien
 
 If you'd like to see how it works for your specific services: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -178,7 +174,6 @@ No app. No card. It runs in the background and compounds every month.
 
 Curious how it would work for your practice: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",

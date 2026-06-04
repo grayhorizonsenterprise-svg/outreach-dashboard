@@ -68,7 +68,6 @@ $97/month. We install it, train it, you own the leads. Demo takes 10 minutes.
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -90,7 +89,7 @@ $97/month. We set it up and train it on your business. Takes about a week start 
 
 {calendly}
 
-Alex | Gray Horizons""",
+Gray Horizons Enterprise""",
 
     """\
 Hey,
@@ -109,7 +108,6 @@ Setup is under 7 days. $97/month, cancel anytime.
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 ]
 
@@ -122,7 +120,7 @@ $97/month. Happy to show you the demo, it takes 10 minutes.
 
 {calendly}
 
-Alex | Gray Horizons Enterprise"""
+Gray Horizons Enterprise"""
 
 
 def scrape_leads(target_count: int = 300) -> list[dict]:
@@ -176,7 +174,7 @@ def send_email(email: str, company: str, niche: str, subject: str, message: str)
 </body></html>"""
     payload = {
         "personalizations": [{"to": [{"email": email, "name": company}]}],
-        "from":    {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from":    {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

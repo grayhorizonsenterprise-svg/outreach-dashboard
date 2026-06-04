@@ -68,7 +68,6 @@ If you want, I can pull your actual PageSpeed score right now and send it to you
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -86,7 +85,7 @@ I can pull your site's score without any login or access on your end, want me to
 
 {calendly}
 
-Alex | Gray Horizons""",
+Gray Horizons Enterprise""",
 
     """\
 Hey,
@@ -101,7 +100,6 @@ I can show you exactly where you're ranking for your top 5 search terms in a 10-
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 ]
 
@@ -151,7 +149,7 @@ def send_email(email, company, niche, subject, message) -> bool:
 </body></html>"""
     payload = {
         "personalizations": [{"to": [{"email": email, "name": company}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

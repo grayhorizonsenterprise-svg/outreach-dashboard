@@ -219,7 +219,6 @@ Shops we've set this up for recovered 6-10 jobs in the first month they'd have o
 
 Worth a 20-minute call to see if it fits? {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -234,7 +233,6 @@ We built a system that responds to those inquiries automatically and keeps them 
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -259,7 +257,6 @@ We built a follow-up system that responds to every new patient inquiry immediate
 
 Happy to show you how it works in 20 minutes: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -281,7 +278,6 @@ We built a system that captures every missed call and gets it back into your pip
 
 I can show you exactly how it works this week: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -303,7 +299,6 @@ We built a system that tracks every open bid and follows up automatically until 
 
 I can show you exactly how it works and get it running for your team this week: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -325,7 +320,6 @@ We built a system that captures new inquiries and responds automatically so you 
 
 I can show you exactly how it works this week: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -347,7 +341,6 @@ We've been helping roofing companies manage exactly that - automated intake, fol
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -371,7 +364,6 @@ We build automated onboarding and retention sequences that check in with new mem
 
 Happy to show you what it looks like for your specific setup: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -395,7 +387,6 @@ We build automated guest retention systems - post-visit thank you, loyalty incen
 
 Worth 15 minutes to see what it looks like: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -419,7 +410,6 @@ We build automated retention systems for aesthetic practices: post-treatment fol
 
 Happy to show you what it looks like: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -443,7 +433,6 @@ We build instant response systems for mortgage brokers and LOs - automated rate 
 
 Happy to walk you through it: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -467,7 +456,6 @@ We build automated nurture sequences for insurance agents - educational content,
 
 Worth a quick call: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -491,7 +479,6 @@ We build automated response and nurture systems for agents - instant acknowledgm
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -515,7 +502,6 @@ We build automated response and booking systems for cleaning companies - instant
 
 Worth 15 minutes to see: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -539,7 +525,6 @@ Most stores see 10-20% revenue lift in the first 30 days.
 
 If you want to see what it looks like for your store: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -567,7 +552,6 @@ We build automated response and follow-up systems that make sure you're always f
 
 Happy to show you what it looks like for your specific business: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -582,7 +566,6 @@ Takes about a week to build. After that it runs and compounds.
 
 If you're looking to add consistent revenue without adding headcount: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -658,7 +641,7 @@ DATA_DIR      = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__))
 QUEUE_FILE    = os.path.join(DATA_DIR, {repr(queue_file)})
 SENDGRID_KEY  = os.getenv({repr(sendgrid_env)}, "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
+SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 CALENDLY      = {calendly_repr}
 DAILY_LIMIT   = int(os.getenv({repr(engine_name.upper() + "_DAILY_LIMIT")}, {repr(daily_limit)}))
 REFILL_BELOW  = 200

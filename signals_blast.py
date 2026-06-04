@@ -68,7 +68,7 @@ def _build_html():
 
 <p style="color:#64748b;font-size:13px;">Not financial advice. Signals are algorithmic and for informational purposes only.</p>
 
-<p>— Alex<br>Gray Horizons Enterprise</p>
+<p>Gray Horizons Enterprise</p>
 </body>
 </html>"""
 
@@ -78,7 +78,7 @@ HTML = _build_html()
 def send(email: str, name: str = "") -> bool:
     payload = {
         "personalizations": [{"to": [{"email": email, "name": name}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": SUBJECT,
         "content": [{"type": "text/html", "value": HTML}],
     }

@@ -15,7 +15,7 @@ OPT_OUT_FILE  = os.path.join(DATA_DIR, "unsubscribe_list.csv")
 SENT_LOG      = os.path.join(DATA_DIR, "sent_log.csv")
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
+SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 CALENDLY      = "https://calendly.com/grayhorizonsenterprise/30min"
 DAILY_LIMIT   = int(os.getenv("DAILY_LIMIT_NICHE", "500"))
 REFILL_BELOW  = 200
@@ -110,7 +110,6 @@ We build instant response systems for mortgage brokers and LOs - automated rate 
 
 Happy to walk you through it: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -126,7 +125,6 @@ Top producers we work with generate 2-4 deals per month purely from past client 
 
 15-minute call to see if this applies to your book: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -140,7 +138,6 @@ We close that gap with automated nurture sequences - educational content, market
 
 Worth a quick conversation: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -156,7 +153,6 @@ You stay top of mind with every agent in your network without manually managing 
 
 Quick call to see what this looks like in practice: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -172,7 +168,6 @@ It takes about a week to build. After that it runs and compounds.
 
 If you're looking to add consistent volume without adding headcount: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",

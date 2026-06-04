@@ -253,7 +253,6 @@ Two ways to move forward:
 
 Either way works. Most people who want to move fast just go straight to option 1.
 
-Alex
 Gray Horizons Enterprise"""
 
 

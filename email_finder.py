@@ -26,9 +26,9 @@ closers = [
 ]
 
 signoffs = [
-"Alex",
-"Alex",
-"Alex"
+"Gray Horizons Enterprise",
+"Gray Horizons Enterprise",
+"Gray Horizons Enterprise"
 ]
 
 companies = [

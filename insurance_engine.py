@@ -15,7 +15,7 @@ OPT_OUT_FILE  = os.path.join(DATA_DIR, "unsubscribe_list.csv")
 SENT_LOG      = os.path.join(DATA_DIR, "sent_log.csv")
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
+SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 CALENDLY      = "https://calendly.com/grayhorizonsenterprise/30min"
 DAILY_LIMIT   = int(os.getenv("DAILY_LIMIT_NICHE", "500"))
 REFILL_BELOW  = 200
@@ -110,7 +110,6 @@ We set up instant response systems for independent agents - automated quote foll
 
 If you want to see how it works: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -126,7 +125,6 @@ Takes about 2 hours to set up. Works across life, health, auto, home - any line 
 
 15-minute call to see if it fits: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -142,7 +140,6 @@ One advisor we work with added 11 new policies in 45 days just from existing cli
 
 Quick call to see if your book has the same opportunity: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -158,7 +155,6 @@ Systematic, personal, and it runs without you having to think about it.
 
 Happy to show you what it looks like: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -172,7 +168,6 @@ We help advisors and agents build the backend - automated outreach, CRM-free pip
 
 Worth a 15-minute conversation if you're looking to add capacity without adding headcount: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",

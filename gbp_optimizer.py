@@ -70,7 +70,6 @@ $197/month. We handle everything. Want to see what a fully optimized profile loo
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -92,7 +91,7 @@ $197/month. First month includes a full profile audit and rebuild.
 
 {calendly}
 
-Alex | Gray Horizons""",
+Gray Horizons Enterprise""",
 
     """\
 Hey,
@@ -112,7 +111,6 @@ If you want, I can pull your current Google rankings on a 15-minute call and sho
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 ]
 
@@ -127,7 +125,7 @@ $197/month. I can show you exactly what we changed.
 
 {calendly}
 
-Alex | Gray Horizons Enterprise"""
+Gray Horizons Enterprise"""
 
 
 def scrape_leads(target_count: int = 300) -> list[dict]:
@@ -181,7 +179,7 @@ def send_email(email: str, company: str, niche: str, subject: str, message: str)
 </body></html>"""
     payload = {
         "personalizations": [{"to": [{"email": email, "name": company}]}],
-        "from":    {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from":    {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

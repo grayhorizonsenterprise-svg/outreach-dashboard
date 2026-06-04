@@ -15,7 +15,7 @@ OPT_OUT_FILE  = os.path.join(DATA_DIR, "unsubscribe_list.csv")
 SENT_LOG      = os.path.join(DATA_DIR, "sent_log.csv")
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
+SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 CALENDLY      = "https://calendly.com/grayhorizonsenterprise/30min"
 DAILY_LIMIT   = int(os.getenv("DAILY_LIMIT_NICHE", "500"))
 REFILL_BELOW  = 200
@@ -110,7 +110,6 @@ Most stores see 10-20% revenue lift in the first 30 days.
 
 If you want to see what it looks like for your store: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -124,7 +123,6 @@ We're talking automated post-purchase sequences, loyalty programs, restock alert
 
 We build this out in about a week. Happy to show you what it looks like for your specific brand: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -140,7 +138,6 @@ The math usually looks like this: same traffic, 30-40% more revenue.
 
 Worth a quick call: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -156,7 +153,6 @@ One client went from 1.2x to 2.8x ROAS just by fixing the post-purchase sequence
 
 Quick call to look at your specific setup: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -172,7 +168,6 @@ Takes 2-3 weeks to build. Runs forever.
 
 If this sounds relevant to where you are: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",

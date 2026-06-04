@@ -17,7 +17,7 @@ OPT_OUT_FILE  = os.path.join(DATA_DIR, "unsubscribe_list.csv")
 SENT_LOG      = os.path.join(DATA_DIR, "sent_log.csv")
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME   = os.getenv("SENDER_NAME", "Alex")
+SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 CALENDLY      = "https://calendly.com/grayhorizonsenterprise/30min"
 DAILY_LIMIT   = int(os.getenv("DAILY_LIMIT_NICHE", "500"))
 REFILL_BELOW  = 200
@@ -113,7 +113,6 @@ We built a system that responds instantly, qualifies the lead, and books a call 
 
 Takes 20 minutes to set up. Happy to show you exactly how it works: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -129,7 +128,6 @@ No CRM overhaul. No new software to learn. Just more deals closed from the leads
 
 If you want to see how it works: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -145,7 +143,6 @@ Took one client from 0 deals in a slow month to 3 closings just from contacts th
 
 15-minute call to see if this applies to your situation: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -159,7 +156,6 @@ We automate all of it - tenant communication, payment reminders, renewal outreac
 
 Currently helping operators with portfolios ranging from 10 to 200+ units. Curious if it applies to your setup: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -175,7 +171,6 @@ You close. The system handles everything else.
 
 See what it looks like for your specific situation: {calendly}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",

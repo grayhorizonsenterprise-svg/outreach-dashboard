@@ -50,7 +50,7 @@ def build_html(company: str, message: str) -> str:
 def send(email: str, name: str, subject: str, html: str) -> bool:
     payload = {
         "personalizations": [{"to": [{"email": email, "name": name}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

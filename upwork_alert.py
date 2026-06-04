@@ -78,7 +78,6 @@ Setup takes 5-7 days. You get a 7-day free trial before committing.
 
 Happy to jump on a 20-minute call to walk through exactly what this looks like for your business.
 
-Alex
 Gray Horizons Enterprise
 https://calendly.com/grayhorizonsenterprise/30min""",
 
@@ -100,7 +99,6 @@ I offer a 7-day free trial so you can see it running before you pay anything.
 
 Would a 20-minute call work to go over the details?
 
-Alex
 Gray Horizons Enterprise
 https://calendly.com/grayhorizonsenterprise/30min""",
 
@@ -120,7 +118,6 @@ Free 7-day trial. No upfront commitment.
 
 Happy to show you exactly what it looks like.
 
-Alex
 Gray Horizons Enterprise
 https://calendly.com/grayhorizonsenterprise/30min""",
 
@@ -135,7 +132,6 @@ Setup time is typically 5-7 days. I offer a free 7-day trial so you can see it w
 
 Can we jump on a quick call to go over your specific situation?
 
-Alex
 Gray Horizons Enterprise
 https://calendly.com/grayhorizonsenterprise/30min""",
 }

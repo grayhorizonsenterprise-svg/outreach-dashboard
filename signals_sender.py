@@ -28,7 +28,7 @@ def load_opt_outs() -> set:
 
 SENDGRID_KEY   = os.getenv("SENDGRID_API_KEY", "")
 SENDER_EMAIL   = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
-SENDER_NAME    = os.getenv("SENDER_NAME", "Alex at GHE")
+SENDER_NAME    = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
 SIGNALS_LINK   = os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
 DAILY_LIMIT    = int(os.getenv("SIGNALS_DAILY_LIMIT", "500"))
 
@@ -53,7 +53,6 @@ It all lands in one email. $49/month.
 
 If you want to see what it looks like: {link}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -67,7 +66,6 @@ We track congressional trades within 48 hours of disclosure, flag momentum setup
 
 Daily email, before market open. $49/month: {link}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -81,7 +79,6 @@ We built a system that flags those setups daily before 8am alongside congression
 
 $49/month: {link}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -95,7 +92,6 @@ Our subscribers had all 14 within 48 hours, before the price moved.
 
 Daily edge for traders: stocks, crypto, sports. $49/month: {link}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",
@@ -111,7 +107,6 @@ Three things hit our subscribers' inboxes this morning:
 
 That's every morning at 7:45am for $49/month: {link}
 
-Alex
 Gray Horizons Enterprise
 
 To opt out reply REMOVE.""",

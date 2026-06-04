@@ -65,7 +65,6 @@ $147/month. We set it up, you get the reviews. I can show you exactly how it wor
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -85,7 +84,7 @@ $147/month. No contracts. I'll show you a demo anytime this week.
 
 {calendly}
 
-Alex | Gray Horizons""",
+Gray Horizons Enterprise""",
 
     """\
 Hey,
@@ -100,7 +99,6 @@ $147/month, includes setup. Want me to pull your current Google ranking and show
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 ]
 
@@ -115,7 +113,7 @@ $147/month. I can get it running for you in 48 hours.
 
 {calendly}
 
-Alex | Gray Horizons"""
+Gray Horizons Enterprise"""
 
 
 def scrape_leads(target_count: int = 300) -> list[dict]:
@@ -169,7 +167,7 @@ def send_email(email: str, company: str, niche: str, subject: str, message: str)
 </body></html>"""
     payload = {
         "personalizations": [{"to": [{"email": email, "name": company}]}],
-        "from":    {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from":    {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

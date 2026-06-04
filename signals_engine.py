@@ -69,7 +69,6 @@ If you're active in the markets, this might be worth 5 minutes of your time:
 
 $49/month. Every morning before 8am.
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -85,7 +84,7 @@ $49/month to get it in your inbox every morning:
 
 {signals_link}
 
-Alex | Gray Horizons Enterprise""",
+Gray Horizons Enterprise""",
 
     """\
 If you're sizing positions by gut feel, you're leaving money on the table.
@@ -98,7 +97,7 @@ That's one of the three tools in our daily signal sheet. The others: momentum se
 
 $49/month. Delivered before market open.
 
-Alex | Gray Horizons""",
+Gray Horizons Enterprise""",
 ]
 
 FOLLOWUP_1 = """\
@@ -126,7 +125,7 @@ $49/month. Most traders say the congressional tracker alone is worth it.
 
 {signals_link}
 
-Alex | Gray Horizons
+Gray Horizons Enterprise
 
 P.S. We also sell the TradingView indicators directly  - Edge Scanner, Kelly Sizer, Congressional Tracker as Pine Script files. $49 one-time: {indicators_link}"""
 
@@ -157,7 +156,7 @@ def build_html(message: str) -> str:
 def send(email: str, name: str, subject: str, message: str) -> bool:
     payload = {
         "personalizations": [{"to": [{"email": email, "name": name}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": build_html(message)}],
     }

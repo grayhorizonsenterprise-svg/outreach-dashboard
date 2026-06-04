@@ -235,12 +235,12 @@ def send_welcome_email(email: str, name: str = ""):
           <li>Sports edge picks with Kelly criterion sizing</li>
         </ul>
         <p>First report arrives tomorrow morning.</p>
-        <p style="color:#94a3b8;font-size:13px;">— Alex, Gray Horizons</p>
+        <p style="color:#94a3b8;font-size:13px;">Gray Horizons Enterprise</p>
       </div>
     </div>"""
     payload = {
         "personalizations": [{"to": [{"email": email, "name": name}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": "You're subscribed — Edge Engine signals start tomorrow",
         "content": [{"type": "text/html", "value": html}],
     }

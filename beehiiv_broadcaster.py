@@ -204,7 +204,7 @@ def publish_newsletter(dry_run: bool = False) -> bool:
     payload = {
         "subject":           subject,
         "preview_text":      f"Edge Engine signals for {today} — momentum scores, congressional flags, sports edge",
-        "authors":           [{"name": "Alex", "email": "grayhorizonsenterprise@gmail.com"}],
+        "authors":           [{"name": "Gray Horizons Enterprise", "email": "grayhorizonsenterprise@gmail.com"}],
         "content_tags":      ["signals", "trading", "edge-engine"],
         "status":            status,
         "send_at":           None,

@@ -160,7 +160,7 @@ def send_proposal(name: str, company: str, email: str, niche: str) -> bool:
 
     payload = {
         "personalizations": [{"to": [{"email": email, "name": name}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": f"Your proposal — AI Lead Follow-Up System for {company}",
         "content": [{"type": "text/html", "value": html}],
     }

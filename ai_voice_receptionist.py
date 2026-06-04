@@ -69,7 +69,6 @@ Want to hear a 60-second demo call?
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -85,7 +84,7 @@ I can send you a demo recording of exactly how it sounds for a {niche}, takes 30
 
 {calendly}
 
-Alex | Gray Horizons""",
+Gray Horizons Enterprise""",
 
     """\
 Hey,
@@ -100,7 +99,6 @@ $197/month all-in. We handle the full setup.
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 ]
 
@@ -150,7 +148,7 @@ def send_email(email, company, niche, subject, message) -> bool:
 </body></html>"""
     payload = {
         "personalizations": [{"to": [{"email": email, "name": company}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }

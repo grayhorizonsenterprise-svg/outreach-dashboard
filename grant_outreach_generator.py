@@ -36,7 +36,6 @@ We handle the full application, research, writing, submission. Flat fee, no reta
 
 If you want, I can pull the specific grants we found for you and send them over this week.
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -50,7 +49,6 @@ We write the full application for a flat fee. If it doesn't get funded, we apply
 
 Worth a 15-minute call to see if there's a fit?
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -64,7 +62,6 @@ Flat fee per application. No upfront retainer. We've helped clients secure betwe
 
 Happy to send over the specific grants we identified for your organization if you're interested.
 
-Alex
 Gray Horizons Enterprise""",
 ]
 

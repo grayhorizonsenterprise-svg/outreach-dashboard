@@ -58,7 +58,6 @@ Worth a 15-minute demo?
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -81,7 +80,6 @@ If you want to see it running live I can do a quick walkthrough this week.
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 
     """\
@@ -99,7 +97,6 @@ Happy to show you exactly how it works for your business specifically.
 
 {calendly}
 
-Alex
 Gray Horizons Enterprise""",
 ]
 
@@ -161,7 +158,7 @@ def build_html(company: str, message: str) -> str:
 def send(email: str, name: str, subject: str, html: str) -> bool:
     payload = {
         "personalizations": [{"to": [{"email": email, "name": name}]}],
-        "from": {"email": FROM_EMAIL, "name": "Alex | Gray Horizons"},
+        "from": {"email": FROM_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html}],
     }
