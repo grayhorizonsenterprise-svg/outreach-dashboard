@@ -586,7 +586,7 @@ def add_social_prospect(handle, platform, notes, email=""):
                     "from your posts or mostly just views?\n\n"
                     "We help businesses turn content into actual leads. "
                     "Happy to show you what that looks like.\n\n"
-                    "Alex\nGray Horizons Enterprise"
+                    "Gray Horizons Enterprise"
                 ),
                 "status": "pending",
             }
@@ -814,8 +814,7 @@ def _build_html_body(name, sender_name, message):
         "<div style='font-family:Arial,sans-serif;line-height:1.7;color:#222;max-width:600px;'>"
         "<p>" + clean_msg.replace("\n\n", "</p><p>").replace("\n", "<br>") + "</p>"
         "<br>"
-        "<p style='margin:0;'>Alex<br>"
-        "Gray Horizons Enterprise<br>"
+        "<p style='margin:0;'>Gray Horizons Enterprise<br>"
         "<a href='https://grayhorizonsenterprise.com' style='color:#1a73e8;'>"
         "grayhorizonsenterprise.com</a></p>"
         "</div>"
@@ -1269,7 +1268,7 @@ def dashboard():
     <div class="card-sub">{email if email else '❌ No Email'}</div>
     <div class="card-msg">{format_message(row["message"])}</div>
     <div style="border-top:1px solid #334155;margin:10px 0 8px;padding-top:8px;font-size:12px;color:#64748b;line-height:1.7;">
-      Alex<br>Gray Horizons Enterprise<br>
+      Gray Horizons Enterprise<br>
       <a href="https://grayhorizonsenterprise.com" style="color:#38bdf8;text-decoration:none;">grayhorizonsenterprise.com</a>
     </div>
     <div>"""
@@ -1719,7 +1718,7 @@ def sent_log_view():
 def test_email():
     result = send_email(
         to_email="grayhorizonsenterprise@gmail.com",
-        name="Alex",
+        name="Gray Horizons Enterprise",
         company="Gray Horizons Enterprise",
         message="This is a test message confirming the outreach system is live and sending correctly."
     )
@@ -1781,7 +1780,7 @@ def test_sendgrid():
     try:
         payload = {
             "personalizations": [{"to": [{"email": sender}]}],
-            "from": {"email": sender, "name": "Alex"},
+            "from": {"email": sender, "name": "Gray Horizons Enterprise"},
             "subject": "SendGrid live test",
             "content": [{"type": "text/plain", "value": "SendGrid test from Gray Horizons dashboard."}]
         }
