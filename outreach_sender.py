@@ -1,7 +1,7 @@
 """
 outreach_sender.py — Gray Horizons Enterprise
-Sends a single email via SendGrid (primary) with Gmail SMTP fallback.
-Used by approval_queue.py for manual-review send flow.
+Sends a single email via Brevo (primary, free 300/day), SendGrid (secondary),
+or Gmail SMTP fallback.
 """
 
 import os
@@ -24,6 +24,7 @@ def _linkify(text: str) -> str:
         return f'<a href="{url}" style="color:#0ea5e9;text-decoration:none;">{label}</a>'
     return _URL_RE.sub(_replace, text)
 
+BREVO_KEY     = os.getenv("BREVO_API_KEY", "")
 SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL    = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
 SENDER_NAME   = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
@@ -45,7 +46,26 @@ def send_email(to_email: str, subject: str, body: str) -> str:
 <p style="color:#94a3b8;font-size:12px;margin-top:32px;">To opt out, reply "remove".</p>
 </body></html>"""
 
-    # ── SendGrid (primary) ───────────────────────────────────────────────────
+    # ── Brevo (primary, free 300/day) ───────────────────────────────────────
+    if BREVO_KEY:
+        payload = {
+            "sender":  {"email": FROM_EMAIL, "name": SENDER_NAME},
+            "to":      [{"email": to_email}],
+            "subject": subject,
+            "htmlContent": html_body,
+        }
+        try:
+            r = requests.post(
+                "https://api.brevo.com/v3/smtp/email",
+                headers={"api-key": BREVO_KEY, "Content-Type": "application/json"},
+                json=payload, timeout=15,
+            )
+            if r.status_code in (200, 201):
+                return "sent"
+        except Exception:
+            pass
+
+    # ── SendGrid (secondary) ─────────────────────────────────────────────────
     if SENDGRID_KEY:
         payload = {
             "personalizations": [{"to": [{"email": to_email}]}],
