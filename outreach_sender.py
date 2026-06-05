@@ -103,3 +103,32 @@ def send_email(to_email: str, subject: str, body: str) -> str:
             return str(e)
 
     return "no credentials configured"
+
+
+def log_sent_date(queue_csv: str, email: str) -> None:
+    """Stamp sent_date on the row after successful send so vapi_agent can time follow-up calls."""
+    import csv
+    from datetime import datetime
+    from pathlib import Path
+
+    path = Path(queue_csv)
+    if not path.exists():
+        return
+
+    rows, fieldnames = [], []
+    with open(path, encoding="utf-8", errors="ignore") as f:
+        reader = csv.DictReader(f)
+        fieldnames = list(reader.fieldnames or [])
+        rows = list(reader)
+
+    if "sent_date" not in fieldnames:
+        fieldnames.append("sent_date")
+
+    for row in rows:
+        if row.get("email", "").strip().lower() == email.lower() and not row.get("sent_date", "").strip():
+            row["sent_date"] = datetime.now().isoformat()
+
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)

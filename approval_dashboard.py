@@ -439,6 +439,22 @@ def _auto_blast_scheduler():
     return
 
 
+def _vapi_followup_scheduler():
+    """Calls leads 3 days after email was sent. Runs daily at 10 AM."""
+    import random
+    while True:
+        now = datetime.now()
+        target = now.replace(hour=10, minute=0, second=0, microsecond=0)
+        if now >= target:
+            target += timedelta(days=1)
+        time.sleep((target - now).total_seconds())
+        try:
+            from vapi_agent import run_followup_calls
+            run_followup_calls(days_after=3, max_calls=20)
+        except Exception as e:
+            print(f"[VAPI FOLLOWUP] Error: {e}", flush=True)
+
+
 # Start all revenue engine threads
 for _fn in [
     _signals_engine_daily,
@@ -456,6 +472,7 @@ for _fn in [
     _mortgage_engine_daily,
     _followup_engine_daily,
     _auto_blast_scheduler,
+    _vapi_followup_scheduler,
 ]:
     threading.Thread(target=_fn, daemon=True).start()
 
