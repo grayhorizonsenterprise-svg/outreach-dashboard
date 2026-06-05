@@ -20,11 +20,12 @@ import requests
 from datetime import datetime, timedelta
 from pathlib import Path
 
-VAPI_KEY          = os.getenv("VAPI_API_KEY", "")
-PHONE_NUMBER_ID   = os.getenv("VAPI_PHONE_NUMBER_ID", "")
-ASSISTANT_ID      = os.getenv("VAPI_ASSISTANT_ID", "")
-CALENDLY_URL      = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
-STRIPE_LINK       = os.getenv("STRIPE_PAYMENT_LINK", "")
+VAPI_KEY              = os.getenv("VAPI_API_KEY", "")
+PHONE_NUMBER_ID       = os.getenv("VAPI_PHONE_NUMBER_ID", "")
+OUTBOUND_ASSISTANT_ID = os.getenv("VAPI_OUTBOUND_ASSISTANT_ID", "a614121f-e9df-4396-b18e-02d0bd682372")
+INBOUND_ASSISTANT_ID  = os.getenv("VAPI_INBOUND_ASSISTANT_ID", "31251738-3c30-4ccb-9d91-c9d4a944dff3")
+CALENDLY_URL          = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
+STRIPE_LINK           = os.getenv("STRIPE_PAYMENT_LINK", "")
 
 BASE_URL  = "https://api.vapi.ai"
 QUEUE_CSV = Path(os.path.dirname(os.path.abspath(__file__))) / "outreach_queue.csv"
@@ -141,13 +142,8 @@ def make_outbound_call(name: str, phone: str, company: str, niche: str = "hvac")
 
     pain      = NICHE_PAIN.get(niche.lower().replace(" ", "_"), "leads slipping through slow follow-up")
     prompt    = OUTBOUND_SYSTEM_PROMPT.replace("{name}", name or "there").replace("{niche}", niche).replace("{pain}", pain)
-    assistant = get_or_create_assistant(outbound=True)
-
-    if not assistant:
-        return {"status": "error", "reason": "could not create assistant"}
-
     payload = {
-        "assistantId": assistant,
+        "assistantId": OUTBOUND_ASSISTANT_ID,
         "assistantOverrides": {
             "model": {
                 "provider": "openai",
