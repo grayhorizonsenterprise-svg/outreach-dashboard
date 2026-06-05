@@ -775,27 +775,39 @@ DAILY_SCHEDULE = [
     ("engagement", "23:00"),   # 6pm ET  — trading question / engagement
 ]
 
-# Trading/finance accounts whose followers are our target audience
+# Target audience accounts — trading AND local business/automation
 FOLLOW_SEED_ACCOUNTS = [
+    # Trading/finance
     "TradingView", "MarketWatch", "YahooFinance", "Investopedia",
     "unusual_whales", "StockMarket", "OptionsFlow", "CryptoDaily",
     "zerohedge", "SquawkCNBC", "MorningBrew", "WSJmarkets",
     "RealVision", "tastytrade", "ThinkOrSwim",
+    # GHL / AI automation / small business
+    "GoHighLevel", "gohighlevel", "AIautomation", "SmallBizTech",
+    "HVACmarketing", "dentalmarketing", "contractormarketing",
+    "SaaSfounder", "agencyowner", "MarketingAutomation",
+    "VapiAI", "openai", "AnthropicAI", "zapier", "make_hq",
 ]
 
 FOLLOW_SEARCH_QUERIES = [
+    # Trading
     "TradingView signals",
     "options flow alert",
     "congressional trades stocks",
     "stock momentum scanner",
-    "crypto trading signals",
-    "position sizing Kelly",
     "RSI divergence setup",
-    "Pine Script indicator",
+    # GHL / automation
+    "GoHighLevel automation",
+    "AI automation local business",
+    "CRM automation small business",
+    "missed call text back HVAC",
+    "lead follow up automation",
+    "GHL workflow setup",
+    "AI voice agent business",
 ]
 
-# Comment templates paired to tweet topics — fills {ticker} or {topic} from tweet
-COMMENT_TEMPLATES = [
+# Comment templates for trading content
+COMMENT_TEMPLATES_TRADING = [
     "This is exactly why we built the Edge Engine — momentum scoring + congressional tracking before open. Worth checking out if you're active in {topic}.",
     "Solid point. We see the same pattern in our signals feed. Kelly-sized positions on setups like this are what separate consistent traders from the rest.",
     "This is the kind of setup our Edge Scanner flags. Volume anomaly + RSI momentum on the same bar. Most miss it without the right tools.",
@@ -805,7 +817,21 @@ COMMENT_TEMPLATES = [
     "Agree. Entry matters less than most people think. Size your position right on a mediocre setup vs. full send on a great one — size wins every time.",
 ]
 
+# Comment templates for GHL/automation content
+COMMENT_TEMPLATES_AUTOMATION = [
+    "This is the exact problem GHL automation solves. Most businesses lose 40% of leads just from slow response time. Seen it across dozens of setups.",
+    "Speed to lead is everything. Under 5 minutes or you've lost them to whoever answered first. Automated SMS on form submit fixes this completely.",
+    "We build this exact system for HVAC, dental, and contractor businesses. The ROI shows up in the first 30 days every time.",
+    "The follow-up sequence is where most CRMs fail. 7 touches over 14 days across SMS, email, and voicemail drop — most people stop after touch 1.",
+    "AI voice agents handling inbound calls 24/7 is no longer expensive or complex. The businesses that deploy this first own their market.",
+    "Missed calls are the silent revenue killer for local service businesses. A missed call text-back bot pays for itself in the first week.",
+    "GHL is the most underutilized platform in local business marketing. Most people use 10% of what it can actually do.",
+]
+
+COMMENT_TEMPLATES = COMMENT_TEMPLATES_TRADING + COMMENT_TEMPLATES_AUTOMATION
+
 TRENDING_SEARCH_TERMS = [
+    # Trading
     "stock market today",
     "trading signals",
     "options flow",
@@ -814,7 +840,77 @@ TRENDING_SEARCH_TERMS = [
     "RSI momentum stocks",
     "Pine Script indicator",
     "position sizing trading",
+    # GHL / automation / small business
+    "GoHighLevel CRM",
+    "AI automation business",
+    "lead generation automation",
+    "CRM follow up system",
+    "missed call text back",
+    "HVAC marketing automation",
+    "dental practice marketing",
+    "AI voice agent small business",
 ]
+
+AUTOMATION_SEARCH_TERMS = [
+    "GoHighLevel automation -is:retweet lang:en min_faves:5",
+    "AI automation local business -is:retweet lang:en min_faves:5",
+    "CRM automation small business -is:retweet lang:en min_faves:5",
+    "missed call text back -is:retweet lang:en min_faves:3",
+    "lead follow up system -is:retweet lang:en min_faves:5",
+    "GHL workflow -is:retweet lang:en min_faves:3",
+]
+
+
+def auto_engage_niche(max_comments: int = 5) -> int:
+    """Auto-reply to high-engagement GHL/automation tweets with value-add comments."""
+    if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
+        return 0
+
+    from requests_oauthlib import OAuth1
+    oauth = OAuth1(TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET)
+    engaged_file = DATA_DIR / "twitter_engaged.json"
+
+    try:
+        engaged = set(json.loads(engaged_file.read_text()).get("ids", []))
+    except Exception:
+        engaged = set()
+
+    commented = 0
+    for query in random.sample(AUTOMATION_SEARCH_TERMS, min(3, len(AUTOMATION_SEARCH_TERMS))):
+        if commented >= max_comments:
+            break
+        try:
+            r = requests.get(
+                "https://api.twitter.com/2/tweets/search/recent",
+                params={
+                    "query": query, "max_results": 10,
+                    "tweet.fields": "public_metrics,author_id",
+                    "expansions": "author_id", "user.fields": "username",
+                },
+                auth=oauth, timeout=15,
+            )
+            if r.status_code != 200:
+                continue
+            tweets = r.json().get("data", [])
+            for tweet in sorted(tweets, key=lambda t: t.get("public_metrics", {}).get("like_count", 0), reverse=True):
+                if commented >= max_comments:
+                    break
+                tid = str(tweet["id"])
+                if tid in engaged:
+                    continue
+                comment = random.choice(COMMENT_TEMPLATES_AUTOMATION)
+                result = post_comment(tid, comment)
+                if result:
+                    engaged.add(tid)
+                    commented += 1
+                    time.sleep(random.uniform(30, 60))
+        except Exception as e:
+            print(f"[TWITTER ENGAGE] Error: {e}")
+        time.sleep(5)
+
+    engaged_file.write_text(json.dumps({"ids": list(engaged)}, indent=2))
+    print(f"[TWITTER ENGAGE] {commented} niche comments posted")
+    return commented
 
 
 # ─── Image Card Generation ────────────────────────────────────────────────────

@@ -263,6 +263,18 @@ def _grant_pipeline_daily():
         time.sleep(60)
 
 
+def _twitter_engage_scheduler():
+    """Auto-comments on GHL/automation tweets 3x/day to grow followers."""
+    time.sleep(180)
+    while True:
+        try:
+            from twitter_poster import auto_engage_niche
+            auto_engage_niche(max_comments=5)
+        except Exception as e:
+            print(f"[TWITTER ENGAGE] Error: {e}", flush=True)
+        time.sleep(28800)  # every 8 hours
+
+
 def _twitter_scheduler():
     """Posts to Twitter 5x/day at 8am, 10am, 1pm, 5pm, 8pm UTC.
     Also fires one post immediately on startup so deploys never go dark."""
@@ -439,6 +451,18 @@ def _auto_blast_scheduler():
     return
 
 
+def _upwork_scout_scheduler():
+    """Scans Upwork RSS every 2 hours for matching jobs, drafts proposals."""
+    time.sleep(240)
+    while True:
+        try:
+            from upwork_scout import run as scout_run
+            scout_run()
+        except Exception as e:
+            print(f"[UPWORK SCOUT] Error: {e}", flush=True)
+        time.sleep(7200)
+
+
 def _vapi_followup_scheduler():
     """Calls leads 3 days after email was sent. Runs daily at 10 AM."""
     import random
@@ -473,6 +497,8 @@ for _fn in [
     _followup_engine_daily,
     _auto_blast_scheduler,
     _vapi_followup_scheduler,
+    _twitter_engage_scheduler,
+    _upwork_scout_scheduler,
 ]:
     threading.Thread(target=_fn, daemon=True).start()
 
