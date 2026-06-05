@@ -264,15 +264,9 @@ def _grant_pipeline_daily():
 
 
 def _twitter_engage_scheduler():
-    """Auto-comments on GHL/automation tweets 3x/day to grow followers."""
-    time.sleep(180)
-    while True:
-        try:
-            from twitter_poster import auto_engage_niche
-            auto_engage_niche(max_comments=5)
-        except Exception as e:
-            print(f"[TWITTER ENGAGE] Error: {e}", flush=True)
-        time.sleep(28800)  # every 8 hours
+    """DISABLED — burns API credits. Re-enable only after revenue covers Twitter API cost."""
+    print("[TWITTER ENGAGE] Disabled — no budget.", flush=True)
+    return
 
 
 def _twitter_scheduler():
