@@ -3364,6 +3364,76 @@ def health():
     return f"OK | pipeline={status} | leads={leads}"
 
 
+@app.route('/upwork', methods=['GET', 'POST'])
+def upwork_drafter():
+    proposal = ""
+    score = 0
+    title = ""
+    error = ""
+    opportunities_html = ""
+
+    # Load scouted opportunities
+    opp_file = os.path.join(DATA_DIR, "upwork_opportunities.json")
+    try:
+        import json
+        opps = json.loads(open(opp_file).read()) if os.path.exists(opp_file) else []
+        for o in opps[:10]:
+            clr = "#22c55e" if o['score'] >= 75 else "#f59e0b" if o['score'] >= 55 else "#ef4444"
+            opportunities_html += f"""
+            <div style='background:#1e293b;border:1px solid #334155;border-radius:8px;padding:16px;margin-bottom:12px;'>
+              <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'>
+                <a href='{o["link"]}' target='_blank' style='color:#38bdf8;font-weight:600;font-size:15px;text-decoration:none;'>{o["title"][:80]}</a>
+                <span style='background:{clr};color:#000;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;'>Score: {o["score"]}</span>
+              </div>
+              <p style='color:#94a3b8;font-size:12px;margin:0 0 8px 0;'>{o["description"][:200]}...</p>
+              <details style='margin-top:8px;'>
+                <summary style='color:#38bdf8;cursor:pointer;font-size:13px;'>View drafted proposal</summary>
+                <pre style='background:#0f172a;color:#e2e8f0;padding:12px;border-radius:6px;font-size:12px;white-space:pre-wrap;margin-top:8px;'>{o["proposal"]}</pre>
+              </details>
+            </div>"""
+    except Exception as e:
+        opportunities_html = f"<p style='color:#ef4444;'>No scouted jobs yet: {e}</p>"
+
+    if flask_request.method == 'POST':
+        job_text = flask_request.form.get('job_text', '').strip()
+        if job_text:
+            try:
+                from upwork_scout import score_job, draft_proposal
+                lines = job_text.split('\n')
+                title = lines[0][:100] if lines else "Job"
+                score = score_job(title, job_text)
+                proposal = draft_proposal(title, job_text)
+            except Exception as e:
+                error = str(e)
+
+    score_color = "#22c55e" if score >= 75 else "#f59e0b" if score >= 55 else "#ef4444"
+    return f"""<!DOCTYPE html>
+<html><head><title>Upwork 2nd Brain</title>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<style>body{{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:24px;}}
+textarea{{width:100%;background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:12px;font-size:14px;}}
+button{{background:#0ea5e9;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;}}
+pre{{background:#1e293b;padding:16px;border-radius:8px;white-space:pre-wrap;font-size:13px;border:1px solid #22c55e;}}
+h1{{color:#38bdf8;}}h2{{color:#94a3b8;font-size:16px;}}
+</style></head><body>
+<h1>Upwork 2nd Brain</h1>
+<p style='color:#94a3b8;'>Paste any job description below. System scores it and drafts your proposal instantly.</p>
+<form method='POST'>
+  <textarea name='job_text' rows='10' placeholder='Paste full job description here...'>{flask_request.form.get('job_text','') if flask_request.method=='POST' else ''}</textarea>
+  <br><br><button type='submit'>Score + Draft Proposal</button>
+</form>
+{f'''<div style="margin-top:24px;padding:16px;background:#1e293b;border-radius:8px;border-left:4px solid {score_color};">
+  <h2>Score: <span style="color:{score_color};">{score}/100</span> — {title}</h2>
+  {f'<p style="color:#ef4444;">{error}</p>' if error else ''}
+  <h2 style="margin-top:16px;">Drafted Proposal — copy and paste into Upwork:</h2>
+  <pre>{proposal}</pre>
+</div>''' if flask_request.method=='POST' else ''}
+<hr style='border-color:#334155;margin:32px 0;'>
+<h2 style='color:#38bdf8;font-size:18px;'>Auto-Scouted Jobs (updated every 2 hrs)</h2>
+{opportunities_html if opportunities_html else '<p style="color:#94a3b8;">Scout running — check back in 2 hours or run upwork_scout.py locally.</p>'}
+</body></html>"""
+
+
 @app.route('/performance')
 def performance():
     try:
