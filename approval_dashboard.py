@@ -916,8 +916,36 @@ def _send_via_smtp(sender_addr, smtp_password, to_email, subject, html_body, nam
 
 VERIFIED_SENDER = "grayhorizonsenterprise@gmail.com"
 
+def _send_via_brevo(to_email, subject, html_body, name, company, sender_addr, sender_name):
+    brevo_key = os.getenv("BREVO_API_KEY", "").strip()
+    if not brevo_key:
+        return False
+    try:
+        resp = requests.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={"api-key": brevo_key, "Content-Type": "application/json"},
+            json={
+                "sender": {"email": sender_addr, "name": sender_name},
+                "to": [{"email": to_email, "name": name}],
+                "subject": subject,
+                "htmlContent": html_body,
+            },
+            timeout=15,
+        )
+        ok = resp.status_code in (200, 201, 202)
+        log_sent(to_email, name, company, subject, ok, f"brevo:{resp.status_code}")
+        if ok:
+            print(f"[SEND] Brevo OK -> {to_email}")
+        else:
+            print(f"[SEND] Brevo {resp.status_code}: {resp.text[:120]}")
+        return ok
+    except Exception as e:
+        print(f"[SEND] Brevo exception: {e}")
+        return False
+
+
 def send_email(to_email, name, company, message, subject=""):
-    sender_addr = VERIFIED_SENDER  # verified in SendGrid, always use this
+    sender_addr = VERIFIED_SENDER
     sender_name = os.getenv("SENDER_NAME", "Gray Horizons Enterprise")
     subject     = subject.strip() if subject.strip() else "Quick question for your team"
 
@@ -927,27 +955,28 @@ def send_email(to_email, name, company, message, subject=""):
 
     html_body = _build_html_body(name, sender_name, message)
 
-    smtp_password = os.getenv("SENDER_APP_PASSWORD", "").strip()
+    # ── Primary: Brevo (free 300/day) ─────────────────────────────────────────
+    if _send_via_brevo(to_email, subject, html_body, name, company, sender_addr, sender_name):
+        return True
+    print(f"[SEND] Brevo failed for {to_email} — trying SendGrid")
 
-    # ── Primary: SendGrid (if key is set) ─────────────────────────────────────
+    # ── Secondary: SendGrid ────────────────────────────────────────────────────
     api_key = os.getenv("SENDGRID_API_KEY", "").strip()
     if api_key:
         ok = _send_via_sendgrid(api_key, sender_addr, sender_name,
                                 to_email, subject, html_body, name, company)
         if ok:
             return True
-        # SendGrid failed — fall through to SMTP
         print(f"[SEND] SendGrid failed for {to_email} — trying Gmail SMTP")
 
     # ── Fallback: Gmail SMTP ───────────────────────────────────────────────────
+    smtp_password = os.getenv("SENDER_APP_PASSWORD", "").strip()
     if smtp_password:
         return _send_via_smtp(sender_addr, smtp_password,
                               to_email, subject, html_body, name, company)
 
-    # ── Neither available ─────────────────────────────────────────────────────
-    print("[SEND] ERROR: No sending method — set SENDGRID_API_KEY or SENDER_APP_PASSWORD")
-    log_sent(to_email, name, company, subject, False,
-             "no sending method: set SENDGRID_API_KEY or SENDER_APP_PASSWORD")
+    print("[SEND] ERROR: No sending method — set BREVO_API_KEY, SENDGRID_API_KEY, or SENDER_APP_PASSWORD")
+    log_sent(to_email, name, company, subject, False, "no sending method")
     return False
 
 # =========================
