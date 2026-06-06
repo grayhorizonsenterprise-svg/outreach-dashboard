@@ -50,187 +50,183 @@ GUMROAD_LINK = "https://horizons56.gumroad.com"
 # ── Content Pools ──────────────────────────────────────────────────────────────
 
 GHL_POSTS = [
-    f"""Everyone says you need more leads.
+    f"""talked to an HVAC owner last week who was spending $4k/month on google ads.
 
-Wrong. You need to close the ones you already have.
+48 leads a month. closing 9.
 
-A roofing company was spending $4,200/month on Google Ads. 48 leads per month. 9 closes.
+not a lead problem. a follow up problem.
 
-We built their GHL pipeline: instant SMS on form submit, missed call text-back, 7-touch follow-up over 14 days.
+built out his GHL, got instant SMS firing on every form submission, missed call text-back, 7 touches over 2 weeks.
 
-Next month: same 48 leads. 23 closes. Zero extra ad spend.
+next month same 48 leads. 23 closes.
 
-The leads were always there. The system was not.
-
-Built and live in 5 days: {FIVERR_GHL}""",
-
-    f"""A lead that calls your business and gets voicemail has already started Googling your competitor.
-
-This is not an opinion. This is what the data shows.
-
-50% of buyers go with the vendor that responds first. Not the best one. The fastest one.
-
-A missed call text-back automation fires in under 10 seconds. "Hey, sorry I missed you. What can I help with?"
-
-That one message recovers 30 to 40% of missed call leads.
-
-What is a missed call worth to your business?
+same budget. just fixed what happens after the lead comes in.
 
 {FIVERR_GHL}""",
 
-    f"""What a fully automated lead pipeline looks like at 11:47 PM:
+    f"""real scenario from a roofing client.
 
-Lead fills out HVAC form.
-11:47:52 PM: SMS fires automatically.
-11:51 PM: Lead replies "tomorrow morning works."
-11:51 PM: Booking confirmed. Owner notified. Calendar updated.
+lead calls at 7pm. goes to voicemail. no callback until next morning.
 
-Zero humans involved. Zero leads lost to slow response.
+by then the lead already booked with someone else.
 
-That is not the future. That is what we build today: {FIVERR_GHL}""",
+the missed call text-back went live that week. fires in under 10 seconds. "hey sorry i missed you, what can i help with?"
 
-    f"""The 5 GHL automations that separate businesses closing 40% of leads from ones closing 15%:
+recovered 6 leads in the first month that would have been gone.
 
-1. Sub-60-second SMS on every new inquiry
-2. Missed call text-back with open-ended question
-3. 7-touch nurture sequence over 14 days
-4. Appointment reminder 24 hours and 2 hours before
-5. Review request triggered on job completion
-
-Most businesses have none of these.
-The ones that do close more from the same lead volume.
-
-Drop a comment if you want to know which one drives the most revenue.
+what does a missed call cost you? genuinely asking.
 
 {FIVERR_GHL}""",
 
-    f"""I see GHL accounts every week that cost $297/month and do nothing.
+    f"""11:47pm. someone fills out an HVAC form.
 
-No workflows active. No pipelines configured. No automations firing.
+11:47:52 automated SMS goes out.
 
-It is not the platform. The platform is exceptional. It is the setup.
+11:51 they reply "tomorrow morning works."
 
-A properly configured GHL account replaces a receptionist, a follow-up VA, and a booking coordinator.
+calendar invite sent. owner gets notified. done.
 
-If you are paying for GHL and still manually following up with leads, the setup is wrong.
+nobody touched this. nobody was awake. nobody had to do anything.
 
-We fix it in 5 days: {FIVERR_GHL}""",
+that's what we set up. {FIVERR_GHL}""",
 
-    f"""Controversial opinion: most local businesses do not have a lead problem. They have a speed problem.
+    f"""paying $297/month for GHL with zero automations running is like buying a truck and leaving it in the garage.
 
-48-hour response time is not a CRM issue. It is a lost revenue issue.
+i see this constantly.
 
-The fix is not hiring faster people. The fix is automating the first 5 touchpoints so no human has to be involved until the lead is warm.
+no workflows. no follow up sequences. leads coming in and getting responded to 6 hours later by a human who forgot.
 
-What does your current average response time look like? Drop it in the comments.
+a properly set up GHL replaces a receptionist, a follow up VA, and a booking coordinator.
+
+if you're on GHL and still doing it manually, something's wrong with the build.
+
+{FIVERR_GHL}""",
+
+    f"""honest question for any service business owner reading this:
+
+what actually happens when someone fills out your contact form at 10pm?
+
+if the answer is "we get to it in the morning" you are losing a percentage of every lead you pay for.
+
+the window is 5 minutes. after that the conversion rate tanks.
+
+not trying to sell you anything right now. just a real question worth sitting with.
+
+{FIVERR_GHL}""",
+
+    f"""most owners i talk to think they have a lead problem.
+
+they don't. they have a speed problem.
+
+same leads, competitor responds in 45 seconds vs your team responding in 4 hours. competitor wins.
+
+the fix isn't hiring. it's automating the first 3 to 5 touches so no human has to be involved until the lead is actually warm.
+
+drop your average response time in the comments. curious where people are at.
 
 {FIVERR_GHL}""",
 ]
 
 AI_SERVICES_POSTS = [
-    f"""A dental office was losing 22 calls per week to voicemail.
+    f"""dental office. 22 missed calls a week.
 
-They knew the number because they checked missed calls. They did not know the revenue because they never calculated it.
+they knew the number because they checked. they didn't know the revenue number because they never did the math.
 
-Average new patient value: $1,400.
-22 missed calls per week at a 30% conversion rate: $9,240 per week walking out the door.
+new patient avg value: $1,400. 30% of those calls would have converted. that's $9,240 a week going to voicemail.
 
-We deployed an AI inbound voice agent. It answers every call, qualifies in 90 seconds, books directly into the calendar.
+put an AI voice agent on their inbound line. answers every call, qualifies in 90 seconds, books straight to the calendar.
 
-Week one: 14 recovered bookings.
+week one: 14 bookings that would have been missed.
 
-The math is not complicated: {FIVERR_VOICE}""",
+the math isn't complicated. {FIVERR_VOICE}""",
 
-    f"""AI is not replacing your business. It is replacing the businesses that do not use it.
+    f"""the HVAC company answering calls at 2am with an AI agent is booking jobs while the competitor sleeps.
 
-The HVAC company with an AI voice agent answering calls at 2 AM is booking jobs while their competitor sleeps.
+the contractor with 14-day automated follow up is closing leads on day 9 that the other guy gave up on day 2.
 
-The contractor with automated follow-up closing leads on day 5 is winning deals the manual operation gave up on day 2.
+this isn't a prediction. it's already happening. in every market.
 
-This is not theoretical. This is happening right now in every market.
-
-Gray Horizons Enterprise builds these systems for local service businesses: {FIVERR_LEAD}""",
-
-    f"""3 questions I ask every business owner before we start:
-
-1. What happens the second someone fills out your contact form?
-2. How many follow-up touches happen before your team gives up?
-3. When was the last time you called a lead back within 5 minutes?
-
-The answers reveal everything about where revenue is leaking.
-
-Most of the time the leak is not the leads. It is what happens after.
-
-What does your current follow-up process look like? Be honest in the comments.
+the businesses that move on this in the next 6 months are going to look very different from the ones that wait.
 
 {FIVERR_LEAD}""",
 
-    f"""There is a version of your business where:
+    f"""3 things i ask every business owner before we build anything:
 
-Every lead gets a response in under 60 seconds.
-Every missed call gets a text back in under 10 seconds.
-Every appointment gets confirmed and reminded automatically.
-Every closed job triggers a review request.
+what happens the second someone fills out your form?
+how many times does your team follow up before they stop?
+when did you last call a lead back in under 5 minutes?
 
-None of this requires hiring anyone.
+the answers tell me exactly where the revenue is leaking.
 
-That version of your business exists. We build it in 5 days.
+9 times out of 10 it's not the leads. it's what happens after.
 
-Gray Horizons Enterprise: {FIVERR_GHL}""",
+what does your follow up look like right now? be real in the comments.
 
-    f"""The businesses that win the next 3 years will not be the ones with the most staff.
+{FIVERR_LEAD}""",
 
-They will be the ones with the best systems behind a lean team.
+    f"""there's a version of your business where leads never sit cold.
 
-1 person running an AI-backed CRM outperforms a 5-person team running spreadsheets.
+where every inquiry gets a response before a minute passes.
+where follow up runs for 30 days without your team lifting a finger.
+where your calendar fills itself.
 
-We build those systems for local service businesses. HVAC. Roofing. Dental. Contractors. HOA management.
+none of that requires more staff. just a different setup.
 
-If you are curious what that looks like for your specific business: {FIVERR_LEAD}""",
+we build that in 5 days. {FIVERR_GHL}""",
+
+    f"""the businesses that scale over the next few years won't necessarily be the biggest.
+
+they'll be the ones running lean with the right systems underneath.
+
+one person with a properly built CRM and automation stack outperforms a 5 person team on spreadsheets.
+
+we build those systems. HVAC. roofing. dental. contractors. HOA.
+
+if you want to see what it looks like for your operation: {FIVERR_LEAD}""",
 ]
 
 EDGE_ENGINE_POSTS = [
-    f"""Most retail traders do not lose because they pick bad setups.
+    f"""most traders don't lose because they pick bad setups.
 
-They lose because they size positions based on how confident they feel instead of what the math says.
+they lose because they size based on how confident they feel.
 
-Confidence is not an edge. Expected value is.
+that's not an edge. that's gambling with extra steps.
 
-Win rate 55%. Average win 2x average loss. Position sized at 2% Kelly. That compounds into something real.
+win rate 55%. average win 2x the average loss. size at Kelly. that compounds into something real over time.
 
-We built the math into the Edge Engine. Every signal comes with a score and a sizing recommendation.
+built that math directly into the Edge Engine. every signal comes with a score and a size.
 
 {GUMROAD_LINK}""",
 
-    f"""Congressional members disclosed $213M in stock trades last quarter.
+    f"""congress members disclosed $213M in trades last quarter.
 
-The STOCK Act requires disclosure within 45 days. The pattern shows up in options flow before that.
+45 days to report under the STOCK Act. but the footprint shows up in options flow before the disclosure.
 
-We track every disclosure and cross-reference it against volume anomalies and institutional flow data.
+not every trade is actionable. but when it lines up with the volume and momentum signals, it's worth watching.
 
-Not every disclosure is actionable. But the ones that line up with the other signals are worth watching.
+we track all of it and run it through the scoring model automatically.
 
-Edge Engine scans this automatically: {GUMROAD_LINK}""",
+{GUMROAD_LINK}""",
 
-    f"""An edge is not a tip. It is a repeatable process with a positive expected value over 100 trades.
+    f"""an edge isn't a hot tip from a discord server.
 
-RSI divergence. Volume 40% above 30-day average. EMA cross with confirmation candle.
+it's a process that has positive expected value over hundreds of trades.
 
-When all three align the score is above 75. That is when we look harder.
+RSI divergence. volume 40% above the 30-day avg. EMA cross with a confirmation candle.
 
-When none align we wait. Most people cannot do that part.
+when all three line up the score clears 75. that's when we look closer.
 
-Edge Engine: {GUMROAD_LINK}""",
+when none of them align we sit on our hands. that part is harder than it sounds.
 
-    f"""The honest truth about trading signals that nobody says:
+{GUMROAD_LINK}""",
 
-No system wins every time. Anyone claiming otherwise is selling something.
+    f"""nobody talks about this but i will:
 
-What a good system does: win more than it loses, keep losses small, let winners run.
+no signal system wins every time. anyone selling you that is lying.
 
-We track every signal and every outcome publicly. Win rate, average return, max drawdown.
+what a real system does: positive expected value over time. more wins than losses. small losses, bigger wins.
 
-Transparency is the product. Everything else is noise.
+we log every signal and every result. open book. if it stops working we say so.
 
 {GUMROAD_LINK}""",
 ]
