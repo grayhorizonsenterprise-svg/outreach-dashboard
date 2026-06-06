@@ -50,158 +50,187 @@ GUMROAD_LINK = "https://horizons56.gumroad.com"
 # ── Content Pools ──────────────────────────────────────────────────────────────
 
 GHL_POSTS = [
-    f"""Most local service businesses pay for leads they never follow up on fast enough.
+    f"""Everyone says you need more leads.
 
-The window to convert an inbound lead is under 5 minutes. After that, the conversion rate drops by over 80%.
+Wrong. You need to close the ones you already have.
 
-A properly built GoHighLevel automation fires an SMS within 60 seconds of a form submission. No staff required.
+A roofing company was spending $4,200/month on Google Ads. 48 leads per month. 9 closes.
 
-If your CRM is sitting idle while leads go cold, that is a fixable problem.
+We built their GHL pipeline: instant SMS on form submit, missed call text-back, 7-touch follow-up over 14 days.
 
-See how it works: {FIVERR_GHL}""",
+Next month: same 48 leads. 23 closes. Zero extra ad spend.
 
-    f"""The 5 GHL automations every HVAC, dental, and contractor business needs:
+The leads were always there. The system was not.
 
-1. Instant SMS on new lead
-2. Missed call text-back
-3. 7-day follow-up sequence
-4. Appointment reminder 24 hours out
-5. Review request after job completion
+Built and live in 5 days: {FIVERR_GHL}""",
 
-Most businesses have zero of these. The ones that do close 30 to 40 percent more leads from the same ad spend.
+    f"""A lead that calls your business and gets voicemail has already started Googling your competitor.
 
-Built and running in 5 days: {FIVERR_GHL}""",
+This is not an opinion. This is what the data shows.
 
-    f"""A client was running Google Ads, getting 40 to 50 leads per month, and closing maybe 8 of them.
+50% of buyers go with the vendor that responds first. Not the best one. The fastest one.
 
-The problem was not the ads. The problem was a 4-hour average response time and no follow-up after day 1.
+A missed call text-back automation fires in under 10 seconds. "Hey, sorry I missed you. What can I help with?"
 
-We built a GHL pipeline with instant SMS, a 5-touch follow-up sequence, and a missed call bot.
+That one message recovers 30 to 40% of missed call leads.
 
-Next month: 21 closes from the same 47 leads.
+What is a missed call worth to your business?
 
-Same ad budget. Better system: {FIVERR_GHL}""",
+{FIVERR_GHL}""",
 
-    f"""GoHighLevel is one of the most powerful CRM platforms available for local service businesses.
+    f"""What a fully automated lead pipeline looks like at 11:47 PM:
 
-Most people use 10% of it.
+Lead fills out HVAC form.
+11:47:52 PM: SMS fires automatically.
+11:51 PM: Lead replies "tomorrow morning works."
+11:51 PM: Booking confirmed. Owner notified. Calendar updated.
 
-Pipelines, automations, SMS sequences, appointment booking, reputation management, voice AI, and reporting are all built in.
+Zero humans involved. Zero leads lost to slow response.
 
-If you are paying for GHL and still manually following up with leads, something is wrong with the setup.
+That is not the future. That is what we build today: {FIVERR_GHL}""",
 
-Let us fix it: {FIVERR_GHL}""",
+    f"""The 5 GHL automations that separate businesses closing 40% of leads from ones closing 15%:
 
-    f"""What a fully automated lead pipeline looks like in practice:
+1. Sub-60-second SMS on every new inquiry
+2. Missed call text-back with open-ended question
+3. 7-touch nurture sequence over 14 days
+4. Appointment reminder 24 hours and 2 hours before
+5. Review request triggered on job completion
 
-Lead fills out form at 11:47 PM.
-60 seconds later: Automated SMS fires. "Saw your inquiry. What is a good time to connect tomorrow?"
-Lead replies: "10 AM works."
-Calendar invite sent automatically. Owner gets a notification.
+Most businesses have none of these.
+The ones that do close more from the same lead volume.
 
-No one touched this manually.
+Drop a comment if you want to know which one drives the most revenue.
 
-That is what we build: {FIVERR_GHL}""",
+{FIVERR_GHL}""",
 
-    f"""The biggest mistake I see in GHL setups: workflows that trigger but do not close the loop.
+    f"""I see GHL accounts every week that cost $297/month and do nothing.
 
-A lead comes in. SMS fires. No reply. Nothing else happens.
+No workflows active. No pipelines configured. No automations firing.
 
-A proper sequence has 7 touches over 14 days across SMS, email, and voicemail drop. Most leads convert on touch 4 or 5, not touch 1.
+It is not the platform. The platform is exceptional. It is the setup.
 
-If your automation stops after the first message, you are leaving money on the table.
+A properly configured GHL account replaces a receptionist, a follow-up VA, and a booking coordinator.
+
+If you are paying for GHL and still manually following up with leads, the setup is wrong.
+
+We fix it in 5 days: {FIVERR_GHL}""",
+
+    f"""Controversial opinion: most local businesses do not have a lead problem. They have a speed problem.
+
+48-hour response time is not a CRM issue. It is a lost revenue issue.
+
+The fix is not hiring faster people. The fix is automating the first 5 touchpoints so no human has to be involved until the lead is warm.
+
+What does your current average response time look like? Drop it in the comments.
 
 {FIVERR_GHL}""",
 ]
 
 AI_SERVICES_POSTS = [
-    f"""Most businesses that invest in AI tools end up with 10 different subscriptions and no system connecting them.
+    f"""A dental office was losing 22 calls per week to voicemail.
 
-The value of AI is not in the tools. It is in the workflow that ties them together.
+They knew the number because they checked missed calls. They did not know the revenue because they never calculated it.
 
-A voice AI that answers calls and books appointments. A CRM that scores leads automatically. A follow-up engine that knows when to push and when to wait.
+Average new patient value: $1,400.
+22 missed calls per week at a 30% conversion rate: $9,240 per week walking out the door.
 
-That is what we build at Gray Horizons Enterprise.
+We deployed an AI inbound voice agent. It answers every call, qualifies in 90 seconds, books directly into the calendar.
 
-{FIVERR_VOICE}""",
+Week one: 14 recovered bookings.
 
-    f"""AI voice agents are no longer a novelty. They are a competitive advantage.
+The math is not complicated: {FIVERR_VOICE}""",
 
-A dental office running an AI inbound agent:
-- Answers every call, even at 2 AM
-- Qualifies the caller in 90 seconds
-- Books directly into the calendar
-- Sends a confirmation SMS automatically
+    f"""AI is not replacing your business. It is replacing the businesses that do not use it.
 
-First month: 14 new patient bookings that would have gone to voicemail.
+The HVAC company with an AI voice agent answering calls at 2 AM is booking jobs while their competitor sleeps.
 
-This is real and it is available now: {FIVERR_VOICE}""",
+The contractor with automated follow-up closing leads on day 5 is winning deals the manual operation gave up on day 2.
 
-    f"""The businesses winning right now are not the ones spending the most on ads.
+This is not theoretical. This is happening right now in every market.
 
-They are the ones with the tightest follow-up systems.
+Gray Horizons Enterprise builds these systems for local service businesses: {FIVERR_LEAD}""",
 
-Speed to lead. Consistent nurture. Automated booking.
+    f"""3 questions I ask every business owner before we start:
 
-If you want to see what that looks like built for your business: {FIVERR_LEAD}""",
+1. What happens the second someone fills out your contact form?
+2. How many follow-up touches happen before your team gives up?
+3. When was the last time you called a lead back within 5 minutes?
 
-    f"""Three questions I ask every business owner before building their automation system:
+The answers reveal everything about where revenue is leaking.
 
-1. What happens when someone fills out your contact form right now?
-2. How many times does your team follow up before giving up?
-3. What does your average lead-to-close timeline look like?
+Most of the time the leak is not the leads. It is what happens after.
 
-Most of the time the answers reveal the same thing: the system stops too early.
+What does your current follow-up process look like? Be honest in the comments.
 
-We fix that: {FIVERR_LEAD}""",
+{FIVERR_LEAD}""",
 
-    f"""There is a version of your business where leads never fall through the cracks.
+    f"""There is a version of your business where:
 
-Where every inquiry gets a response in under 60 seconds.
-Where follow-ups happen automatically for 30 days.
-Where your calendar fills without your team touching a single thing manually.
+Every lead gets a response in under 60 seconds.
+Every missed call gets a text back in under 10 seconds.
+Every appointment gets confirmed and reminded automatically.
+Every closed job triggers a review request.
 
-That version exists. We build it.
+None of this requires hiring anyone.
 
-Gray Horizons Enterprise. AI automation for local service businesses.
+That version of your business exists. We build it in 5 days.
 
-{FIVERR_GHL}""",
+Gray Horizons Enterprise: {FIVERR_GHL}""",
+
+    f"""The businesses that win the next 3 years will not be the ones with the most staff.
+
+They will be the ones with the best systems behind a lean team.
+
+1 person running an AI-backed CRM outperforms a 5-person team running spreadsheets.
+
+We build those systems for local service businesses. HVAC. Roofing. Dental. Contractors. HOA management.
+
+If you are curious what that looks like for your specific business: {FIVERR_LEAD}""",
 ]
 
 EDGE_ENGINE_POSTS = [
-    f"""Most retail traders lose not because they pick bad stocks, but because they size positions emotionally.
+    f"""Most retail traders do not lose because they pick bad setups.
 
-The Kelly Criterion removes the emotion. It tells you exactly what percentage of your capital to risk on each trade based on your actual win rate and average win/loss ratio.
+They lose because they size positions based on how confident they feel instead of what the math says.
 
-We built this into the Edge Engine scoring system.
+Confidence is not an edge. Expected value is.
+
+Win rate 55%. Average win 2x average loss. Position sized at 2% Kelly. That compounds into something real.
+
+We built the math into the Edge Engine. Every signal comes with a score and a sizing recommendation.
 
 {GUMROAD_LINK}""",
 
-    f"""Congressional members are required to disclose stock trades within 45 days under the STOCK Act.
+    f"""Congressional members disclosed $213M in stock trades last quarter.
 
-The pattern shows up before the disclosure in volume and options flow. Not always. But often enough to track.
+The STOCK Act requires disclosure within 45 days. The pattern shows up in options flow before that.
 
-We scan every new disclosure and run it through our momentum scoring model.
+We track every disclosure and cross-reference it against volume anomalies and institutional flow data.
+
+Not every disclosure is actionable. But the ones that line up with the other signals are worth watching.
+
+Edge Engine scans this automatically: {GUMROAD_LINK}""",
+
+    f"""An edge is not a tip. It is a repeatable process with a positive expected value over 100 trades.
+
+RSI divergence. Volume 40% above 30-day average. EMA cross with confirmation candle.
+
+When all three align the score is above 75. That is when we look harder.
+
+When none align we wait. Most people cannot do that part.
 
 Edge Engine: {GUMROAD_LINK}""",
 
-    f"""A trading edge is not a hot tip. It is a repeatable process.
+    f"""The honest truth about trading signals that nobody says:
 
-RSI divergence. Volume anomaly relative to 30-day average. EMA cross confirmation.
+No system wins every time. Anyone claiming otherwise is selling something.
 
-When all three line up, the score is above 70. That is when we look closer.
+What a good system does: win more than it loses, keep losses small, let winners run.
 
-When none align, we wait. That is the discipline most people cannot maintain.
+We track every signal and every outcome publicly. Win rate, average return, max drawdown.
 
-Edge Engine scoring system: {GUMROAD_LINK}""",
-
-    f"""The most honest thing I can tell you about trading signals:
-
-No system wins 100% of the time. The goal is a positive expected value over many trades.
-
-Win rate of 55%. Average win 2x the average loss. That math compounds into real results over time.
-
-We track every signal, every outcome. Transparency is the product.
+Transparency is the product. Everything else is noise.
 
 {GUMROAD_LINK}""",
 ]
@@ -286,14 +315,20 @@ def run_auth():
             pass
 
     server = http.server.HTTPServer(("localhost", 8000), Handler)
-    t = threading.Thread(target=server.handle_request)
+
+    def serve_until_code():
+        while "code" not in auth_code:
+            server.handle_request()
+
+    t = threading.Thread(target=serve_until_code)
+    t.daemon = True
     t.start()
 
     params = urlencode({
         "response_type": "code",
         "client_id": CLIENT_ID,
         "redirect_uri": "http://localhost:8000/callback",
-        "scope": "r_liteprofile w_member_social openid profile",
+        "scope": "openid profile w_member_social",
         "state": "ghe_auth"
     })
     webbrowser.open(f"https://www.linkedin.com/oauth/v2/authorization?{params}")

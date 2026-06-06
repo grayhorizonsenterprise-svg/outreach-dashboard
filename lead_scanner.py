@@ -67,6 +67,21 @@ LINKEDIN_TARGETS = [
     "site:linkedin.com/in owner accounting firm",
     "site:linkedin.com/in director nonprofit organization",
     "site:linkedin.com/in owner solar company",
+    # High-intent GHL/automation targets
+    "site:linkedin.com/in owner GoHighLevel CRM",
+    "site:linkedin.com/in owner contractor automation",
+    "site:linkedin.com/in HOA manager community association",
+    "site:linkedin.com/in owner dental practice email",
+    "site:linkedin.com/in owner HVAC email contact",
+    "site:linkedin.com/in owner roofing contractor email",
+    "site:linkedin.com/in owner plumbing electrical email",
+    "site:linkedin.com/in owner landscaping company email",
+    "site:linkedin.com/in owner home services email",
+    "site:linkedin.com/in property manager HOA email",
+    "site:linkedin.com/in owner med spa aesthetic email",
+    "site:linkedin.com/in owner staffing agency email",
+    "site:linkedin.com/in owner logistics trucking email",
+    "site:linkedin.com/in founder automation agency email",
 ]
 
 TWITTER_TARGETS = [
