@@ -1,0 +1,43 @@
+{{$node["Get row(s) in sheet"].json["Message"]}}
+
+
+
+{{ new Date().toLocaleString('sv-SE', { timeZone: 'America/Los_Angeles' }).replace(' ', 'T') + 'Z' }}
+
+
+
+
+
+{{ new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }) }}
+
+
+
+
+
+{{$node["Normalize + Dedupe"].json["ResidentID"]}}
+
+
+
+
+
+return items.filter(item => item.json.Message && item.json.Message.trim() !== "");return items.map(item => {
+  return {
+    json: {
+      ResidentID: item.json.ResidentID,
+      Name: item.json.Name,
+      Email: item.json.Email,
+      Phone: item.json.Phone,
+      Status: item.json.Status,
+      Unit: item.json.Unit,
+      Notes: item.json.Notes,
+      VIOLATIONNOTICE: item.json.VIOLATIONNOTICE,
+      Message: item.json.Message
+    }
+  };
+});
+
+
+
+
+
+

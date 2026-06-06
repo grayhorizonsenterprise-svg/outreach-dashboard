@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0f172a;font-family:Arial,sans-serif;padding:24px;min-width:1200px;}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.logo{color:#38bdf8;font-size:20px;font-weight:700;}
+.badge{background:#22c55e;color:#000;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;}
+.stats{display:flex;gap:16px;margin-bottom:20px;}
+.stat{background:#1e293b;border-radius:10px;padding:14px 20px;flex:1;text-align:center;}
+.stat-val{color:#38bdf8;font-size:26px;font-weight:700;}
+.stat-label{color:#64748b;font-size:11px;margin-top:2px;}
+.pipeline{display:flex;gap:16px;}
+.col{background:#1e293b;border-radius:12px;padding:16px;width:260px;min-height:480px;}
+.col-header{font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;display:flex;justify-content:space-between;}
+.count{background:#334155;color:#e2e8f0;padding:2px 8px;border-radius:10px;font-size:11px;}
+.card{background:#0f172a;border-radius:8px;padding:12px;margin-bottom:10px;border-left:3px solid #334155;}
+.card.urgent{border-left-color:#ef4444;}
+.card.progress{border-left-color:#f59e0b;}
+.card.resolved{border-left-color:#22c55e;}
+.card-unit{color:#38bdf8;font-size:12px;font-weight:700;margin-bottom:2px;}
+.card-type{color:#e2e8f0;font-size:13px;font-weight:600;margin-bottom:4px;}
+.card-meta{display:flex;justify-content:space-between;align-items:center;}
+.card-days{color:#ef4444;font-size:11px;}
+.card-days.ok{color:#22c55e;}
+.auto-badge{background:#0ea5e9;color:#fff;font-size:9px;padding:2px 5px;border-radius:3px;font-weight:700;}
+.warn-badge{background:#ef4444;color:#fff;font-size:9px;padding:2px 5px;border-radius:3px;font-weight:700;}
+</style></head><body>
+<div class="header">
+  <div class="logo">GRAY HORIZONS ENTERPRISE — HOA Violation Tracker</div>
+  <div class="badge">● LIVE</div>
+</div>
+<div class="stats">
+  <div class="stat"><div class="stat-val">34</div><div class="stat-label">Open Violations</div></div>
+  <div class="stat"><div class="stat-val">100%</div><div class="stat-label">Notices Sent Automatically</div></div>
+  <div class="stat"><div class="stat-val">0</div><div class="stat-label">Missed Follow-Ups</div></div>
+  <div class="stat"><div class="stat-val">18</div><div class="stat-label">Resolved This Month</div></div>
+</div>
+<div class="pipeline">
+  <div class="col">
+    <div class="col-header">Reported <span class="count">8</span></div>
+    <div class="card urgent">
+      <div class="card-unit">Unit 114 — Johnson</div>
+      <div class="card-type">Lawn overgrowth violation</div>
+      <div class="card-meta"><span class="card-days">Day 1</span><span class="auto-badge">NOTICE SENT</span></div>
+    </div>
+    <div class="card urgent">
+      <div class="card-unit">Unit 207 — Martinez</div>
+      <div class="card-type">Unauthorized parking</div>
+      <div class="card-meta"><span class="card-days">Day 1</span><span class="auto-badge">NOTICE SENT</span></div>
+    </div>
+    <div class="card">
+      <div class="card-unit">Unit 89 — Chen</div>
+      <div class="card-type">Trash bin left at curb</div>
+      <div class="card-meta"><span class="card-days">Day 2</span><span class="auto-badge">NOTICE SENT</span></div>
+    </div>
+    <div class="card">
+      <div class="card-unit">Unit 312 — Williams</div>
+      <div class="card-type">Unapproved fence color</div>
+      <div class="card-meta"><span class="card-days">Day 2</span><span class="auto-badge">NOTICE SENT</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="col-header">Notice Sent <span class="count">9</span></div>
+    <div class="card progress">
+      <div class="card-unit">Unit 45 — Thompson</div>
+      <div class="card-type">Vehicle oil stain — driveway</div>
+      <div class="card-meta"><span class="card-days">Day 7</span><span class="auto-badge">FOLLOW-UP 1</span></div>
+    </div>
+    <div class="card progress">
+      <div class="card-unit">Unit 178 — Garcia</div>
+      <div class="card-type">Noise complaint — repeated</div>
+      <div class="card-meta"><span class="card-days">Day 5</span><span class="auto-badge">FOLLOW-UP 1</span></div>
+    </div>
+    <div class="card">
+      <div class="card-unit">Unit 23 — Patel</div>
+      <div class="card-type">Satellite dish — unapproved</div>
+      <div class="card-meta"><span class="card-days">Day 9</span><span class="auto-badge">FOLLOW-UP 2</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="col-header">Escalated <span class="count">5</span></div>
+    <div class="card urgent">
+      <div class="card-unit">Unit 55 — Robinson</div>
+      <div class="card-type">Pool fence non-compliant</div>
+      <div class="card-meta"><span class="card-days warn-badge">DAY 21 — FINE</span></div>
+    </div>
+    <div class="card urgent">
+      <div class="card-unit">Unit 301 — Davis</div>
+      <div class="card-type">Commercial vehicle storage</div>
+      <div class="card-meta"><span class="card-days warn-badge">DAY 18 — FINE</span></div>
+    </div>
+    <div class="card progress">
+      <div class="card-unit">Unit 67 — Lee</div>
+      <div class="card-type">Exterior paint non-compliant</div>
+      <div class="card-meta"><span class="card-days">Day 14</span><span class="warn-badge">BOARD REVIEW</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="col-header">Resolved <span class="count">12</span></div>
+    <div class="card resolved">
+      <div class="card-unit">Unit 102 — Harris</div>
+      <div class="card-type">Lawn — corrected</div>
+      <div class="card-meta"><span class="card-days ok">Closed Day 8</span><span class="auto-badge">AUTO-LOGGED</span></div>
+    </div>
+    <div class="card resolved">
+      <div class="card-unit">Unit 198 — Wilson</div>
+      <div class="card-type">Parking violation — resolved</div>
+      <div class="card-meta"><span class="card-days ok">Closed Day 5</span><span class="auto-badge">AUTO-LOGGED</span></div>
+    </div>
+    <div class="card resolved">
+      <div class="card-unit">Unit 77 — Moore</div>
+      <div class="card-type">Trash bin — corrected</div>
+      <div class="card-meta"><span class="card-days ok">Closed Day 3</span><span class="auto-badge">AUTO-LOGGED</span></div>
+    </div>
+    <div class="card resolved">
+      <div class="card-unit">Unit 144 — Taylor</div>
+      <div class="card-type">Noise complaint — resolved</div>
+      <div class="card-meta"><span class="card-days ok">Closed Day 6</span><span class="auto-badge">AUTO-LOGGED</span></div>
+    </div>
+  </div>
+</div>
+</body></html>

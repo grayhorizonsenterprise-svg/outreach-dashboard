@@ -1,0 +1,1152 @@
+{
+  "generated": "2026-05-20T16:43:46.212930",
+  "stocks": {
+    "type": "stocks",
+    "signals": 39,
+    "wins": 27,
+    "win_rate": 69.2,
+    "avg_return": 2.63,
+    "start_value": 10000,
+    "end_value": 11025.16,
+    "top_signals": [
+      {
+        "ticker": "CRWD",
+        "date": "2026-05-06",
+        "score": 76.1,
+        "entry": 468.07,
+        "exit": 562.57,
+        "return_pct": 20.19,
+        "win": true
+      },
+      {
+        "ticker": "MSTR",
+        "date": "2026-04-29",
+        "score": 72.2,
+        "entry": 158.19,
+        "exit": 186.82,
+        "return_pct": 18.1,
+        "win": true
+      },
+      {
+        "ticker": "AMD",
+        "date": "2026-04-09",
+        "score": 73.8,
+        "entry": 236.64,
+        "exit": 278.26,
+        "return_pct": 17.59,
+        "win": true
+      },
+      {
+        "ticker": "AMD",
+        "date": "2026-04-02",
+        "score": 71.1,
+        "entry": 217.5,
+        "exit": 245.04,
+        "return_pct": 12.66,
+        "win": true
+      },
+      {
+        "ticker": "AMD",
+        "date": "2026-04-08",
+        "score": 77.0,
+        "entry": 231.82,
+        "exit": 258.12,
+        "return_pct": 11.35,
+        "win": true
+      },
+      {
+        "ticker": "TSLA",
+        "date": "2026-05-01",
+        "score": 74.0,
+        "entry": 390.82,
+        "exit": 428.35,
+        "return_pct": 9.6,
+        "win": true
+      },
+      {
+        "ticker": "MSTR",
+        "date": "2026-04-30",
+        "score": 76.3,
+        "entry": 165.45,
+        "exit": 179.84,
+        "return_pct": 8.7,
+        "win": true
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-04-30",
+        "score": 74.4,
+        "entry": 271.1,
+        "exit": 287.18,
+        "return_pct": 5.93,
+        "win": true
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-05-04",
+        "score": 71.5,
+        "entry": 276.58,
+        "exit": 292.68,
+        "return_pct": 5.82,
+        "win": true
+      },
+      {
+        "ticker": "CRWD",
+        "date": "2026-04-20",
+        "score": 71.6,
+        "entry": 433.15,
+        "exit": 454.61,
+        "return_pct": 4.95,
+        "win": true
+      }
+    ],
+    "all_signals": [
+      {
+        "ticker": "NVDA",
+        "date": "2026-02-26",
+        "score": 74.1,
+        "entry": 184.88,
+        "exit": 183.33,
+        "return_pct": -0.84,
+        "win": false
+      },
+      {
+        "ticker": "NVDA",
+        "date": "2026-05-11",
+        "score": 70.4,
+        "entry": 219.44,
+        "exit": 222.32,
+        "return_pct": 1.31,
+        "win": true
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-04-10",
+        "score": 72.6,
+        "entry": 260.24,
+        "exit": 269.98,
+        "return_pct": 3.74,
+        "win": true
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-04-15",
+        "score": 76.0,
+        "entry": 266.18,
+        "exit": 272.92,
+        "return_pct": 2.53,
+        "win": true
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-04-22",
+        "score": 74.4,
+        "entry": 272.92,
+        "exit": 269.92,
+        "return_pct": -1.1,
+        "win": false
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-04-23",
+        "score": 72.0,
+        "entry": 273.18,
+        "exit": 271.1,
+        "return_pct": -0.76,
+        "win": false
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-04-30",
+        "score": 74.4,
+        "entry": 271.1,
+        "exit": 287.18,
+        "return_pct": 5.93,
+        "win": true
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-05-01",
+        "score": 86.1,
+        "entry": 279.88,
+        "exit": 293.05,
+        "return_pct": 4.7,
+        "win": true
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-05-04",
+        "score": 71.5,
+        "entry": 276.58,
+        "exit": 292.68,
+        "return_pct": 5.82,
+        "win": true
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-05-05",
+        "score": 71.9,
+        "entry": 283.92,
+        "exit": 294.8,
+        "return_pct": 3.83,
+        "win": true
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-05-07",
+        "score": 73.6,
+        "entry": 287.18,
+        "exit": 298.21,
+        "return_pct": 3.84,
+        "win": true
+      },
+      {
+        "ticker": "AAPL",
+        "date": "2026-05-08",
+        "score": 78.7,
+        "entry": 293.05,
+        "exit": 300.23,
+        "return_pct": 2.45,
+        "win": true
+      },
+      {
+        "ticker": "MSFT",
+        "date": "2026-04-30",
+        "score": 80.5,
+        "entry": 407.78,
+        "exit": 420.77,
+        "return_pct": 3.19,
+        "win": true
+      },
+      {
+        "ticker": "META",
+        "date": "2026-04-29",
+        "score": 74.5,
+        "entry": 669.12,
+        "exit": 612.88,
+        "return_pct": -8.41,
+        "win": false
+      },
+      {
+        "ticker": "TSLA",
+        "date": "2026-04-27",
+        "score": 71.2,
+        "entry": 378.67,
+        "exit": 392.51,
+        "return_pct": 3.65,
+        "win": true
+      },
+      {
+        "ticker": "TSLA",
+        "date": "2026-04-28",
+        "score": 70.0,
+        "entry": 376.02,
+        "exit": 389.37,
+        "return_pct": 3.55,
+        "win": true
+      },
+      {
+        "ticker": "TSLA",
+        "date": "2026-05-01",
+        "score": 74.0,
+        "entry": 390.82,
+        "exit": 428.35,
+        "return_pct": 9.6,
+        "win": true
+      },
+      {
+        "ticker": "TSLA",
+        "date": "2026-05-08",
+        "score": 78.5,
+        "entry": 428.35,
+        "exit": 422.24,
+        "return_pct": -1.43,
+        "win": false
+      },
+      {
+        "ticker": "AMD",
+        "date": "2026-03-25",
+        "score": 76.3,
+        "entry": 220.27,
+        "exit": 210.21,
+        "return_pct": -4.57,
+        "win": false
+      },
+      {
+        "ticker": "AMD",
+        "date": "2026-04-02",
+        "score": 71.1,
+        "entry": 217.5,
+        "exit": 245.04,
+        "return_pct": 12.66,
+        "win": true
+      },
+      {
+        "ticker": "AMD",
+        "date": "2026-04-08",
+        "score": 77.0,
+        "entry": 231.82,
+        "exit": 258.12,
+        "return_pct": 11.35,
+        "win": true
+      },
+      {
+        "ticker": "AMD",
+        "date": "2026-04-09",
+        "score": 73.8,
+        "entry": 236.64,
+        "exit": 278.26,
+        "return_pct": 17.59,
+        "win": true
+      },
+      {
+        "ticker": "SPY",
+        "date": "2026-05-07",
+        "score": 78.5,
+        "entry": 731.58,
+        "exit": 748.17,
+        "return_pct": 2.27,
+        "win": true
+      },
+      {
+        "ticker": "PLTR",
+        "date": "2026-03-10",
+        "score": 75.5,
+        "entry": 151.14,
+        "exit": 155.08,
+        "return_pct": 2.61,
+        "win": true
+      },
+      {
+        "ticker": "PLTR",
+        "date": "2026-03-11",
+        "score": 75.5,
+        "entry": 151.6,
+        "exit": 152.77,
+        "return_pct": 0.77,
+        "win": true
+      },
+      {
+        "ticker": "PLTR",
+        "date": "2026-03-23",
+        "score": 70.9,
+        "entry": 160.84,
+        "exit": 137.55,
+        "return_pct": -14.48,
+        "win": false
+      },
+      {
+        "ticker": "CRWD",
+        "date": "2026-03-12",
+        "score": 70.0,
+        "entry": 441.54,
+        "exit": 428.18,
+        "return_pct": -3.03,
+        "win": false
+      },
+      {
+        "ticker": "CRWD",
+        "date": "2026-04-20",
+        "score": 71.6,
+        "entry": 433.15,
+        "exit": 454.61,
+        "return_pct": 4.95,
+        "win": true
+      },
+      {
+        "ticker": "CRWD",
+        "date": "2026-04-21",
+        "score": 76.2,
+        "entry": 449.61,
+        "exit": 454.99,
+        "return_pct": 1.2,
+        "win": true
+      },
+      {
+        "ticker": "CRWD",
+        "date": "2026-04-29",
+        "score": 75.7,
+        "entry": 452.38,
+        "exit": 468.07,
+        "return_pct": 3.47,
+        "win": true
+      },
+      {
+        "ticker": "CRWD",
+        "date": "2026-05-06",
+        "score": 76.1,
+        "entry": 468.07,
+        "exit": 562.57,
+        "return_pct": 20.19,
+        "win": true
+      },
+      {
+        "ticker": "COIN",
+        "date": "2026-03-09",
+        "score": 70.1,
+        "entry": 199.79,
+        "exit": 203.32,
+        "return_pct": 1.77,
+        "win": true
+      },
+      {
+        "ticker": "COIN",
+        "date": "2026-03-13",
+        "score": 74.5,
+        "entry": 195.53,
+        "exit": 197.5,
+        "return_pct": 1.01,
+        "win": true
+      },
+      {
+        "ticker": "COIN",
+        "date": "2026-03-16",
+        "score": 79.5,
+        "entry": 203.32,
+        "exit": 200.62,
+        "return_pct": -1.33,
+        "win": false
+      },
+      {
+        "ticker": "COIN",
+        "date": "2026-04-21",
+        "score": 72.7,
+        "entry": 195.95,
+        "exit": 194.1,
+        "return_pct": -0.94,
+        "win": false
+      },
+      {
+        "ticker": "MSTR",
+        "date": "2026-03-16",
+        "score": 72.4,
+        "entry": 147.52,
+        "exit": 138.2,
+        "return_pct": -6.32,
+        "win": false
+      },
+      {
+        "ticker": "MSTR",
+        "date": "2026-04-29",
+        "score": 72.2,
+        "entry": 158.19,
+        "exit": 186.82,
+        "return_pct": 18.1,
+        "win": true
+      },
+      {
+        "ticker": "MSTR",
+        "date": "2026-04-30",
+        "score": 76.3,
+        "entry": 165.45,
+        "exit": 179.84,
+        "return_pct": 8.7,
+        "win": true
+      },
+      {
+        "ticker": "MSTR",
+        "date": "2026-05-11",
+        "score": 74.5,
+        "entry": 195.94,
+        "exit": 166.63,
+        "return_pct": -14.96,
+        "win": false
+      }
+    ]
+  },
+  "sports": [
+    {
+      "sport": "NBA",
+      "picks": 63,
+      "wins": 45,
+      "win_rate": 71.4,
+      "roi": 229.1,
+      "start_bank": 1000,
+      "end_bank": 3290.91,
+      "pick_log": [
+        {
+          "date": "2026-04-12",
+          "matchup": "Memphis Grizzlies @ Houston Rockets",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 28.0,
+          "home_prob": 0.64,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3090.91
+        },
+        {
+          "date": "2026-04-12",
+          "matchup": "Phoenix Suns @ Oklahoma City Thunder",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 25.0,
+          "home_prob": 0.625,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 2990.91
+        },
+        {
+          "date": "2026-04-12",
+          "matchup": "Utah Jazz @ Los Angeles Lakers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 27.0,
+          "home_prob": 0.635,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3081.82
+        },
+        {
+          "date": "2026-04-12",
+          "matchup": "Sacramento Kings @ Portland Trail Blazers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 24.7,
+          "home_prob": 0.623,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3172.73
+        },
+        {
+          "date": "2026-04-18",
+          "matchup": "Toronto Raptors @ Cleveland Cavaliers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 22.3,
+          "home_prob": 0.611,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3263.64
+        },
+        {
+          "date": "2026-04-18",
+          "matchup": "Minnesota Timberwolves @ Denver Nuggets",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 21.6,
+          "home_prob": 0.608,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3354.55
+        },
+        {
+          "date": "2026-04-19",
+          "matchup": "Portland Trail Blazers @ San Antonio Spurs",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 20.0,
+          "home_prob": 0.6,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3445.45
+        },
+        {
+          "date": "2026-04-20",
+          "matchup": "Toronto Raptors @ Cleveland Cavaliers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 23.7,
+          "home_prob": 0.619,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3536.36
+        },
+        {
+          "date": "2026-04-20",
+          "matchup": "Atlanta Hawks @ New York Knicks",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 20.1,
+          "home_prob": 0.601,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 3436.36
+        },
+        {
+          "date": "2026-04-20",
+          "matchup": "Minnesota Timberwolves @ Denver Nuggets",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 23.0,
+          "home_prob": 0.615,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 3336.36
+        },
+        {
+          "date": "2026-04-21",
+          "matchup": "Portland Trail Blazers @ San Antonio Spurs",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 22.0,
+          "home_prob": 0.61,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 3236.36
+        },
+        {
+          "date": "2026-04-22",
+          "matchup": "Phoenix Suns @ Oklahoma City Thunder",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 20.1,
+          "home_prob": 0.601,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3327.27
+        },
+        {
+          "date": "2026-04-23",
+          "matchup": "New York Knicks @ Atlanta Hawks",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 20.0,
+          "home_prob": 0.6,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3418.18
+        },
+        {
+          "date": "2026-04-25",
+          "matchup": "New York Knicks @ Atlanta Hawks",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 22.0,
+          "home_prob": 0.61,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 3318.18
+        },
+        {
+          "date": "2026-04-29",
+          "matchup": "Toronto Raptors @ Cleveland Cavaliers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 24.8,
+          "home_prob": 0.624,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3409.09
+        },
+        {
+          "date": "2026-05-03",
+          "matchup": "Toronto Raptors @ Cleveland Cavaliers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 25.7,
+          "home_prob": 0.628,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3500.0
+        },
+        {
+          "date": "2026-05-11",
+          "matchup": "Detroit Pistons @ Cleveland Cavaliers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 20.0,
+          "home_prob": 0.6,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 3590.91
+        },
+        {
+          "date": "2026-05-13",
+          "matchup": "Cleveland Cavaliers @ Detroit Pistons",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 24.0,
+          "home_prob": 0.62,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 3490.91
+        },
+        {
+          "date": "2026-05-15",
+          "matchup": "Detroit Pistons @ Cleveland Cavaliers",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 25.0,
+          "home_prob": 0.625,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 3390.91
+        },
+        {
+          "date": "2026-05-17",
+          "matchup": "Cleveland Cavaliers @ Detroit Pistons",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 21.0,
+          "home_prob": 0.605,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 3290.91
+        }
+      ]
+    },
+    {
+      "sport": "MLB",
+      "picks": 92,
+      "wins": 53,
+      "win_rate": 57.6,
+      "roi": 91.8,
+      "start_bank": 1000,
+      "end_bank": 1918.18,
+      "pick_log": [
+        {
+          "date": "2026-04-14",
+          "matchup": "Toronto Blue Jays @ Milwaukee Brewers",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 20.6,
+          "home_prob": 0.603,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 1336.36
+        },
+        {
+          "date": "2026-04-15",
+          "matchup": "Boston Red Sox @ Minnesota Twins",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 25.3,
+          "home_prob": 0.626,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 1236.36
+        },
+        {
+          "date": "2026-04-15",
+          "matchup": "Kansas City Royals @ Detroit Tigers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 28.2,
+          "home_prob": 0.641,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1327.27
+        },
+        {
+          "date": "2026-04-15",
+          "matchup": "Seattle Mariners @ San Diego Padres",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 20.7,
+          "home_prob": 0.604,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1418.18
+        },
+        {
+          "date": "2026-04-16",
+          "matchup": "Kansas City Royals @ Detroit Tigers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 28.6,
+          "home_prob": 0.643,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1509.09
+        },
+        {
+          "date": "2026-04-16",
+          "matchup": "Seattle Mariners @ San Diego Padres",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 24.1,
+          "home_prob": 0.621,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1600.0
+        },
+        {
+          "date": "2026-04-19",
+          "matchup": "Toronto Blue Jays @ Arizona Diamondbacks",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 20.7,
+          "home_prob": 0.604,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 1500.0
+        },
+        {
+          "date": "2026-04-20",
+          "matchup": "Houston Astros @ Cleveland Guardians",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 20.7,
+          "home_prob": 0.603,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 1400.0
+        },
+        {
+          "date": "2026-04-21",
+          "matchup": "Milwaukee Brewers @ Detroit Tigers",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 23.7,
+          "home_prob": 0.619,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 1300.0
+        },
+        {
+          "date": "2026-04-23",
+          "matchup": "Philadelphia Phillies @ Chicago Cubs",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 22.2,
+          "home_prob": 0.611,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1390.91
+        },
+        {
+          "date": "2026-05-02",
+          "matchup": "Texas Rangers @ Detroit Tigers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 21.6,
+          "home_prob": 0.608,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1481.82
+        },
+        {
+          "date": "2026-05-02",
+          "matchup": "Kansas City Royals @ Seattle Mariners",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 21.6,
+          "home_prob": 0.608,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 1381.82
+        },
+        {
+          "date": "2026-05-03",
+          "matchup": "Texas Rangers @ Detroit Tigers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 21.6,
+          "home_prob": 0.608,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1472.73
+        },
+        {
+          "date": "2026-05-04",
+          "matchup": "Cincinnati Reds @ Chicago Cubs",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 22.6,
+          "home_prob": 0.613,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1563.64
+        },
+        {
+          "date": "2026-05-05",
+          "matchup": "Cincinnati Reds @ Chicago Cubs",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 22.6,
+          "home_prob": 0.613,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1654.55
+        },
+        {
+          "date": "2026-05-18",
+          "matchup": "Baltimore Orioles @ Tampa Bay Rays",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 21.6,
+          "home_prob": 0.608,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1745.45
+        },
+        {
+          "date": "2026-05-18",
+          "matchup": "Milwaukee Brewers @ Chicago Cubs",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 24.6,
+          "home_prob": 0.623,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 1645.45
+        },
+        {
+          "date": "2026-05-19",
+          "matchup": "Baltimore Orioles @ Tampa Bay Rays",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 23.6,
+          "home_prob": 0.618,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1736.36
+        },
+        {
+          "date": "2026-05-19",
+          "matchup": "Toronto Blue Jays @ New York Yankees",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 21.6,
+          "home_prob": 0.608,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1827.27
+        },
+        {
+          "date": "2026-05-20",
+          "matchup": "Baltimore Orioles @ Tampa Bay Rays",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 23.6,
+          "home_prob": 0.618,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1918.18
+        }
+      ]
+    },
+    {
+      "sport": "NHL",
+      "picks": 25,
+      "wins": 13,
+      "win_rate": 52.0,
+      "roi": -1.8,
+      "start_bank": 1000,
+      "end_bank": 981.82,
+      "pick_log": [
+        {
+          "date": "2026-03-26",
+          "matchup": "Columbus Blue Jackets @ Montreal Canadiens",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 21.4,
+          "home_prob": 0.607,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 972.73
+        },
+        {
+          "date": "2026-03-26",
+          "matchup": "Pittsburgh Penguins @ Ottawa Senators",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 21.4,
+          "home_prob": 0.607,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 872.73
+        },
+        {
+          "date": "2026-03-26",
+          "matchup": "Seattle Kraken @ Tampa Bay Lightning",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 31.4,
+          "home_prob": 0.657,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 772.73
+        },
+        {
+          "date": "2026-03-26",
+          "matchup": "Minnesota Wild @ Florida Panthers",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 31.4,
+          "home_prob": 0.657,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 672.73
+        },
+        {
+          "date": "2026-03-26",
+          "matchup": "San Jose Sharks @ St. Louis Blues",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 31.4,
+          "home_prob": 0.657,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 763.64
+        },
+        {
+          "date": "2026-03-28",
+          "matchup": "San Jose Sharks @ Columbus Blue Jackets",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 31.4,
+          "home_prob": 0.657,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 663.64
+        },
+        {
+          "date": "2026-03-28",
+          "matchup": "Toronto Maple Leafs @ St. Louis Blues",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 21.4,
+          "home_prob": 0.607,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 754.55
+        },
+        {
+          "date": "2026-03-30",
+          "matchup": "Toronto Maple Leafs @ Anaheim Ducks",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 24.7,
+          "home_prob": 0.624,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 654.55
+        },
+        {
+          "date": "2026-04-02",
+          "matchup": "Vancouver Canucks @ Minnesota Wild",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 24.7,
+          "home_prob": 0.624,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 745.45
+        },
+        {
+          "date": "2026-04-04",
+          "matchup": "New York Islanders @ Carolina Hurricanes",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 21.4,
+          "home_prob": 0.607,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 836.36
+        },
+        {
+          "date": "2026-04-05",
+          "matchup": "New Jersey Devils @ Montreal Canadiens",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 21.4,
+          "home_prob": 0.607,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 736.36
+        },
+        {
+          "date": "2026-04-07",
+          "matchup": "Florida Panthers @ Montreal Canadiens",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 23.9,
+          "home_prob": 0.62,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 827.27
+        },
+        {
+          "date": "2026-04-07",
+          "matchup": "Seattle Kraken @ Minnesota Wild",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 28.1,
+          "home_prob": 0.64,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 918.18
+        },
+        {
+          "date": "2026-04-08",
+          "matchup": "Washington Capitals @ Toronto Maple Leafs",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 23.4,
+          "home_prob": 0.617,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 818.18
+        },
+        {
+          "date": "2026-04-09",
+          "matchup": "Tampa Bay Lightning @ Montreal Canadiens",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 20.4,
+          "home_prob": 0.602,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 909.09
+        },
+        {
+          "date": "2026-04-09",
+          "matchup": "Florida Panthers @ Ottawa Senators",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 21.4,
+          "home_prob": 0.607,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1000.0
+        },
+        {
+          "date": "2026-04-13",
+          "matchup": "New York Rangers @ Florida Panthers",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 23.9,
+          "home_prob": 0.62,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1090.91
+        },
+        {
+          "date": "2026-04-14",
+          "matchup": "Anaheim Ducks @ Minnesota Wild",
+          "predicted": "Home",
+          "actual": "Home",
+          "confidence": 21.4,
+          "home_prob": 0.607,
+          "correct": true,
+          "profit": 90.91,
+          "bankroll": 1181.82
+        },
+        {
+          "date": "2026-04-15",
+          "matchup": "New York Rangers @ Tampa Bay Lightning",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 23.9,
+          "home_prob": 0.62,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 1081.82
+        },
+        {
+          "date": "2026-04-22",
+          "matchup": "Dallas Stars @ Minnesota Wild",
+          "predicted": "Home",
+          "actual": "Away",
+          "confidence": 22.8,
+          "home_prob": 0.614,
+          "correct": false,
+          "profit": -100.0,
+          "bankroll": 981.82
+        }
+      ]
+    }
+  ]
+}

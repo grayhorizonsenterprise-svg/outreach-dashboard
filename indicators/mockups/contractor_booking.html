@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0f172a;font-family:Arial,sans-serif;padding:32px;min-width:1100px;}
+.logo{color:#38bdf8;font-size:18px;font-weight:700;margin-bottom:24px;}
+.top{display:flex;gap:24px;margin-bottom:24px;}
+.calendar{background:#1e293b;border-radius:12px;padding:20px;flex:2;}
+.sidebar{flex:1;display:flex;flex-direction:column;gap:16px;}
+.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.cal-title{color:#e2e8f0;font-size:16px;font-weight:700;}
+.cal-nav{color:#38bdf8;cursor:pointer;font-size:18px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-day-name{color:#64748b;font-size:11px;text-align:center;padding:4px;font-weight:600;}
+.cal-day{color:#94a3b8;font-size:13px;text-align:center;padding:8px 4px;border-radius:6px;cursor:pointer;}
+.cal-day.today{background:#0ea5e9;color:#fff;font-weight:700;}
+.cal-day.booked{background:#22c55e22;color:#22c55e;font-weight:600;position:relative;}
+.cal-day.booked::after{content:'●';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);font-size:8px;color:#22c55e;}
+.cal-day.other{color:#334155;}
+.appt-card{background:#0f172a;border-radius:10px;padding:14px;border-left:4px solid #22c55e;}
+.appt-time{color:#22c55e;font-size:13px;font-weight:700;margin-bottom:4px;}
+.appt-name{color:#e2e8f0;font-size:15px;font-weight:600;margin-bottom:2px;}
+.appt-job{color:#94a3b8;font-size:12px;margin-bottom:8px;}
+.appt-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.badge{padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;}
+.badge.auto{background:#0ea5e9;color:#fff;}
+.badge.confirmed{background:#22c55e;color:#000;}
+.badge.reminded{background:#f59e0b;color:#000;}
+.stat-card{background:#1e293b;border-radius:10px;padding:16px;}
+.stat-val{color:#38bdf8;font-size:28px;font-weight:700;}
+.stat-label{color:#64748b;font-size:12px;margin-top:2px;}
+.today-list{background:#1e293b;border-radius:12px;padding:20px;}
+.today-title{color:#38bdf8;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+.today-appt{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #334155;}
+.today-appt:last-child{border-bottom:none;}
+.ta-left{}
+.ta-name{color:#e2e8f0;font-size:14px;font-weight:600;}
+.ta-job{color:#94a3b8;font-size:12px;}
+.ta-right{text-align:right;}
+.ta-time{color:#22c55e;font-size:13px;font-weight:700;}
+.ta-val{color:#64748b;font-size:12px;}
+</style></head><body>
+<div class="logo">GRAY HORIZONS ENTERPRISE — Booking Confirmation System</div>
+<div class="top">
+  <div class="calendar">
+    <div class="cal-header">
+      <span class="cal-nav">‹</span>
+      <span class="cal-title">June 2026</span>
+      <span class="cal-nav">›</span>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-day-name">SUN</div><div class="cal-day-name">MON</div><div class="cal-day-name">TUE</div><div class="cal-day-name">WED</div><div class="cal-day-name">THU</div><div class="cal-day-name">FRI</div><div class="cal-day-name">SAT</div>
+      <div class="cal-day other">1</div><div class="cal-day booked">2</div><div class="cal-day booked">3</div><div class="cal-day booked">4</div><div class="cal-day today">5</div><div class="cal-day booked">6</div><div class="cal-day">7</div>
+      <div class="cal-day">8</div><div class="cal-day booked">9</div><div class="cal-day booked">10</div><div class="cal-day">11</div><div class="cal-day booked">12</div><div class="cal-day">13</div><div class="cal-day">14</div>
+      <div class="cal-day booked">15</div><div class="cal-day">16</div><div class="cal-day booked">17</div><div class="cal-day booked">18</div><div class="cal-day">19</div><div class="cal-day booked">20</div><div class="cal-day">21</div>
+      <div class="cal-day">22</div><div class="cal-day booked">23</div><div class="cal-day">24</div><div class="cal-day booked">25</div><div class="cal-day">26</div><div class="cal-day">27</div><div class="cal-day">28</div>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="stat-card"><div class="stat-val">8</div><div class="stat-label">Appointments This Week</div></div>
+    <div class="stat-card"><div class="stat-val">100%</div><div class="stat-label">Auto-Confirmed (No Manual Work)</div></div>
+    <div class="stat-card"><div class="stat-val">0</div><div class="stat-label">No-Shows (Reminders Sent)</div></div>
+  </div>
+</div>
+<div class="today-list">
+  <div class="today-title">Today's Schedule — Auto-Booked by System</div>
+  <div class="today-appt">
+    <div class="ta-left"><div class="ta-name">Mike Torres</div><div class="ta-job">HVAC Install — 3-ton unit</div></div>
+    <div class="ta-right"><div class="ta-time">9:00 AM</div><div class="ta-val">$4,200 est. <span style="background:#22c55e;color:#000;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;">AUTO</span></div></div>
+  </div>
+  <div class="today-appt">
+    <div class="ta-left"><div class="ta-name">Sandra Reyes</div><div class="ta-job">Roof replacement — storm damage</div></div>
+    <div class="ta-right"><div class="ta-time">11:00 AM</div><div class="ta-val">$9,800 est. <span style="background:#22c55e;color:#000;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;">AUTO</span></div></div>
+  </div>
+  <div class="today-appt">
+    <div class="ta-left"><div class="ta-name">Angela Foster</div><div class="ta-job">AC tune-up + filter replacement</div></div>
+    <div class="ta-right"><div class="ta-time">1:30 PM</div><div class="ta-val">$380 est. <span style="background:#22c55e;color:#000;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;">AUTO</span></div></div>
+  </div>
+  <div class="today-appt">
+    <div class="ta-left"><div class="ta-name">Derek Hawkins</div><div class="ta-job">Electrical panel upgrade</div></div>
+    <div class="ta-right"><div class="ta-time">3:00 PM</div><div class="ta-val">$2,100 est. <span style="background:#22c55e;color:#000;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;">AUTO</span></div></div>
+  </div>
+</div>
+</body></html>

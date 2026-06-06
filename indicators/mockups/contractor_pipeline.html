@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0f172a;font-family:Arial,sans-serif;padding:24px;min-width:1200px;}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.logo{color:#38bdf8;font-size:20px;font-weight:700;letter-spacing:1px;}
+.badge{background:#22c55e;color:#000;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;}
+.pipeline{display:flex;gap:16px;}
+.col{background:#1e293b;border-radius:12px;padding:16px;width:280px;min-height:500px;}
+.col-header{font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;display:flex;justify-content:space-between;}
+.count{background:#334155;color:#e2e8f0;padding:2px 8px;border-radius:10px;font-size:11px;}
+.card{background:#0f172a;border-radius:8px;padding:14px;margin-bottom:12px;border-left:3px solid #334155;}
+.card.hot{border-left-color:#f59e0b;}
+.card.booked{border-left-color:#22c55e;}
+.card-name{color:#e2e8f0;font-weight:600;font-size:14px;margin-bottom:4px;}
+.card-job{color:#94a3b8;font-size:12px;margin-bottom:8px;}
+.card-meta{display:flex;justify-content:space-between;align-items:center;}
+.card-value{color:#22c55e;font-size:13px;font-weight:700;}
+.card-time{color:#475569;font-size:11px;}
+.sms-badge{background:#f59e0b;color:#000;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700;}
+.auto-badge{background:#0ea5e9;color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:4px;}
+.stats{display:flex;gap:16px;margin-bottom:24px;}
+.stat{background:#1e293b;border-radius:10px;padding:14px 20px;flex:1;text-align:center;}
+.stat-val{color:#38bdf8;font-size:24px;font-weight:700;}
+.stat-label{color:#64748b;font-size:11px;margin-top:2px;}
+</style></head><body>
+<div class="header">
+  <div class="logo">GRAY HORIZONS ENTERPRISE — Contractor Pipeline</div>
+  <div class="badge">● LIVE</div>
+</div>
+<div class="stats">
+  <div class="stat"><div class="stat-val">23</div><div class="stat-label">New Leads This Week</div></div>
+  <div class="stat"><div class="stat-val">$0</div><div class="stat-label">Missed Calls (AI Answered)</div></div>
+  <div class="stat"><div class="stat-val">8</div><div class="stat-label">Appointments Booked</div></div>
+  <div class="stat"><div class="stat-val">$18,400</div><div class="stat-label">Pipeline Value</div></div>
+</div>
+<div class="pipeline">
+  <div class="col">
+    <div class="col-header">New Intake <span class="count">7</span></div>
+    <div class="card hot">
+      <div class="card-name">Mike Torres</div>
+      <div class="card-job">HVAC Install — 3-ton unit replacement</div>
+      <div class="card-meta"><span class="card-value">$4,200</span><span><span class="sms-badge">SMS SENT</span><span class="card-time"> 42s ago</span></span></div>
+    </div>
+    <div class="card hot">
+      <div class="card-name">Sandra Reyes</div>
+      <div class="card-job">Roof Replacement — storm damage claim</div>
+      <div class="card-meta"><span class="card-value">$9,800</span><span><span class="sms-badge">SMS SENT</span><span class="card-time"> 1m ago</span></span></div>
+    </div>
+    <div class="card">
+      <div class="card-name">Derek Hawkins</div>
+      <div class="card-job">Electrical panel upgrade — 200 amp</div>
+      <div class="card-meta"><span class="card-value">$2,100</span><span class="card-time">8m ago</span></div>
+    </div>
+    <div class="card">
+      <div class="card-name">Priya Nair</div>
+      <div class="card-job">Plumbing — water heater replacement</div>
+      <div class="card-meta"><span class="card-value">$1,400</span><span class="card-time">22m ago</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="col-header">Qualified <span class="count">5</span></div>
+    <div class="card hot">
+      <div class="card-name">James Whitfield</div>
+      <div class="card-job">Commercial HVAC — office building</div>
+      <div class="card-meta"><span class="card-value">$14,500</span><span><span class="auto-badge">FOLLOW-UP 3</span></span></div>
+    </div>
+    <div class="card">
+      <div class="card-name">Carol Nguyen</div>
+      <div class="card-job">Kitchen remodel — full gut</div>
+      <div class="card-meta"><span class="card-value">$22,000</span><span class="card-time">Estimate sent</span></div>
+    </div>
+    <div class="card">
+      <div class="card-name">Robert Castillo</div>
+      <div class="card-job">Fence installation — 180ft vinyl</div>
+      <div class="card-meta"><span class="card-value">$3,600</span><span class="card-time">Awaiting reply</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="col-header">Scheduled <span class="count">6</span></div>
+    <div class="card booked">
+      <div class="card-name">Angela Foster</div>
+      <div class="card-job">AC tune-up + filter replacement</div>
+      <div class="card-meta"><span class="card-value">$380</span><span class="card-time">Tomorrow 9AM</span></div>
+    </div>
+    <div class="card booked">
+      <div class="card-name">Luis Mendoza</div>
+      <div class="card-job">Roof inspection — 2,400 sqft</div>
+      <div class="card-meta"><span class="card-value">$650</span><span class="card-time">Tomorrow 11AM</span></div>
+    </div>
+    <div class="card booked">
+      <div class="card-name">Tina Okafor</div>
+      <div class="card-job">HVAC install — new construction</div>
+      <div class="card-meta"><span class="card-value">$6,200</span><span class="card-time">Thu 8AM</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="col-header">Closed Won <span class="count">4</span></div>
+    <div class="card booked">
+      <div class="card-name">Frank Delgado</div>
+      <div class="card-job">Full HVAC replacement</div>
+      <div class="card-meta"><span class="card-value">$8,900</span><span class="card-time">Paid ✓</span></div>
+    </div>
+    <div class="card booked">
+      <div class="card-name">Melissa Park</div>
+      <div class="card-job">Bathroom remodel</div>
+      <div class="card-meta"><span class="card-value">$11,200</span><span class="card-time">Paid ✓</span></div>
+    </div>
+    <div class="card booked">
+      <div class="card-name">George Simmons</div>
+      <div class="card-job">Electrical rewire — full home</div>
+      <div class="card-meta"><span class="card-value">$7,400</span><span class="card-time">Paid ✓</span></div>
+    </div>
+  </div>
+</div>
+</body></html>

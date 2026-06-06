@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GHE Edge Engine — Backtest Results</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,sans-serif;background:#071426;color:#e2e8f0;padding:40px 20px;}
+  h1{font-size:28px;font-weight:900;margin-bottom:4px;}
+  .subtitle{color:#64748b;font-size:14px;margin-bottom:40px;}
+  .card{background:#0c1b33;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px;margin-bottom:24px;}
+  .card-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4f9cff;margin-bottom:20px;}
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px;}
+  .stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:16px;text-align:center;}
+  .stat-val{font-size:26px;font-weight:900;letter-spacing:-.02em;margin-bottom:4px;}
+  .stat-lbl{font-size:11px;color:#64748b;font-weight:600;}
+  .section-title{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:12px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;padding:8px 12px;background:rgba(255,255,255,.04);color:#64748b;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.06em;}
+  td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.05);}
+  .disclaimer{font-size:12px;color:#475569;margin-top:32px;padding:20px;background:rgba(255,255,255,.03);border-radius:10px;line-height:1.6;}
+</style>
+</head>
+<body>
+<h1>GHE Edge Engine — Historical Backtest</h1>
+<div class="subtitle">Generated May 20, 2026 at 04:43 PM &nbsp;·&nbsp; Real historical data &nbsp;·&nbsp; Not simulated or forward-looking</div>
+
+        <div class="card">
+          <div class="card-label">Stock Signal Backtest — Last 90 Days</div>
+          <div class="stats-row">
+            <div class="stat"><div class="stat-val">39</div><div class="stat-lbl">Signals Fired (Score 70+)</div></div>
+            <div class="stat"><div class="stat-val" style="color:#22c55e">69.2%</div><div class="stat-lbl">Win Rate (5-Day Hold)</div></div>
+            <div class="stat"><div class="stat-val" style="color:#22c55e">+2.63%</div><div class="stat-lbl">Avg Return Per Signal</div></div>
+            <div class="stat"><div class="stat-val" style="color:#22c55e">$11,025</div><div class="stat-lbl">$10,000 Starting Capital</div></div>
+          </div>
+          <div class="section-title">Top 10 Signals</div>
+          <table>
+            <tr><th>Date</th><th>Ticker</th><th>Score</th><th>Entry</th><th>Exit (5d)</th><th>Return</th></tr>
+            <tr><td>2026-05-06</td><td><strong>CRWD</strong></td><td>76.1</td><td>$468.07</td><td>$562.57</td><td style="color:#22c55e">+20.19%</td></tr><tr><td>2026-04-29</td><td><strong>MSTR</strong></td><td>72.2</td><td>$158.19</td><td>$186.82</td><td style="color:#22c55e">+18.10%</td></tr><tr><td>2026-04-09</td><td><strong>AMD</strong></td><td>73.8</td><td>$236.64</td><td>$278.26</td><td style="color:#22c55e">+17.59%</td></tr><tr><td>2026-04-02</td><td><strong>AMD</strong></td><td>71.1</td><td>$217.5</td><td>$245.04</td><td style="color:#22c55e">+12.66%</td></tr><tr><td>2026-04-08</td><td><strong>AMD</strong></td><td>77.0</td><td>$231.82</td><td>$258.12</td><td style="color:#22c55e">+11.35%</td></tr><tr><td>2026-05-01</td><td><strong>TSLA</strong></td><td>74.0</td><td>$390.82</td><td>$428.35</td><td style="color:#22c55e">+9.60%</td></tr><tr><td>2026-04-30</td><td><strong>MSTR</strong></td><td>76.3</td><td>$165.45</td><td>$179.84</td><td style="color:#22c55e">+8.70%</td></tr><tr><td>2026-04-30</td><td><strong>AAPL</strong></td><td>74.4</td><td>$271.1</td><td>$287.18</td><td style="color:#22c55e">+5.93%</td></tr><tr><td>2026-05-04</td><td><strong>AAPL</strong></td><td>71.5</td><td>$276.58</td><td>$292.68</td><td style="color:#22c55e">+5.82%</td></tr><tr><td>2026-04-20</td><td><strong>CRWD</strong></td><td>71.6</td><td>$433.15</td><td>$454.61</td><td style="color:#22c55e">+4.95%</td></tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-label">NBA Betting Model — Last 60 Days (High-Confidence Only)</div>
+          <div class="stats-row">
+            <div class="stat"><div class="stat-val">63</div><div class="stat-lbl">High-Confidence Picks</div></div>
+            <div class="stat"><div class="stat-val" style="color:#22c55e">71.4%</div><div class="stat-lbl">Win Rate</div></div>
+            <div class="stat"><div class="stat-val" style="color:#22c55e">+229.1%</div><div class="stat-lbl">ROI ($100 flat bet)</div></div>
+            <div class="stat"><div class="stat-val" style="color:#22c55e">$3,291</div><div class="stat-lbl">$1,000 Starting Bankroll</div></div>
+          </div>
+          <div class="section-title">Last 20 Picks</div>
+          <table>
+            <tr><th>Date</th><th>Matchup</th><th>Confidence</th><th>Result</th><th>P&L</th><th>Bankroll</th></tr>
+            <tr><td>2026-04-12</td><td>Memphis Grizzlies @ Houston Rockets</td><td>28.0%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,091</td></tr><tr><td>2026-04-12</td><td>Phoenix Suns @ Oklahoma City Thunder</td><td>25.0%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$2,991</td></tr><tr><td>2026-04-12</td><td>Utah Jazz @ Los Angeles Lakers</td><td>27.0%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,082</td></tr><tr><td>2026-04-12</td><td>Sacramento Kings @ Portland Trail Blazers</td><td>24.7%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,173</td></tr><tr><td>2026-04-18</td><td>Toronto Raptors @ Cleveland Cavaliers</td><td>22.3%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,264</td></tr><tr><td>2026-04-18</td><td>Minnesota Timberwolves @ Denver Nuggets</td><td>21.6%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,355</td></tr><tr><td>2026-04-19</td><td>Portland Trail Blazers @ San Antonio Spurs</td><td>20.0%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,445</td></tr><tr><td>2026-04-20</td><td>Toronto Raptors @ Cleveland Cavaliers</td><td>23.7%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,536</td></tr><tr><td>2026-04-20</td><td>Atlanta Hawks @ New York Knicks</td><td>20.1%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$3,436</td></tr><tr><td>2026-04-20</td><td>Minnesota Timberwolves @ Denver Nuggets</td><td>23.0%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$3,336</td></tr><tr><td>2026-04-21</td><td>Portland Trail Blazers @ San Antonio Spurs</td><td>22.0%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$3,236</td></tr><tr><td>2026-04-22</td><td>Phoenix Suns @ Oklahoma City Thunder</td><td>20.1%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,327</td></tr><tr><td>2026-04-23</td><td>New York Knicks @ Atlanta Hawks</td><td>20.0%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,418</td></tr><tr><td>2026-04-25</td><td>New York Knicks @ Atlanta Hawks</td><td>22.0%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$3,318</td></tr><tr><td>2026-04-29</td><td>Toronto Raptors @ Cleveland Cavaliers</td><td>24.8%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,409</td></tr><tr><td>2026-05-03</td><td>Toronto Raptors @ Cleveland Cavaliers</td><td>25.7%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,500</td></tr><tr><td>2026-05-11</td><td>Detroit Pistons @ Cleveland Cavaliers</td><td>20.0%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$3,591</td></tr><tr><td>2026-05-13</td><td>Cleveland Cavaliers @ Detroit Pistons</td><td>24.0%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$3,491</td></tr><tr><td>2026-05-15</td><td>Detroit Pistons @ Cleveland Cavaliers</td><td>25.0%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$3,391</td></tr><tr><td>2026-05-17</td><td>Cleveland Cavaliers @ Detroit Pistons</td><td>21.0%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$3,291</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-label">MLB Betting Model — Last 60 Days (High-Confidence Only)</div>
+          <div class="stats-row">
+            <div class="stat"><div class="stat-val">92</div><div class="stat-lbl">High-Confidence Picks</div></div>
+            <div class="stat"><div class="stat-val" style="color:#22c55e">57.6%</div><div class="stat-lbl">Win Rate</div></div>
+            <div class="stat"><div class="stat-val" style="color:#22c55e">+91.8%</div><div class="stat-lbl">ROI ($100 flat bet)</div></div>
+            <div class="stat"><div class="stat-val" style="color:#22c55e">$1,918</div><div class="stat-lbl">$1,000 Starting Bankroll</div></div>
+          </div>
+          <div class="section-title">Last 20 Picks</div>
+          <table>
+            <tr><th>Date</th><th>Matchup</th><th>Confidence</th><th>Result</th><th>P&L</th><th>Bankroll</th></tr>
+            <tr><td>2026-04-14</td><td>Toronto Blue Jays @ Milwaukee Brewers</td><td>20.6%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$1,336</td></tr><tr><td>2026-04-15</td><td>Boston Red Sox @ Minnesota Twins</td><td>25.3%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$1,236</td></tr><tr><td>2026-04-15</td><td>Kansas City Royals @ Detroit Tigers</td><td>28.2%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,327</td></tr><tr><td>2026-04-15</td><td>Seattle Mariners @ San Diego Padres</td><td>20.7%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,418</td></tr><tr><td>2026-04-16</td><td>Kansas City Royals @ Detroit Tigers</td><td>28.6%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,509</td></tr><tr><td>2026-04-16</td><td>Seattle Mariners @ San Diego Padres</td><td>24.1%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,600</td></tr><tr><td>2026-04-19</td><td>Toronto Blue Jays @ Arizona Diamondbacks</td><td>20.7%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$1,500</td></tr><tr><td>2026-04-20</td><td>Houston Astros @ Cleveland Guardians</td><td>20.7%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$1,400</td></tr><tr><td>2026-04-21</td><td>Milwaukee Brewers @ Detroit Tigers</td><td>23.7%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$1,300</td></tr><tr><td>2026-04-23</td><td>Philadelphia Phillies @ Chicago Cubs</td><td>22.2%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,391</td></tr><tr><td>2026-05-02</td><td>Texas Rangers @ Detroit Tigers</td><td>21.6%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,482</td></tr><tr><td>2026-05-02</td><td>Kansas City Royals @ Seattle Mariners</td><td>21.6%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$1,382</td></tr><tr><td>2026-05-03</td><td>Texas Rangers @ Detroit Tigers</td><td>21.6%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,473</td></tr><tr><td>2026-05-04</td><td>Cincinnati Reds @ Chicago Cubs</td><td>22.6%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,564</td></tr><tr><td>2026-05-05</td><td>Cincinnati Reds @ Chicago Cubs</td><td>22.6%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,655</td></tr><tr><td>2026-05-18</td><td>Baltimore Orioles @ Tampa Bay Rays</td><td>21.6%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,745</td></tr><tr><td>2026-05-18</td><td>Milwaukee Brewers @ Chicago Cubs</td><td>24.6%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$1,645</td></tr><tr><td>2026-05-19</td><td>Baltimore Orioles @ Tampa Bay Rays</td><td>23.6%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,736</td></tr><tr><td>2026-05-19</td><td>Toronto Blue Jays @ New York Yankees</td><td>21.6%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,827</td></tr><tr><td>2026-05-20</td><td>Baltimore Orioles @ Tampa Bay Rays</td><td>23.6%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,918</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-label">NHL Betting Model — Last 60 Days (High-Confidence Only)</div>
+          <div class="stats-row">
+            <div class="stat"><div class="stat-val">25</div><div class="stat-lbl">High-Confidence Picks</div></div>
+            <div class="stat"><div class="stat-val" style="color:#22c55e">52.0%</div><div class="stat-lbl">Win Rate</div></div>
+            <div class="stat"><div class="stat-val" style="color:#f87171">-1.8%</div><div class="stat-lbl">ROI ($100 flat bet)</div></div>
+            <div class="stat"><div class="stat-val" style="color:#f87171">$982</div><div class="stat-lbl">$1,000 Starting Bankroll</div></div>
+          </div>
+          <div class="section-title">Last 20 Picks</div>
+          <table>
+            <tr><th>Date</th><th>Matchup</th><th>Confidence</th><th>Result</th><th>P&L</th><th>Bankroll</th></tr>
+            <tr><td>2026-03-26</td><td>Columbus Blue Jackets @ Montreal Canadiens</td><td>21.4%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$973</td></tr><tr><td>2026-03-26</td><td>Pittsburgh Penguins @ Ottawa Senators</td><td>21.4%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$873</td></tr><tr><td>2026-03-26</td><td>Seattle Kraken @ Tampa Bay Lightning</td><td>31.4%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$773</td></tr><tr><td>2026-03-26</td><td>Minnesota Wild @ Florida Panthers</td><td>31.4%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$673</td></tr><tr><td>2026-03-26</td><td>San Jose Sharks @ St. Louis Blues</td><td>31.4%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$764</td></tr><tr><td>2026-03-28</td><td>San Jose Sharks @ Columbus Blue Jackets</td><td>31.4%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$664</td></tr><tr><td>2026-03-28</td><td>Toronto Maple Leafs @ St. Louis Blues</td><td>21.4%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$755</td></tr><tr><td>2026-03-30</td><td>Toronto Maple Leafs @ Anaheim Ducks</td><td>24.7%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$655</td></tr><tr><td>2026-04-02</td><td>Vancouver Canucks @ Minnesota Wild</td><td>24.7%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$745</td></tr><tr><td>2026-04-04</td><td>New York Islanders @ Carolina Hurricanes</td><td>21.4%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$836</td></tr><tr><td>2026-04-05</td><td>New Jersey Devils @ Montreal Canadiens</td><td>21.4%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$736</td></tr><tr><td>2026-04-07</td><td>Florida Panthers @ Montreal Canadiens</td><td>23.9%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$827</td></tr><tr><td>2026-04-07</td><td>Seattle Kraken @ Minnesota Wild</td><td>28.1%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$918</td></tr><tr><td>2026-04-08</td><td>Washington Capitals @ Toronto Maple Leafs</td><td>23.4%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$818</td></tr><tr><td>2026-04-09</td><td>Tampa Bay Lightning @ Montreal Canadiens</td><td>20.4%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$909</td></tr><tr><td>2026-04-09</td><td>Florida Panthers @ Ottawa Senators</td><td>21.4%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,000</td></tr><tr><td>2026-04-13</td><td>New York Rangers @ Florida Panthers</td><td>23.9%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,091</td></tr><tr><td>2026-04-14</td><td>Anaheim Ducks @ Minnesota Wild</td><td>21.4%</td><td>✓</td><td style="color:#22c55e">$+91</td><td>$1,182</td></tr><tr><td>2026-04-15</td><td>New York Rangers @ Tampa Bay Lightning</td><td>23.9%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$1,082</td></tr><tr><td>2026-04-22</td><td>Dallas Stars @ Minnesota Wild</td><td>22.8%</td><td>✗</td><td style="color:#f87171">$-100</td><td>$982</td></tr>
+          </table>
+        </div>
+<div class="disclaimer">
+  <strong>Methodology:</strong> Stock signals use RSI (14), volume ratio vs 20-day average, and EMA12/26 crossover — same logic as the live Edge Scanner. Entry at close when score &ge;70, exit 5 trading days later. Sports model uses home-field advantage, team form (last 10 games), and confidence filtering — only picks with &ge;20% edge above 50/50 are included. Standard -110 odds applied to all sports picks. Past performance does not guarantee future results.
+</div>
+</body>
+</html>
