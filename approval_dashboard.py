@@ -986,8 +986,8 @@ _batch_started_at = 0.0
 
 def run_batch_send(limit=None):
     global batch_running, batch_sent_count, _batch_started_at
-    if not os.getenv("BREVO_API_KEY", "").strip():
-        print("[BATCH] PAUSED — BREVO_API_KEY not set. Add key to Railway to resume outreach.", flush=True)
+    if not os.getenv("BREVO_API_KEY", "").strip() and not os.getenv("SENDGRID_API_KEY", "").strip():
+        print("[BATCH] PAUSED — No sender configured. Add BREVO_API_KEY or SENDGRID_API_KEY to Railway.", flush=True)
         return
     if batch_running:
         # Safety: if stuck for > 45 min, auto-reset
