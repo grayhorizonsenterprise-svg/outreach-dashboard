@@ -308,6 +308,22 @@ def merge_results(*dicts) -> dict[str, list[dict]]:
 
 # ─── Main run ─────────────────────────────────────────────────────────────────
 
+def run_apollo():
+    """Pull verified decision-maker leads from Apollo if API key is set."""
+    apollo_key = os.getenv("APOLLO_API_KEY", "").strip()
+    if not apollo_key:
+        log("  [APOLLO] No APOLLO_API_KEY set — skipping. Add key to Railway to unlock verified leads.")
+        return {}
+    try:
+        import apollo_scraper
+        log("  [APOLLO] Pulling verified decision-maker leads...")
+        apollo_scraper.run_apollo_scan()
+        log("  [APOLLO] Done.")
+    except Exception as e:
+        log(f"  [APOLLO] Error: {e}")
+    return {}
+
+
 def run_scan():
     log("=" * 50)
     log("LEAD SCANNER — starting scan cycle")
@@ -326,6 +342,9 @@ def run_scan():
 
     log("  [4/4] Direct niche scanning...")
     dr_results = scan_direct(ddgs)
+
+    log("  [5/5] Apollo verified leads...")
+    run_apollo()
 
     all_results = merge_results(li_results, tw_results, rd_results, dr_results)
 
