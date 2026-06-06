@@ -3541,6 +3541,44 @@ h1{{color:#38bdf8;}}h2{{color:#94a3b8;font-size:16px;}}
 </body></html>"""
 
 
+@app.route('/vapi-webhook', methods=['POST'])
+def vapi_webhook():
+    """Receives Vapi end-of-call events and sends a follow-up SMS to the caller."""
+    import json
+    try:
+        data = flask_request.get_json(silent=True) or {}
+        event = data.get("message", {}).get("type", "")
+        if event != "end-of-call-report":
+            return "ok", 200
+
+        call      = data.get("message", {}).get("call", {})
+        caller_nr = call.get("customer", {}).get("number", "")
+        if not caller_nr:
+            return "no caller number", 200
+
+        vapi_key  = os.getenv("VAPI_API_KEY", "").strip()
+        phone_id  = os.getenv("VAPI_PHONE_NUMBER_ID", "e80874f3-73be-486f-b453-1b73573dbf9b")
+        if not vapi_key:
+            return "no vapi key", 200
+
+        sms_body = (
+            "Hey, this is Jordan from Gray Horizons Enterprise. "
+            "Here is the link to book your free 15-minute call: "
+            "https://calendly.com/grayhorizonsenterprise/30min\n\n"
+            "You can also check out our services at grayhorizonsenterprise.com"
+        )
+        requests.post(
+            "https://api.vapi.ai/message",
+            headers={"Authorization": f"Bearer {vapi_key}", "Content-Type": "application/json"},
+            json={"phoneNumberId": phone_id, "to": caller_nr, "message": sms_body},
+            timeout=10,
+        )
+        print(f"[VAPI SMS] Sent follow-up text to {caller_nr}")
+    except Exception as e:
+        print(f"[VAPI SMS] Error: {e}")
+    return "ok", 200
+
+
 @app.route('/performance')
 def performance():
     try:
