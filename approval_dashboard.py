@@ -3403,6 +3403,74 @@ def health():
     return f"OK | pipeline={status} | leads={leads}"
 
 
+@app.route('/linkedin-dms', methods=['GET', 'POST'])
+def linkedin_dms():
+    import json
+    from pathlib import Path
+    dm_file = Path(__file__).parent / "linkedin_dm_queue.json"
+    action  = request.form.get("action", "")
+    dm_id   = request.form.get("dm_id", "")
+
+    queue = json.loads(dm_file.read_text(encoding="utf-8")) if dm_file.exists() else []
+
+    if action == "mark_sent" and dm_id:
+        for e in queue:
+            if str(e["id"]) == dm_id:
+                e["status"]  = "sent"
+                e["sent_at"] = datetime.now().isoformat()
+        dm_file.write_text(json.dumps(queue, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    if action == "scan":
+        try:
+            from linkedin_dm_drafter import run_dm_scan
+            run_dm_scan()
+            queue = json.loads(dm_file.read_text(encoding="utf-8")) if dm_file.exists() else []
+        except Exception as e:
+            pass
+
+    pending = [e for e in queue if e.get("status") == "pending"]
+    sent    = [e for e in queue if e.get("status") == "sent"]
+
+    rows = ""
+    for e in pending[:30]:
+        rows += f"""
+        <div style='background:#1e293b;border-radius:10px;padding:16px;margin-bottom:14px;border-left:4px solid #38bdf8;'>
+          <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'>
+            <div>
+              <span style='color:#38bdf8;font-weight:700;font-size:14px;'>{e['name']}</span>
+              <span style='color:#64748b;font-size:12px;margin-left:10px;'>{e['niche']}</span>
+            </div>
+            <a href='{e['profile_url']}' target='_blank' style='color:#0ea5e9;font-size:12px;'>View Profile</a>
+          </div>
+          <div style='background:#0f172a;border-radius:6px;padding:12px;color:#e2e8f0;font-size:13px;line-height:1.6;margin-bottom:10px;white-space:pre-wrap;'>{e['dm_text']}</div>
+          <form method='POST' style='display:inline;'>
+            <input type='hidden' name='action' value='mark_sent'>
+            <input type='hidden' name='dm_id' value='{e['id']}'>
+            <button type='submit' style='background:#22c55e;color:#000;border:none;padding:6px 16px;border-radius:5px;font-weight:700;cursor:pointer;font-size:12px;'>Mark Sent</button>
+          </form>
+        </div>"""
+
+    html = f"""<!DOCTYPE html><html><head><meta charset='UTF-8'>
+    <title>LinkedIn DM Queue</title>
+    <style>*{{margin:0;padding:0;box-sizing:border-box;}}body{{background:#0f172a;font-family:Arial,sans-serif;padding:24px;color:#e2e8f0;}}</style>
+    </head><body>
+    <div style='max-width:900px;margin:0 auto;'>
+      <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;'>
+        <h1 style='color:#38bdf8;font-size:22px;'>LinkedIn DM Queue</h1>
+        <div>
+          <span style='color:#22c55e;font-size:13px;margin-right:16px;'>{len(pending)} pending / {len(sent)} sent</span>
+          <form method='POST' style='display:inline;'>
+            <input type='hidden' name='action' value='scan'>
+            <button type='submit' style='background:#38bdf8;color:#000;border:none;padding:8px 18px;border-radius:6px;font-weight:700;cursor:pointer;'>Scan for New Profiles</button>
+          </form>
+        </div>
+      </div>
+      <p style='color:#64748b;font-size:12px;margin-bottom:20px;'>Copy each DM, paste into LinkedIn, click "Mark Sent" to track.</p>
+      {rows if rows else "<p style='color:#64748b;'>No pending DMs. Click Scan to find new profiles.</p>"}
+    </div></body></html>"""
+    return html
+
+
 @app.route('/upwork', methods=['GET', 'POST'])
 def upwork_drafter():
     proposal = ""
