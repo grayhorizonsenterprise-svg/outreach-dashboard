@@ -761,7 +761,6 @@ ALL_POSTS = {
     "indicators":   INDICATOR_POSTS,
     "results":      RESULTS_POSTS,
     "engagement":   ENGAGEMENT_POSTS,
-    "portfolio":    PORTFOLIO_POSTS,
 }
 
 # Image-attached categories — get a generated card PNG attached to the tweet
@@ -771,7 +770,6 @@ DAILY_SCHEDULE = [
     ("signals",    "13:00"),   # 8am ET  — morning signal preview (image card)
     ("results",    "17:00"),   # 12pm ET — weekly scorecard (image card)
     ("indicators", "20:00"),   # 3pm ET  — TradingView Pine Script product post
-    ("portfolio",  "21:00"),   # 4pm ET  — portfolio showcase with real screenshot
     ("engagement", "23:00"),   # 6pm ET  — trading question / engagement
 ]
 
