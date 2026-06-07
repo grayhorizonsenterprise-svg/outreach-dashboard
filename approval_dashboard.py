@@ -3584,15 +3584,18 @@ def vapi_webhook():
   <p>Talk soon,<br>Gray Horizons Enterprise</p>
 </div>
 """
-        sent = _send_via_brevo(
-            to_email   = to_email,
-            subject    = subject,
-            html_body  = html_body,
-            name       = name,
-            company    = "",
-            sender_addr= VERIFIED_SENDER,
-            sender_name= "Gray Horizons Enterprise",
-        )
+        sender_name = "Gray Horizons Enterprise"
+        sent = False
+
+        # Primary: SendGrid
+        sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
+        if sg_key:
+            sent = _send_via_sendgrid(sg_key, VERIFIED_SENDER, sender_name, to_email, subject, html_body, name, "")
+
+        # Fallback: Brevo
+        if not sent:
+            sent = _send_via_brevo(to_email, subject, html_body, name, "", VERIFIED_SENDER, sender_name)
+
         print(f"[VAPI WEBHOOK] Follow-up email {'sent' if sent else 'FAILED'} -> {to_email}")
     except Exception as e:
         print(f"[VAPI WEBHOOK] Error: {e}")
