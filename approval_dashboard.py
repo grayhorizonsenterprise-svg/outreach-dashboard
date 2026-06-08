@@ -562,6 +562,19 @@ def _init_db():
                     website TEXT DEFAULT ''
                 )
             """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS vapi_leads (
+                    id SERIAL PRIMARY KEY,
+                    name TEXT DEFAULT '',
+                    email TEXT DEFAULT '',
+                    phone TEXT DEFAULT '',
+                    business_type TEXT DEFAULT '',
+                    raw_email TEXT DEFAULT '',
+                    email_sent BOOLEAN DEFAULT FALSE,
+                    sms_sent BOOLEAN DEFAULT FALSE,
+                    created_at TIMESTAMP DEFAULT NOW()
+                )
+            """)
         conn.commit()
         print("[DB] Table ready", flush=True)
     except Exception as e:
@@ -3559,6 +3572,67 @@ def _send_sms_textbelt(to_phone: str, message: str) -> bool:
         return False
 
 
+@app.route('/calls')
+def calls_dashboard():
+    """Live inbound call leads captured by Jordan."""
+    rows = []
+    try:
+        conn = get_db()
+        if conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT name, email, phone, business_type, raw_email, email_sent, created_at
+                    FROM vapi_leads ORDER BY created_at DESC LIMIT 100
+                """)
+                rows = cur.fetchall()
+            conn.close()
+    except Exception as e:
+        print(f"[CALLS] DB error: {e}")
+
+    rows_html = ""
+    for r in rows:
+        name, email, phone, biz, raw_email, email_sent, created_at = r
+        ts = created_at.strftime("%b %d %I:%M %p") if created_at else ""
+        email_badge = (
+            "<span style='color:#22c55e;font-weight:bold;'>Sent</span>" if email_sent
+            else "<span style='color:#ef4444;'>Not sent</span>"
+        )
+        email_display = email or f"<span style='color:#f97316;'>{raw_email} (parse failed)</span>"
+        rows_html += f"""
+        <tr style='border-bottom:1px solid #1e293b;'>
+          <td style='padding:12px 16px;color:#e2e8f0;'>{ts}</td>
+          <td style='padding:12px 16px;color:#f1f5f9;font-weight:bold;'>{name}</td>
+          <td style='padding:12px 16px;color:#94a3b8;'>{email_display}</td>
+          <td style='padding:12px 16px;color:#94a3b8;'>{phone or '—'}</td>
+          <td style='padding:12px 16px;color:#94a3b8;'>{biz or '—'}</td>
+          <td style='padding:12px 16px;'>{email_badge}</td>
+        </tr>"""
+
+    empty = "<tr><td colspan='6' style='padding:40px;text-align:center;color:#475569;'>No calls captured yet. Make a test call to Jordan at (909) 927-6310.</td></tr>" if not rows else ""
+
+    return f"""<!DOCTYPE html>
+<html><head><title>Inbound Calls — GHE</title>
+<meta http-equiv='refresh' content='15'>
+<style>body{{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;margin:0;padding:32px;}}
+h1{{color:#38bdf8;margin-bottom:4px;}}
+.sub{{color:#475569;font-size:13px;margin-bottom:28px;}}
+table{{width:100%;border-collapse:collapse;background:#1e293b;border-radius:8px;overflow:hidden;}}
+th{{background:#0f172a;padding:12px 16px;text-align:left;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.05em;}}
+tr:hover{{background:#263348;}}
+.back{{color:#38bdf8;text-decoration:none;font-size:13px;}}</style>
+</head><body>
+<a href='/' class='back'>← Dashboard</a>
+<h1 style='margin-top:16px;'>Inbound Call Leads</h1>
+<div class='sub'>Jordan captures these mid-call. Auto-refreshes every 15 seconds. {len(rows)} total.</div>
+<table>
+  <thead><tr>
+    <th>Time</th><th>Name</th><th>Email</th><th>Phone</th><th>Business</th><th>Email</th>
+  </tr></thead>
+  <tbody>{rows_html}{empty}</tbody>
+</table>
+</body></html>"""
+
+
 @app.route('/vapi-webhook', methods=['POST'])
 def vapi_webhook():
     """Receives Vapi end-of-call events. Fires owner alert + caller email + SMS immediately."""
@@ -3719,6 +3793,20 @@ def vapi_collect():
 
         print(f"[VAPI COLLECT] name={name} email={to_email} phone={phone} biz={business_type}")
 
+        # ── Save to DB immediately — before any email/SMS attempt ────────────────
+        try:
+            conn = get_db()
+            if conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        INSERT INTO vapi_leads (name, email, phone, business_type, raw_email)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, (name, to_email or raw_email, phone, business_type, raw_email))
+                conn.commit()
+                conn.close()
+        except Exception as _e:
+            print(f"[VAPI COLLECT] DB save error: {_e}")
+
         # ── Owner alert ──────────────────────────────────────────────────────────
         owner_html = f"""
 <div style="font-family:Arial,sans-serif;font-size:15px;color:#222;max-width:560px;padding:24px;">
@@ -3765,6 +3853,16 @@ def vapi_collect():
                                           to_email, f"Your booking link — Gray Horizons Enterprise",
                                           caller_html, name, "")
             print(f"[VAPI COLLECT] Caller email {'sent' if sent else 'FAILED'} -> {to_email}")
+            if sent:
+                try:
+                    conn = get_db()
+                    if conn:
+                        with conn.cursor() as cur:
+                            cur.execute("UPDATE vapi_leads SET email_sent=TRUE WHERE email=%s", (to_email,))
+                        conn.commit()
+                        conn.close()
+                except Exception:
+                    pass
 
         # ── SMS to caller ────────────────────────────────────────────────────────
         if phone:
