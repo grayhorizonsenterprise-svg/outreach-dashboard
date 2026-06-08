@@ -21,7 +21,8 @@ except ImportError:
     pass
 
 SENDGRID_KEY = os.getenv("SENDGRID_API_KEY", "")
-FROM_EMAIL   = os.getenv("SENDER_EMAIL", "grayhorizonsenterprise@gmail.com")
+FROM_EMAIL   = os.getenv("SENDER_EMAIL", "alex@grayhorizonsenterprise.com")
+REPLY_TO     = "grayhorizonsenterprise@gmail.com"
 SENDER_NAME  = "Gray Horizons Enterprise"
 CALENDLY     = "https://calendly.com/grayhorizonsenterprise/30min"
 LOOM_DEMO    = os.getenv("LOOM_DEMO_URL", "")
@@ -260,6 +261,7 @@ def _send_via_sendgrid(to_email: str, subject: str, body: str) -> bool:
     payload = {
         "personalizations": [{"to": [{"email": to_email}]}],
         "from": {"email": FROM_EMAIL, "name": SENDER_NAME},
+        "reply_to": {"email": REPLY_TO, "name": SENDER_NAME},
         "subject": subject,
         "content": [{"type": "text/html", "value": html_body}],
     }

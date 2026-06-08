@@ -866,11 +866,11 @@ def _build_html_body(name, sender_name, message):
 
 def _send_via_sendgrid(api_key, sender_addr, sender_name, to_email, subject, html_body, name, company):
     # Force lowercase — SendGrid sender verification is case-sensitive
-    verified_from = "grayhorizonsenterprise@gmail.com"
+    verified_from = sender_addr
     payload = {
         "personalizations": [{"to": [{"email": to_email}]}],
         "from": {"email": verified_from, "name": sender_name},
-        "reply_to": {"email": verified_from, "name": sender_name},
+        "reply_to": {"email": REPLY_TO_EMAIL, "name": "Gray Horizons Enterprise"},
         "subject": subject,
         "content": [{"type": "text/html", "value": html_body}]
     }
@@ -921,7 +921,8 @@ def _send_via_smtp(sender_addr, smtp_password, to_email, subject, html_body, nam
         log_sent(to_email, name, company, subject, False, f"smtp: {e}")
         return False
 
-VERIFIED_SENDER = "grayhorizonsenterprise@gmail.com"
+VERIFIED_SENDER = "jordan@grayhorizonsenterprise.com"
+REPLY_TO_EMAIL  = "grayhorizonsenterprise@gmail.com"
 
 def _send_via_brevo(to_email, subject, html_body, name, company, sender_addr, sender_name):
     brevo_key = os.getenv("BREVO_API_KEY", "").strip()
@@ -3331,7 +3332,7 @@ def stripe_webhook():
 def _send_onboarding(name: str, email: str, amount: float):
     import requests as _req
     key  = os.getenv("SENDGRID_API_KEY", "")
-    from_email = os.getenv("FROM_EMAIL", "grayhorizonsenterprise@gmail.com")
+    from_email = os.getenv("FROM_EMAIL", "jordan@grayhorizonsenterprise.com")
     cal  = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
     if not key or not email:
         return
