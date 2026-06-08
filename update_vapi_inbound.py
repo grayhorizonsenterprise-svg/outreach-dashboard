@@ -167,11 +167,11 @@ CALL FLOW:
 4. Match it to the right service. Explain simply.
 5. If they mention a job, inspection, estimate, or photos: say "Our system will send you a personalized client onboarding link with a secure access ticket. You submit your project details and photos there so our team is already prepared before your call."
 6. Offer the free call. Ask for their email. Confirm by repeating it back.
-7. Ask: "And what is the best number to reach you at?"
-8. Once you have name, email, AND phone: call the collect_contact tool. Then say: "Perfect. I am sending that to you right now. You should see it come through any second."
-9. Warm close: "We will show you exactly what this looks like for your operation on the call. Looking forward to it."
+7. The MOMENT email is confirmed: call collect_contact immediately. Say: "Perfect. I am sending that to you right now — you should see it come through any second."
+8. Then ask: "And what is the best callback number for you?" If they give it, call collect_contact again with the phone number so the text fires too.
+9. Warm close: "You are all set. We will show you exactly what this looks like for your operation on the call."
 
-IMPORTANT: Only say "I am sending this right now" AFTER you call collect_contact. That tool fires the email and text immediately while you are still on the call. Never promise it is sent before the tool is called.
+IMPORTANT: Fire collect_contact as soon as email is confirmed — do not wait for phone. If the call drops after email is given, the booking link is already in their inbox. Phone is a bonus that triggers the SMS follow-up.
 
 CLIENT PORTAL TRIGGER — say this when they mention a job site, inspection, estimate, quote, remodel, repair, or photos:
 "Our system sends a personalized onboarding link with a secure access ticket. You submit your project details and photos through your client portal. Our team reviews everything before your call so we skip the back and forth entirely."
@@ -188,32 +188,33 @@ def update_inbound(key: str):
             "model": "gpt-4o-mini",
             "systemPrompt": INBOUND_PROMPT,
             "temperature": 0.55,
-            "toolIds": [],
-        },
-        "tools": [
-            {
-                "type": "function",
-                "function": {
-                    "name": "collect_contact",
-                    "description": (
-                        "Call this the moment you have the caller's name, email, AND phone number. "
-                        "Fires the follow-up email and SMS to the caller instantly while still on the call. "
-                        "Do not wait until the end of the call. Call this as soon as all three are confirmed."
-                    ),
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "name":          {"type": "string", "description": "Caller first name"},
-                            "email":         {"type": "string", "description": "Caller email address as spoken, e.g. 'grayhorizons at gmail dot com'"},
-                            "phone":         {"type": "string", "description": "Caller callback number"},
-                            "business_type": {"type": "string", "description": "Type of business they run, e.g. roofing, HVAC, dental"},
+            "tools": [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "collect_contact",
+                        "description": (
+                            "Call this THE MOMENT the caller confirms their email address. "
+                            "Do NOT wait for phone number — fire this immediately after email is confirmed. "
+                            "This sends the booking link email instantly while still on the call. "
+                            "Include phone if already given, leave blank if not yet. "
+                            "If phone is given later in the call, call this again with the phone number."
+                        ),
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "name":          {"type": "string", "description": "Caller first name"},
+                                "email":         {"type": "string", "description": "Caller email address as spoken, e.g. 'grayhorizons at gmail dot com'"},
+                                "phone":         {"type": "string", "description": "Caller callback number — include if given, leave blank if not yet"},
+                                "business_type": {"type": "string", "description": "Type of business they run, e.g. roofing, HVAC, dental"},
+                            },
+                            "required": ["name", "email"],
                         },
-                        "required": ["name", "email", "phone"],
                     },
-                },
-                "server": {"url": COLLECT_URL},
-            }
-        ],
+                    "server": {"url": COLLECT_URL},
+                }
+            ],
+        },
         "voice": {
             "provider": "openai",
             "voiceId": "shimmer",
