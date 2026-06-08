@@ -962,12 +962,7 @@ def send_email(to_email, name, company, message, subject=""):
 
     html_body = _build_html_body(name, sender_name, message)
 
-    # ── Primary: Brevo (free 300/day) ─────────────────────────────────────────
-    if _send_via_brevo(to_email, subject, html_body, name, company, sender_addr, sender_name):
-        return True
-    print(f"[SEND] Brevo failed for {to_email} — trying SendGrid")
-
-    # ── Secondary: SendGrid ────────────────────────────────────────────────────
+    # ── Primary: SendGrid ─────────────────────────────────────────────────────
     api_key = os.getenv("SENDGRID_API_KEY", "").strip()
     if api_key:
         ok = _send_via_sendgrid(api_key, sender_addr, sender_name,
@@ -3619,7 +3614,9 @@ def vapi_webhook():
   <pre style="background:#f8fafc;padding:16px;border-radius:6px;font-size:13px;white-space:pre-wrap;">{transcript[:2000]}</pre>
   {'<p><a href="' + upload_url + '" style="color:#1a73e8;">View client portal</a></p>' if wants_photos else ''}
 </div>"""
-        _send_via_brevo(owner_email, owner_subject, owner_html, "Curtis", "GHE", VERIFIED_SENDER, sender_name)
+        sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
+        if sg_key:
+            _send_via_sendgrid(sg_key, VERIFIED_SENDER, sender_name, owner_email, owner_subject, owner_html, "Curtis", "GHE")
         print(f"[VAPI WEBHOOK] Owner alert sent — caller: {name} {caller_num} | email: {to_email or 'none'}")
 
         # ── 2. Caller follow-up email (only if email was collected) ──────────────
@@ -3653,8 +3650,6 @@ def vapi_webhook():
             sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
             if sg_key:
                 sent = _send_via_sendgrid(sg_key, VERIFIED_SENDER, sender_name, to_email, caller_subject, caller_html, name, "")
-            if not sent:
-                sent = _send_via_brevo(to_email, caller_subject, caller_html, name, "", VERIFIED_SENDER, sender_name)
             print(f"[VAPI WEBHOOK] Caller email {'sent' if sent else 'FAILED'} -> {to_email}")
 
         # ── 3. SMS to caller (if phone number available) ─────────────────────────
@@ -3734,9 +3729,12 @@ def vapi_collect():
     <tr><td style="padding:6px 12px;background:#f1f5f9;font-weight:bold;">Business</td><td style="padding:6px 12px;">{business_type}</td></tr>
   </table>
 </div>"""
-        _send_via_brevo("grayhorizonsenterprise@gmail.com",
-                        f"Lead captured: {name} — {business_type}",
-                        owner_html, "Curtis", "GHE", VERIFIED_SENDER, sender_name)
+        sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
+        if sg_key:
+            _send_via_sendgrid(sg_key, VERIFIED_SENDER, sender_name,
+                               "grayhorizonsenterprise@gmail.com",
+                               f"Lead captured: {name} — {business_type}",
+                               owner_html, "Curtis", "GHE")
 
         # ── Caller email ─────────────────────────────────────────────────────────
         if to_email:
@@ -3765,9 +3763,6 @@ def vapi_collect():
                 sent = _send_via_sendgrid(sg_key, VERIFIED_SENDER, sender_name,
                                           to_email, f"Your booking link — Gray Horizons Enterprise",
                                           caller_html, name, "")
-            if not sent:
-                sent = _send_via_brevo(to_email, "Your booking link — Gray Horizons Enterprise",
-                                       caller_html, name, "", VERIFIED_SENDER, sender_name)
             print(f"[VAPI COLLECT] Caller email {'sent' if sent else 'FAILED'} -> {to_email}")
 
         # ── SMS to caller ────────────────────────────────────────────────────────
