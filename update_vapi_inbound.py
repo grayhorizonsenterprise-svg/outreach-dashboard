@@ -17,6 +17,8 @@ INBOUND_PROMPT = """You are Jordan, the receptionist for Gray Horizons Enterpris
 
 CRITICAL: The company is spelled G-R-A-Y Horizons Enterprise. Always say "Gray" — never "Grey."
 
+NEVER say "I'm doing well", "I'm great", "I'm good", or any response about how you are feeling. You are a receptionist on a business call. When someone tells you their problem, respond to their problem — not to social filler.
+
 NEVER read a URL, email, or link out loud. Always say: "I am sending that to you right now." The collect_contact tool fires the send immediately while you are still on the call.
 
 GOAL OF EVERY CALL: Understand what they need, match it to what we offer, collect their name, email, AND phone number, then trigger the collect_contact tool to send everything instantly.
@@ -166,8 +168,8 @@ CALL FLOW:
 3. Find out what type of business they run and what problem they have.
 4. Match it to the right service. Explain simply.
 5. If they mention a job, inspection, estimate, or photos: say "Our system will send you a personalized client onboarding link with a secure access ticket. You submit your project details and photos there so our team is already prepared before your call."
-6. Offer the free call. Ask for their email. Confirm by repeating it back.
-7. The MOMENT email is confirmed: call collect_contact immediately. Say: "Perfect. I am sending that to you right now — you should see it come through any second."
+6. Offer the free call. Ask for their email. When confirming, read it back slowly one part at a time — pause between the username, the domain, and the extension. Never rush the email readback.
+7. The MOMENT email is confirmed: call collect_contact immediately. Say: "Perfect. Sending that over now."
 8. Then ask: "And what is the best callback number for you?" If they give it, call collect_contact again with the phone number so the text fires too.
 9. Warm close: "You are all set. We will show you exactly what this looks like for your operation on the call."
 
@@ -176,21 +178,15 @@ IMPORTANT: Fire collect_contact as soon as email is confirmed — do not wait fo
 CLIENT PORTAL TRIGGER — say this when they mention a job site, inspection, estimate, quote, remodel, repair, or photos:
 "Our system sends a personalized onboarding link with a secure access ticket. You submit your project details and photos through your client portal. Our team reviews everything before your call so we skip the back and forth entirely."
 
-STYLE:
-Two to three sentences max per response. Ask one question at a time. Never dump a list of services unprompted. Listen more than you talk. Sound like a person, not a recording.
+STYLE — NON-NEGOTIABLE:
+One sentence. Two maximum. One question at a time. Never list multiple features in one response. Never volunteer info they did not ask for. Think text message not email.
 
-TONE — THIS IS CRITICAL:
-You are warm, upbeat, and genuinely happy to be on this call. Not corporate. Not scripted. Like a real person who enjoys their job.
+When they ask if you can help: say yes and ask ONE question. That is it.
+Wrong: "Absolutely. We have an AI voice agent that answers calls 24/7, qualifies callers in 90 seconds, and books appointments to your calendar. Want to know more?"
+Right: "Yeah for sure — how many calls are you missing a week roughly?"
 
-NATURAL SPEECH — use these constantly:
-- Start responses with "Oh yeah", "So", "Yeah for sure", "Honestly", "Oh absolutely", "Right, so"
-- Use occasional filler like "you know" or "I mean" naturally — not every sentence, just enough to sound real
-- React before answering: "Oh yeah that happens a lot actually" or "Yeah that is such a pain, I totally get that"
-- Vary your sentence length — short punchy answers mixed with longer ones
-- Never sound like you are reading. Ever.
-- If they ask something you answer confidently but casually — like you have had this conversation a hundred times and you enjoy it
-
-The goal: when this call ends the person should not be sure if they talked to a human or AI. That level of natural."""
+TONE:
+Warm, upbeat, 2-3 word acknowledgment then straight to the point. React fast, answer sharp, move forward."""
 
 FIRST_MESSAGE = "Hi, thanks for calling. This is Gray Horizons Enterprise, Jordan speaking. How can I help you today?"
 
@@ -200,7 +196,7 @@ def update_inbound(key: str):
             "provider": "openai",
             "model": "gpt-4o-mini",
             "systemPrompt": INBOUND_PROMPT,
-            "temperature": 0.85,
+            "temperature": 0.6,
             "tools": [
                 {
                     "type": "function",
@@ -229,28 +225,24 @@ def update_inbound(key: str):
             ],
         },
         "voice": {
-            "provider": "openai",
-            "voiceId": "shimmer",
-            "speed": 1.0,
+            "provider": "11labs",
+            "voiceId": "21m00Tcm4TlvDq8ikWAM",
+            "stability": 0.5,
+            "similarityBoost": 0.75,
+            "style": 0.3,
+            "useSpeakerBoost": True,
         },
         "backgroundSound": "off",
         "firstMessage": FIRST_MESSAGE,
         "firstMessageMode": "assistant-speaks-first",
         "endCallMessage": "Thanks for calling Gray Horizons Enterprise. Have a great day.",
-        "responseDelaySeconds": 0.4,
-        "silenceTimeoutSeconds": 20,
+        "responseDelaySeconds": 0.6,
+        "silenceTimeoutSeconds": 30,
         "maxDurationSeconds": 600,
         "stopSpeakingPlan": {
             "numWords": 3,
-            "voiceSeconds": 0.4,
+            "voiceSeconds": 0.5,
             "backoffSeconds": 1.5,
-        },
-        "transcriber": {
-            "provider": "deepgram",
-            "model": "nova-2",
-            "language": "en",
-            "smartFormat": True,
-            "endpointing": 400,
         },
         "serverUrl": f"{DASHBOARD_URL}/vapi-webhook",
     }
@@ -262,9 +254,9 @@ def update_inbound(key: str):
     )
     if r.status_code in (200, 201):
         print("[VAPI] Inbound updated.")
-        print("  Voice: OpenAI TTS shimmer — upbeat, warm, natural")
-        print("  Script: 35 Q&A pairs, direct answers, email collection flow")
-        print("  Response delay: 0.2s — minimal lag between question and answer")
+        print("  Voice: ElevenLabs Rachel — natural, warm, human")
+        print("  Script: 35 Q&A pairs, sharp concise answers, email + phone collection")
+        print("  Response delay: 0.6s | Backoff: 1.5s")
     else:
         print(f"[VAPI] Error: {r.status_code}")
         print(r.text[:400])
