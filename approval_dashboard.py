@@ -3672,6 +3672,123 @@ def vapi_webhook():
     return "ok", 200
 
 
+def _parse_spoken_email(transcript: str) -> str:
+    """Parse email spoken aloud: 'grayhorizons at gmail dot com' -> grayhorizons@gmail.com"""
+    import re as _re
+    # Standard format first
+    m = _re.findall(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}", transcript)
+    if m:
+        return m[0].lower()
+    # Spoken format: "word at word dot com/net/org/io"
+    spoken = _re.search(
+        r"([\w]+(?:\s+[\w]+)*)\s+at\s+([\w]+(?:\s+[\w]+)*)\s+dot\s+(com|net|org|io|co|us|biz)",
+        transcript, _re.IGNORECASE
+    )
+    if spoken:
+        local  = spoken.group(1).strip().replace(" ", "").lower()
+        domain = spoken.group(2).strip().replace(" ", "").lower()
+        tld    = spoken.group(3).lower()
+        return f"{local}@{domain}.{tld}"
+    return ""
+
+
+@app.route('/vapi-collect', methods=['POST'])
+def vapi_collect():
+    """Mid-call tool endpoint. Jordan calls this the moment name+email+phone are collected.
+    Fires email and SMS immediately — caller receives it before the call even ends."""
+    import re as _re
+    try:
+        data = flask_request.get_json(silent=True) or {}
+        # Vapi wraps tool call params under message.toolCallList[0].function.arguments
+        tool_calls = data.get("message", {}).get("toolCallList", [])
+        args = {}
+        tool_call_id = ""
+        if tool_calls:
+            args = tool_calls[0].get("function", {}).get("arguments", {})
+            tool_call_id = tool_calls[0].get("id", "")
+        if not args:
+            args = data  # fallback if called directly
+
+        name          = str(args.get("name", "there")).strip()
+        raw_email     = str(args.get("email", "")).strip()
+        phone         = str(args.get("phone", "")).strip()
+        business_type = str(args.get("business_type", "your business")).strip()
+
+        # Parse spoken email if needed
+        to_email = _parse_spoken_email(raw_email) if raw_email else ""
+
+        upload_url  = f"{DASHBOARD_URL}/job-upload"
+        sender_name = "Gray Horizons Enterprise"
+        calendly    = "https://calendly.com/grayhorizonsenterprise/30min"
+
+        print(f"[VAPI COLLECT] name={name} email={to_email} phone={phone} biz={business_type}")
+
+        # ── Owner alert ──────────────────────────────────────────────────────────
+        owner_html = f"""
+<div style="font-family:Arial,sans-serif;font-size:15px;color:#222;max-width:560px;padding:24px;">
+  <h2 style="color:#22c55e;margin-top:0;">Lead Captured — Mid-Call</h2>
+  <table style="width:100%;border-collapse:collapse;">
+    <tr><td style="padding:6px 12px;background:#f8fafc;font-weight:bold;width:140px;">Name</td><td style="padding:6px 12px;">{name}</td></tr>
+    <tr><td style="padding:6px 12px;background:#f1f5f9;font-weight:bold;">Email</td><td style="padding:6px 12px;">{to_email or raw_email}</td></tr>
+    <tr><td style="padding:6px 12px;background:#f8fafc;font-weight:bold;">Phone</td><td style="padding:6px 12px;">{phone or 'Not given'}</td></tr>
+    <tr><td style="padding:6px 12px;background:#f1f5f9;font-weight:bold;">Business</td><td style="padding:6px 12px;">{business_type}</td></tr>
+  </table>
+</div>"""
+        _send_via_brevo("grayhorizonsenterprise@gmail.com",
+                        f"Lead captured: {name} — {business_type}",
+                        owner_html, "Curtis", "GHE", VERIFIED_SENDER, sender_name)
+
+        # ── Caller email ─────────────────────────────────────────────────────────
+        if to_email:
+            caller_html = f"""
+<div style="font-family:Arial,sans-serif;font-size:15px;color:#222;max-width:560px;">
+  <p>Hey {name},</p>
+  <p>Thanks for calling Gray Horizons Enterprise. Here is your booking link as promised:</p>
+  <p style="text-align:center;margin:28px 0;">
+    <a href="{calendly}"
+       style="background:#1a73e8;color:#fff;padding:12px 28px;border-radius:5px;text-decoration:none;font-weight:bold;font-size:15px;">
+      Book Your Free 15-Minute Call
+    </a>
+  </p>
+  <p>We specialize in AI automation for {business_type}. The 15-minute call is a live demo built around your exact situation.</p>
+  <p style="margin-top:24px;padding:16px;background:#f0f9ff;border-radius:8px;border-left:4px solid #0ea5e9;">
+    <b>Your personalized client portal is ready.</b> Submit your project details through your secure onboarding link before the call so our team is already prepared.<br><br>
+    <a href="{upload_url}" style="background:#0ea5e9;color:#fff;padding:10px 22px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;margin-top:8px;">
+      Open Your Client Portal
+    </a>
+  </p>
+  <p>Talk soon,<br>Gray Horizons Enterprise</p>
+</div>"""
+            sent = False
+            sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
+            if sg_key:
+                sent = _send_via_sendgrid(sg_key, VERIFIED_SENDER, sender_name,
+                                          to_email, f"Your booking link — Gray Horizons Enterprise",
+                                          caller_html, name, "")
+            if not sent:
+                sent = _send_via_brevo(to_email, "Your booking link — Gray Horizons Enterprise",
+                                       caller_html, name, "", VERIFIED_SENDER, sender_name)
+            print(f"[VAPI COLLECT] Caller email {'sent' if sent else 'FAILED'} -> {to_email}")
+
+        # ── SMS to caller ────────────────────────────────────────────────────────
+        if phone:
+            sms = (f"Hey {name}, Gray Horizons Enterprise here. "
+                   f"Book your free 15-min call: {calendly}  "
+                   f"Client portal: {upload_url}")
+            _send_sms_textbelt(phone, sms)
+
+    except Exception as e:
+        print(f"[VAPI COLLECT] Error: {e}")
+
+    # Vapi requires a result response to continue the call
+    return {
+        "results": [{
+            "toolCallId": tool_call_id if 'tool_call_id' in dir() else "",
+            "result": "Contact info received. Follow-up sent."
+        }]
+    }, 200
+
+
 @app.route('/performance')
 def performance():
     try:
