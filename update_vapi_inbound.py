@@ -10,7 +10,7 @@ import sys
 import requests
 
 INBOUND_ASSISTANT_ID = "31251738-3c30-4ccb-9d91-c9d4a944dff3"
-DASHBOARD_URL = os.getenv("DASHBOARD_URL", "https://outreach-dashboard-production-6894.up.railway.app")
+DASHBOARD_URL = os.getenv("DASHBOARD_URL", "https://ghe-dashboard-production.up.railway.app")
 COLLECT_URL   = f"{DASHBOARD_URL}/vapi-collect"
 
 INBOUND_PROMPT = """You are Jordan, the receptionist for Gray Horizons Enterprise. You speak naturally and warmly like a real person. Short answers. One question at a time. Never robotic.
@@ -177,7 +177,10 @@ CLIENT PORTAL TRIGGER — say this when they mention a job site, inspection, est
 "Our system sends a personalized onboarding link with a secure access ticket. You submit your project details and photos through your client portal. Our team reviews everything before your call so we skip the back and forth entirely."
 
 STYLE:
-Two to three sentences max per response. Ask one question at a time. Never dump a list of services unprompted. Listen more than you talk. Sound like a person, not a recording."""
+Two to three sentences max per response. Ask one question at a time. Never dump a list of services unprompted. Listen more than you talk. Sound like a person, not a recording.
+
+TONE — THIS IS CRITICAL:
+You are genuinely excited to help. Not fake corporate excited — naturally upbeat like a real person who enjoys their job. Use these openers: "Oh absolutely", "That is a great question", "Perfect", "For sure", "Oh yeah we handle that all the time", "Totally get that", "Yeah for sure". React to what they say before answering — if they mention a problem, acknowledge it first: "Oh yeah that is such a common one" or "Yeah that is a real pain point for a lot of contractors." You care about their outcome. Your energy should make them feel like they called the right place."""
 
 FIRST_MESSAGE = "Thank you for calling Gray Horizons Enterprise, this is Jordan. How can I help you?"
 
@@ -187,7 +190,7 @@ def update_inbound(key: str):
             "provider": "openai",
             "model": "gpt-4o-mini",
             "systemPrompt": INBOUND_PROMPT,
-            "temperature": 0.55,
+            "temperature": 0.7,
             "tools": [
                 {
                     "type": "function",
@@ -218,15 +221,27 @@ def update_inbound(key: str):
         "voice": {
             "provider": "openai",
             "voiceId": "shimmer",
-            "speed": 1.05,
+            "speed": 1.0,
         },
         "backgroundSound": "off",
         "firstMessage": FIRST_MESSAGE,
         "firstMessageMode": "assistant-speaks-first",
         "endCallMessage": "Thanks for calling Gray Horizons Enterprise. Have a great day.",
-        "responseDelaySeconds": 0.1,
+        "responseDelaySeconds": 0.4,
         "silenceTimeoutSeconds": 20,
         "maxDurationSeconds": 600,
+        "stopSpeakingPlan": {
+            "numWords": 3,
+            "voiceSeconds": 0.4,
+            "backoffSeconds": 1.5,
+        },
+        "transcriber": {
+            "provider": "deepgram",
+            "model": "nova-2",
+            "language": "en",
+            "smartFormat": True,
+            "endpointing": 400,
+        },
         "serverUrl": f"{DASHBOARD_URL}/vapi-webhook",
     }
     r = requests.patch(
