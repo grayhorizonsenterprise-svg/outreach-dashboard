@@ -3541,9 +3541,31 @@ h1{{color:#38bdf8;}}h2{{color:#94a3b8;font-size:16px;}}
 </body></html>"""
 
 
+def _send_sms_textbelt(to_phone: str, message: str) -> bool:
+    """Send SMS via Textbelt. $0.01/text, no registration required.
+    Set TEXTBELT_KEY in Railway env vars. Buy credits at textbelt.com."""
+    key = os.getenv("TEXTBELT_KEY", "").strip()
+    if not key:
+        print("[SMS] TEXTBELT_KEY not set — skipping SMS")
+        return False
+    try:
+        r = requests.post(
+            "https://textbelt.com/text",
+            data={"phone": to_phone, "message": message, "key": key},
+            timeout=10,
+        )
+        result = r.json()
+        ok = result.get("success", False)
+        print(f"[SMS] {'OK' if ok else 'FAILED'} -> {to_phone} | {result.get('error', '')}")
+        return ok
+    except Exception as e:
+        print(f"[SMS] Exception: {e}")
+        return False
+
+
 @app.route('/vapi-webhook', methods=['POST'])
 def vapi_webhook():
-    """Receives Vapi end-of-call events and sends a follow-up email with booking link."""
+    """Receives Vapi end-of-call events. Fires owner alert + caller email + SMS immediately."""
     import re as _re
     try:
         data  = flask_request.get_json(silent=True) or {}
@@ -3551,42 +3573,72 @@ def vapi_webhook():
         if event != "end-of-call-report":
             return "ok", 200
 
-        artifact   = data.get("message", {}).get("artifact", {})
+        msg        = data.get("message", {})
+        artifact   = msg.get("artifact", {})
         transcript = artifact.get("transcript", "")
+        call_obj   = msg.get("call", {})
+        duration_s = int(msg.get("durationSeconds", 0))
+        caller_num = call_obj.get("customer", {}).get("number", "unknown")
 
         # Pull email from transcript
         emails = _re.findall(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}", transcript)
         to_email = emails[0].lower() if emails else ""
 
-        # Pull caller name — grab first word after "my name is" or "this is"
-        name = "there"
+        # Pull caller name
+        name = "the caller"
         name_match = _re.search(r"(?:my name is|this is)\s+([A-Z][a-z]+)", transcript)
         if name_match:
             name = name_match.group(1)
 
-        if not to_email:
-            print(f"[VAPI WEBHOOK] No email found in transcript — skipping follow-up")
-            return "ok", 200
-
-        # Detect if caller mentioned inspection, photos, job site, estimate, quote
+        # Detect inspection/photo keywords
         photo_keywords = ["photo", "picture", "inspect", "estimate", "quote", "job site",
-                          "look at", "come out", "come by", "measure", "assess"]
+                          "look at", "come out", "come by", "measure", "assess", "bathroom",
+                          "roof", "hvac", "remodel", "repair", "install"]
         wants_photos = any(kw in transcript.lower() for kw in photo_keywords)
+        upload_url   = f"{DASHBOARD_URL}/job-upload"
 
-        upload_url = f"{DASHBOARD_URL}/job-upload"
-        upload_section = ""
-        if wants_photos:
-            upload_section = f"""
+        sender_name = "Gray Horizons Enterprise"
+        minutes     = duration_s // 60
+        seconds     = duration_s % 60
+        duration_str = f"{minutes}m {seconds}s"
+
+        # ── 1. Owner alert — fires on EVERY call, regardless of email collected ──
+        owner_email = "grayhorizonsenterprise@gmail.com"
+        owner_subject = f"New call: {name} ({caller_num}) — {duration_str}"
+        owner_html = f"""
+<div style="font-family:Arial,sans-serif;font-size:15px;color:#222;max-width:560px;padding:24px;">
+  <h2 style="color:#1a73e8;margin-top:0;">New Inbound Call — Jordan</h2>
+  <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+    <tr><td style="padding:6px 12px;background:#f8fafc;font-weight:bold;width:140px;">Caller</td><td style="padding:6px 12px;">{name}</td></tr>
+    <tr><td style="padding:6px 12px;background:#f1f5f9;font-weight:bold;">Phone</td><td style="padding:6px 12px;">{caller_num}</td></tr>
+    <tr><td style="padding:6px 12px;background:#f8fafc;font-weight:bold;">Email given</td><td style="padding:6px 12px;">{to_email if to_email else 'Not collected'}</td></tr>
+    <tr><td style="padding:6px 12px;background:#f1f5f9;font-weight:bold;">Duration</td><td style="padding:6px 12px;">{duration_str}</td></tr>
+    <tr><td style="padding:6px 12px;background:#f8fafc;font-weight:bold;">Wants photos</td><td style="padding:6px 12px;">{'Yes' if wants_photos else 'No'}</td></tr>
+  </table>
+  <h3 style="color:#475569;">Transcript</h3>
+  <pre style="background:#f8fafc;padding:16px;border-radius:6px;font-size:13px;white-space:pre-wrap;">{transcript[:2000]}</pre>
+  {'<p><a href="' + upload_url + '" style="color:#1a73e8;">View client portal</a></p>' if wants_photos else ''}
+</div>"""
+        _send_via_brevo(owner_email, owner_subject, owner_html, "Curtis", "GHE", VERIFIED_SENDER, sender_name)
+        print(f"[VAPI WEBHOOK] Owner alert sent — caller: {name} {caller_num} | email: {to_email or 'none'}")
+
+        # ── 2. Caller follow-up email (only if email was collected) ──────────────
+        if to_email:
+            upload_section = ""
+            if wants_photos:
+                upload_section = f"""
   <p style="margin-top:24px;padding:16px;background:#f0f9ff;border-radius:8px;border-left:4px solid #0ea5e9;">
-    <b>Speed up your inspection:</b> Upload photos of your job site so our team can review before the call.<br>
-    <a href="{upload_url}" style="color:#1a73e8;font-weight:bold;">Upload Job Photos Here</a>
+    <b>Your personalized client portal is ready.</b> Submit your project details and photos using your secure access link below. Our team reviews everything before your call.<br><br>
+    <a href="{upload_url}" style="background:#0ea5e9;color:#fff;padding:10px 22px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;margin-top:8px;">
+      Open Your Client Portal
+    </a>
   </p>"""
 
-        subject = "Your booking link from Gray Horizons Enterprise"
-        html_body = f"""
+            caller_subject = "Your booking link from Gray Horizons Enterprise"
+            caller_html = f"""
 <div style="font-family:Arial,sans-serif;font-size:15px;color:#222;max-width:560px;">
   <p>Hey {name},</p>
-  <p>Thanks for calling Gray Horizons Enterprise. As promised, here is the link to book your free 15-minute call with our team:</p>
+  <p>Thanks for calling Gray Horizons Enterprise. As promised, here is your link to book a free 15-minute call with our team:</p>
   <p style="text-align:center;margin:28px 0;">
     <a href="https://calendly.com/grayhorizonsenterprise/30min"
        style="background:#1a73e8;color:#fff;padding:12px 28px;border-radius:5px;text-decoration:none;font-weight:bold;font-size:15px;">
@@ -3596,21 +3648,25 @@ def vapi_webhook():
   <p>We will show you exactly what the system looks like for your type of business. No pitch, just the demo.</p>{upload_section}
   <p>You can also browse our services at <a href="https://grayhorizonsenterprise.com">grayhorizonsenterprise.com</a>.</p>
   <p>Talk soon,<br>Gray Horizons Enterprise</p>
-</div>
-"""
-        sender_name = "Gray Horizons Enterprise"
-        sent = False
+</div>"""
+            sent = False
+            sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
+            if sg_key:
+                sent = _send_via_sendgrid(sg_key, VERIFIED_SENDER, sender_name, to_email, caller_subject, caller_html, name, "")
+            if not sent:
+                sent = _send_via_brevo(to_email, caller_subject, caller_html, name, "", VERIFIED_SENDER, sender_name)
+            print(f"[VAPI WEBHOOK] Caller email {'sent' if sent else 'FAILED'} -> {to_email}")
 
-        # Primary: SendGrid
-        sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
-        if sg_key:
-            sent = _send_via_sendgrid(sg_key, VERIFIED_SENDER, sender_name, to_email, subject, html_body, name, "")
+        # ── 3. SMS to caller (if phone number available) ─────────────────────────
+        if caller_num and caller_num != "unknown":
+            sms_msg = (
+                f"Hey {name}, thanks for calling Gray Horizons Enterprise. "
+                f"Book your free 15-min call here: https://calendly.com/grayhorizonsenterprise/30min"
+            )
+            if wants_photos:
+                sms_msg += f" Upload job photos: {upload_url}"
+            _send_sms_textbelt(caller_num, sms_msg)
 
-        # Fallback: Brevo
-        if not sent:
-            sent = _send_via_brevo(to_email, subject, html_body, name, "", VERIFIED_SENDER, sender_name)
-
-        print(f"[VAPI WEBHOOK] Follow-up email {'sent' if sent else 'FAILED'} -> {to_email}")
     except Exception as e:
         print(f"[VAPI WEBHOOK] Error: {e}")
     return "ok", 200
