@@ -3568,6 +3568,20 @@ def vapi_webhook():
             print(f"[VAPI WEBHOOK] No email found in transcript — skipping follow-up")
             return "ok", 200
 
+        # Detect if caller mentioned inspection, photos, job site, estimate, quote
+        photo_keywords = ["photo", "picture", "inspect", "estimate", "quote", "job site",
+                          "look at", "come out", "come by", "measure", "assess"]
+        wants_photos = any(kw in transcript.lower() for kw in photo_keywords)
+
+        upload_url = f"{DASHBOARD_URL}/job-upload"
+        upload_section = ""
+        if wants_photos:
+            upload_section = f"""
+  <p style="margin-top:24px;padding:16px;background:#f0f9ff;border-radius:8px;border-left:4px solid #0ea5e9;">
+    <b>Speed up your inspection:</b> Upload photos of your job site so our team can review before the call.<br>
+    <a href="{upload_url}" style="color:#1a73e8;font-weight:bold;">Upload Job Photos Here</a>
+  </p>"""
+
         subject = "Your booking link from Gray Horizons Enterprise"
         html_body = f"""
 <div style="font-family:Arial,sans-serif;font-size:15px;color:#222;max-width:560px;">
@@ -3579,7 +3593,7 @@ def vapi_webhook():
       Book Your Free 15-Minute Call
     </a>
   </p>
-  <p>We will show you exactly what the system looks like for your type of business. No pitch, just the demo.</p>
+  <p>We will show you exactly what the system looks like for your type of business. No pitch, just the demo.</p>{upload_section}
   <p>You can also browse our services at <a href="https://grayhorizonsenterprise.com">grayhorizonsenterprise.com</a>.</p>
   <p>Talk soon,<br>Gray Horizons Enterprise</p>
 </div>
@@ -3609,6 +3623,138 @@ def performance():
         return f"<pre style='font-family:monospace;padding:24px;background:#0f172a;color:#e2e8f0;'>{get_summary()}</pre>"
     except Exception as e:
         return f"No performance data yet: {e}"
+
+
+# ── Job Photo Upload ──────────────────────────────────────────────────────────
+import uuid as _uuid
+
+PHOTO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "job_photos")
+os.makedirs(PHOTO_DIR, exist_ok=True)
+
+@app.route('/job-upload', methods=["GET"])
+def job_upload_form():
+    token = flask_request.args.get("t", "")
+    return f"""<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Upload Job Photos</title>
+  <style>
+    body{{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:24px;}}
+    .card{{max-width:520px;margin:40px auto;background:#1e293b;border-radius:12px;padding:32px;}}
+    h2{{color:#38bdf8;margin-top:0;font-size:1.4rem;}}
+    label{{display:block;margin:16px 0 6px;font-size:.9rem;color:#94a3b8;}}
+    input,textarea{{width:100%;padding:10px;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:.95rem;box-sizing:border-box;}}
+    .upload-area{{border:2px dashed #38bdf8;border-radius:8px;padding:24px;text-align:center;margin-top:8px;cursor:pointer;}}
+    .upload-area:hover{{background:#0ea5e920;}}
+    button{{width:100%;margin-top:24px;padding:14px;background:#38bdf8;color:#000;font-weight:bold;font-size:1rem;border:none;border-radius:8px;cursor:pointer;}}
+    button:hover{{background:#0ea5e9;}}
+    p.sub{{color:#64748b;font-size:.85rem;margin-top:8px;}}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Upload Job Site Photos</h2>
+    <p class="sub">Gray Horizons Enterprise uses your photos to speed up the inspection and estimate process. All uploads are secure.</p>
+    <form method="POST" action="/job-upload" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{token}">
+      <label>Your Name</label>
+      <input type="text" name="name" placeholder="First Last" required>
+      <label>Email</label>
+      <input type="email" name="email" placeholder="you@example.com" required>
+      <label>Phone</label>
+      <input type="tel" name="phone" placeholder="(555) 555-5555">
+      <label>Brief Job Description</label>
+      <textarea name="description" rows="3" placeholder="e.g. bathroom remodel, roof inspection, HVAC replacement..."></textarea>
+      <label>Upload Photos (up to 10, JPG/PNG/HEIC)</label>
+      <div class="upload-area">
+        <input type="file" name="photos" accept="image/*" multiple style="width:100%;cursor:pointer;">
+        <p class="sub">Tap to select or drag photos here</p>
+      </div>
+      <button type="submit">Send Photos to GHE</button>
+    </form>
+  </div>
+</body>
+</html>"""
+
+
+@app.route('/job-upload', methods=["POST"])
+def job_upload_post():
+    try:
+        name        = flask_request.form.get("name", "").strip()
+        email       = flask_request.form.get("email", "").strip()
+        phone       = flask_request.form.get("phone", "").strip()
+        description = flask_request.form.get("description", "").strip()
+        files       = flask_request.files.getlist("photos")
+
+        job_id  = _uuid.uuid4().hex[:8].upper()
+        job_dir = os.path.join(PHOTO_DIR, job_id)
+        os.makedirs(job_dir, exist_ok=True)
+
+        saved = []
+        for f in files:
+            if f and f.filename:
+                safe_name = f.filename.replace("/", "_").replace("\\", "_")
+                path = os.path.join(job_dir, safe_name)
+                f.save(path)
+                saved.append(safe_name)
+
+        # Log the submission
+        log_path = os.path.join(PHOTO_DIR, "submissions.json")
+        try:
+            submissions = json.load(open(log_path)) if os.path.exists(log_path) else []
+        except Exception:
+            submissions = []
+        submissions.append({
+            "job_id": job_id, "name": name, "email": email, "phone": phone,
+            "description": description, "photos": saved,
+            "submitted_at": datetime.utcnow().isoformat()
+        })
+        with open(log_path, "w") as lf:
+            json.dump(submissions, lf, indent=2)
+
+        # Notify GHE via email
+        sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
+        if sg_key and saved:
+            notify_html = f"""
+<div style="font-family:Arial;font-size:15px;color:#222;max-width:560px;">
+  <h3 style="color:#1a73e8;">New Job Photo Submission #{job_id}</h3>
+  <p><b>Name:</b> {name}<br>
+  <b>Email:</b> {email}<br>
+  <b>Phone:</b> {phone}</p>
+  <p><b>Description:</b><br>{description or 'Not provided'}</p>
+  <p><b>Photos uploaded:</b> {len(saved)}<br>
+  {'<br>'.join(saved)}</p>
+  <p style="color:#64748b;font-size:13px;">Saved to job_photos/{job_id}/</p>
+</div>"""
+            payload = {
+                "personalizations": [{"to": [{"email": VERIFIED_SENDER}]}],
+                "from": {"email": VERIFIED_SENDER, "name": "GHE Job Uploads"},
+                "subject": f"Job Photos Received #{job_id} — {name}",
+                "content": [{"type": "text/html", "value": notify_html}],
+            }
+            try:
+                requests.post("https://api.sendgrid.com/v3/mail/send",
+                    headers={"Authorization": f"Bearer {sg_key}", "Content-Type": "application/json"},
+                    json=payload, timeout=10)
+            except Exception:
+                pass
+
+        return f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Photos Received</title>
+<style>body{{font-family:Arial;background:#0f172a;color:#e2e8f0;margin:0;padding:24px;}}
+.card{{max-width:480px;margin:60px auto;background:#1e293b;border-radius:12px;padding:40px;text-align:center;}}
+h2{{color:#22c55e;}} p{{color:#94a3b8;}}</style></head>
+<body><div class="card">
+<h2>Photos Received</h2>
+<p>Thank you {name}. We received {len(saved)} photo{'s' if len(saved)!=1 else ''}.<br>
+Reference: <b>#{job_id}</b></p>
+<p>Our team will review them and reach out within 1 business day.</p>
+</div></body></html>"""
+    except Exception as e:
+        return f"<p style='color:red;padding:40px;font-family:Arial;'>Upload error: {e}</p>", 500
 
 # =========================
 # GMAIL REPLY MONITOR
