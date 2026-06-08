@@ -42,9 +42,9 @@ DATA_DIR   = Path(os.path.dirname(os.path.abspath(__file__)))
 POSTED_LOG = DATA_DIR / "linkedin_posted.json"
 TOKEN_FILE = DATA_DIR / "linkedin_token.json"
 
-FIVERR_GHL   = "https://www.fiverr.com/s/5rYYAZQ"
-FIVERR_VOICE = "https://www.fiverr.com/s/Eg88Kld"
-FIVERR_LEAD  = "https://www.fiverr.com/s/m588eez"
+FIVERR_GHL   = "https://grayhorizonsenterprise.com"
+FIVERR_VOICE = "https://grayhorizonsenterprise.com"
+FIVERR_LEAD  = "https://calendly.com/grayhorizonsenterprise/30min"
 GUMROAD_LINK = "https://horizons56.gumroad.com"
 
 # ── Content Pools ──────────────────────────────────────────────────────────────
