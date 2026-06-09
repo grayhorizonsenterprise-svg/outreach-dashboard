@@ -3898,6 +3898,8 @@ def _parse_spoken_email(transcript: str) -> str:
     return ""
 
 
+_sms_sent_ids: set = set()  # dedup: one SMS per tool_call_id
+
 @app.route('/vapi-collect', methods=['POST'])
 def vapi_collect():
     """Mid-call tool endpoint. Jordan calls this the moment name+email+phone are collected.
@@ -4002,11 +4004,14 @@ def vapi_collect():
                 except Exception:
                     pass
 
-        # ── SMS to caller — no URL (Textbelt requires URL permissions; email handles the link) ─
-        if phone:
+        # ── SMS to caller — one per tool_call_id to prevent Vapi retry duplicate sends ─
+        if phone and tool_call_id not in _sms_sent_ids:
+            _sms_sent_ids.add(tool_call_id)
             sms = (f"GrayHorizons: Hi {name}, thanks for calling. Our team will follow up with your booking link shortly.")
             sms_ok = _send_sms_textbelt(phone, sms)
             print(f"[VAPI COLLECT] SMS {'sent' if sms_ok else 'FAILED'} -> {phone}")
+        elif phone:
+            print(f"[VAPI COLLECT] SMS skipped — duplicate tool_call_id {tool_call_id}")
 
     except Exception as e:
         print(f"[VAPI COLLECT] Error: {e}")
