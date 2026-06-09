@@ -76,7 +76,7 @@ SYNC_AFTER = {"outreach_generator.py", "yelp_scraper.py", "apollo_scraper.py"}
 def _write_skip_list():
     """Dump all sent/opted-out email domains to sent_domains.csv so scrapers skip them."""
     try:
-        conn = _get_db()
+        conn = __get_db()
         rows = []
         if conn:
             with conn.cursor() as cur:
@@ -144,7 +144,7 @@ def run_pipeline_once():
 def get_pending_count():
     """Quick check of pending lead count from DB or CSV."""
     try:
-        conn = _get_db()
+        conn = __get_db()
         if conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT COUNT(*) FROM leads WHERE status='pending'")
@@ -533,7 +533,7 @@ import psycopg2.extras
 
 _DATABASE_URL = os.getenv("DATABASE_URL", "")
 
-def _get_db():
+def __get_db():
     if not _DATABASE_URL:
         return None
     try:
@@ -544,7 +544,7 @@ def _get_db():
         return None
 
 def _init_db():
-    conn = _get_db()
+    conn = __get_db()
     if not conn:
         return
     try:
@@ -708,7 +708,7 @@ def _clean_df(df):
     return df
 
 def load_data():
-    conn = _get_db()
+    conn = __get_db()
     if conn:
         try:
             df = pd.read_sql(
@@ -729,7 +729,7 @@ def load_data():
     return _clean_df(pd.read_csv(CSV_FILE))
 
 def save_data(df):
-    conn = _get_db()
+    conn = __get_db()
     if conn:
         try:
             with conn.cursor() as cur:
@@ -830,7 +830,7 @@ def log_sent(to_email, name, company, subject, success, error=""):
     # Immediately persist to DB so redeploys don't lose sent records
     if success and to_email:
         try:
-            _c = _get_db()
+            _c = __get_db()
             if _c:
                 with _c.cursor() as _cur:
                     _cur.execute(
@@ -1045,7 +1045,7 @@ def run_batch_send(limit=None):
 
     # 1. Load from PostgreSQL (persistent across redeploys — authoritative source)
     try:
-        _conn = _get_db()
+        _conn = __get_db()
         if _conn:
             with _conn.cursor() as _cur:
                 _cur.execute("SELECT email, website, company FROM leads WHERE status IN ('sent','opted_out','skipped')")
@@ -2176,7 +2176,7 @@ def _sync_csv_to_db():
             print("[SYNC] No pending rows to sync.", flush=True)
             return
         # Only insert/update rows that aren't already sent in DB
-        conn = _get_db()
+        conn = __get_db()
         if not conn:
             print("[SYNC] No DB — CSV is the queue.", flush=True)
             return
@@ -2392,7 +2392,7 @@ def status():
     # ── Lead queue counts from DB ──
     pending = 0; total_sent = 0; total_opted = 0; total_all = 0
     try:
-        conn = _get_db()
+        conn = __get_db()
         if conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT status, COUNT(*) FROM leads GROUP BY status")
@@ -2571,7 +2571,7 @@ def purge_bounced():
             print(f"[PURGE] SendGrid fetch error: {ex}", flush=True)
 
     # -- Purge from PostgreSQL DB --
-    conn = _get_db()
+    conn = __get_db()
     if conn:
         try:
             with conn.cursor() as cur:
@@ -3589,7 +3589,7 @@ def confirm_email():
         # Look up lead by token
         lead = None
         try:
-            conn = get_db()
+            conn = _get_db()
             if conn:
                 with conn.cursor() as cur:
                     cur.execute("SELECT id, name, phone, business_type FROM vapi_leads WHERE confirm_token=%s", (token,))
@@ -3636,7 +3636,7 @@ def confirm_email():
                                       caller_html, name, "")
         if sent:
             try:
-                conn = get_db()
+                conn = _get_db()
                 if conn:
                     with conn.cursor() as cur:
                         cur.execute("UPDATE vapi_leads SET email=%s, email_sent=TRUE WHERE confirm_token=%s", (email, token))
@@ -3667,7 +3667,7 @@ h2{{color:#22c55e;margin-top:0;}} a{{color:#38bdf8;}}</style>
 def confirm_email_page(token, error=None):
     name = "there"
     try:
-        conn = get_db()
+        conn = _get_db()
         if conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT name FROM vapi_leads WHERE confirm_token=%s", (token,))
@@ -3712,7 +3712,7 @@ def calls_dashboard():
     """Live inbound call leads captured by Jordan."""
     rows = []
     try:
-        conn = get_db()
+        conn = _get_db()
         if conn:
             with conn.cursor() as cur:
                 cur.execute("""
@@ -3938,7 +3938,7 @@ def vapi_collect():
         import secrets as _sec
         confirm_token = _sec.token_urlsafe(20)
         try:
-            conn = get_db()
+            conn = _get_db()
             if conn:
                 with conn.cursor() as cur:
                     cur.execute("""
@@ -3998,7 +3998,7 @@ def vapi_collect():
             print(f"[VAPI COLLECT] Caller email {'sent' if sent else 'FAILED'} -> {to_email}")
             if sent:
                 try:
-                    conn = get_db()
+                    conn = _get_db()
                     if conn:
                         with conn.cursor() as cur:
                             cur.execute("UPDATE vapi_leads SET email_sent=TRUE WHERE email=%s", (to_email,))
