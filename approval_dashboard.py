@@ -543,6 +543,8 @@ def __get_db():
         print(f"[DB] Connect failed: {e}", flush=True)
         return None
 
+_get_db = __get_db  # alias used by vapi_collect, confirm_email, calls routes
+
 def _init_db():
     conn = __get_db()
     if not conn:
