@@ -4002,9 +4002,9 @@ def vapi_collect():
                 except Exception:
                     pass
 
-        # ── SMS to caller — confirm-email link so they type their email accurately ─
+        # ── SMS to caller — no URL (Textbelt requires URL permissions; email handles the link) ─
         if phone:
-            sms = (f"GrayHorizons: Hi {name}, book your free 15-min call here: https://calendly.com/grayhorizonsenterprise/30min")
+            sms = (f"GrayHorizons: Hi {name}, thanks for calling. Our team will follow up with your booking link shortly.")
             sms_ok = _send_sms_textbelt(phone, sms)
             print(f"[VAPI COLLECT] SMS {'sent' if sms_ok else 'FAILED'} -> {phone}")
 
