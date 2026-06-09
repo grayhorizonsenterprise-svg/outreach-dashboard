@@ -572,9 +572,11 @@ def _init_db():
                     raw_email TEXT DEFAULT '',
                     email_sent BOOLEAN DEFAULT FALSE,
                     sms_sent BOOLEAN DEFAULT FALSE,
+                    confirm_token TEXT DEFAULT '',
                     created_at TIMESTAMP DEFAULT NOW()
                 )
             """)
+            cur.execute("ALTER TABLE vapi_leads ADD COLUMN IF NOT EXISTS confirm_token TEXT DEFAULT ''")
         conn.commit()
         print("[DB] Table ready", flush=True)
     except Exception as e:
@@ -3572,6 +3574,139 @@ def _send_sms_textbelt(to_phone: str, message: str) -> bool:
         return False
 
 
+@app.route('/confirm-email', methods=['GET', 'POST'])
+def confirm_email():
+    """Caller taps link from SMS, types their email, booking link fires instantly."""
+    import secrets as _secrets
+    import re as _re
+
+    if flask_request.method == 'POST':
+        token    = flask_request.form.get('token', '').strip()
+        email    = flask_request.form.get('email', '').strip().lower()
+        if not _re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return confirm_email_page(token, error="Please enter a valid email address.")
+
+        # Look up lead by token
+        lead = None
+        try:
+            conn = get_db()
+            if conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT id, name, phone, business_type FROM vapi_leads WHERE confirm_token=%s", (token,))
+                    lead = cur.fetchone()
+                    if lead:
+                        cur.execute("UPDATE vapi_leads SET email=%s, email_sent=FALSE WHERE confirm_token=%s", (email, token))
+                conn.commit()
+                conn.close()
+        except Exception as _e:
+            print(f"[CONFIRM EMAIL] DB error: {_e}")
+
+        if not lead:
+            return "<html><body style='background:#0f172a;color:#ef4444;font-family:Arial;padding:40px;text-align:center;'><h2>Link expired or invalid.</h2><p>Please call us again at (909) 927-6310.</p></body></html>"
+
+        lead_id, name, phone, business_type = lead
+        calendly    = os.getenv("CALENDLY_URL", "https://calendly.com/grayhorizonsenterprise/30min")
+        upload_url  = f"{DASHBOARD_URL}/job-upload"
+        sender_name = "Gray Horizons Enterprise"
+
+        caller_html = f"""
+<div style="font-family:Arial,sans-serif;font-size:15px;color:#222;max-width:560px;">
+  <p>Hey {name},</p>
+  <p>Thanks for calling Gray Horizons Enterprise. Here is your booking link:</p>
+  <p style="text-align:center;margin:28px 0;">
+    <a href="{calendly}" style="background:#1a73e8;color:#fff;padding:12px 28px;border-radius:5px;text-decoration:none;font-weight:bold;font-size:15px;">
+      Book Your Free 15-Minute Call
+    </a>
+  </p>
+  <p>We will show you exactly what the system looks like for {business_type or 'your business'}. No pitch, just the demo.</p>
+  <p style="margin-top:24px;padding:16px;background:#f0f9ff;border-radius:8px;border-left:4px solid #0ea5e9;">
+    <b>Your client portal is ready.</b> Submit project details before the call so our team is already prepared.<br><br>
+    <a href="{upload_url}" style="background:#0ea5e9;color:#fff;padding:10px 22px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;margin-top:8px;">
+      Open Your Client Portal
+    </a>
+  </p>
+  <p>Talk soon,<br>Gray Horizons Enterprise</p>
+</div>"""
+
+        sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
+        sent = False
+        if sg_key:
+            sent = _send_via_sendgrid(sg_key, VERIFIED_SENDER, sender_name, email,
+                                      "Your booking link — Gray Horizons Enterprise",
+                                      caller_html, name, "")
+        if sent:
+            try:
+                conn = get_db()
+                if conn:
+                    with conn.cursor() as cur:
+                        cur.execute("UPDATE vapi_leads SET email=%s, email_sent=TRUE WHERE confirm_token=%s", (email, token))
+                    conn.commit()
+                    conn.close()
+            except Exception:
+                pass
+            print(f"[CONFIRM EMAIL] Booking link sent to {email} for {name}")
+
+        return f"""<!DOCTYPE html>
+<html><head><title>You're all set</title>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<style>body{{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;}}
+.card{{background:#1e293b;border-radius:12px;padding:40px 32px;max-width:420px;text-align:center;}}
+h2{{color:#22c55e;margin-top:0;}} a{{color:#38bdf8;}}</style>
+</head><body><div class='card'>
+<h2>You're all set, {name}.</h2>
+<p>Your booking link is on its way to <b>{email}</b>.</p>
+<p>Check your inbox — it arrives within 30 seconds.</p>
+<p style='margin-top:28px;font-size:13px;color:#475569;'>Gray Horizons Enterprise &nbsp;·&nbsp; grayhorizonsenterprise.com</p>
+</div></body></html>"""
+
+    # GET — show the form
+    token = flask_request.args.get('t', '')
+    return confirm_email_page(token)
+
+
+def confirm_email_page(token, error=None):
+    name = "there"
+    try:
+        conn = get_db()
+        if conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT name FROM vapi_leads WHERE confirm_token=%s", (token,))
+                row = cur.fetchone()
+                if row:
+                    name = row[0].split()[0] if row[0] else "there"
+            conn.close()
+    except Exception:
+        pass
+
+    error_html = f"<p style='color:#ef4444;margin-bottom:16px;'>{error}</p>" if error else ""
+    return f"""<!DOCTYPE html>
+<html><head><title>Confirm Your Email — Gray Horizons Enterprise</title>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<style>
+body{{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;}}
+.card{{background:#1e293b;border-radius:12px;padding:40px 32px;max-width:420px;width:90%;}}
+h2{{color:#38bdf8;margin-top:0;font-size:22px;}}
+p{{color:#94a3b8;line-height:1.6;}}
+input{{width:100%;padding:12px 14px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;font-size:16px;box-sizing:border-box;margin-top:8px;}}
+input:focus{{outline:none;border-color:#38bdf8;}}
+button{{width:100%;padding:13px;background:#1a73e8;color:#fff;border:none;border-radius:6px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:16px;}}
+button:hover{{background:#1557b0;}}
+.brand{{margin-top:28px;font-size:12px;color:#475569;text-align:center;}}
+</style>
+</head><body><div class='card'>
+<h2>One quick step, {name}.</h2>
+<p>Enter your email below and we'll send your booking link instantly.</p>
+{error_html}
+<form method='POST' action='/confirm-email'>
+  <input type='hidden' name='token' value='{token}'>
+  <label style='font-size:13px;color:#64748b;'>Your email address</label>
+  <input type='email' name='email' placeholder='you@example.com' required autofocus>
+  <button type='submit'>Send My Booking Link</button>
+</form>
+<div class='brand'>Gray Horizons Enterprise &nbsp;·&nbsp; grayhorizonsenterprise.com</div>
+</div></body></html>"""
+
+
 @app.route('/calls')
 def calls_dashboard():
     """Live inbound call leads captured by Jordan."""
@@ -3794,14 +3929,16 @@ def vapi_collect():
         print(f"[VAPI COLLECT] name={name} email={to_email} phone={phone} biz={business_type}")
 
         # ── Save to DB immediately — before any email/SMS attempt ────────────────
+        import secrets as _sec
+        confirm_token = _sec.token_urlsafe(20)
         try:
             conn = get_db()
             if conn:
                 with conn.cursor() as cur:
                     cur.execute("""
-                        INSERT INTO vapi_leads (name, email, phone, business_type, raw_email)
-                        VALUES (%s, %s, %s, %s, %s)
-                    """, (name, to_email or raw_email, phone, business_type, raw_email))
+                        INSERT INTO vapi_leads (name, email, phone, business_type, raw_email, confirm_token)
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                    """, (name, to_email or raw_email, phone, business_type, raw_email, confirm_token))
                 conn.commit()
                 conn.close()
         except Exception as _e:
@@ -3864,12 +4001,12 @@ def vapi_collect():
                 except Exception:
                     pass
 
-        # ── SMS to caller ────────────────────────────────────────────────────────
+        # ── SMS to caller — confirm-email link so they type their email accurately ─
         if phone:
-            sms = (f"Hey {name}, Gray Horizons Enterprise here. "
-                   f"Book your free 15-min call: {calendly}  "
-                   f"Client portal: {upload_url}")
-            _send_sms_textbelt(phone, sms)
+            confirm_url = f"{DASHBOARD_URL}/confirm-email?t={confirm_token}"
+            sms = (f"GrayHorizons: Hi {name}, tap to confirm your email and get your booking link: {confirm_url}")
+            sms_ok = _send_sms_textbelt(phone, sms)
+            print(f"[VAPI COLLECT] SMS {'sent' if sms_ok else 'FAILED'} -> {phone}")
 
     except Exception as e:
         print(f"[VAPI COLLECT] Error: {e}")
