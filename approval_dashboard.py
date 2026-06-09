@@ -940,6 +940,7 @@ def _send_via_smtp(sender_addr, smtp_password, to_email, subject, html_body, nam
 
 VERIFIED_SENDER = "jordan@grayhorizonsenterprise.com"
 REPLY_TO_EMAIL  = "grayhorizonsenterprise@gmail.com"
+DASHBOARD_URL   = os.getenv("DASHBOARD_URL", "https://ghe-dashboard-production.up.railway.app")
 
 def _send_via_brevo(to_email, subject, html_body, name, company, sender_addr, sender_name):
     brevo_key = os.getenv("BREVO_API_KEY", "").strip()
