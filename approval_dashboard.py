@@ -3871,15 +3871,7 @@ def vapi_webhook():
                 sent = _send_via_sendgrid(sg_key, VERIFIED_SENDER, sender_name, to_email, caller_subject, caller_html, name, "")
             print(f"[VAPI WEBHOOK] Caller email {'sent' if sent else 'FAILED'} -> {to_email}")
 
-        # ── 3. SMS to caller (if phone number available) ─────────────────────────
-        if caller_num and caller_num != "unknown":
-            sms_msg = (
-                f"Hey {name}, thanks for calling Gray Horizons Enterprise. "
-                f"Book your free 15-min call here: https://calendly.com/grayhorizonsenterprise/30min"
-            )
-            if wants_photos:
-                sms_msg += f" Upload job photos: {upload_url}"
-            _send_sms_textbelt(caller_num, sms_msg)
+        # SMS sent by /vapi-collect when tool fires mid-call — do not duplicate here
 
     except Exception as e:
         print(f"[VAPI WEBHOOK] Error: {e}")
