@@ -3716,7 +3716,7 @@ def calls_dashboard():
         if conn:
             with conn.cursor() as cur:
                 cur.execute("""
-                    SELECT name, email, phone, business_type, raw_email, email_sent, created_at
+                    SELECT name, email, phone, business_type, raw_email, email_sent, created_at, confirm_token
                     FROM vapi_leads ORDER BY created_at DESC LIMIT 100
                 """)
                 rows = cur.fetchall()
@@ -3726,13 +3726,18 @@ def calls_dashboard():
 
     rows_html = ""
     for r in rows:
-        name, email, phone, biz, raw_email, email_sent, created_at = r
+        name, email, phone, biz, raw_email, email_sent, created_at, confirm_token = r
         ts = created_at.strftime("%b %d %I:%M %p") if created_at else ""
         email_badge = (
             "<span style='color:#22c55e;font-weight:bold;'>Sent</span>" if email_sent
             else "<span style='color:#ef4444;'>Not sent</span>"
         )
-        email_display = email or f"<span style='color:#f97316;'>{raw_email} (parse failed)</span>"
+        email_display = email or f"<span style='color:#f97316;'>{raw_email or 'Not given'}</span>"
+        confirm_link = (
+            f"<a href='/confirm-email?t={confirm_token}' target='_blank' "
+            f"style='background:#1a73e8;color:#fff;padding:4px 12px;border-radius:4px;text-decoration:none;font-size:12px;font-weight:bold;'>Send Email</a>"
+            if confirm_token else "—"
+        )
         rows_html += f"""
         <tr style='border-bottom:1px solid #1e293b;'>
           <td style='padding:12px 16px;color:#e2e8f0;'>{ts}</td>
@@ -3741,9 +3746,10 @@ def calls_dashboard():
           <td style='padding:12px 16px;color:#94a3b8;'>{phone or '—'}</td>
           <td style='padding:12px 16px;color:#94a3b8;'>{biz or '—'}</td>
           <td style='padding:12px 16px;'>{email_badge}</td>
+          <td style='padding:12px 16px;'>{confirm_link}</td>
         </tr>"""
 
-    empty = "<tr><td colspan='6' style='padding:40px;text-align:center;color:#475569;'>No calls captured yet. Make a test call to Jordan at (909) 927-6310.</td></tr>" if not rows else ""
+    empty = "<tr><td colspan='7' style='padding:40px;text-align:center;color:#475569;'>No calls captured yet. Make a test call to Jordan at (909) 927-6310.</td></tr>" if not rows else ""
 
     return f"""<!DOCTYPE html>
 <html><head><title>Inbound Calls — GHE</title>
@@ -3761,7 +3767,7 @@ tr:hover{{background:#263348;}}
 <div class='sub'>Jordan captures these mid-call. Auto-refreshes every 15 seconds. {len(rows)} total.</div>
 <table>
   <thead><tr>
-    <th>Time</th><th>Name</th><th>Email</th><th>Phone</th><th>Business</th><th>Email</th>
+    <th>Time</th><th>Name</th><th>Email</th><th>Phone</th><th>Business</th><th>Status</th><th>Action</th>
   </tr></thead>
   <tbody>{rows_html}{empty}</tbody>
 </table>
