@@ -4012,8 +4012,7 @@ def vapi_collect():
 
         # ── SMS to caller — confirm-email link so they type their email accurately ─
         if phone:
-            confirm_url = f"{DASHBOARD_URL}/confirm-email?t={confirm_token}"
-            sms = (f"GrayHorizons: Hi {name}, tap to confirm your email and get your booking link: {confirm_url}")
+            sms = (f"GrayHorizons: Hi {name}, book your free 15-min call here: https://calendly.com/grayhorizonsenterprise/30min")
             sms_ok = _send_sms_textbelt(phone, sms)
             print(f"[VAPI COLLECT] SMS {'sent' if sms_ok else 'FAILED'} -> {phone}")
 
