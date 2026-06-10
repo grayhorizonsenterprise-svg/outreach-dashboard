@@ -95,6 +95,7 @@ def fire_call(phone: str, name: str, company: str, niche: str) -> bool:
             "number": phone,
             "name": company or name or "Business Owner",
         },
+        "maxDurationSeconds": 180,
     }
     headers = {"Authorization": f"Bearer {VAPI_KEY}", "Content-Type": "application/json"}
     try:
@@ -111,7 +112,7 @@ def fire_call(phone: str, name: str, company: str, niche: str) -> bool:
         return False
 
 
-def main(max_calls: int = 20):
+def main(max_calls: int = 5):
     if not VAPI_KEY:
         print("[ERROR] VAPI_PRIVATE_KEY not set")
         sys.exit(1)
@@ -149,7 +150,7 @@ def main(max_calls: int = 20):
 
 
 if __name__ == "__main__":
-    limit = 20
+    limit = 5
     for i, arg in enumerate(sys.argv[1:]):
         if arg == "--max" and i + 2 <= len(sys.argv) - 1:
             try:
