@@ -45,7 +45,7 @@ TOKEN_FILE = DATA_DIR / "linkedin_token.json"
 FIVERR_GHL   = "https://grayhorizonsenterprise.com"
 FIVERR_VOICE = "https://grayhorizonsenterprise.com"
 FIVERR_LEAD  = "https://calendly.com/grayhorizonsenterprise/30min"
-GUMROAD_LINK = "https://horizons56.gumroad.com"
+GUMROAD_LINK = os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
 
 # ── Content Pools ──────────────────────────────────────────────────────────────
 
@@ -231,7 +231,7 @@ we log every signal and every result. open book. if it stops working we say so.
 {GUMROAD_LINK}""",
 ]
 
-ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS + EDGE_ENGINE_POSTS
+ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
