@@ -22,6 +22,8 @@ sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 SENDGRID_API_KEY   = os.getenv("SENDGRID_API_KEY", "")
 FROM_EMAIL         = os.getenv("FROM_EMAIL", "grayhorizonsenterprise@gmail.com")
 STRIPE_LINK        = os.getenv("STRIPE_PAYMENT_LINK", "")
+WHOP_LINK          = os.getenv("WHOP_CONTRACTOR_LINK", "https://whop.com/gray-horizons-enterprise/contractor-automation-system/")
+GUMROAD_LINK       = os.getenv("GUMROAD_STORE", "https://horizons56.gumroad.com")
 CALENDLY_URL       = os.getenv("CALENDLY_URL", "https://grayhorizonsenterprise.com")
 GHE_SITE           = "https://grayhorizonsenterprise.com"
 
@@ -119,8 +121,8 @@ def build_proposal(name: str, company: str, email: str, niche: str) -> str:
     <div class="section">
       <h2>Investment</h2>
       <div class="highlight">
-        <div class="line"><span>One-time setup fee</span><span class="price">$2,500</span></div>
-        <div class="line"><span>Monthly management</span><span><strong>$297/mo</strong></span></div>
+        <div class="line"><span>One-time setup fee</span><span class="price">$997</span></div>
+        <div class="line"><span>Monthly management (optional)</span><span><strong>$297/mo</strong></span></div>
         <div class="line"><span>Setup timeline</span><span>Live within 5 business days</span></div>
         <div class="line" style="border:none"><span>Contract</span><span>Month-to-month, cancel anytime</span></div>
       </div>
@@ -132,9 +134,11 @@ def build_proposal(name: str, company: str, email: str, niche: str) -> str:
     </div>
 
     <div class="cta">
-      <p style="font-size:15px;margin-bottom:20px;">Ready to get started? Click below to complete payment and we'll begin setup within 24 hours.</p>
-      <a href="{STRIPE_LINK}" class="btn">Secure Your Spot — Pay Now</a>
-      <p style="font-size:12px;color:#94a3b8;margin-top:16px;">Questions? Reply to this email or book a follow-up: <a href="{CALENDLY_URL}">{CALENDLY_URL}</a></p>
+      <p style="font-size:15px;margin-bottom:20px;">Ready to get started? Pick your preferred platform below — setup begins within 24 hours.</p>
+      <a href="{STRIPE_LINK}" class="btn" style="display:block;margin-bottom:12px;">Pay via Stripe</a>
+      <a href="{WHOP_LINK}" class="btn" style="display:block;margin-bottom:12px;background:#22c55e;">Pay via Whop</a>
+      <a href="{GUMROAD_LINK}" class="btn" style="display:block;margin-bottom:12px;background:#ff90e8;color:#000;">Pay via Gumroad</a>
+      <p style="font-size:12px;color:#94a3b8;margin-top:16px;">Questions? Reply to this email or book a call: <a href="{CALENDLY_URL}">{CALENDLY_URL}</a></p>
     </div>
   </div>
   <div class="footer">
