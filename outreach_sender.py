@@ -2,6 +2,10 @@
 outreach_sender.py — Gray Horizons Enterprise
 Sends a single email via Brevo (primary, free 300/day), SendGrid (secondary),
 or Gmail SMTP fallback.
+
+Run directly to send today's batch:
+  python outreach_sender.py           (50 emails)
+  python outreach_sender.py --limit 100
 """
 
 import os
@@ -10,6 +14,12 @@ import smtplib
 import requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 _URL_RE = re.compile(r'(https?://[^\s<>"{}|\\^`\[\]]+)')
 
@@ -132,3 +142,77 @@ def log_sent_date(queue_csv: str, email: str) -> None:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
+
+
+if __name__ == "__main__":
+    import csv as _csv
+    import sys as _sys
+    from datetime import datetime as _dt
+    from pathlib import Path as _Path
+
+    _limit = 50
+    for i, arg in enumerate(_sys.argv[1:]):
+        if arg == "--limit" and i + 1 < len(_sys.argv) - 1:
+            try:
+                _limit = int(_sys.argv[i + 2])
+            except ValueError:
+                pass
+
+    _queue = _Path(os.path.dirname(os.path.abspath(__file__))) / "outreach_queue.csv"
+    if not _queue.exists():
+        print("[ERROR] outreach_queue.csv not found")
+        _sys.exit(1)
+
+    _rows = list(_csv.DictReader(open(_queue, encoding="utf-8", errors="ignore")))
+    _fields = list(_rows[0].keys()) if _rows else []
+    if "status" not in _fields:
+        _fields.append("status")
+
+    import re as _re
+    _SKIP_RE = _re.compile(
+        r'^(info|contact|noreply|no-reply|donotreply|support|admin|webmaster|postmaster'
+        r'|sales|hello|mail|office|team|help|service|enquiries|enquiry|billing'
+        r'|someone|you|test|xxx|guest|data|forwarding)@'
+        r'|@(web|someplace|example|domain|test)\.com$'
+        r'|[a-f0-9]{20,}@'
+        r'|@stderr\.|@stacks\.|uce\.com$|vk-portal',
+        _re.I
+    )
+
+    _pending = [r for r in _rows if r.get("status", "").strip().lower() not in ("sent", "skipped")]
+
+    # Auto-skip garbage addresses before counting
+    for _r in _pending:
+        if _SKIP_RE.search(_r.get("email", "")):
+            _r["status"] = "skipped"
+    _pending = [r for r in _pending if r.get("status", "").strip().lower() == "pending"]
+
+    print(f"[OUTREACH] {len(_pending)} clean pending — sending up to {_limit} now")
+
+    _sent = 0
+    _failed = 0
+    for _row in _pending[:_limit]:
+        _email = _row.get("email", "").strip()
+        _subject = _row.get("subject", "").strip()
+        _message = _row.get("message", "").strip()
+
+        if not _email or not _subject or not _message:
+            _row["status"] = "skipped"
+            continue
+
+        _result = send_email(_email, _subject, _message)
+        if _result == "sent":
+            _row["status"] = "sent"
+            _sent += 1
+            print(f"  [SENT] {_email}")
+        else:
+            _row["status"] = "failed"
+            _failed += 1
+            print(f"  [FAIL] {_email} — {_result}")
+
+    with open(_queue, "w", newline="", encoding="utf-8") as _f:
+        _w = _csv.DictWriter(_f, fieldnames=_fields)
+        _w.writeheader()
+        _w.writerows(_rows)
+
+    print(f"\n[DONE] Sent: {_sent} | Failed: {_failed} | Remaining: {len(_pending) - _limit if len(_pending) > _limit else 0}")

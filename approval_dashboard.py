@@ -59,7 +59,7 @@ PIPELINE_SCRIPTS = [
     # outreach_sender.py intentionally excluded — sending is manual-only via dashboard buttons
 ]
 
-DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "150"))  # throttled: 26.7% bounce rate detected — rebuild reputation before scaling
+DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "50"))  # conservative: rebuilding SendGrid reputation after 26.7% bounce
 batch_running     = False
 batch_sent_count  = 0
 
@@ -439,10 +439,24 @@ def _followup_engine_daily():
 
 
 def _auto_blast_scheduler():
-    """AUTO-BLAST DISABLED — bad data quality burning SendGrid reputation.
-    Manual sends only via dashboard buttons until lead data quality improves."""
-    print("[AUTO-BLAST] Disabled — manual sends only.", flush=True)
-    return
+    """Sends cold outreach daily at 6 AM UTC via SendGrid.
+    50 emails/day. Role addresses and SendGrid suppressions filtered before every send."""
+    import datetime as _dt
+    fired_today: set = set()
+    print("[AUTO-BLAST] Scheduler active — fires daily at 06:00 UTC", flush=True)
+    while True:
+        try:
+            now = _dt.datetime.utcnow()
+            key = now.date()
+            if now.hour == 6 and now.minute < 10 and key not in fired_today:
+                fired_today.add(key)
+                if len(fired_today) > 3:
+                    fired_today = set(list(fired_today)[-2:])
+                print(f"[AUTO-BLAST] Firing daily batch — {now.strftime('%Y-%m-%d %H:%M UTC')}", flush=True)
+                run_batch_send()
+        except Exception as _e:
+            print(f"[AUTO-BLAST] Error: {_e}", flush=True)
+        time.sleep(60)
 
 
 def _upwork_scout_scheduler():
@@ -1001,6 +1015,49 @@ def send_email(to_email, name, company, message, subject=""):
     return False
 
 # =========================
+# BOUNCE SUPPRESSION — checks SendGrid suppression lists before every send
+# =========================
+_suppression_cache: dict = {}   # email -> True (suppressed) cached for the session
+
+_ROLE_PREFIXES = {
+    "info", "contact", "support", "admin", "noreply", "no-reply",
+    "hello", "team", "sales", "help", "service", "billing",
+    "office", "mail", "email", "reception", "enquiries", "enquiry",
+    "general", "business", "company", "webmaster", "postmaster",
+    "accounts", "accounting", "customerservice", "customer",
+}
+
+def _is_role_address(email: str) -> bool:
+    local = email.lower().split("@")[0]
+    return local in _ROLE_PREFIXES
+
+def _is_sendgrid_suppressed(email: str) -> bool:
+    """Returns True if SendGrid has this email on any suppression list (bounce/spam/unsubscribe).
+    Caches per-session so we only hit the API once per address."""
+    email = email.strip().lower()
+    if email in _suppression_cache:
+        return _suppression_cache[email]
+    api_key = os.getenv("SENDGRID_API_KEY", "").strip()
+    if not api_key:
+        return False
+    headers = {"Authorization": f"Bearer {api_key}"}
+    for endpoint in [
+        f"https://api.sendgrid.com/v3/suppression/bounces/{email}",
+        f"https://api.sendgrid.com/v3/suppression/spam_reports/{email}",
+        f"https://api.sendgrid.com/v3/suppression/unsubscribes/{email}",
+    ]:
+        try:
+            r = requests.get(endpoint, headers=headers, timeout=8)
+            if r.status_code == 200 and r.json():
+                _suppression_cache[email] = True
+                return True
+        except Exception:
+            pass
+    _suppression_cache[email] = False
+    return False
+
+
+# =========================
 # BATCH SENDER — runs in background thread
 # =========================
 _batch_started_at = 0.0
@@ -1097,6 +1154,12 @@ def run_batch_send(limit=None):
         email_key   = str(row["email"]).strip().lower()
         domain_key  = email_key.split("@")[-1] if "@" in email_key else ""
         company_key = _norm_company(row.get("company", "") or "")
+
+        # Skip role addresses — #1 cause of bounces
+        if _is_role_address(email_key):
+            df.at[i, "status"] = "skipped"
+            continue
+
         already_contacted = (
             email_key in opt_outs
             or email_key in ever_sent
@@ -1104,13 +1167,13 @@ def run_batch_send(limit=None):
             or (company_key and company_key in ever_companies)
         )
         if already_contacted:
-            df.at[i, "status"] = "sent"   # already contacted — sync status
+            df.at[i, "status"] = "sent"
         elif email_key not in seen_emails:
             seen_emails.add(email_key)
             if domain_key:
-                ever_domains.add(domain_key)  # block rest of run from same domain
+                ever_domains.add(domain_key)
             if company_key:
-                ever_companies.add(company_key)  # block rest of run from same company name
+                ever_companies.add(company_key)
             rows.append((i, row))
         else:
             df.at[i, "status"] = "skipped"
@@ -1122,13 +1185,19 @@ def run_batch_send(limit=None):
 
     def _send_one(item):
         i, row = item
+        email = str(row["email"]).strip().lower()
+        # Check SendGrid suppression lists before attempting send
+        if _is_sendgrid_suppressed(email):
+            print(f"[BATCH] Suppressed (bounce/spam/unsub): {email}", flush=True)
+            return i, False
+        time.sleep(1.5)  # ~33 emails/min max — avoids burst-spam flags
         ok = send_email(
             row["email"], row.get("name", ""), row.get("company", ""),
             row["message"], row.get("subject", "")
         )
         return i, ok
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=3) as executor:
         futures = {executor.submit(_send_one, r): r for r in rows}
         for future in as_completed(futures):
             try:
@@ -1192,6 +1261,44 @@ def dashboard():
     sent_today        = count_sent_today()
     daily_remaining   = max(0, DAILY_EMAIL_LIMIT - sent_today)
     social_table_html = build_social_table()
+
+    # Load Upwork scouted opportunities
+    _upwork_opps = []
+    _upwork_opp_file = os.path.join(DATA_DIR, "upwork_opportunities.json")
+    try:
+        import json as _json
+        if os.path.exists(_upwork_opp_file):
+            _upwork_opps = _json.loads(open(_upwork_opp_file).read())
+    except Exception:
+        pass
+
+    def _build_upwork_jobs_html(opps):
+        if not opps:
+            return "<p style='color:#64748b;padding:20px 0;'>Scout running — jobs appear here every 2 hours. Use the Paste Job tool below to score and draft instantly.</p>"
+        rows = ""
+        for o in opps[:15]:
+            clr = "#22c55e" if o.get("score", 0) >= 75 else "#f59e0b" if o.get("score", 0) >= 55 else "#ef4444"
+            safe_proposal = o.get("proposal", "").replace("`", "'").replace("\\", "\\\\").replace("\n", "\\n")
+            rows += f"""
+            <div style='background:#1e293b;border:1px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px;'>
+              <div style='display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px;'>
+                <a href='{o.get("link","#")}' target='_blank' style='color:#38bdf8;font-weight:600;font-size:14px;text-decoration:none;flex:1;'>{o.get("title","Untitled")[:90]}</a>
+                <span style='background:{clr};color:#000;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;white-space:nowrap;'>Score: {o.get("score",0)}/100</span>
+              </div>
+              <p style='color:#94a3b8;font-size:12px;margin:0 0 10px 0;'>{o.get("description","")[:220]}...</p>
+              <div style='display:flex;gap:8px;flex-wrap:wrap;'>
+                <button onclick='copyProposal(this, `{safe_proposal}`)' style='background:#0ea5e9;color:#fff;border:none;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;'>Copy Proposal</button>
+                <a href='{o.get("link","#")}' target='_blank' style='background:#22c55e;color:#000;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;'>Apply on Upwork</a>
+                <span style='color:#64748b;font-size:11px;align-self:center;'>Boost: 15-20 connects for top visibility</span>
+              </div>
+              <details style='margin-top:10px;'>
+                <summary style='color:#64748b;cursor:pointer;font-size:12px;'>View full proposal</summary>
+                <pre style='background:#0f172a;color:#e2e8f0;padding:12px;border-radius:6px;font-size:12px;white-space:pre-wrap;margin-top:8px;border:1px solid #334155;'>{o.get("proposal","")}</pre>
+              </details>
+            </div>"""
+        return rows
+
+    _upwork_jobs_html = _build_upwork_jobs_html(_upwork_opps)
 
     status_text = '<span style="color:#22c55e">Scraping leads now...</span>' if pipeline_running else (
         f"Last run: {fmt_pacific(last_run_time)}" if last_run_time else "Starting soon..."
@@ -1285,6 +1392,7 @@ def dashboard():
   <a onclick="showTab('social')"   id="tab-social"   class="{'active' if active_tab=='social' else ''}" style="color:#f97316;">Social Pipeline</a>
   <a onclick="showTab('grants')"   id="tab-grants"   class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grant Agent</a>
   <a onclick="showTab('twitter')"  id="tab-twitter"  class="{'active' if active_tab=='twitter' else ''}" style="color:#1d9bf0;font-weight:bold;">🐦 Twitter</a>
+  <a onclick="showTab('upwork')"  id="tab-upwork"  class="{'active' if active_tab=='upwork' else ''}" style="color:#14a800;font-weight:bold;">💼 Upwork ({len(_upwork_opps)} jobs)</a>
   <a href="/status" style="color:#22c55e;font-weight:bold;">⚡ System Status</a>
   <a href="/trigger-pipeline" style="color:#f97316;font-weight:bold;" onclick="return confirm('Run pipeline now to fetch fresh leads?')">▶ Run Pipeline Now</a>
   <a href="/purge-bounced" style="color:#ef4444;font-weight:bold;" onclick="return confirm('Purge all role/generic emails (info@, service@, hello@) from queue? This fixes your 26.7% bounce rate.')">🧹 Purge Bounced</a>
@@ -1633,6 +1741,58 @@ function filterNiche(niche, btn) {{
 
   </div>
 </div><!-- end twitter tab -->
+
+<!-- UPWORK TAB -->
+<div id="content-upwork" class="tab-content {'active' if active_tab=='upwork' else ''}">
+  <div style="max-width:860px;margin:0 auto;padding:20px 16px;">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div style="font-size:18px;font-weight:bold;color:#14a800;">Upwork Job Board</div>
+        <div style="font-size:12px;color:#64748b;margin-top:2px;">Auto-scouted every 2 hours. Copy proposal, boost 15-20 connects, click Apply.</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <a href="https://www.upwork.com/nx/find-work/" target="_blank" style="background:#14a800;color:#fff;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">Browse Upwork</a>
+        <a href="https://www.upwork.com/nx/plans/connects/purchase/" target="_blank" style="background:#1e293b;color:#14a800;border:1px solid #14a800;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">Buy Connects</a>
+      </div>
+    </div>
+
+    <!-- Connects guide -->
+    <div style="background:#1e293b;border-left:4px solid #14a800;border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#94a3b8;">
+      <strong style="color:#14a800;">Connect Boost Strategy:</strong> Standard apply = 6 connects. Boost to top = 15-20 connects. Only boost on jobs posted under 2 hours old with under 15 proposals. Score 75+ = apply immediately.
+    </div>
+
+    <!-- Scouted Jobs -->
+    <div style="font-size:15px;font-weight:bold;color:#e2e8f0;margin-bottom:12px;">Auto-Scouted Jobs ({len(_upwork_opps)} found)</div>
+    {_upwork_jobs_html}
+
+    <hr style="border-color:#1e293b;margin:28px 0;">
+
+    <!-- Paste Job Drafter -->
+    <div style="font-size:15px;font-weight:bold;color:#e2e8f0;margin-bottom:8px;">Paste Any Job Description</div>
+    <p style="color:#64748b;font-size:12px;margin-bottom:12px;">Paste a job from Upwork. System scores it and writes your proposal instantly.</p>
+    <form method="POST" action="/upwork-draft" target="_blank">
+      <textarea name="job_text" rows="8" placeholder="Paste full job description here..."
+        style="width:100%;background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:12px;font-size:14px;resize:vertical;"></textarea>
+      <div style="margin-top:10px;">
+        <button type="submit" style="background:#14a800;color:#fff;border:none;padding:10px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;">Score + Draft Proposal</button>
+      </div>
+    </form>
+
+  </div>
+</div><!-- end upwork tab -->
+
+<script>
+function copyProposal(btn, text) {{
+  var decoded = text.replace(/\\n/g, '\n');
+  navigator.clipboard.writeText(decoded).then(function() {{
+    btn.textContent = 'Copied!';
+    btn.style.background = '#22c55e';
+    btn.style.color = '#000';
+    setTimeout(function() {{ btn.textContent = 'Copy Proposal'; btn.style.background = '#0ea5e9'; btn.style.color = '#fff'; }}, 2000);
+  }});
+}}
+</script>
 
 </script>
 </body>
@@ -2956,6 +3116,42 @@ def run_all_engines_route():
     )
 
 
+@app.route('/trigger-calls', methods=['GET', 'POST'])
+def trigger_calls_route():
+    """Fire outbound calls to all prospects with phone numbers. Business hours enforced inside script."""
+    def _run():
+        _run_engine("Outbound Calls", "outbound_caller.py", ["--max", "50"])
+    threading.Thread(target=_run, daemon=True).start()
+    return (
+        "<html><body style='background:#0f172a;color:#e2e8f0;font-family:monospace;padding:2rem;'>"
+        "<h2 style='color:#4ade80;'>Outbound calls queued</h2>"
+        "<p>Jordan is calling up to 50 prospects. Business hours enforced (9am-5pm ET Mon-Fri).<br>"
+        "Check Railway logs for call results.</p>"
+        "<br><a href='/' style='color:#38bdf8;'>Back to Dashboard</a>"
+        "</body></html>"
+    )
+
+
+def _daily_call_scheduler():
+    """Background thread: fires outbound calls once per day at 9am ET."""
+    from zoneinfo import ZoneInfo
+    import time as _time
+    ET = ZoneInfo("America/New_York")
+    while True:
+        now = datetime.now(ET)
+        # Run Mon-Fri at 9am ET
+        if now.weekday() < 5 and now.hour == 9 and now.minute < 5:
+            print("[SCHEDULER] 9am ET — firing outbound calls", flush=True)
+            _run_engine("Daily Outbound Calls", "outbound_caller.py", ["--max", "50"])
+            _time.sleep(360)  # sleep 6 min so it doesn't double-fire within same 9am window
+        else:
+            _time.sleep(60)
+
+
+# Start the daily call scheduler in background when app boots
+threading.Thread(target=_daily_call_scheduler, daemon=True).start()
+
+
 @app.route('/opt-out', methods=['GET', 'POST'])
 def opt_out_route():
     if flask_request.method == 'POST':
@@ -3485,6 +3681,52 @@ def linkedin_dms():
     return html
 
 
+@app.route('/upwork-draft', methods=['GET', 'POST'])
+def upwork_draft_inline():
+    """Handles the Paste Job form from the Upwork dashboard tab."""
+    proposal = ""
+    score = 0
+    title = ""
+    error = ""
+    job_text = ""
+    if flask_request.method == 'POST':
+        job_text = flask_request.form.get('job_text', '').strip()
+        if job_text:
+            try:
+                from upwork_scout import score_job, draft_proposal
+                lines = job_text.split('\n')
+                title = lines[0][:100] if lines else "Job"
+                score = score_job(title, job_text)
+                proposal = draft_proposal(title, job_text)
+            except Exception as e:
+                error = str(e)
+    score_color = "#22c55e" if score >= 75 else "#f59e0b" if score >= 55 else "#ef4444"
+    return f"""<!DOCTYPE html>
+<html><head><title>Upwork Draft</title>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<style>body{{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:24px;max-width:800px;margin:0 auto;padding:24px;}}
+textarea{{width:100%;background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:12px;font-size:14px;}}
+button{{background:#14a800;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;}}
+pre{{background:#1e293b;padding:16px;border-radius:8px;white-space:pre-wrap;font-size:13px;border:1px solid #22c55e;}}
+h1{{color:#14a800;}}h2{{color:#94a3b8;font-size:16px;}}
+a{{color:#38bdf8;}}
+</style></head><body>
+<h1>Upwork Proposal Drafter</h1>
+<a href='javascript:window.close()' style='font-size:13px;'>Close window</a>
+<form method='POST' style='margin-top:16px;'>
+  <textarea name='job_text' rows='10' placeholder='Paste full job description here...'>{job_text}</textarea>
+  <br><br><button type='submit'>Score + Draft Proposal</button>
+</form>
+{f'''<div style="margin-top:24px;padding:16px;background:#1e293b;border-radius:8px;border-left:4px solid {score_color};">
+  <h2>Score: <span style="color:{score_color};">{score}/100</span> — {title}</h2>
+  {f'<p style="color:#ef4444;">{error}</p>' if error else ''}
+  <div style="margin-top:8px;"><button onclick="navigator.clipboard.writeText(document.getElementById('prop').innerText).then(()=>this.textContent='Copied!')" style="background:#0ea5e9;padding:8px 20px;font-size:13px;">Copy Proposal</button></div>
+  <pre id="prop" style="margin-top:12px;">{proposal}</pre>
+  <p style="color:#64748b;font-size:12px;margin-top:12px;">Boost: use 15-20 connects for top placement. Apply to jobs under 2 hours old.</p>
+</div>''' if flask_request.method=='POST' else ''}
+</body></html>"""
+
+
 @app.route('/upwork', methods=['GET', 'POST'])
 def upwork_drafter():
     proposal = ""
@@ -3556,24 +3798,27 @@ h1{{color:#38bdf8;}}h2{{color:#94a3b8;font-size:16px;}}
 
 
 def _send_sms_textbelt(to_phone: str, message: str) -> bool:
-    """Send SMS via Textbelt. $0.01/text, no registration required.
-    Set TEXTBELT_KEY in Railway env vars. Buy credits at textbelt.com."""
-    key = os.getenv("TEXTBELT_KEY", "").strip()
-    if not key:
-        print("[SMS] TEXTBELT_KEY not set — skipping SMS")
+    """Send SMS via Twilio (primary) with Textbelt fallback."""
+    twilio_sid   = os.getenv("TWILIO_ACCOUNT_SID", "").strip()
+    twilio_token = os.getenv("TWILIO_AUTH_TOKEN", "").strip()
+    twilio_from  = os.getenv("TWILIO_FROM_NUMBER", "").strip()
+
+    if not (twilio_sid and twilio_token and twilio_from):
+        print("[SMS] Twilio not configured — set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER")
         return False
     try:
         r = requests.post(
-            "https://textbelt.com/text",
-            data={"phone": to_phone, "message": message, "key": key},
+            f"https://api.twilio.com/2010-04-01/Accounts/{twilio_sid}/Messages.json",
+            auth=(twilio_sid, twilio_token),
+            data={"From": twilio_from, "To": to_phone, "Body": message},
             timeout=10,
         )
-        result = r.json()
-        ok = result.get("success", False)
-        print(f"[SMS] {'OK' if ok else 'FAILED'} -> {to_phone} | {result.get('error', '')}")
+        ok = r.status_code in (200, 201)
+        sid = r.json().get("sid", "") if ok else ""
+        print(f"[SMS] Twilio {'OK' if ok else 'FAILED'} -> {to_phone} | {sid or r.text[:80]}")
         return ok
     except Exception as e:
-        print(f"[SMS] Exception: {e}")
+        print(f"[SMS] Twilio exception: {e}")
         return False
 
 
