@@ -112,7 +112,7 @@ def fire_call(phone: str, name: str, company: str, niche: str) -> bool:
         return False
 
 
-def main(max_calls: int = 7):
+def main(max_calls: int = 5):
     if not VAPI_KEY:
         print("[ERROR] VAPI_PRIVATE_KEY not set")
         sys.exit(1)
@@ -150,7 +150,7 @@ def main(max_calls: int = 7):
 
 
 if __name__ == "__main__":
-    limit = 7
+    limit = 5
     for i, arg in enumerate(sys.argv[1:]):
         if arg == "--max" and i + 2 <= len(sys.argv) - 1:
             try:
