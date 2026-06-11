@@ -487,30 +487,14 @@ def _vapi_followup_scheduler():
             print(f"[VAPI FOLLOWUP] Error: {e}", flush=True)
 
 
-# Start all revenue engine threads
+# Start only essential schedulers — others disabled until fixed
 for _fn in [
-    _signals_engine_daily,
-    _grant_pipeline_daily,
     _twitter_scheduler,
-    _gmail_monitor_thread,
-    _reddit_monitor_thread,
     _shadow_clans_nightly,
-    _realestate_engine_daily,
-    _medspa_engine_daily,
-    _insurance_engine_daily,
-    _ecommerce_engine_daily,
-    _restaurant_engine_daily,
-    _gym_engine_daily,
-    _mortgage_engine_daily,
-    _followup_engine_daily,
-    _auto_blast_scheduler,
-    _vapi_followup_scheduler,
-    _twitter_engage_scheduler,
-    _upwork_scout_scheduler,
 ]:
     threading.Thread(target=_fn, daemon=True).start()
 
-print("[ENGINES] All 14 revenue engine schedulers started", flush=True)
+print("[ENGINES] Essential schedulers started (Twitter, Shadow Clans)", flush=True)
 
 CSV_FILE      = os.path.join(DATA_DIR, "outreach_queue.csv")
 SOCIAL_FILE   = os.path.join(DATA_DIR, "social_pipeline.csv")
