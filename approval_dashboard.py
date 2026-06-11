@@ -3120,12 +3120,12 @@ def run_all_engines_route():
 def trigger_calls_route():
     """Fire outbound calls to all prospects with phone numbers. Business hours enforced inside script."""
     def _run():
-        _run_engine("Outbound Calls", "outbound_caller.py", ["--max", "50"])
+        _run_engine("Outbound Calls", "outbound_caller.py", ["--max", "5"])
     threading.Thread(target=_run, daemon=True).start()
     return (
         "<html><body style='background:#0f172a;color:#e2e8f0;font-family:monospace;padding:2rem;'>"
         "<h2 style='color:#4ade80;'>Outbound calls queued</h2>"
-        "<p>Jordan is calling up to 50 prospects. Business hours enforced (9am-5pm ET Mon-Fri).<br>"
+        "<p>Jordan is calling up to 5 prospects. Business hours enforced (9am-5pm ET Mon-Fri).<br>"
         "Check Railway logs for call results.</p>"
         "<br><a href='/' style='color:#38bdf8;'>Back to Dashboard</a>"
         "</body></html>"
@@ -3142,7 +3142,7 @@ def _daily_call_scheduler():
         # Run Mon-Fri at 9am ET
         if now.weekday() < 5 and now.hour == 9 and now.minute < 5:
             print("[SCHEDULER] 9am ET — firing outbound calls", flush=True)
-            _run_engine("Daily Outbound Calls", "outbound_caller.py", ["--max", "50"])
+            _run_engine("Daily Outbound Calls", "outbound_caller.py", ["--max", "5"])
             _time.sleep(360)  # sleep 6 min so it doesn't double-fire within same 9am window
         else:
             _time.sleep(60)
