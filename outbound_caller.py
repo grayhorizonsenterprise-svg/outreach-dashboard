@@ -27,6 +27,7 @@ VAPI_KEY          = os.getenv("VAPI_PRIVATE_KEY", os.getenv("VAPI_API_KEY", ""))
 PHONE_NUMBER_ID   = os.getenv("VAPI_PHONE_NUMBER_ID", "e80874f3-73be-486f-b453-1b73573dbf9b")
 OUTBOUND_AGENT_ID = "a614121f-e9df-4396-b18e-02d0bd682372"
 CALENDLY_URL      = "https://calendly.com/grayhorizonsenterprise/30min"
+WEBHOOK_URL       = os.getenv("DASHBOARD_URL", "https://outreach-dashboard-production.up.railway.app") + "/vapi-webhook"
 DATA_DIR          = Path(os.path.dirname(os.path.abspath(__file__)))
 PROSPECTS_CSV     = DATA_DIR / "prospects_raw.csv"
 CALL_LOG          = DATA_DIR / "call_log.json"
@@ -96,6 +97,7 @@ def fire_call(phone: str, name: str, company: str, niche: str) -> bool:
             "name": company or name or "Business Owner",
         },
         "maxDurationSeconds": 120,
+        "serverUrl": WEBHOOK_URL,
     }
     headers = {"Authorization": f"Bearer {VAPI_KEY}", "Content-Type": "application/json"}
     try:
