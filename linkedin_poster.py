@@ -51,139 +51,139 @@ GUMROAD_LINK = os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V
 # ── Content Pools ──────────────────────────────────────────────────────────────
 
 GHL_POSTS = [
-    f"""talked to an HVAC owner last week who was spending $4k/month on google ads.
+    f"""Talked to an HVAC owner last week spending $4k/month on Google Ads.
 
-48 leads a month. closing 9.
+48 leads a month. Closing 9.
 
-not a lead problem. a follow up problem.
+Not a lead problem. A follow-up problem.
 
-built out his GHL, got instant SMS firing on every form submission, missed call text-back, 7 touches over 2 weeks.
+We built out his GHL: instant SMS on every form submission, missed call text-back, 7 touches over 2 weeks.
 
-next month same 48 leads. 23 closes.
+Next month, same 48 leads. 23 closes. Same budget.
 
-same budget. just fixed what happens after the lead comes in.
-
-{FIVERR_GHL}""",
-
-    f"""real scenario from a roofing client.
-
-lead calls at 7pm. goes to voicemail. no callback until next morning.
-
-by then the lead already booked with someone else.
-
-the missed call text-back went live that week. fires in under 10 seconds. "hey sorry i missed you, what can i help with?"
-
-recovered 6 leads in the first month that would have been gone.
-
-what does a missed call cost you? genuinely asking.
+Just fixed what happens after the lead comes in.
 
 {FIVERR_GHL}""",
 
-    f"""11:47pm. someone fills out an HVAC form.
+    f"""Real scenario from a roofing client I worked with last quarter.
 
-11:47:52 automated SMS goes out.
+Lead called at 7pm. Went to voicemail. No callback until the next morning.
 
-11:51 they reply "tomorrow morning works."
+By then they had already booked with someone else.
 
-calendar invite sent. owner gets notified. done.
+We set up a missed call text-back that fires in under 10 seconds. "Hey, sorry I missed you. What can I help with?"
 
-nobody touched this. nobody was awake. nobody had to do anything.
+Recovered 6 leads in the first month that would have walked.
 
-that's what we set up. {FIVERR_GHL}""",
-
-    f"""paying $297/month for GHL with zero automations running is like buying a truck and leaving it in the garage.
-
-i see this constantly.
-
-no workflows. no follow up sequences. leads coming in and getting responded to 6 hours later by a human who forgot.
-
-a properly set up GHL replaces a receptionist, a follow up VA, and a booking coordinator.
-
-if you're on GHL and still doing it manually, something's wrong with the build.
+What does a missed call actually cost you? I'm genuinely curious.
 
 {FIVERR_GHL}""",
 
-    f"""honest question for any service business owner reading this:
+    f"""11:47pm. Someone fills out an HVAC form.
 
-what actually happens when someone fills out your contact form at 10pm?
+11:47:52. Automated SMS goes out.
 
-if the answer is "we get to it in the morning" you are losing a percentage of every lead you pay for.
+11:51. They reply: "Tomorrow morning works."
 
-the window is 5 minutes. after that the conversion rate tanks.
+Calendar invite sent. Owner gets notified. Done.
 
-not trying to sell you anything right now. just a real question worth sitting with.
+Nobody touched this. Nobody was awake. The system handled it start to finish.
+
+That's what we build. {FIVERR_GHL}""",
+
+    f"""Paying $297/month for GHL with zero automations running is like buying a truck and leaving it in the garage.
+
+I see this constantly.
+
+No workflows. No follow-up sequences. Leads coming in and sitting for 6 hours until someone remembers to call back.
+
+A properly built GHL can replace a receptionist, a follow-up VA, and a booking coordinator.
+
+If you're on GHL and still doing it manually, something is off with the setup.
 
 {FIVERR_GHL}""",
 
-    f"""most owners i talk to think they have a lead problem.
+    f"""Honest question for any service business owner reading this:
 
-they don't. they have a speed problem.
+What actually happens when someone fills out your contact form at 10pm?
 
-same leads, competitor responds in 45 seconds vs your team responding in 4 hours. competitor wins.
+If the answer is "we get to it in the morning," you're losing a percentage of every lead you're paying for.
 
-the fix isn't hiring. it's automating the first 3 to 5 touches so no human has to be involved until the lead is actually warm.
+The window is 5 minutes. After that, conversion drops fast.
 
-drop your average response time in the comments. curious where people are at.
+Not trying to sell you anything right now. Just a real question worth sitting with.
+
+{FIVERR_GHL}""",
+
+    f"""Most owners I talk to think they have a lead problem.
+
+They don't. They have a speed problem.
+
+Same leads. Competitor responds in 45 seconds. Your team responds in 4 hours. Competitor wins.
+
+The fix isn't hiring more people. It's automating the first 3 to 5 touches so no one has to be involved until the lead is actually warm.
+
+Drop your average response time in the comments. Curious where people are at.
 
 {FIVERR_GHL}""",
 ]
 
 AI_SERVICES_POSTS = [
-    f"""dental office. 22 missed calls a week.
+    f"""Dental office. 22 missed calls a week.
 
-they knew the number because they checked. they didn't know the revenue number because they never did the math.
+They tracked the number. They never did the math on the revenue.
 
-new patient avg value: $1,400. 30% of those calls would have converted. that's $9,240 a week going to voicemail.
+New patient average value: $1,400. If 30% of those calls would have converted, that's $9,240 a week going to voicemail.
 
-put an AI voice agent on their inbound line. answers every call, qualifies in 90 seconds, books straight to the calendar.
+We put an AI voice agent on their inbound line. Answers every call, qualifies in 90 seconds, books straight to the calendar.
 
-week one: 14 bookings that would have been missed.
+Week one: 14 bookings that would have been missed.
 
-the math isn't complicated. {FIVERR_VOICE}""",
+The math isn't complicated. {FIVERR_VOICE}""",
 
-    f"""the HVAC company answering calls at 2am with an AI agent is booking jobs while the competitor sleeps.
+    f"""The HVAC company answering calls at 2am with an AI agent is booking jobs while the competition sleeps.
 
-the contractor with 14-day automated follow up is closing leads on day 9 that the other guy gave up on day 2.
+The contractor with a 14-day automated follow-up is closing leads on day 9 that the other guy gave up on day 2.
 
-this isn't a prediction. it's already happening. in every market.
+This isn't a prediction. It's already happening in every market right now.
 
-the businesses that move on this in the next 6 months are going to look very different from the ones that wait.
-
-{FIVERR_LEAD}""",
-
-    f"""3 things i ask every business owner before we build anything:
-
-what happens the second someone fills out your form?
-how many times does your team follow up before they stop?
-when did you last call a lead back in under 5 minutes?
-
-the answers tell me exactly where the revenue is leaking.
-
-9 times out of 10 it's not the leads. it's what happens after.
-
-what does your follow up look like right now? be real in the comments.
+The businesses that move on this in the next 6 months are going to look very different from the ones that wait.
 
 {FIVERR_LEAD}""",
 
-    f"""there's a version of your business where leads never sit cold.
+    f"""Three things I ask every business owner before we build anything:
 
-where every inquiry gets a response before a minute passes.
-where follow up runs for 30 days without your team lifting a finger.
-where your calendar fills itself.
+What happens the second someone fills out your form?
+How many times does your team follow up before they stop?
+When did you last call a lead back in under 5 minutes?
 
-none of that requires more staff. just a different setup.
+The answers tell me exactly where the revenue is leaking.
 
-we build that in 5 days. {FIVERR_GHL}""",
+Nine times out of 10, it's not the leads. It's what happens after.
 
-    f"""the businesses that scale over the next few years won't necessarily be the biggest.
+What does your follow-up look like right now? Be honest in the comments.
 
-they'll be the ones running lean with the right systems underneath.
+{FIVERR_LEAD}""",
 
-one person with a properly built CRM and automation stack outperforms a 5 person team on spreadsheets.
+    f"""There's a version of your business where leads never sit cold.
 
-we build those systems. HVAC. roofing. dental. contractors. HOA.
+Where every inquiry gets a response in under a minute.
+Where follow-up runs for 30 days without your team lifting a finger.
+Where your calendar fills itself.
 
-if you want to see what it looks like for your operation: {FIVERR_LEAD}""",
+None of that requires more staff. Just a different setup.
+
+We build that in 5 days. {FIVERR_GHL}""",
+
+    f"""The businesses that scale over the next few years won't necessarily be the biggest.
+
+They'll be the ones running lean with the right systems underneath.
+
+One person with a properly built CRM and automation stack can outperform a 5-person team running on spreadsheets.
+
+We build those systems for HVAC, roofing, dental, contractors, and HOA companies.
+
+If you want to see what it looks like for your operation: {FIVERR_LEAD}""",
 ]
 
 EDGE_ENGINE_POSTS = [
