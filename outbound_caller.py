@@ -115,6 +115,10 @@ def fire_call(phone: str, name: str, company: str, niche: str) -> bool:
 
 
 def main(max_calls: int = 5):
+    if os.getenv("CALLS_PAUSED", "").lower() in ("1", "true", "yes"):
+        print("[PAUSED] Outbound calls paused via CALLS_PAUSED env var. Set to false to resume.")
+        sys.exit(0)
+
     if not VAPI_KEY:
         print("[ERROR] VAPI_PRIVATE_KEY not set")
         sys.exit(1)
