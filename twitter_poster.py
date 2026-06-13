@@ -50,43 +50,42 @@ WHOP_LINK    = os.getenv("WHOP_INDICATORS_LINK", "https://horizons56.gumroad.com
 
 
 SIGNALS_POSTS = [
-    f"""Congress bought $87M in defense stocks 3 weeks before the contract announcement.
+    f"""Congress bought $87M in defense stocks 3 weeks before the contract dropped.
 
-That's not coincidence.
+45 days to report. Volume pattern shows up in week 1.
 
-They have 45 days to report. The volume pattern shows up in week 1.
+Most traders see the move after it's already over.
 
-Most traders never see it coming. We track every disclosure as it drops.
-
-{SIGNALS_LINK}""",
-
-    f"""Unpopular trading truth:
-
-Your entry matters less than your position size.
-
-97% of blown accounts die from overleveraging a losing trade, not from a bad pick.
-
-We built a Kelly Criterion calculator that tells you exactly how many shares to hold based on your real edge. Not a guess.
+What ticker are you watching this week?
 
 {SIGNALS_LINK}""",
 
-    f"""I got tired of checking 30 tickers every morning before the open.
+    f"""Unpopular truth: your entry matters less than your position size.
 
-So I built a scoring system.
+97% of blown accounts died from overleveraging a loss. Not a bad pick.
 
-RSI + volume anomaly + EMA cross = one number, 0 to 100.
+Kelly math sizes each trade to your actual edge.
 
-70 or above, I look closer. Below 70, I skip it.
+Sizing by math or feeling?
 
-Simpler. Faster. More consistent.
+{SIGNALS_LINK}""",
+
+    f"""I got tired of checking 30 tickers before the open.
+
+Built a scoring system. RSI + volume anomaly + EMA cross = 0 to 100.
+
+Score 70 or above I look closer. Below 70 I skip it.
+
+How many tickers are you scanning each morning?
 
 {SIGNALS_LINK}""",
 
     f"""NVDA showed a 2.3x volume anomaly 6 hours before the 8% move.
 
-Volume tells you something is happening before price confirms it.
+Volume tells you what's about to happen.
+Price tells you what already happened.
 
-Most retail traders see the move after it's already over.
+Most retail traders watch the wrong thing.
 
 {SIGNALS_LINK}""",
 
@@ -94,33 +93,30 @@ Most retail traders see the move after it's already over.
 
 Almost nobody has a position sizing strategy.
 
-That's why the same person can nail 7 trades in a row and still blow their account on trade 8.
+That's why someone nails 7 trades in a row and blows their account on trade 8.
 
-Kelly Criterion fixes that. It sizes each position based on your actual win rate and edge.
+What's your position sizing rule?
 
 {SIGNALS_LINK}""",
 
     f"""The market doesn't care about your analysis.
 
-It cares about order flow, institutional positioning, and congressional insider timing.
+It cares about order flow, institutional positioning, and congressional timing.
 
 Three things most retail traders have zero visibility into.
 
-We built alerts for all three. Daily. Before the open.
+Which one do you actually track?
 
 {SIGNALS_LINK}""",
 
-    f"""Here's what a profitable trading morning looks like:
+    f"""6:45am. Signal sheet in your inbox.
 
-6:45am: Signal sheet hits inbox
-- 3 setups scored 70+
-- 1 congressional flag active
-- 1 crypto volume alert
+3 setups scored 70+. 1 congressional flag. 1 crypto alert.
 
-7:30am: Position sized. Orders placed.
-8am: Market opens. No scrambling.
+7:30am. Positions sized. Orders placed.
+8am. Market opens. No scrambling.
 
-That's the system.
+What does your pre-market routine look like?
 
 {SIGNALS_LINK}""",
 
@@ -128,77 +124,22 @@ That's the system.
 
 Institutional traders win because they position ahead of the move.
 
-Congressional disclosures, volume anomalies, and momentum scoring are the three signals that let you stop reacting and start positioning.
+Congressional disclosures + volume anomalies + momentum scoring = stop reacting.
 
-{SIGNALS_LINK}""",
-
-    f"""Stop asking "what should I buy?"
-
-Start asking "what's the asymmetric setup right now?"
-
-A setup with a 2.3x volume anomaly + RSI building in the 50-65 zone + a congressional disclosure in the last 3 weeks is not random.
-
-That's a pattern worth tracking.
-
-{SIGNALS_LINK}""",
-
-    f"""The difference between a trader who breaks even and one who compounds:
-
-Not stock picks.
-Not secret indicators.
-
-Consistent position sizing on high-probability setups.
-
-That's it. That's the whole thing.
-
-{SIGNALS_LINK}""",
-
-    f"""Most retail traders watch price.
-
-We watch volume, congressional disclosures, and momentum scoring simultaneously.
-
-Price is what already happened.
-
-Volume is what's about to happen.
-
-{SIGNALS_LINK}""",
-
-    f"""A congressional disclosure filed on a Monday.
-
-Volume anomaly visible by Thursday.
-
-Public retail traders see it on the following Monday after the news cycle catches up.
-
-By then the move is over.
-
-We track the disclosure window so you're positioned before the crowd.
+Are you tracking any of these three?
 
 {SIGNALS_LINK}""",
 
     f"""The math most traders ignore:
 
-If you risk 5% of your account on every trade:
-- 5 losers in a row = account down 22.6%
-- 10 losers in a row = account down 40%
+Risk 5% per trade:
+- 5 losers in a row = down 22.6%
+- 10 losers = down 40%
 
-If you use Kelly and your edge is real:
+Use Kelly with a real edge:
 - Worst 10-trade stretch = down 8-12%
-- You survive. You compound.
 
-Position sizing is the edge.
-
-{SIGNALS_LINK}""",
-
-    f"""6:45am signal sheet in your inbox.
-
-Here's what's in it:
-
-1. Top 3 scored setups (0-100 momentum score)
-2. Active congressional disclosures with volume flag
-3. Crypto momentum score
-4. 1 note on macro conditions
-
-Under 5 minutes to read. Clear on what to do.
+Position sizing is the edge. Not the picks.
 
 {SIGNALS_LINK}""",
 
@@ -206,11 +147,34 @@ Under 5 minutes to read. Clear on what to do.
 
 The S&P 500 averages 10%.
 
-Most retail traders underperform doing nothing would have done.
+Most retail traders underperform doing nothing.
 
-The difference is usually impulsive entries, poor position sizing, and no signal filter.
+Impulsive entries. No position sizing rule. No signal filter.
 
-We fix all three.
+Which one is costing you the most?
+
+{SIGNALS_LINK}""",
+
+    f"""A congressional disclosure filed Monday.
+
+Volume anomaly visible by Thursday.
+
+Retail traders see it the following Monday after the news cycle.
+
+By then the move is over.
+
+Are you tracking the 45-day disclosure window?
+
+{SIGNALS_LINK}""",
+
+    f"""Most retail traders watch price.
+
+We watch volume, congressional disclosures, and momentum scoring.
+
+Price is what already happened.
+Volume is what's about to happen.
+
+Which do you prioritize?
 
 {SIGNALS_LINK}""",
 ]
@@ -222,271 +186,271 @@ We use 3.
 
 Edge Scanner + Kelly Sizer + Congressional Tracker.
 
-All 3 on TradingView. $79 one-time.
+All 3 on TradingView. $79 once.
+
+What's the indicator you can't trade without?
 
 {WHOP_LINK}""",
-    f"""RSI alone is noise.
-Volume alone is noise.
-EMA alone is noise.
+
+    f"""RSI alone is noise. Volume alone is noise. EMA alone is noise.
 
 All 3 at the same time = signal.
 
-The GHE Edge Scanner scores this 0-100 on every bar.
+The GHE Edge Scanner scores this 0-100 on every bar automatically.
+
+What's your go-to setup?
 
 {WHOP_LINK}""",
+
     f"""Congress disclosed $315M in trades last year.
 
-Most traders never see it coming.
+Volume pattern shows on the chart BEFORE the disclosure goes public.
 
-We built an indicator that shows the volume patterns before disclosure.
+We built an indicator that flags it automatically.
+
+Are you tracking congressional flow?
 
 {WHOP_LINK}""",
+
     f"""The number 1 reason traders blow up:
 
-Not bad entries.
-Bad position sizing.
+Not bad entries. Bad position sizing.
 
-Kelly Criterion with Quarter-Kelly fractional sizing.
-Built into TradingView.
+Kelly Criterion with Quarter-Kelly fractional sizing. Built into TradingView.
+
+Do you have a written position sizing rule?
 
 {WHOP_LINK}""",
-    f"""High-confidence signal:
+
+    f"""High-confidence signal checklist:
 
 RSI 45-70
 Volume 2x avg
 EMA crossover
 
-All 3 on the same bar. Momentum score 70+.
+All 3 on the same bar. Score 70+.
 
-The GHE Edge Scanner marks these automatically.
+GHE Edge Scanner marks these automatically.
+
+Missing any of the 3?
 
 {WHOP_LINK}""",
+
     f"""3 TradingView indicators. One decision framework.
 
 1. When to enter (Edge Scanner)
 2. How much to risk (Kelly Sizer)
-3. What Congress is doing (Congressional Tracker)
+3. Congressional activity (Tracker)
 
-$79 one-time
-{WHOP_LINK}""",
-    f"""Position sizing question I get constantly:
-
-\"How many shares should I buy?\"
-
-It's not a guess. It's math.
-
-Kelly Criterion calculates it based on your actual edge.
-
-{WHOP_LINK}""",
-    f"""Alert fatigue kills accounts.
-
-200 signals a day means you act on garbage.
-
-3-5 high-confidence setups means you act on edges.
-
-GHE Edge Scanner scores 0-100. Only trade 70+.
-
-{WHOP_LINK}""",
-    f"""Works on stocks. Works on crypto. Works on forex.
-
-Anything tradeable on TradingView.
-
-GHE Indicator Suite - Pine Script v5, real-time scoring.
-
-{WHOP_LINK}""",
-    f"""Insider volume shows up on the chart before the disclosure goes public.
-
-Congress has 45 days to report.
-
-The pattern appears in week 1.
-
-We built an indicator that flags it.
-
-{WHOP_LINK}""",
-
-    f"""TradingView lets you build and share custom indicators.
-
-We built 3 that do what most retail traders do manually in 2 hours every morning.
-
-Done in 3 minutes. Automatically. On every ticker you watch.
-
-$79. One time.
+$79 once. What's your current setup cost?
 
 {WHOP_LINK}""",
 
     f"""Most indicators repaint.
 
-The GHE Edge Scanner does not.
+The GHE Edge Scanner doesn't. Scores lock on bar close. No hindsight.
 
-Scores are locked on bar close. No hindsight.
+That's the difference between a signal system and a fantasy.
 
-That matters a lot more than most traders realize.
-
-{WHOP_LINK}""",
-
-    f"""The 3 questions before every trade:
-
-1. What is the momentum score? (Edge Scanner)
-2. How much should I risk? (Kelly Sizer)
-3. Is there congressional activity in this ticker? (Congressional Tracker)
-
-All 3 answered automatically. On TradingView. $79 once.
+Does your indicator repaint?
 
 {WHOP_LINK}""",
 
-    f"""Edge Scanner score over 70 this week:
+    f"""Alert fatigue kills accounts.
+
+200 signals a day = you act on garbage.
+3-5 high-confidence setups = you act on edges.
+
+GHE Edge Scanner scores 0-100. Only look at 70+.
+
+How many alerts are you filtering daily?
+
+{WHOP_LINK}""",
+
+    f"""Insider volume shows up on the chart before disclosure goes public.
+
+Congress has 45 days to report. Pattern appears in week 1.
+
+We built an indicator that flags it.
+
+Are you using it?
+
+{WHOP_LINK}""",
+
+    f"""Works on stocks. Works on crypto. Works on forex.
+
+Anything tradeable on TradingView.
+
+3 indicators. Pine Script v5. Real-time scoring. $79 once.
+
+What platform are you on?
+
+{WHOP_LINK}""",
+
+    f"""Edge Scanner scores this week above 70:
 
 NVDA: 78
 MSFT: 74
 COIN: 81
 ETH: 76
 
-4 setups. All above threshold. Identified pre-move.
+4 setups. All above threshold. Pre-move identification.
 
-The indicator does the filtering automatically.
+How many setups did you take this week?
+
+{WHOP_LINK}""",
+
+    f"""The 3 questions before every trade:
+
+1. What's the momentum score? (Edge Scanner)
+2. How much do I risk? (Kelly Sizer)
+3. Congressional activity in this ticker? (Tracker)
+
+All 3 answered automatically. $79 once.
 
 {WHOP_LINK}""",
 ]
 
 BUSINESS_TIP_POSTS = [
-    """Most small businesses lose 30% of inbound leads to voicemail.
+    """Most local service businesses lose 30% of inbound leads to voicemail.
 
-The customer doesn't leave a message.
+The customer doesn't leave a message. They call the next Google result.
 
-They call the next result on Google.
+Not a lead problem. A response time problem.
 
-#SmallBusiness #AI""",
-    """Your Google Business Profile is either making you money or losing you money.
+What's your missed call rate?""",
 
-There's no neutral.
+    """SMS gets a 98% open rate. Email gets 20%.
 
-#LocalSEO #SmallBusiness""",
-    """SMS gets a 98% open rate.
-Email gets 20%.
+If you're a local business and you're not texting within 5 minutes of an inquiry, you're losing to whoever does.
 
-If you're a local business and you're not texting your customers, you're leaving money behind.
+What's your average response time?""",
 
-#marketing #smallbusiness""",
     """Dead leads aren't dead.
 
 They're waiting for the right message at the right time.
 
-5-15% convert if you follow up correctly.
+5-15% convert when followed up correctly. Most businesses stop after 1 touch.
 
-#sales #businessgrowth""",
-    """AI doesn't replace your front desk.
+How many times do you follow up before stopping?""",
 
-It answers when your front desk can't.
-
-Every missed call after 5pm is revenue you didn't capture.
-
-#AI #automation #SmallBusiness""",
-    """The businesses winning on Google Maps right now all do one thing.
-
-They post to their Google Business Profile every single week.
-
-Most competitors post zero times.
-
-#LocalSEO""",
-    """Most contractors lose their best leads in the gap between the estimate and the follow-up.
-
-That's a system problem. Not a sales problem.
-
-#contractors #businesstips""",
-    """You built a great service.
-
-Then you trusted word of mouth to scale it.
-
-That's the ceiling most small businesses hit.
-
-#entrepreneur #smallbusiness""",
     """The first business to respond to an inbound lead wins 78% of the time.
 
 Not the best price. Not the best reviews.
 
 The fastest response.
 
-#sales #automation""",
+What's your average time from inquiry to first contact?""",
+
     """What's actually working in 2026:
 
 AI answering calls 24/7
-Automated follow-up sequences
+Automated follow-up for 30 days
 Systems that run while you sleep
 
-What's not: hoping referrals keep coming.
+What's not: hoping referrals keep coming in.
 
-#SmallBusiness""",
-    """One closed deal from automation pays for a year of the system.
+What's your biggest growth bottleneck?""",
+
+    """HVAC company. $4k/month on ads. 48 leads. Closing 9.
+
+Not a lead problem. A follow-up problem.
+
+Instant SMS on every form. Missed call text-back. 7 touches over 2 weeks.
+
+Same budget. 23 closes the next month.
+
+Does your follow-up run automatically?""",
+
+    """One closed deal from automation pays for a full year of the system.
 
 Most business owners wait until they're desperate to build it.
 
-The ones winning built it first.
+The ones growing built it before they needed it.
 
-#businessgrowth""",
+What's the thing in your business that should already be automated?""",
+
+    """AI doesn't replace your front desk.
+
+It answers when your front desk can't.
+
+Every missed call after 5pm is revenue you didn't capture.
+
+How much is one missed call worth to your business?""",
+
+    """Most contractors lose their best leads in the gap between the estimate and the follow-up.
+
+The homeowner makes a decision within 5 days. Most contractors follow up on day 12.
+
+That's a system problem. Not a sales problem.
+
+What's your estimate-to-follow-up time?""",
+
+    """Your Google Business Profile is either making you money or losing you money.
+
+No neutral.
+
+Businesses posting weekly to GBP are showing up above competitors who post zero times.
+
+When did you last post to yours?""",
+
+    """The window to close an inbound lead is 5 minutes.
+
+After that, conversion drops by 80%.
+
+Most local businesses respond in 4-6 hours.
+
+That gap is exactly where your competitors are stealing your customers.""",
 ]
 
 ENGAGEMENT_POSTS = [
-    """Traders: what's the one indicator you refuse to trade without?
+    """Traders: what's the one setup you refuse to trade without?
 
-#trading #TradingView #stocks""",
-    """Real question for traders:
+Be specific.""",
 
-Do you have a written position sizing rule or do you decide in the moment?
+    """Do you have a written position sizing rule or do you size in the moment?
 
-#trading #riskmanagement""",
-    """Serious question for traders: what's your rule for cutting a losing position?
+If you wing it, your account isn't broken. Your system is.""",
 
-Most people don't have one. That's the problem.
+    """Serious question: what's your rule for cutting a losing trade?
 
-#trading #riskmanagement #stocks""",
-    """Traders: what's your process when a trade is up 15% — do you have a rule for taking profit or do you wing it?
+Most people don't have one written down. That's usually the problem.""",
 
-#trading #stocks #options""",
-    """Do you trade pre-market or wait for the open?
+    """Trade is up 15%. Do you have a rule for taking profit or do you make it up as you go?
 
-Why?
+Be honest.""",
 
-#trading #stocks #daytrading""",
+    """Pre-market or wait for the open?
+
+Why?""",
+
     """What's your max loss per day before you stop trading?
 
-Most people don't have a number. The ones who do last longer.
+Most people don't have a hard number. The ones who do stay in the game longer.""",
 
-#trading #riskmanagement""",
-    """Congressional stock disclosures — do you actually track them or ignore them?
+    """Congressional stock disclosures. Do you track them or ignore them?
 
-Because the volume pattern shows up before the disclosure goes public.
+The volume pattern shows up before the disclosure goes public. Most retail traders miss the entire window.""",
 
-#stocks #trading #congress""",
-    """What's your biggest trading mistake in the last 6 months?
+    """What's the biggest trading mistake you've made in the last 6 months?
 
-Be honest. We all have one.
+Be honest. We all have one.""",
 
-#trading #stocks #options""",
-    """RSI, MACD, or volume — if you could only watch one, which one?
+    """RSI, MACD, or volume. If you could only watch one, which is it and why?""",
 
-#TradingView #trading #technicalanalysis""",
     """Crypto or stocks?
 
-Which one are you more consistent with and why.
+Which one are you actually consistent with and why.""",
 
-#crypto #stocks #trading""",
-    """What's the cleanest setup you've ever taken?
+    """What's the cleanest trade setup you've ever taken? Describe what lined up.""",
 
-Describe it.
+    """Do you backtest or just trade live and learn?""",
 
-#trading #stocks #technicalanalysis""",
-    """Do you backtest your strategies or just trade live and learn?
+    """Biggest myth in trading I've seen blown up: you need to be glued to the screen to make money.
 
-#trading #backtesting #strategy""",
-    """Biggest myth in trading:
+The best traders I know place orders before 8am and walk away.
 
-"You need to be glued to the screen to make money."
-
-The best traders I know place their orders before 8am and walk away.
-
-What's a trading myth you've seen blown up?
-
-#trading #stocks #mindset""",
+What trading myth have you seen disproven?""",
 ]
 
 RESULTS_POSTS = [
@@ -554,13 +518,13 @@ These hit your inbox by 6:45am ET.
 
 {SIGNALS_LINK}""",
 
-    f"""The market gives you 3-5 clean setups a week if you know where to look.
+    f"""3-5 clean setups per week if you know where to look.
 
 Most retail traders take 20-30 trades chasing noise.
 
-Our system scores everything 0-100. We only show you the 70+.
+System scores 0-100. We only show the 70+.
 
-This week: 4 setups. 4 scored 70+. Average move: +8.2%.
+This week: 4 setups. All scored 70+. Avg move: +8.2%.
 
 {SIGNALS_LINK}""",
 
@@ -580,97 +544,74 @@ That's it.
 ]
 
 CASE_STUDY_POSTS = [
-    """A roofing company was answering maybe 60% of their inbound calls.
+    """Roofing company. Answering 60% of inbound calls. The other 40% moved to the next Google result.
 
-The other 40% left no voicemail. Just moved on to the next Google result.
-
-We set up automated missed-call text-back. Same day.
+Set up automated missed-call text-back. Same day.
 
 3 months later: 94% response rate. 3 new jobs per week from leads they used to lose.
 
-#roofing #contractor #automation""",
+What's your current answer rate?""",
 
-    """HOA management firm. 3 employees. Managing 12 communities.
-
-Violation tracking was done in a shared spreadsheet.
+    """HOA management firm. 3 employees. 12 communities. Violation tracking in a shared spreadsheet.
 
 Things got lost. Homeowners complained. Board meetings got ugly.
 
-We built them an automated tracking system. 6 days to implement.
+We built automated tracking from report to resolution. 6 days to implement.
 
-Violations are now tracked from report to resolution without anyone touching a spreadsheet.
+No more lost violations. No more spreadsheet.""",
 
-#HOA #propertymanagement #automation""",
+    """HVAC company. Owner spending 2 hours a day calling back leads.
 
-    """HVAC company. Peak season. Owner was spending 2 hours a day calling back leads.
-
-After we set up the system:
-
-- Every inbound lead gets a text response in under 90 seconds
-- Estimates followed up automatically until answered
+After the system went live:
+- Every lead gets text response in under 90 seconds
+- Estimates followed up automatically
 - Owner spends 0 hours on lead chasing
 
-First month: 4 additional booked jobs.
+First month: 4 additional booked jobs.""",
 
-#HVAC #smallbusiness #AI""",
+    """Dental practice. 40% of new patient calls came in after hours. All 40% went to voicemail. Most didn't leave a message.
 
-    """Dental practice. 40% of new patient calls came in after hours.
+Built an after-hours system that captures name, callback number, and reason for calling.
 
-All 40% went to voicemail.
+Front desk arrives with a sorted list every morning.""",
 
-Most didn't leave a message.
+    """Contractor. 12-day average estimate-to-follow-up time.
 
-We built an after-hours response system that captures name, callback number, and reason for calling.
+Homeowners make a decision in 5 days.
 
-Front desk arrives with a sorted list every morning. No lost patients.
+He was following up 7 days too late. Every time.
 
-#dental #medtech #automation""",
+Automated follow-up at day 3, 5, and 8 after every estimate.
 
-    """Contractor had a 12-day average estimate-to-follow-up time.
+Close rate: 22% to 39% in 60 days.""",
 
-In contracting, most homeowners make a decision within 5 days.
-
-He was following up 7 days too late, every time.
-
-We built automated follow-up at day 3, day 5, and day 8 after every estimate.
-
-Close rate went from 22% to 39% in 60 days.
-
-#contractor #construction #sales""",
-
-    """Here's what $2,500 in business automation actually looks like:
+    """What $2,500 in automation actually looks like:
 
 Before:
-- 1 person manually chasing 40 leads/week
+- 1 person chasing 40 leads manually
 - 60% follow-up rate
 - 18% close rate
 
 After:
-- System handles all follow-up automatically
+- System handles all follow-up
 - 100% follow-up rate
 - 31% close rate
 
-That's math, not a pitch.
+That's math, not a pitch.""",
 
-#smallbusiness #automation #AI""",
+    """Landscaping company. Lost 30% of recurring clients between seasons because nobody reached out.
 
-    """Landscaping company. Seasonal business. Lost 30% of recurring clients between seasons because nobody reached out.
+Built a win-back sequence. Fires automatically 45 days before their usual start date.
 
-We built a win-back sequence that goes out automatically 45 days before their usual start date.
+Last season: 76% of lapsed clients rebooked. Owner made zero calls.""",
 
-Last season: 76% of lapsed clients rebooked. No calls made by the owner.
+    """Plumbing company. Missed calls during peak hours meant lost jobs.
 
-#landscaping #smallbusiness #entrepreneur""",
+Emergency plumbing: customer calls 2-3 companies. Books whoever responds first.
 
-    """Plumbing company. Peak hours meant missed calls. Missed calls meant lost jobs.
+Set up immediate SMS acknowledgment + calendar booking for all inbound calls.
 
-Emergency plumbing: the customer calls 2-3 companies and books whoever responds.
-
-We set up immediate SMS acknowledgment + calendar booking for all inbound calls.
-
-Missed call rate: down 90%.
-
-#plumbing #contractor #automation""",
+Missed call rate: down 90%.""",
 ]
 
 # Portfolio showcase posts — paired with real screenshots from indicators/ folder
@@ -1055,7 +996,7 @@ def post_tweet(text: str, media_id: str | None = None) -> bool:
     try:
         from requests_oauthlib import OAuth1
         oauth = OAuth1(TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET)
-        payload: dict = {"text": text[:280]}
+        payload: dict = {"text": text}
         if media_id:
             payload["media"] = {"media_ids": [media_id]}
         r = requests.post(
