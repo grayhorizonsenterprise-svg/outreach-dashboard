@@ -3782,27 +3782,26 @@ h1{{color:#38bdf8;}}h2{{color:#94a3b8;font-size:16px;}}
 
 
 def _send_sms_textbelt(to_phone: str, message: str) -> bool:
-    """Send SMS via Twilio (primary) with Textbelt fallback."""
-    twilio_sid   = os.getenv("TWILIO_ACCOUNT_SID", "").strip()
-    twilio_token = os.getenv("TWILIO_AUTH_TOKEN", "").strip()
-    twilio_from  = os.getenv("TWILIO_FROM_NUMBER", "").strip()
+    """Send SMS via Telnyx."""
+    api_key   = os.getenv("TELNYX_API_KEY", "").strip()
+    from_num  = os.getenv("TELNYX_PHONE_NUMBER", "").strip()
 
-    if not (twilio_sid and twilio_token and twilio_from):
-        print("[SMS] Twilio not configured — set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER")
+    if not (api_key and from_num):
+        print("[SMS] Telnyx not configured — set TELNYX_API_KEY and TELNYX_PHONE_NUMBER in Railway")
         return False
     try:
         r = requests.post(
-            f"https://api.twilio.com/2010-04-01/Accounts/{twilio_sid}/Messages.json",
-            auth=(twilio_sid, twilio_token),
-            data={"From": twilio_from, "To": to_phone, "Body": message},
+            "https://api.telnyx.com/v2/messages",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={"from": from_num, "to": to_phone, "text": message},
             timeout=10,
         )
         ok = r.status_code in (200, 201)
-        sid = r.json().get("sid", "") if ok else ""
-        print(f"[SMS] Twilio {'OK' if ok else 'FAILED'} -> {to_phone} | {sid or r.text[:80]}")
+        msg_id = r.json().get("data", {}).get("id", "") if ok else ""
+        print(f"[SMS] Telnyx {'OK' if ok else 'FAILED'} -> {to_phone} | {msg_id or r.text[:80]}")
         return ok
     except Exception as e:
-        print(f"[SMS] Twilio exception: {e}")
+        print(f"[SMS] Telnyx exception: {e}")
         return False
 
 
