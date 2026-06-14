@@ -90,6 +90,7 @@ def fire_call(phone: str, name: str, company: str, niche: str) -> bool:
                 "pain": pain,
                 "calendly": CALENDLY_URL,
             },
+            "serverUrl": WEBHOOK_URL,
         },
         "phoneNumberId": PHONE_NUMBER_ID,
         "customer": {
@@ -97,7 +98,6 @@ def fire_call(phone: str, name: str, company: str, niche: str) -> bool:
             "name": company or name or "Business Owner",
         },
         "maxDurationSeconds": 120,
-        "serverUrl": WEBHOOK_URL,
     }
     headers = {"Authorization": f"Bearer {VAPI_KEY}", "Content-Type": "application/json"}
     try:

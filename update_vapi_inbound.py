@@ -160,10 +160,10 @@ Q: Where are you located?
 A: We are based in California and serve businesses across the US. All work is done remotely so your location does not matter.
 
 Q: What is the next step to get started?
-A: The easiest first step is a free 15-minute call. We look at your business, show you exactly what the system looks like for your niche, and you can decide from there. What is the best email to send the booking link to?
+A: The easiest first step is a free 15-minute call. We look at your business, show you exactly what the system looks like for your niche, and you can decide from there. What is the best number to reach you?
 
 Q: When can I book a call?
-A: As soon as we finish this call I will have the booking link sent to your email and you can pick any time that works for you. What is the best email for you?
+A: As soon as we finish this call I will have the booking link texted to your number and you can pick any time that works for you. What is the best number for you?
 
 Q: Is the call really free?
 A: Yes, completely free. Fifteen minutes, no pitch, just a live demo of the system for your type of business.
@@ -176,15 +176,8 @@ CALL FLOW:
 3. Find out what type of business they run and what problem they have.
 4. Match it to the right service. Explain simply.
 5. If they mention a job, inspection, estimate, or photos: say "Our system will send you a personalized client onboarding link with a secure access ticket. You submit your project details and photos there so our team is already prepared before your call."
-6. Offer the free call. Ask for their email. Read it back in THREE separate parts with a pause between each:
-   - Part 1: everything before the @ sign
-   - Part 2: the domain name
-   - Part 3: the extension (.com, .net, etc.)
-   Say: "Let me read that back — the username is [part1] — the domain is [part2] — dot [part3]. Is every part correct?"
-   If they say no or correct any part, fix that part and read the full email back again before firing.
-   Only fire collect_contact AFTER they confirm all three parts are correct.
-7. The MOMENT all three parts are confirmed: call collect_contact immediately. Say: "Perfect. Sending that over now."
-8. Then ask: "And what is the best callback number for you?" If they give it, call collect_contact again with the phone number so the text fires too.
+6. Offer the free call. Ask: "What is the best number to reach you?" Get their phone number. Then call collect_contact immediately with name, phone, and business type. Say: "Perfect. You will get a text right now with your booking link."
+7. NEVER ask for email. NEVER ask them to spell anything. Phone number only. The system texts them a link automatically.
 9. Warm close: "You are all set. We will show you exactly what this looks like for your operation on the call."
 
 IMPORTANT: Fire collect_contact as soon as email is confirmed — do not wait for phone. If the call drops after email is given, the booking link is already in their inbox. Phone is a bonus that triggers the SMS follow-up.
@@ -217,11 +210,10 @@ def update_inbound(key: str):
                     "function": {
                         "name": "collect_contact",
                         "description": (
-                            "Call this THE MOMENT the caller confirms their email address. "
-                            "Do NOT wait for phone number — fire this immediately after email is confirmed. "
-                            "This sends the booking link email instantly while still on the call. "
-                            "Include phone if already given, leave blank if not yet. "
-                            "If phone is given later in the call, call this again with the phone number."
+                            "Call this THE MOMENT the caller gives their phone number. "
+                            "Required: name and phone. Do NOT collect email — leave it blank. "
+                            "The system automatically texts the caller a secure link to enter their email. "
+                            "Never ask for email by voice under any circumstances."
                         ),
                         "parameters": {
                             "type": "object",
@@ -231,7 +223,7 @@ def update_inbound(key: str):
                                 "phone":         {"type": "string", "description": "Caller callback number — include if given, leave blank if not yet"},
                                 "business_type": {"type": "string", "description": "Type of business they run, e.g. roofing, HVAC, dental"},
                             },
-                            "required": ["name", "email"],
+                            "required": ["name", "phone"],
                         },
                     },
                     "server": {"url": COLLECT_URL},
@@ -245,6 +237,15 @@ def update_inbound(key: str):
             "similarityBoost": 0.75,
             "style": 0.3,
             "useSpeakerBoost": True,
+            "fallbackPlan": {
+                "voices": [
+                    {
+                        "provider": "openai",
+                        "voiceId": "shimmer",
+                        "speed": 0.92,
+                    }
+                ]
+            },
         },
         "backgroundSound": "off",
         "firstMessage": FIRST_MESSAGE,

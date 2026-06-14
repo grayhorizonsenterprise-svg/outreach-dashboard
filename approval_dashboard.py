@@ -3782,27 +3782,59 @@ h1{{color:#38bdf8;}}h2{{color:#94a3b8;font-size:16px;}}
 
 
 def _send_sms_textbelt(to_phone: str, message: str) -> bool:
-    """Send SMS via Telnyx."""
-    api_key   = os.getenv("TELNYX_API_KEY", "").strip()
-    from_num  = os.getenv("TELNYX_PHONE_NUMBER", "").strip()
+    """Send SMS via carrier email gateways — free, no account needed.
+    Blasts all major US carriers simultaneously; the matching one delivers."""
+    import smtplib as _smtp
+    from email.mime.text import MIMEText as _MIMEText
 
-    if not (api_key and from_num):
-        print("[SMS] Telnyx not configured — set TELNYX_API_KEY and TELNYX_PHONE_NUMBER in Railway")
+    sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
+    sender  = os.getenv("SENDER_EMAIL", "").strip().lower()
+    if not (sg_key and sender):
+        print("[SMS] SENDGRID_API_KEY / SENDER_EMAIL not set")
         return False
+
+    digits = "".join(c for c in str(to_phone) if c.isdigit())
+    if digits.startswith("1") and len(digits) == 11:
+        digits = digits[1:]
+    if len(digits) != 10:
+        print(f"[SMS] Invalid phone: {to_phone}")
+        return False
+
+    carriers = [
+        "txt.att.net",
+        "vtext.com",
+        "tmomail.net",
+        "messaging.sprintpcs.com",
+        "sms.myboostmobile.com",
+        "sms.cricketwireless.net",
+        "mymetropcs.com",
+        "email.uscc.net",
+        "msg.fi.google.com",
+    ]
+
+    sent = 0
     try:
-        r = requests.post(
-            "https://api.telnyx.com/v2/messages",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={"from": from_num, "to": to_phone, "text": message},
-            timeout=10,
-        )
-        ok = r.status_code in (200, 201)
-        msg_id = r.json().get("data", {}).get("id", "") if ok else ""
-        print(f"[SMS] Telnyx {'OK' if ok else 'FAILED'} -> {to_phone} | {msg_id or r.text[:80]}")
-        return ok
+        server = _smtp.SMTP("smtp.sendgrid.net", 587, timeout=10)
+        server.starttls()
+        server.login("apikey", sg_key)
+        for carrier in carriers:
+            to_addr = f"{digits}@{carrier}"
+            msg = _MIMEText(message)
+            msg["From"] = sender
+            msg["To"]   = to_addr
+            msg["Subject"] = ""
+            try:
+                server.sendmail(gmail_user, [to_addr], msg.as_string())
+                sent += 1
+            except Exception:
+                pass
+        server.quit()
     except Exception as e:
-        print(f"[SMS] Telnyx exception: {e}")
+        print(f"[SMS] Gateway exception: {e}")
         return False
+
+    print(f"[SMS] Carrier blast -> {to_phone} | {sent}/{len(carriers)} gateways accepted")
+    return sent > 0
 
 
 @app.route('/confirm-email', methods=['GET', 'POST'])
@@ -4235,7 +4267,8 @@ def vapi_collect():
         # ── SMS to caller — one per tool_call_id to prevent Vapi retry duplicate sends ─
         if phone and tool_call_id not in _sms_sent_ids:
             _sms_sent_ids.add(tool_call_id)
-            sms = (f"GrayHorizons: Hi {name}, thanks for calling. Our team will follow up with your booking link shortly.")
+            sms = (f"Hi {name}, this is Gray Horizons Enterprise. Book your free 15-min demo here: "
+                   f"calendly.com/grayhorizonsenterprise/30min")
             sms_ok = _send_sms_textbelt(phone, sms)
             print(f"[VAPI COLLECT] SMS {'sent' if sms_ok else 'FAILED'} -> {phone}")
         elif phone:
