@@ -890,13 +890,32 @@ def _analyze_game(game: dict, sport: str) -> list[BetSignal]:
         print(f"  [REJECT] {game_str} — {intel['red_flags']}")
         return []
 
-    # ── Full scout ensemble (rest + efficiency + line movement + weather + Pythagorean)
+    # ── Full scout ensemble ───────────────────────────────────────────────────
     venue = game.get("venue", "")
-    scout_result = _scout.scout_game(
-        home=home, away=away, sport=sport_name, venue=venue,
-        home_odds=best_home[1], away_odds=best_away[1],
-        book_home_prob=home_true,
-    )
+    event_name = game.get("sport_title", sport)
+
+    if sport_name == "MMA":
+        # MMA has no team efficiency / Pythagorean model.
+        # Use dedicated MMA scout: book calibration + narrative/script + sharp money.
+        scout_result = _scout.mma_scout(
+            fighter1=home, fighter2=away,
+            odds1=best_home[1], odds2=best_away[1],
+            book_home_prob=home_true,
+            event_name=event_name,
+        )
+        _scout.log_mma_prediction(
+            fighter1=home, fighter2=away,
+            pick=scout_result.pick_team,
+            pick_pct=scout_result.pick_pct,
+            confidence=scout_result.confidence,
+            event=event_name,
+        )
+    else:
+        scout_result = _scout.scout_game(
+            home=home, away=away, sport=sport_name, venue=venue,
+            home_odds=best_home[1], away_odds=best_away[1],
+            book_home_prob=home_true,
+        )
     scout_home_p = scout_result.p_ensemble
     scout_away_p = 1.0 - scout_home_p
 

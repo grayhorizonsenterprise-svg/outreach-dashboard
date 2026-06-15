@@ -1,23 +1,22 @@
 """
-Congress Trade Tracker — QuiverQuant API (free tier)
+Congress Trade Tracker
+Primary: QuiverQuant API (free tier, QUIVERQUANT_KEY in .env)
+Fallback: House Stock Watcher public S3 dataset (no key, always free)
 
-Setup (one-time, 2 minutes):
-  1. Go to quiverquant.com/quiverapi → sign up (free)
-  2. Copy your API token
-  3. Add to .env: QUIVERQUANT_KEY=your_token_here
-
-QuiverQuant free tier: 100 requests/day — more than enough for daily scans.
-Covers ALL of Congress: House + Senate, including Nancy Pelosi.
+Tracks BUYS (bullish signal) and SELLS (dump/short signal separately).
 """
 
 import requests
 import pandas as pd
 import os
 from datetime import datetime, timedelta
-from collections import defaultdict
 
 QUIVER_KEY = os.getenv("QUIVERQUANT_KEY", "")
 BASE_URL   = "https://api.quiverquant.com/beta"
+
+# Free, no-auth endpoints maintained by opensecrets community projects
+HOUSE_DATA_URL  = "https://house-stock-watcher-data.s3-us-west-2.amazonaws.com/data/all_transactions.json"
+SENATE_DATA_URL = "https://senate-stock-watcher-data.s3-us-west-2.amazonaws.com/aggregate/all_transactions.json"
 
 HEADERS = lambda key: {
     "Accept":        "application/json",
@@ -60,63 +59,147 @@ def _quiver_get(endpoint: str) -> list:
         return []
 
 
+def _parse_house_data(lookback_days: int) -> tuple[list, list]:
+    """
+    Pull from House Stock Watcher free S3 endpoint — no key required.
+    Returns (buy_records, sell_records).
+    """
+    cutoff = datetime.now() - timedelta(days=lookback_days)
+    buy_records, sell_records = [], []
+    try:
+        r = requests.get(HOUSE_DATA_URL, timeout=20,
+                         headers={"User-Agent": "StockEngine/1.0"})
+        if r.status_code != 200:
+            return [], []
+        raw = r.json()
+        if not isinstance(raw, list):
+            return [], []
+        for t in raw:
+            ticker = str(t.get("ticker", "")).strip().upper()
+            if not ticker or ticker in ("N/A", "--") or len(ticker) > 5 or not ticker.isalpha():
+                continue
+            date_raw = t.get("transaction_date", t.get("disclosure_date", ""))
+            try:
+                tx_date = datetime.strptime(str(date_raw)[:10], "%Y-%m-%d")
+            except ValueError:
+                continue
+            if tx_date < cutoff:
+                continue
+
+            tx_type  = str(t.get("type", "")).lower()
+            member   = str(t.get("representative", "")).strip()
+            amount   = str(t.get("amount", ""))
+            size_pts = SIZE_SCORE.get(amount, 1)
+            days_ago  = (datetime.now() - tx_date).days
+            recency_w = max(0.1, 1.0 - (days_ago / lookback_days))
+            quality_w = 2.0 if any(h in member for h in HIGH_SIGNAL_MEMBERS) else 1.0
+            rec = {
+                "ticker": ticker, "member": member,
+                "date": tx_date.strftime("%Y-%m-%d"), "amount": amount,
+                "size_pts": size_pts, "recency_w": recency_w, "quality_w": quality_w,
+                "raw_score": size_pts * recency_w * quality_w,
+            }
+            if "purchase" in tx_type or "buy" in tx_type:
+                buy_records.append(rec)
+            elif "sale" in tx_type or "sell" in tx_type:
+                sell_records.append(rec)
+        print(f"  [Congress] House Watcher: {len(buy_records)} buys, {len(sell_records)} sells ({lookback_days}d)")
+    except Exception as e:
+        print(f"  [!] House Stock Watcher fetch failed: {e}")
+    return buy_records, sell_records
+
+
 def get_congress_signals(lookback_days: int = 90) -> pd.DataFrame:
     """
-    Returns DataFrame of tickers ranked by congress buy activity.
-    Score = weighted: recency + size + member quality.
+    Returns DataFrame of tickers ranked by congress BUY activity (bullish signal).
+    Tries QuiverQuant (if key set), then falls back to free House Stock Watcher data.
+    NEVER uses hardcoded demo data — that causes stale, fake scores.
     """
-    if not QUIVER_KEY:
-        print("  [!] No QUIVERQUANT_KEY — add it to .env for congress data.")
-        print("      Get free key at: quiverquant.com/quiverapi")
-        return _demo_signals()
+    buy_records: list = []
 
-    cutoff = datetime.now() - timedelta(days=lookback_days)
-    raw    = _quiver_get("live/congresstrading")
+    if QUIVER_KEY:
+        cutoff = datetime.now() - timedelta(days=lookback_days)
+        raw    = _quiver_get("live/congresstrading")
+        for t in raw:
+            tx_type = str(t.get("Transaction", "")).lower()
+            if "purchase" not in tx_type and "buy" not in tx_type:
+                continue
+            ticker = str(t.get("Ticker", "")).strip().upper()
+            if not ticker or len(ticker) > 5 or not ticker.isalpha():
+                continue
+            date_raw = t.get("Date", t.get("TransactionDate", ""))
+            try:
+                tx_date = datetime.strptime(str(date_raw)[:10], "%Y-%m-%d")
+            except ValueError:
+                continue
+            if tx_date < cutoff:
+                continue
+            member   = str(t.get("Representative", t.get("Senator", ""))).strip()
+            amount   = str(t.get("Range", t.get("Amount", "")))
+            size_pts = SIZE_SCORE.get(amount, 1)
+            days_ago  = (datetime.now() - tx_date).days
+            recency_w = max(0.1, 1.0 - (days_ago / lookback_days))
+            quality_w = 2.0 if any(h in member for h in HIGH_SIGNAL_MEMBERS) else 1.0
+            buy_records.append({
+                "ticker": ticker, "member": member,
+                "date": tx_date.strftime("%Y-%m-%d"), "amount": amount,
+                "size_pts": size_pts, "recency_w": recency_w, "quality_w": quality_w,
+                "raw_score": size_pts * recency_w * quality_w,
+            })
+        print(f"  [Congress] QuiverQuant: {len(buy_records)} buy records")
+    else:
+        # Free fallback — no key needed
+        print("  [Congress] No QUIVERQUANT_KEY — using House Stock Watcher (free)")
+        buy_records, _ = _parse_house_data(lookback_days)
 
-    records = []
-    for t in raw:
-        tx_type = str(t.get("Transaction", "")).lower()
-        if "purchase" not in tx_type and "buy" not in tx_type:
-            continue
+    return _aggregate(buy_records)
 
-        ticker = str(t.get("Ticker", "")).strip().upper()
-        if not ticker or len(ticker) > 5 or not ticker.isalpha():
-            continue
 
-        date_raw = t.get("Date", t.get("TransactionDate", ""))
-        try:
-            tx_date = datetime.strptime(str(date_raw)[:10], "%Y-%m-%d")
-        except ValueError:
-            continue
-        if tx_date < cutoff:
-            continue
+def get_congress_sells(lookback_days: int = 60) -> pd.DataFrame:
+    """
+    Returns tickers Congress members are SELLING — potential dump/short signals.
+    High sell score = insiders exiting before bad news. Watch these for shorting.
+    """
+    sell_records: list = []
 
-        member   = str(t.get("Representative", t.get("Senator", ""))).strip()
-        amount   = str(t.get("Range", t.get("Amount", "")))
-        size_pts = SIZE_SCORE.get(amount, 1)
+    if QUIVER_KEY:
+        cutoff = datetime.now() - timedelta(days=lookback_days)
+        raw    = _quiver_get("live/congresstrading")
+        for t in raw:
+            tx_type = str(t.get("Transaction", "")).lower()
+            if "sale" not in tx_type and "sell" not in tx_type:
+                continue
+            ticker = str(t.get("Ticker", "")).strip().upper()
+            if not ticker or len(ticker) > 5 or not ticker.isalpha():
+                continue
+            date_raw = t.get("Date", t.get("TransactionDate", ""))
+            try:
+                tx_date = datetime.strptime(str(date_raw)[:10], "%Y-%m-%d")
+            except ValueError:
+                continue
+            if tx_date < cutoff:
+                continue
+            member   = str(t.get("Representative", t.get("Senator", ""))).strip()
+            amount   = str(t.get("Range", t.get("Amount", "")))
+            size_pts = SIZE_SCORE.get(amount, 1)
+            days_ago  = (datetime.now() - tx_date).days
+            recency_w = max(0.1, 1.0 - (days_ago / lookback_days))
+            quality_w = 2.5 if any(h in member for h in HIGH_SIGNAL_MEMBERS) else 1.0
+            sell_records.append({
+                "ticker": ticker, "member": member,
+                "date": tx_date.strftime("%Y-%m-%d"), "amount": amount,
+                "size_pts": size_pts, "recency_w": recency_w, "quality_w": quality_w,
+                "raw_score": size_pts * recency_w * quality_w,
+            })
+    else:
+        _, sell_records = _parse_house_data(lookback_days)
 
-        days_ago  = (datetime.now() - tx_date).days
-        recency_w = max(0.1, 1.0 - (days_ago / lookback_days))
-        quality_w = 2.0 if any(h in member for h in HIGH_SIGNAL_MEMBERS) else 1.0
-
-        records.append({
-            "ticker":    ticker,
-            "member":    member,
-            "date":      tx_date.strftime("%Y-%m-%d"),
-            "amount":    amount,
-            "size_pts":  size_pts,
-            "recency_w": recency_w,
-            "quality_w": quality_w,
-            "raw_score": size_pts * recency_w * quality_w,
-        })
-
-    return _aggregate(records)
+    return _aggregate_sells(sell_records)
 
 
 def _aggregate(records: list) -> pd.DataFrame:
     if not records:
         return pd.DataFrame()
-
     df = pd.DataFrame(records)
     agg = df.groupby("ticker").agg(
         congress_score=("raw_score",  "sum"),
@@ -125,29 +208,27 @@ def _aggregate(records: list) -> pd.DataFrame:
         last_buy=      ("date",       "max"),
         pelosi_bought= ("member", lambda x: any("Pelosi" in m for m in x)),
     ).reset_index()
-
     mx = agg["congress_score"].max()
     if mx > 0:
         agg["congress_score"] = (agg["congress_score"] / mx * 100).round(1)
-
     return agg.sort_values("congress_score", ascending=False).reset_index(drop=True)
 
 
-def _demo_signals() -> pd.DataFrame:
-    """
-    Placeholder data so the rest of the system runs without a key.
-    Based on historically frequent Pelosi/Congress buys — for demo only.
-    Replace with live data once QUIVERQUANT_KEY is set.
-    """
-    demo = [
-        {"ticker": "NVDA", "congress_score": 88, "buy_count": 12, "unique_members": 7, "last_buy": "2025-04-01", "pelosi_bought": True},
-        {"ticker": "MSFT", "congress_score": 74, "buy_count": 9,  "unique_members": 5, "last_buy": "2025-03-28", "pelosi_bought": False},
-        {"ticker": "GOOGL","congress_score": 70, "buy_count": 8,  "unique_members": 6, "last_buy": "2025-03-20", "pelosi_bought": True},
-        {"ticker": "AAPL", "congress_score": 65, "buy_count": 7,  "unique_members": 5, "last_buy": "2025-03-15", "pelosi_bought": False},
-        {"ticker": "AMZN", "congress_score": 60, "buy_count": 6,  "unique_members": 4, "last_buy": "2025-03-10", "pelosi_bought": False},
-    ]
-    print("  [DEMO MODE] Add QUIVERQUANT_KEY to .env for live congress data.")
-    return pd.DataFrame(demo)
+def _aggregate_sells(records: list) -> pd.DataFrame:
+    if not records:
+        return pd.DataFrame()
+    df = pd.DataFrame(records)
+    agg = df.groupby("ticker").agg(
+        dump_score=    ("raw_score",  "sum"),
+        sell_count=    ("ticker",     "count"),
+        unique_sellers=("member",     "nunique"),
+        last_sell=     ("date",       "max"),
+        pelosi_sold=   ("member", lambda x: any("Pelosi" in m for m in x)),
+    ).reset_index()
+    mx = agg["dump_score"].max()
+    if mx > 0:
+        agg["dump_score"] = (agg["dump_score"] / mx * 100).round(1)
+    return agg.sort_values("dump_score", ascending=False).reset_index(drop=True)
 
 
 def print_congress_top(n: int = 20):
