@@ -4160,6 +4160,16 @@ def _parse_spoken_email(transcript: str) -> str:
 
 _sms_sent_ids: set = set()  # dedup: one SMS per tool_call_id
 
+@app.route('/test-sms', methods=['GET'])
+def test_sms_route():
+    """Direct SMS test — fires carrier blast to number in ?to= param."""
+    phone = flask_request.args.get("to", "").strip()
+    if not phone:
+        return "Pass ?to=9096448087", 400
+    ok = _send_sms_textbelt(phone, "GHE test: SMS is working from Railway.")
+    return f"SMS {'OK' if ok else 'FAILED'} -> {phone}", 200
+
+
 @app.route('/vapi-collect', methods=['POST'])
 def vapi_collect():
     """Mid-call tool endpoint. Jordan calls this the moment name+email+phone are collected.
@@ -4167,12 +4177,18 @@ def vapi_collect():
     import re as _re
     try:
         data = flask_request.get_json(silent=True) or {}
+        print(f"[VAPI COLLECT] raw keys: {list(data.keys())}", flush=True)
+        msg = data.get("message", {})
+        print(f"[VAPI COLLECT] message keys: {list(msg.keys())}", flush=True)
+
         # Vapi wraps tool call params under message.toolCallList[0].function.arguments
-        tool_calls = data.get("message", {}).get("toolCallList", [])
+        tool_calls = msg.get("toolCallList", [])
+        print(f"[VAPI COLLECT] toolCallList count: {len(tool_calls)}", flush=True)
         args = {}
         tool_call_id = ""
         if tool_calls:
             raw_args = tool_calls[0].get("function", {}).get("arguments", {})
+            print(f"[VAPI COLLECT] raw_args type={type(raw_args).__name__} val={str(raw_args)[:100]}", flush=True)
             if isinstance(raw_args, str):
                 import json as _json
                 try:
