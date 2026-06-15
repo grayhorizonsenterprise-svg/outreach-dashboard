@@ -3782,16 +3782,10 @@ h1{{color:#38bdf8;}}h2{{color:#94a3b8;font-size:16px;}}
 
 
 def _send_sms_textbelt(to_phone: str, message: str) -> bool:
-    """Send SMS via carrier email gateways — free, no account needed.
-    Blasts all major US carriers simultaneously; the matching one delivers."""
-    import smtplib as _smtp
-    from email.mime.text import MIMEText as _MIMEText
-
-    sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
-    sender  = VERIFIED_SENDER
-    if not sg_key:
-        print("[SMS] SENDGRID_API_KEY not set")
-        return False
+    """Send SMS via TextBelt API. key=textbelt = 1 free/day. Set TEXTBELT_KEY for paid."""
+    import urllib.request as _ur
+    import urllib.parse as _up
+    import json as _json
 
     digits = "".join(c for c in str(to_phone) if c.isdigit())
     if digits.startswith("1") and len(digits) == 11:
@@ -3800,41 +3794,24 @@ def _send_sms_textbelt(to_phone: str, message: str) -> bool:
         print(f"[SMS] Invalid phone: {to_phone}")
         return False
 
-    carriers = [
-        "txt.att.net",
-        "vtext.com",
-        "tmomail.net",
-        "messaging.sprintpcs.com",
-        "sms.myboostmobile.com",
-        "sms.cricketwireless.net",
-        "mymetropcs.com",
-        "email.uscc.net",
-        "msg.fi.google.com",
-    ]
-
-    sent = 0
+    tb_key = os.getenv("TEXTBELT_KEY", "textbelt")
+    payload = _up.urlencode({
+        "phone": f"+1{digits}",
+        "message": message,
+        "key": tb_key,
+    }).encode()
     try:
-        server = _smtp.SMTP("smtp.sendgrid.net", 587, timeout=10)
-        server.starttls()
-        server.login("apikey", sg_key)
-        for carrier in carriers:
-            to_addr = f"{digits}@{carrier}"
-            msg = _MIMEText(message)
-            msg["From"] = sender
-            msg["To"]   = to_addr
-            msg["Subject"] = ""
-            try:
-                server.sendmail(gmail_user, [to_addr], msg.as_string())
-                sent += 1
-            except Exception:
-                pass
-        server.quit()
-    except Exception as e:
-        print(f"[SMS] Gateway exception: {e}")
+        req = _ur.Request("https://textbelt.com/text", data=payload, method="POST")
+        resp_raw = _ur.urlopen(req, timeout=10).read()
+        resp = _json.loads(resp_raw)
+        print(f"[SMS] TextBelt -> +1{digits} | {resp}")
+        if resp.get("success"):
+            return True
+        print(f"[SMS] TextBelt failed: {resp.get('error', 'unknown')}")
         return False
-
-    print(f"[SMS] Carrier blast -> {to_phone} | {sent}/{len(carriers)} gateways accepted")
-    return sent > 0
+    except Exception as e:
+        print(f"[SMS] TextBelt exception: {e}")
+        return False
 
 
 @app.route('/confirm-email', methods=['GET', 'POST'])
