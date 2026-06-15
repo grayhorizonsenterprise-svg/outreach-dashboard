@@ -4172,7 +4172,15 @@ def vapi_collect():
         args = {}
         tool_call_id = ""
         if tool_calls:
-            args = tool_calls[0].get("function", {}).get("arguments", {})
+            raw_args = tool_calls[0].get("function", {}).get("arguments", {})
+            if isinstance(raw_args, str):
+                import json as _json
+                try:
+                    args = _json.loads(raw_args)
+                except Exception:
+                    args = {}
+            else:
+                args = raw_args
             tool_call_id = tool_calls[0].get("id", "")
         if not args:
             args = data  # fallback if called directly
