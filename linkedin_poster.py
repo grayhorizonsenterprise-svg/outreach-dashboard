@@ -42,11 +42,19 @@ DATA_DIR   = Path(os.path.dirname(os.path.abspath(__file__)))
 POSTED_LOG = DATA_DIR / "linkedin_posted.json"
 TOKEN_FILE = DATA_DIR / "linkedin_token.json"
 
-BOOK_CALL    = "https://calendly.com/grayhorizonsenterprise/30min"
-FIVERR_GHL   = BOOK_CALL
-FIVERR_VOICE = BOOK_CALL
-FIVERR_LEAD  = BOOK_CALL
-GUMROAD_LINK = os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
+BOOK_CALL      = "https://calendly.com/grayhorizonsenterprise/30min"
+FIVERR_GHL     = BOOK_CALL
+FIVERR_VOICE   = BOOK_CALL
+FIVERR_LEAD    = BOOK_CALL
+GUMROAD_SIGNALS   = "https://horizons56.gumroad.com/l/hwghqu"
+GUMROAD_FLOW      = "https://horizons56.gumroad.com/l/ibbxcp"
+GUMROAD_INDICATORS= "https://horizons56.gumroad.com/l/ghe-indicators"
+GUMROAD_AI_BIZ    = "https://horizons56.gumroad.com/l/ai-small-business-guide"
+GUMROAD_CONTRACTOR= "https://horizons56.gumroad.com/l/contractors-playbook"
+GUMROAD_HOA       = "https://horizons56.gumroad.com/l/hoa-management-guide"
+GUMROAD_TRADING   = "https://horizons56.gumroad.com/l/stock-trading-guide"
+GUMROAD_BETS      = "https://horizons56.gumroad.com/l/sports-bettors-edge"
+GUMROAD_LINK      = GUMROAD_SIGNALS
 
 # ── Content Pools ──────────────────────────────────────────────────────────────
 
@@ -187,52 +195,94 @@ If you want to see what it looks like for your operation: {FIVERR_LEAD}""",
 ]
 
 EDGE_ENGINE_POSTS = [
-    f"""most traders don't lose because they pick bad setups.
+    f"""Most traders don't lose because they pick bad setups.
 
-they lose because they size based on how confident they feel.
+They lose because they size based on how confident they feel.
 
-that's not an edge. that's gambling with extra steps.
+That's not an edge. That's gambling with extra steps.
 
-win rate 55%. average win 2x the average loss. size at Kelly. that compounds into something real over time.
+Win rate 55%. Average win 2x the average loss. Size at Kelly. That compounds into something real over time.
 
-built that math directly into the Edge Engine. every signal comes with a score and a size.
+Built that math directly into the Edge Engine. Every signal comes with a score and a size.
 
-{GUMROAD_LINK}""",
+{GUMROAD_SIGNALS}""",
 
-    f"""congress members disclosed $213M in trades last quarter.
+    f"""Congress members disclosed $213M in trades last quarter.
 
-45 days to report under the STOCK Act. but the footprint shows up in options flow before the disclosure.
+45 days to report under the STOCK Act. But the footprint shows up in options flow before the disclosure.
 
-not every trade is actionable. but when it lines up with the volume and momentum signals, it's worth watching.
+Not every trade is actionable. But when it lines up with the volume and momentum signals, it's worth watching.
 
-we track all of it and run it through the scoring model automatically.
+We track all of it and run it through the scoring model automatically.
 
-{GUMROAD_LINK}""",
+Daily signals: {GUMROAD_SIGNALS}""",
 
-    f"""an edge isn't a hot tip from a discord server.
+    f"""An edge isn't a hot tip from a Discord server.
 
-it's a process that has positive expected value over hundreds of trades.
+It's a process that has positive expected value over hundreds of trades.
 
-RSI divergence. volume 40% above the 30-day avg. EMA cross with a confirmation candle.
+RSI divergence. Volume 40% above the 30-day avg. EMA cross with a confirmation candle.
 
-when all three line up the score clears 75. that's when we look closer.
+When all three line up the score clears 75. That's when we look closer.
 
-when none of them align we sit on our hands. that part is harder than it sounds.
+When none of them align we sit on our hands. That part is harder than it sounds.
 
-{GUMROAD_LINK}""",
+{GUMROAD_INDICATORS}""",
 
-    f"""nobody talks about this but i will:
+    f"""Nobody talks about this but I will:
 
-no signal system wins every time. anyone selling you that is lying.
+No signal system wins every time. Anyone selling you that is lying.
 
-what a real system does: positive expected value over time. more wins than losses. small losses, bigger wins.
+What a real system does: positive expected value over time. More wins than losses. Small losses, bigger wins.
 
-we log every signal and every result. open book. if it stops working we say so.
+We log every signal and every result. Open book. If it stops working we say so.
 
-{GUMROAD_LINK}""",
+{GUMROAD_SIGNALS}""",
 ]
 
-ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS
+PRODUCT_POSTS = [
+    f"""If you run a contracting business and you're still following up manually, you're losing jobs to whoever responds first.
+
+We put together a full playbook on how to automate your lead follow-up, booking, and client intake.
+
+No fluff. Just the system.
+
+{GUMROAD_CONTRACTOR}""",
+
+    f"""AI automation for small business doesn't have to be complicated.
+
+I put together a guide covering exactly what to automate first, what tools to use, and how to set it up without a tech background.
+
+If you're still doing things manually that a $12 tool could handle, this is worth your time.
+
+{GUMROAD_AI_BIZ}""",
+
+    f"""HOA managers are drowning in violation tracking, notices, and follow-up.
+
+Most are still doing it on spreadsheets or email chains.
+
+We put together a guide on how to automate the whole process — from violation report to resident notice to compliance log.
+
+{GUMROAD_HOA}""",
+
+    f"""The sports betting edge most people miss isn't picking winners.
+
+It's Kelly sizing and expected value. Bet too big on a good edge and variance wipes you out. Size correctly and it compounds.
+
+We built a full breakdown of the math and the model.
+
+{GUMROAD_BETS}""",
+
+    f"""Stock trading for people who have a job and a life.
+
+Not day trading. Not screen-watching. Institutional flow signals, RSI, congressional trades — filtered and scored daily.
+
+You get the signal. You decide. Takes 10 minutes a day.
+
+{GUMROAD_TRADING}""",
+]
+
+ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS + EDGE_ENGINE_POSTS + PRODUCT_POSTS
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
