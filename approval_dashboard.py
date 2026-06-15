@@ -3782,7 +3782,7 @@ h1{{color:#38bdf8;}}h2{{color:#94a3b8;font-size:16px;}}
 
 
 def _send_sms_textbelt(to_phone: str, message: str) -> bool:
-    """Send SMS via TextBelt API. key=textbelt = 1 free/day. Set TEXTBELT_KEY for paid."""
+    """SMS with fallback: TextBelt API first, then SendGrid carrier gateway blast."""
     import urllib.request as _ur
     import urllib.parse as _up
     import json as _json
@@ -3794,6 +3794,7 @@ def _send_sms_textbelt(to_phone: str, message: str) -> bool:
         print(f"[SMS] Invalid phone: {to_phone}")
         return False
 
+    # -- Primary: TextBelt --
     tb_key = os.getenv("TEXTBELT_KEY", "textbelt")
     payload = _up.urlencode({
         "phone": f"+1{digits}",
@@ -3807,11 +3808,44 @@ def _send_sms_textbelt(to_phone: str, message: str) -> bool:
         print(f"[SMS] TextBelt -> +1{digits} | {resp}")
         if resp.get("success"):
             return True
-        print(f"[SMS] TextBelt failed: {resp.get('error', 'unknown')}")
-        return False
+        print(f"[SMS] TextBelt failed: {resp.get('error', 'unknown')} — trying carrier fallback")
     except Exception as e:
-        print(f"[SMS] TextBelt exception: {e}")
+        print(f"[SMS] TextBelt exception: {e} — trying carrier fallback")
+
+    # -- Fallback: SendGrid carrier gateway blast --
+    sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
+    if not sg_key:
+        print("[SMS] No SENDGRID_API_KEY — carrier fallback skipped")
         return False
+
+    carriers = [
+        "txt.att.net", "vtext.com", "tmomail.net",
+        "messaging.sprintpcs.com", "sms.myboostmobile.com",
+        "sms.cricketwireless.net", "mymetropcs.com",
+        "email.uscc.net", "msg.fi.google.com",
+    ]
+    sent = 0
+    plain_html = f"<p>{message}</p>"
+    for carrier in carriers:
+        carrier_addr = f"{digits}@{carrier}"
+        try:
+            _resp = requests.post(
+                "https://api.sendgrid.com/v3/mail/send",
+                json={
+                    "personalizations": [{"to": [{"email": carrier_addr}]}],
+                    "from": {"email": VERIFIED_SENDER, "name": "Gray Horizons Enterprise"},
+                    "subject": "",
+                    "content": [{"type": "text/plain", "value": message}],
+                },
+                headers={"Authorization": f"Bearer {sg_key}", "Content-Type": "application/json"},
+                timeout=8,
+            )
+            if _resp.status_code == 202:
+                sent += 1
+        except Exception:
+            pass
+    print(f"[SMS] Carrier fallback -> +1{digits} | {sent}/{len(carriers)} accepted")
+    return sent > 0
 
 
 @app.route('/confirm-email', methods=['GET', 'POST'])
