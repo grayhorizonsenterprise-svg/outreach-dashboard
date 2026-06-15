@@ -3788,9 +3788,9 @@ def _send_sms_textbelt(to_phone: str, message: str) -> bool:
     from email.mime.text import MIMEText as _MIMEText
 
     sg_key = os.getenv("SENDGRID_API_KEY", "").strip()
-    sender  = os.getenv("SENDER_EMAIL", "").strip().lower()
-    if not (sg_key and sender):
-        print("[SMS] SENDGRID_API_KEY / SENDER_EMAIL not set")
+    sender  = VERIFIED_SENDER
+    if not sg_key:
+        print("[SMS] SENDGRID_API_KEY not set")
         return False
 
     digits = "".join(c for c in str(to_phone) if c.isdigit())
