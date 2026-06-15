@@ -4139,20 +4139,21 @@ def vapi_webhook():
 
 
 def _parse_spoken_email(transcript: str) -> str:
-    """Parse email spoken aloud: 'grayhorizons at gmail dot com' -> grayhorizons@gmail.com"""
+    """Parse email spoken aloud: 'john at gmail dot com' -> john@gmail.com"""
     import re as _re
-    # Standard format first
+    # Standard typed format first
     m = _re.findall(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}", transcript)
     if m:
         return m[0].lower()
-    # Spoken format: "word at word dot com/net/org/io"
+    # Spoken format: match ONLY the word immediately before 'at'
+    # e.g. "my email is john at gmail dot com" -> john@gmail.com
     spoken = _re.search(
-        r"([\w]+(?:\s+[\w]+)*)\s+at\s+([\w]+(?:\s+[\w]+)*)\s+dot\s+(com|net|org|io|co|us|biz)",
+        r"(\w[\w.+\-]*)\s+at\s+(\w+)\s+dot\s+(com|net|org|io|co|us|biz|gov|edu)",
         transcript, _re.IGNORECASE
     )
     if spoken:
-        local  = spoken.group(1).strip().replace(" ", "").lower()
-        domain = spoken.group(2).strip().replace(" ", "").lower()
+        local  = spoken.group(1).strip().lower()
+        domain = spoken.group(2).strip().lower()
         tld    = spoken.group(3).lower()
         return f"{local}@{domain}.{tld}"
     return ""
