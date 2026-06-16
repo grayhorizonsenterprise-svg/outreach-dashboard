@@ -374,6 +374,43 @@ def api_parlays():
         return jsonify({"parlays": CACHE.get("parlays", []),
                         "last_updated": CACHE.get("last_updated")})
 
+@app.route("/api/wins")
+def api_wins():
+    """Return wins/losses log from wins_log.json (root project dir or edge_engine/)."""
+    import json as _json
+    for p in [
+        Path(__file__).parent.parent / "wins_log.json",
+        Path(__file__).parent / "wins_log.json",
+        Path("wins_log.json"),
+    ]:
+        if p.exists():
+            try:
+                return jsonify(_json.loads(p.read_text(encoding="utf-8")))
+            except Exception:
+                pass
+    return jsonify({"picks": [], "overall": {"wins": 0, "losses": 0, "pushes": 0}})
+
+@app.route("/api/wins/log", methods=["POST"])
+def api_wins_log():
+    """POST {pick, outcome, result, category, date} to append a result to wins_log.json."""
+    import json as _json
+    data = flask_request.get_json(silent=True) or {}
+    wins_path = Path(__file__).parent.parent / "wins_log.json"
+    if not wins_path.exists():
+        wins_path = Path(__file__).parent / "wins_log.json"
+    try:
+        log = _json.loads(wins_path.read_text(encoding="utf-8")) if wins_path.exists() else {"picks": [], "overall": {"wins": 0, "losses": 0, "pushes": 0}}
+        entry = {k: data.get(k, "") for k in ("pick", "outcome", "result", "category", "date")}
+        entry["outcome"] = entry["outcome"].upper()
+        log.setdefault("picks", []).append(entry)
+        o = log.setdefault("overall", {"wins": 0, "losses": 0, "pushes": 0})
+        key = {"WIN": "wins", "LOSS": "losses"}.get(entry["outcome"], "pushes")
+        o[key] = o.get(key, 0) + 1
+        wins_path.write_text(_json.dumps(log, indent=2), encoding="utf-8")
+        return jsonify({"status": "ok", "entry": entry})
+    except Exception as e:
+        return jsonify({"status": "error", "error": str(e)}), 500
+
 @app.route("/api/ticker/<ticker>")
 def api_ticker(ticker: str):
     """Single ticker deep dive — price history + all patterns."""

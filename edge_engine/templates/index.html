@@ -285,7 +285,150 @@
   }
   .proj-row .proj-val { color: var(--green); font-weight: 700; }
 
+  /* ── Wins/Losses Results Sidebar ── */
+  .wins-sb {
+    position: fixed; right: 0; top: 0; bottom: 0;
+    width: 300px; background: var(--panel);
+    border-left: 2px solid var(--border);
+    z-index: 99; display: flex; flex-direction: column;
+    transition: width 0.22s ease; overflow: hidden;
+  }
+  .wins-sb.compact { width: 48px; }
+
+  /* push all full-width sections left of sidebar */
+  body.has-sidebar .dash-nav,
+  body.has-sidebar .header,
+  body.has-sidebar .action-center,
+  body.has-sidebar .tabs,
+  body.has-sidebar .content { margin-right: 300px; transition: margin-right 0.22s ease; }
+  body.has-sidebar.sb-compact .dash-nav,
+  body.has-sidebar.sb-compact .header,
+  body.has-sidebar.sb-compact .action-center,
+  body.has-sidebar.sb-compact .tabs,
+  body.has-sidebar.sb-compact .content { margin-right: 48px; }
+
+  .wins-sb-header {
+    background: #0a0e1a; border-bottom: 1px solid var(--border);
+    padding: 10px 10px; display: flex; align-items: center;
+    gap: 7px; min-height: 52px; flex-shrink: 0;
+  }
+  .wins-sb-title {
+    font-size: 10px; font-weight: 800; color: var(--green);
+    text-transform: uppercase; letter-spacing: 2px;
+    white-space: nowrap; overflow: hidden;
+  }
+  .wins-toggle-btn {
+    margin-left: auto; background: none; border: 1px solid var(--border);
+    color: var(--muted); cursor: pointer; border-radius: 4px;
+    width: 22px; height: 22px; font-size: 11px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .wins-toggle-btn:hover { color: var(--text); border-color: var(--muted); }
+
+  /* Compact: vertical label */
+  .wins-compact-label {
+    display: none; flex-direction: column; align-items: center;
+    justify-content: flex-start; padding-top: 16px; gap: 14px;
+  }
+  .wins-sb.compact .wins-compact-label { display: flex; }
+  .wins-sb.compact .wins-expanded-content { display: none; }
+  .wins-vert-text {
+    writing-mode: vertical-rl; text-orientation: mixed;
+    letter-spacing: 3px; font-size: 9px; font-weight: 800;
+    color: var(--green); text-transform: uppercase;
+  }
+
+  .wins-expanded-content {
+    display: flex; flex-direction: column; flex: 1; overflow: hidden; min-width: 0;
+  }
+
+  /* Amount dropdown */
+  .wins-controls {
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  }
+  .wins-controls label { font-size: 10px; color: var(--muted); white-space: nowrap; }
+  .wins-controls select {
+    flex: 1; background: #0d1117; border: 1px solid var(--border);
+    color: var(--text); padding: 4px 6px; border-radius: 4px;
+    font-size: 11px; cursor: pointer;
+  }
+  .wins-controls select:focus { outline: none; border-color: var(--green); }
+
+  /* Totals block */
+  .wins-totals {
+    padding: 10px 10px 8px; background: #080c14;
+    border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .wins-record-line {
+    display: flex; align-items: center; gap: 5px; margin-bottom: 6px;
+  }
+  .wins-w { font-size: 22px; font-weight: 800; color: var(--green); }
+  .wins-sep { font-size: 12px; color: var(--muted); }
+  .wins-l { font-size: 22px; font-weight: 800; color: var(--red); }
+  .wins-winpct { margin-left: auto; font-size: 13px; font-weight: 700; }
+  .wins-bar { height: 4px; border-radius: 2px; background: var(--border); margin-bottom: 8px; overflow: hidden; }
+  .wins-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
+  .wins-stats-row { display: flex; gap: 5px; }
+  .wins-stat {
+    flex: 1; background: #111827; border-radius: 5px;
+    padding: 5px 4px; text-align: center;
+  }
+  .wins-stat-lbl { color: var(--muted); font-size: 8px; text-transform: uppercase; letter-spacing: .5px; }
+  .wins-stat-val { font-weight: 700; font-size: 11px; margin-top: 2px; }
+
+  /* Groups list */
+  .wins-list { flex: 1; overflow-y: auto; padding: 5px; }
+  .wins-list::-webkit-scrollbar { width: 3px; }
+  .wins-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .wins-group { margin-bottom: 5px; }
+  .wins-group-hd {
+    display: flex; align-items: center; padding: 6px 8px;
+    background: #0d1117; border-radius: 6px; cursor: pointer;
+    border: 1px solid var(--border); user-select: none;
+    transition: border-color 0.15s;
+  }
+  .wins-group-hd:hover { border-color: var(--muted); }
+  .wins-chevron {
+    color: var(--muted); font-size: 9px; margin-right: 6px;
+    transition: transform 0.15s; display: inline-block;
+  }
+  .wins-group.open .wins-chevron { transform: rotate(90deg); }
+  .wins-cat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .wins-cat-sub { font-size: 9px; color: var(--muted); margin-left: 6px; }
+  .wins-cat-pnl { margin-left: auto; font-size: 10px; font-weight: 700; }
+
+  .wins-picks-list { display: none; padding: 3px 2px 1px; }
+  .wins-group.open .wins-picks-list { display: block; }
+
+  .wins-pick {
+    display: flex; align-items: flex-start; gap: 5px;
+    padding: 5px 4px; border-bottom: 1px solid #0d1117; font-size: 10px;
+  }
+  .wins-pick:last-child { border-bottom: none; }
+  .wins-badge {
+    width: 17px; height: 17px; border-radius: 3px; flex-shrink: 0;
+    font-size: 8px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  .wb-W { background: var(--green); color: #000; }
+  .wb-L { background: var(--red); color: #fff; }
+  .wb-P { background: var(--muted); color: #000; }
+  .wins-pick-body { flex: 1; min-width: 0; line-height: 1.3; }
+  .wins-pick-name { color: var(--text); word-break: break-word; }
+  .wins-pick-res { color: var(--muted); font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .wins-pick-amt { font-size: 9px; font-weight: 700; margin-top: 1px; }
+  .wins-pick-date { color: var(--muted); font-size: 9px; flex-shrink: 0; padding-top: 2px; }
+
   /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .wins-sb { display: none; }
+    body.has-sidebar .dash-nav, body.has-sidebar .header,
+    body.has-sidebar .action-center, body.has-sidebar .tabs,
+    body.has-sidebar .content { margin-right: 0; }
+  }
   @media (max-width: 768px) {
     .header h1 { font-size: 14px; }
     .content { padding: 12px; }
@@ -293,7 +436,7 @@
   }
 </style>
 </head>
-<body>
+<body class="has-sidebar">
 
 <!-- ── Dashboard Switcher ── -->
 <div class="dash-nav">
@@ -411,6 +554,75 @@
   </div>
 
 </div>
+
+<!-- ── Wins/Losses Results Sidebar ── -->
+<div class="wins-sb" id="wins-sb">
+
+  <!-- Header -->
+  <div class="wins-sb-header">
+    <div class="pulse-dot" style="background:var(--green)"></div>
+    <div class="wins-sb-title">Edge Results</div>
+    <button class="wins-toggle-btn" id="wins-toggle-btn" onclick="toggleWinsSb()" title="Collapse sidebar">&#9664;</button>
+  </div>
+
+  <!-- Compact state: vertical label + mini W/L -->
+  <div class="wins-compact-label">
+    <span class="wins-vert-text">Results</span>
+    <div id="compact-wl" style="text-align:center;font-size:9px;font-weight:800;line-height:1.8">
+      <span style="color:var(--green)">0W</span><br><span style="color:var(--red)">0L</span>
+    </div>
+  </div>
+
+  <!-- Expanded content -->
+  <div class="wins-expanded-content">
+
+    <!-- Bet size dropdown -->
+    <div class="wins-controls">
+      <label>Bet size</label>
+      <select id="wins-amount" onchange="recalcWins()">
+        <option value="10">$10</option>
+        <option value="25">$25</option>
+        <option value="50" selected>$50</option>
+        <option value="100">$100</option>
+        <option value="200">$200</option>
+        <option value="500">$500</option>
+        <option value="1000">$1,000</option>
+      </select>
+    </div>
+
+    <!-- Totals (always visible when expanded) -->
+    <div class="wins-totals">
+      <div class="wins-record-line">
+        <span class="wins-w" id="sb-w">0</span>
+        <span class="wins-sep">W</span>
+        <span class="wins-l" id="sb-l">0</span>
+        <span class="wins-sep">L</span>
+        <span class="wins-winpct" id="sb-pct" style="color:var(--muted)">--%</span>
+      </div>
+      <div class="wins-bar"><div class="wins-bar-fill" id="sb-bar" style="width:0%;background:var(--green)"></div></div>
+      <div class="wins-stats-row">
+        <div class="wins-stat">
+          <div class="wins-stat-lbl">P&amp;L</div>
+          <div class="wins-stat-val" id="sb-pnl" style="color:var(--muted)">$0</div>
+        </div>
+        <div class="wins-stat">
+          <div class="wins-stat-lbl">Avg Win</div>
+          <div class="wins-stat-val" id="sb-avgwin" style="color:var(--green)">--</div>
+        </div>
+        <div class="wins-stat">
+          <div class="wins-stat-lbl">Picks</div>
+          <div class="wins-stat-val" id="sb-total">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category groups — compacted by default, click to expand -->
+    <div class="wins-list" id="wins-list">
+      <div style="color:var(--muted);font-size:11px;padding:20px;text-align:center" class="pulse">Loading results...</div>
+    </div>
+
+  </div><!-- end expanded-content -->
+</div><!-- end wins-sb -->
 
 <!-- ── Ticker Detail Modal ── -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
@@ -1390,6 +1602,221 @@ function manualRefresh() {
         btn.disabled = false;
         btn.textContent = 'Refresh';
       }, 5000);
+    });
+}
+
+// ── Wins/Losses Sidebar ─────────────────────────────────────────────────────
+let _winsData = null;
+let _sbOpen = true;
+
+function toggleWinsSb() {
+  _sbOpen = !_sbOpen;
+  const sb  = document.getElementById('wins-sb');
+  const btn = document.getElementById('wins-toggle-btn');
+  sb.classList.toggle('compact', !_sbOpen);
+  document.body.classList.toggle('sb-compact', !_sbOpen);
+  btn.innerHTML = _sbOpen ? '&#9664;' : '&#9654;';
+}
+
+function _parsePct(str) {
+  // Extract first percentage e.g. "+9.2%" → 9.2, "-2.3%" → -2.3
+  const m = (str || '').match(/([+-]?\d+\.?\d*)%/);
+  return m ? parseFloat(m[1]) : null;
+}
+
+function _fmtPnl(v) {
+  return (v >= 0 ? '+' : '') + '$' + Math.abs(v).toFixed(2);
+}
+
+function recalcWins() {
+  if (_winsData) renderWinsSidebar(_winsData);
+}
+
+function renderWinsSidebar(data) {
+  _winsData = data;
+  const amount  = parseFloat(document.getElementById('wins-amount').value) || 50;
+  const picks   = data.picks || [];
+  const overall = data.overall || {};
+  const w = overall.wins || 0;
+  const l = overall.losses || 0;
+  const total = w + l;
+  const winPct = total > 0 ? (w / total * 100) : 0;
+
+  // P&L total
+  let pnl = 0;
+  const winPcts = [];
+  picks.forEach(p => {
+    const pct = _parsePct(p.result);
+    if (p.outcome === 'WIN') {
+      const gain = pct !== null ? amount * pct / 100 : amount * 0.15;
+      pnl += gain;
+      winPcts.push(pct !== null ? pct : 15);
+    } else if (p.outcome === 'LOSS') {
+      pnl -= amount;
+    }
+  });
+  const avgWin = winPcts.length ? (winPcts.reduce((a,b) => a+b, 0) / winPcts.length) : 0;
+
+  // Totals UI
+  document.getElementById('sb-w').textContent   = w;
+  document.getElementById('sb-l').textContent   = l;
+  document.getElementById('sb-total').textContent = total;
+  const pctEl = document.getElementById('sb-pct');
+  pctEl.textContent = winPct.toFixed(0) + '%';
+  pctEl.style.color = winPct >= 60 ? 'var(--green)' : winPct >= 50 ? 'var(--yellow)' : 'var(--red)';
+  const barEl = document.getElementById('sb-bar');
+  barEl.style.width = winPct + '%';
+  barEl.style.background = winPct >= 60 ? 'var(--green)' : winPct >= 50 ? 'var(--yellow)' : 'var(--red)';
+  const pnlEl = document.getElementById('sb-pnl');
+  pnlEl.textContent = _fmtPnl(pnl);
+  pnlEl.style.color = pnl >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('sb-avgwin').textContent = winPcts.length ? '+' + avgWin.toFixed(1) + '%' : '--';
+
+  // Compact mini-label
+  document.getElementById('compact-wl').innerHTML =
+    `<span style="color:var(--green)">${w}W</span><br><span style="color:var(--red)">${l}L</span>`;
+
+  // Build category groups
+  const cats = {};
+  picks.forEach(p => {
+    const c = (p.category || 'other').toLowerCase();
+    if (!cats[c]) cats[c] = [];
+    cats[c].push(p);
+  });
+
+  const CAT_COLOR = { stocks:'var(--green)', crypto:'var(--purple)',
+    sports:'var(--yellow)', options:'var(--cyan)', other:'var(--muted)' };
+  const CAT_ICON  = { stocks:'&#9650;', crypto:'&#9673;',
+    sports:'&#127942;', options:'&#9889;', other:'&bull;' };
+
+  let html = '';
+  // Sort categories: stocks → crypto → sports → options → other
+  const catOrder = ['stocks','crypto','sports','options','other'];
+  const sortedCats = [...Object.keys(cats)].sort(
+    (a, b) => (catOrder.indexOf(a)+1||99) - (catOrder.indexOf(b)+1||99)
+  );
+
+  sortedCats.forEach(cat => {
+    const catPicks = cats[cat];
+    const cw = catPicks.filter(p => p.outcome === 'WIN').length;
+    const cl = catPicks.filter(p => p.outcome === 'LOSS').length;
+    const cp = catPicks.filter(p => p.outcome === 'PUSH').length;
+    const catPnl = catPicks.reduce((sum, p) => {
+      const pct = _parsePct(p.result);
+      if (p.outcome === 'WIN')  return sum + (pct !== null ? amount * pct / 100 : amount * 0.15);
+      if (p.outcome === 'LOSS') return sum - amount;
+      return sum;
+    }, 0);
+    const cc   = CAT_COLOR[cat] || 'var(--muted)';
+    const icon = CAT_ICON[cat]  || '&bull;';
+    const gid  = 'wg-' + cat;
+
+    html += `
+    <div class="wins-group" id="${gid}">
+      <div class="wins-group-hd" onclick="toggleWinsGroup('${gid}')">
+        <span class="wins-chevron">&#9654;</span>
+        <span class="wins-cat-label" style="color:${cc}">${icon} ${cat}</span>
+        <span class="wins-cat-sub">${cw}W-${cl}L${cp?'-'+cp+'P':''}</span>
+        <span class="wins-cat-pnl" style="color:${catPnl>=0?'var(--green)':'var(--red)'}">
+          ${_fmtPnl(catPnl)}
+        </span>
+      </div>
+      <div class="wins-picks-list">`;
+
+    // Most recent first
+    [...catPicks].reverse().forEach(p => {
+      const o   = (p.outcome || 'P').toUpperCase();
+      const oc  = {'WIN':'W','LOSS':'L','PUSH':'P'}[o] || 'P';
+      const pct = _parsePct(p.result);
+      const pickPnl = o === 'WIN' ? (pct !== null ? amount * pct / 100 : amount * 0.15)
+                    : o === 'LOSS' ? -amount : 0;
+      const pc  = pickPnl >= 0 ? 'var(--green)' : 'var(--red)';
+      html += `
+        <div class="wins-pick">
+          <span class="wins-badge wb-${oc}">${oc}</span>
+          <div class="wins-pick-body">
+            <div class="wins-pick-name">${p.pick || '--'}</div>
+            <div class="wins-pick-res">${p.result || ''}</div>
+            <div class="wins-pick-amt" style="color:${pc}">${_fmtPnl(pickPnl)} at $${amount}</div>
+          </div>
+          <div class="wins-pick-date">${p.date || ''}</div>
+        </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  if (!html) {
+    html = `<div style="color:var(--muted);font-size:11px;padding:18px;text-align:center;line-height:1.7">
+      No results logged yet.<br>
+      <span style="font-size:9px">python chart_card_generator.py log_win<br>"PICK" WIN "+9.2%" stocks</span>
+    </div>`;
+  }
+
+  // Log win form at bottom
+  html += `
+  <div style="padding:8px 4px;border-top:1px solid var(--border);margin-top:6px">
+    <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Log New Result</div>
+    <input id="wl-pick" placeholder="Pick description" style="width:100%;background:#0d1117;border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:4px;font-size:10px;box-sizing:border-box;margin-bottom:4px">
+    <input id="wl-result" placeholder="Result e.g. +9.2% / +$92" style="width:100%;background:#0d1117;border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:4px;font-size:10px;box-sizing:border-box;margin-bottom:4px">
+    <div style="display:flex;gap:4px;margin-bottom:4px">
+      <select id="wl-outcome" style="flex:1;background:#0d1117;border:1px solid var(--border);color:var(--text);padding:4px;border-radius:4px;font-size:10px">
+        <option value="WIN">WIN</option>
+        <option value="LOSS">LOSS</option>
+        <option value="PUSH">PUSH</option>
+      </select>
+      <select id="wl-cat" style="flex:1;background:#0d1117;border:1px solid var(--border);color:var(--text);padding:4px;border-radius:4px;font-size:10px">
+        <option value="stocks">Stocks</option>
+        <option value="crypto">Crypto</option>
+        <option value="sports">Sports</option>
+        <option value="options">Options</option>
+      </select>
+    </div>
+    <button onclick="logWinEntry()" style="width:100%;background:var(--green);color:#000;border:none;border-radius:4px;padding:5px;font-size:10px;font-weight:700;cursor:pointer">Log Result</button>
+    <div id="wl-msg" style="font-size:9px;color:var(--green);text-align:center;margin-top:4px;min-height:12px"></div>
+  </div>`;
+
+  document.getElementById('wins-list').innerHTML = html;
+}
+
+function toggleWinsGroup(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function logWinEntry() {
+  const pick    = document.getElementById('wl-pick').value.trim();
+  const result  = document.getElementById('wl-result').value.trim();
+  const outcome = document.getElementById('wl-outcome').value;
+  const cat     = document.getElementById('wl-cat').value;
+  if (!pick) { document.getElementById('wl-msg').textContent = 'Enter a pick description'; return; }
+  const today = new Date();
+  const dateStr = (today.getMonth()+1).toString().padStart(2,'0') + '/' + today.getDate().toString().padStart(2,'0');
+  fetch('/api/wins/log', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({pick, outcome, result, category: cat, date: dateStr})
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.status === 'ok') {
+      document.getElementById('wl-msg').textContent = '✓ Logged';
+      document.getElementById('wl-pick').value = '';
+      document.getElementById('wl-result').value = '';
+      setTimeout(fetchWins, 400);
+    } else {
+      document.getElementById('wl-msg').textContent = 'Error: ' + d.error;
+    }
+  })
+  .catch(() => { document.getElementById('wl-msg').textContent = 'Save failed'; });
+}
+
+function fetchWins() {
+  fetch('/api/wins')
+    .then(r => r.json())
+    .then(data => renderWinsSidebar(data))
+    .catch(() => {
+      document.getElementById('wins-list').innerHTML =
+        '<div style="color:var(--muted);font-size:11px;padding:16px;text-align:center">No wins data found.</div>';
     });
 }
 
