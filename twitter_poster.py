@@ -32,6 +32,14 @@ import requests
 from datetime import datetime
 from pathlib import Path
 
+try:
+    from chart_card_generator import next_card as _next_card
+    _CARD_GEN = True
+except ImportError:
+    _CARD_GEN = False
+    def _next_card(category_filter=None):
+        return ("none", None)
+
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 TWITTER_API_KEY       = os.getenv("TWITTER_API_KEY", "")
@@ -697,21 +705,230 @@ Built for lead generation at scale. Same system can be built for any service bus
 PORTFOLIO_POSTS    = [item[0] for item in _PORTFOLIO_ITEMS]
 PORTFOLIO_IMAGE_MAP = {item[0]: item[1] for item in _PORTFOLIO_ITEMS}
 
+CHART_POSTS = [
+    f"""TradingView screenshot — this is what a 70+ signal looks like on the chart.
+
+RSI in range. Volume anomaly confirmed. EMA alignment clean.
+
+Score 78. Entry zone active.
+
+How often do all 3 line up at the same time for you?
+
+{WHOP_LINK}""",
+
+    f"""This is the GHE Edge Scanner live on a daily chart.
+
+Green bar = momentum score 70+. Volume confirmation. EMA cross.
+
+Most traders look at price. We look at score.
+
+What does your TradingView setup look like?
+
+{WHOP_LINK}""",
+
+    f"""Congressional buy flagged. Volume spike confirmed. Score building.
+
+This is what the institutional flow indicator looks like before the move.
+
+Retail sees this 3 weeks after it already ran.
+
+Are you tracking congressional timing?
+
+{WHOP_LINK}""",
+
+    f"""Automation workflow live inside GoHighLevel.
+
+Lead submits form. Instant SMS fires. 7-touch sequence begins automatically.
+
+No manual steps. Zero missed leads.
+
+What's your current follow-up rate?
+
+{GUMROAD_LINK}""",
+
+    f"""AI voice agent confirmed the booking. No human involved.
+
+Caller said they need HVAC repair. Agent collected name, address, issue, preferred time.
+
+Job booked. Calendar updated. Owner notified.
+
+This runs 24/7.
+
+{GUMROAD_LINK}""",
+
+    f"""GHL dashboard — live pipeline data for a home services client.
+
+Every lead tracked. Every stage visible. Revenue value by opportunity.
+
+This is what running a business with a real CRM looks like.
+
+What are you using to track your pipeline?
+
+{GUMROAD_LINK}""",
+
+    f"""Contractor intake system — both sides live.
+
+Client submits. Contractor gets notified instantly. No phone tag. No lost jobs.
+
+Built and deployed in under a week.
+
+{GUMROAD_LINK}""",
+
+    f"""Real chart. Real signal. Real entry zone.
+
+GHE Edge Scanner + Institutional Flow running simultaneously on APP.
+
+Score 78. Congressional flag active. Pre-move identification.
+
+{WHOP_LINK}""",
+
+    f"""Product showcase — GHE Edge Scanner for TradingView.
+
+3 indicators. 1 decision framework.
+When to enter. How much to risk. Congressional activity.
+
+$79 once.
+
+{WHOP_LINK}""",
+
+    f"""What retail traders don't see until it's too late:
+
+This chart. This volume pattern. This momentum build.
+
+7 days before the disclosure hit the news.
+
+The pattern shows up. Most people miss it.
+
+{SIGNALS_LINK}""",
+
+    f"""Dashboard screenshot — outreach system live and running.
+
+Lead status, pipeline value, outreach history — one screen.
+
+Built for scale. Runs automatically.
+
+{GUMROAD_LINK}""",
+
+    f"""GHE Institutional Flow indicator — live on NASDAQ.
+
+Blue zone = institutional accumulation. Red zone = distribution.
+
+You don't need to guess which side of the trade is active.
+
+The chart tells you.
+
+{WHOP_LINK}""",
+]
+
+WINS_POSTS = [
+    f"""Weekly recap — what the model called correctly:
+
+NVDA: flagged Monday premarket / +9.2% by Friday close
+APP: EMA breakout score 78 / +6.8% in 48 hours
+BTC: breakout above $104k confirmed / +4.1% overnight
+
+3 setups. 3 clean entries.
+
+Signal sheet drops every morning at 6:45am ET.
+
+{SIGNALS_LINK}""",
+
+    f"""This week's scorecard:
+
+Win rate: 80%
+Average win: +6.7%
+Average loss: -2.3%
+Kelly fraction used: 14%
+
+Not luck. Not gut. Scored entries. Sized correctly.
+
+{SIGNALS_LINK}""",
+
+    f"""Congressional flow result — filed 3 weeks ago, move confirmed this week.
+
+Disclosure filed: day 0
+Volume spike: day 4
+Price move: +12.3% by day 21
+
+The pattern repeats. Every quarter. We track it so you don't have to.
+
+{SIGNALS_LINK}""",
+
+    f"""Position sizing check — real numbers this week:
+
+Win rate: 75%
+Avg win: 1.8R
+Avg loss: 1.0R
+Kelly fraction: 14.4%
+
+At $10k account: $1,440 risk per setup. Math, not guessing.
+
+{SIGNALS_LINK}""",
+
+    f"""What 4 clean setups looks like:
+
+SPY: momentum 71 — held the level
+NVDA: congressional flag + volume anomaly — +9.2%
+COIN: score 74, EMA breakout — +5.1%
+ETH: above 20d EMA, confirmed — +4.1%
+
+All scored 70+. All sized with Kelly.
+
+{SIGNALS_LINK}""",
+
+    f"""Boring week. Best kind.
+
+Mon: 1 setup. Scored 81. Sized 14% Kelly.
+Tue-Thu: hold.
+Fri: +11.3%. Close. Log it.
+
+That's it. No drama. No overtrading.
+
+{SIGNALS_LINK}""",
+
+    f"""YTD scorecard update:
+
+Q1: 7 setups flagged / avg return +7.4%
+Q2: 5 setups flagged / avg return +9.1%
+Win rate YTD: 80%
+
+We skip everything below 70. That's the system.
+
+{SIGNALS_LINK}""",
+
+    f"""What happened when we followed the congressional volume signal:
+
+Week 1: Volume spike. Score building.
+Week 2: Momentum confirming. RSI 58.
+Week 3: +14.2%. News hits. Retail buys the top.
+
+We were already in.
+
+{SIGNALS_LINK}""",
+]
+
 ALL_POSTS = {
     "signals":      SIGNALS_POSTS,
     "indicators":   INDICATOR_POSTS,
     "results":      RESULTS_POSTS,
     "engagement":   ENGAGEMENT_POSTS,
+    "chart":        CHART_POSTS,
+    "wins":         WINS_POSTS,
 }
 
-# Image-attached categories — get a generated card PNG attached to the tweet
-IMAGE_CATEGORIES = {"results", "signals"}
+# Image-attached categories — auto-generate or attach a card PNG
+IMAGE_CATEGORIES = {"results", "signals", "chart", "wins"}
+
+# chart/wins use the chart_card_generator (real screenshots + dynamic cards)
+CHART_CARD_CATEGORIES = {"chart", "wins"}
 
 DAILY_SCHEDULE = [
-    ("signals",    "13:00"),   # 8am ET  — morning signal preview (image card)
-    ("results",    "17:00"),   # 12pm ET — weekly scorecard (image card)
-    ("indicators", "20:00"),   # 3pm ET  — TradingView Pine Script product post
-    ("engagement", "23:00"),   # 6pm ET  — trading question / engagement
+    ("signals",    "13:00"),   # 8am ET   — morning signal preview (text + auto card)
+    ("chart",      "15:00"),   # 10am ET  — real chart/dashboard screenshot post
+    ("results",    "17:00"),   # 12pm ET  — weekly scorecard (text + auto card)
+    ("indicators", "20:00"),   # 3pm ET   — TradingView product post
+    ("wins",       "21:30"),   # 4:30pm ET — wins recap (text + wins card)
+    ("engagement", "23:00"),   # 6pm ET   — engagement question
 ]
 
 # Target audience accounts — trading AND local business/automation
@@ -963,10 +1180,14 @@ def upload_media(image_bytes: bytes) -> str | None:
 def load_posted() -> dict:
     if POSTED_LOG.exists():
         try:
-            return json.loads(POSTED_LOG.read_text())
+            data = json.loads(POSTED_LOG.read_text())
+            # Ensure new categories exist
+            for cat in ("signals", "indicators", "results", "engagement", "chart", "wins"):
+                data.setdefault(cat, [])
+            return data
         except Exception:
             pass
-    return {"signals": [], "indicators": [], "business_tip": [], "engagement": []}
+    return {"signals": [], "indicators": [], "results": [], "engagement": [], "chart": [], "wins": []}
 
 
 def save_posted(data: dict):
@@ -1282,7 +1503,17 @@ def run(force: bool = False):
         print(f"\n[{category.upper()}] Posting ({datetime.utcnow().strftime('%H:%M UTC')})...")
 
         media_id = None
-        if category in IMAGE_CATEGORIES:
+        if category in CHART_CARD_CATEGORIES:
+            # Use chart_card_generator — real screenshots + dynamic data cards
+            cat_filter = "chart" if category == "chart" else None
+            card_name, img_bytes = _next_card(cat_filter)
+            if img_bytes:
+                print(f"  [{category.upper()}] Card: {card_name}")
+                media_id = upload_media(img_bytes)
+            else:
+                print(f"  [{category.upper()}] Card generator returned None — posting text only")
+        elif category in IMAGE_CATEGORIES:
+            # Existing text card generator for signals/results
             card_lines = _extract_card_lines(text)
             card_type  = "signals" if category == "signals" else "results"
             img_bytes  = _generate_signal_card(card_lines, card_type)

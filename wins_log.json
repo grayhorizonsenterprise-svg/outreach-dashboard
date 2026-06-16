@@ -1,0 +1,49 @@
+{
+  "overall": {
+    "wins": 4,
+    "losses": 1,
+    "pushes": 0
+  },
+  "picks": [
+    {
+      "pick": "NVDA long $145 strike",
+      "outcome": "WIN",
+      "result": "+9.2% / +$92 on $1k",
+      "category": "stocks",
+      "date": "06/09"
+    },
+    {
+      "pick": "APP above EMA50",
+      "outcome": "WIN",
+      "result": "+6.8% in 48hrs",
+      "category": "stocks",
+      "date": "06/10"
+    },
+    {
+      "pick": "BTC breakout $104k",
+      "outcome": "WIN",
+      "result": "+4.1% overnight",
+      "category": "crypto",
+      "date": "06/11"
+    },
+    {
+      "pick": "COIN momentum score 74",
+      "outcome": "LOSS",
+      "result": "-2.3% / stopped out",
+      "category": "stocks",
+      "date": "06/12"
+    },
+    {
+      "pick": "MSFT congressional buy",
+      "outcome": "WIN",
+      "result": "+3.9% / congressional flow",
+      "category": "stocks",
+      "date": "06/13"
+    }
+  ],
+  "_instructions": {
+    "add_result": "Run: python chart_card_generator.py log_win \"PICK DESCRIPTION\" WIN|LOSS|PUSH \"RESULT TEXT\" CATEGORY",
+    "categories": ["stocks", "crypto", "sports", "options"],
+    "example": "python chart_card_generator.py log_win \"UFC: Topuria underdog\" WIN \"+180 odds / +$180 on $100\" sports"
+  }
+}
