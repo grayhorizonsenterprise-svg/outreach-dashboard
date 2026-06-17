@@ -1235,7 +1235,8 @@ def fetch_grants(limit=20):
 @app.route('/')
 def dashboard():
     from flask import request as flask_request
-    active_tab = flask_request.args.get('tab', 'outreach')
+    demo_mode  = flask_request.args.get('demo', '0') in ('1', 'true', 'yes')
+    active_tab = 'wins' if demo_mode else flask_request.args.get('tab', 'outreach')
 
     df = load_data()
 
@@ -1293,8 +1294,8 @@ def dashboard():
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="300;url=/?tab={active_tab}">
-<title>Gray Horizons — Command Center</title>
+<meta http-equiv="refresh" content="{'300;url=/?demo=1' if demo_mode else f'300;url=/?tab={active_tab}'}">
+<title>{'GHE Edge Engine — Demo' if demo_mode else 'Gray Horizons — Command Center'}</title>
 <style>
   *{{box-sizing:border-box;margin:0;padding:0}}
   html,body{{height:100%;}}
@@ -1314,6 +1315,7 @@ def dashboard():
   .btn-link:hover{{background:#2563eb;}}
   .tab-content{{display:none;}}
   .tab-content.active{{display:block;}}
+  {'/* demo mode: hide all nav/header/topbar/action elements */.nav,.header,.topbar,.btn-link[href^="/trigger"],.btn-link[href^="/purge"],.btn-link[href^="/dedup"],.btn-link[href^="/activate"]{{display:none!important;}} body{{padding-top:0!important;}} .demo-banner-strip{{display:flex!important;}}' if demo_mode else '.demo-banner-strip{{display:none;}}'}
 
   /* Outreach cards */
   .card{{background:#1e293b;padding:16px;margin:12px auto;width:94%;max-width:720px;border-radius:10px;}}
@@ -1367,6 +1369,15 @@ def dashboard():
 </style>
 </head>
 <body>
+<!-- Demo mode banner — hidden in full dashboard, shown in demo mode via CSS -->
+<div class="demo-banner-strip" style="background:#0d1828;border-bottom:1px solid #1e3764;padding:10px 24px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span style="background:#00cd7322;color:#00cd73;font-size:10px;font-weight:700;letter-spacing:2px;padding:4px 12px;border-radius:10px;border:1px solid #00cd7344;">DEMO</span>
+    <span style="color:#fff;font-size:15px;font-weight:700;">GHE Edge Engine</span>
+    <span style="color:#94a3b8;font-size:12px;">Sample performance data — live system available on request</span>
+  </div>
+  <a href="mailto:grayhorizonsenterprise@gmail.com?subject=GHE Edge Engine Access Request" style="background:#00cd73;color:#000;font-weight:700;font-size:12px;padding:8px 18px;border-radius:6px;text-decoration:none;">Request Full Access</a>
+</div>
 <div class="header">Gray Horizons Enterprise | Command Center</div>
 
 {'<div style="background:#060a12;border-bottom:1px solid #1f2937;padding:6px 24px;display:flex;align-items:center;gap:6px;"><span style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-right:8px;">Dashboard</span><a href="' + EDGE_ENGINE_URL + '" style="padding:4px 12px;border-radius:5px;font-size:10px;font-weight:700;text-decoration:none;background:transparent;color:#6b7280;border:1px solid #1f2937;" target="_blank">Edge Engine</a><span style="padding:4px 12px;border-radius:5px;font-size:10px;font-weight:700;background:#06b6d4;color:#000;border:1px solid #06b6d4;">Outreach</span></div>' if EDGE_ENGINE_URL else ''}
