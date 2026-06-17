@@ -538,6 +538,351 @@ def card_sports_picks(picks: list[dict] | None = None) -> bytes | None:
         return None
 
 
+# ─── Complex visual cards ────────────────────────────────────────────────────
+
+def _fake_sparkline(ticker: str, n: int = 32) -> list[float]:
+    """Deterministic fake sparkline seeded by ticker name — consistent per ticker."""
+    import hashlib
+    seed = int(hashlib.md5(ticker.encode()).hexdigest()[:8], 16) % (2**31)
+    import random as _r
+    rng = _r.Random(seed)
+    v = 100.0
+    vals = [v]
+    for _ in range(n - 1):
+        v += rng.gauss(0, 1.8)
+        vals.append(v)
+    return vals
+
+
+def _draw_sparkline(draw, x: int, y: int, w: int, h: int,
+                    values: list[float], color=GREEN, width: int = 2):
+    mn, mx = min(values), max(values)
+    rng = mx - mn or 1
+    pts = []
+    for i, v in enumerate(values):
+        px = x + int(i / max(len(values) - 1, 1) * w)
+        py = y + h - int((v - mn) / rng * h)
+        pts.append((px, py))
+    for i in range(len(pts) - 1):
+        draw.line([pts[i], pts[i + 1]], fill=color, width=width)
+    # Shade area under line
+    for i, (px, py) in enumerate(pts):
+        draw.line([(px, py), (px, y + h)], fill=(*color[:3], 35) if len(color) == 4 else color, width=1)
+
+
+def _score_bar(draw, x: int, y: int, w: int, h: int, score: float, fonts=None):
+    """Draw a filled score bar with percentage label."""
+    fill_w = int((score / 100) * w)
+    bar_color = GREEN if score >= 75 else (GOLD if score >= 60 else (BLUE_ACC if score >= 45 else RED_ACC))
+    draw.rectangle([x, y, x + w, y + h], fill=(20, 30, 55))
+    draw.rectangle([x, y, x + fill_w, y + h], fill=bar_color)
+    if fonts and fonts[0]:
+        draw.text((x + w + 6, y - 1), str(int(score)), font=fonts[0], fill=bar_color)
+    return bar_color
+
+
+# ── CARD 13 — Signal Matrix (6-ticker grid with sparklines) ───────────────────
+
+def card_signal_matrix(signals: list[dict] | None = None) -> bytes | None:
+    """6-ticker grid — each cell has ticker, score bar, mini sparkline, RSI dot, trend."""
+    try:
+        from PIL import Image, ImageDraw
+        fonts = _fonts()
+        img, draw = _new_canvas()
+        _accent_bar(draw, GREEN)
+        _header(draw, "SIGNAL MATRIX — TOP 6 SETUPS", GREEN, fonts)
+
+        tickers = signals or [
+            {"ticker": "NVDA", "score": 81, "rsi": 62.1, "trend": "STRONG BUY",  "change": +2.3},
+            {"ticker": "APP",  "score": 78, "rsi": 58.4, "trend": "BUY",         "change": +1.8},
+            {"ticker": "COIN", "score": 74, "rsi": 55.2, "trend": "BUY",         "change": +3.1},
+            {"ticker": "ETH",  "score": 71, "rsi": 61.8, "trend": "WATCH",       "change": +0.9},
+            {"ticker": "MSFT", "score": 70, "rsi": 57.3, "trend": "BUY",         "change": +1.2},
+            {"ticker": "PLTR", "score": 68, "rsi": 53.0, "trend": "WATCH",       "change": -0.4},
+        ]
+
+        # 3-col × 2-row grid
+        cols, rows = 3, 2
+        cell_w = (W - 36) // cols
+        cell_h = (H - 130) // rows
+        pad = 8
+
+        for idx, t in enumerate(tickers[:6]):
+            col = idx % cols
+            row = idx // cols
+            cx = 18 + col * cell_w
+            cy = 74 + row * cell_h
+
+            sc = t.get("score", 50)
+            rsi = t.get("rsi", 50.0)
+            trend = t.get("trend", "WATCH")
+            chg = t.get("change", 0.0)
+            ticker = t.get("ticker", "???")
+
+            bar_color = GREEN if sc >= 75 else (GOLD if sc >= 62 else (BLUE_ACC if sc >= 48 else RED_ACC))
+            rsi_color = RED_ACC if rsi > 72 else (GREEN if rsi < 35 else GRAY_LO)
+
+            # Cell background
+            draw.rectangle([cx + 2, cy + 2, cx + cell_w - 6, cy + cell_h - 6],
+                           fill=(14, 22, 44))
+            draw.rectangle([cx + 2, cy + 2, cx + cell_w - 6, cy + cell_h - 6],
+                           outline=bar_color, width=1)
+
+            # Ticker name
+            draw.text((cx + pad, cy + pad), ticker, font=fonts[1], fill=WHITE)
+
+            # Score bar
+            bar_x = cx + pad
+            bar_y = cy + 56
+            bar_w  = cell_w - 40
+            draw.rectangle([bar_x, bar_y, bar_x + bar_w, bar_y + 8], fill=(20, 35, 65))
+            draw.rectangle([bar_x, bar_y, bar_x + int(bar_w * sc / 100), bar_y + 8], fill=bar_color)
+            draw.text((bar_x + bar_w + 6, bar_y - 2), str(sc), font=fonts[0], fill=bar_color)
+
+            # RSI dot + label
+            draw.ellipse([cx + pad, cy + 72, cx + pad + 8, cy + 80], fill=rsi_color)
+            draw.text((cx + pad + 12, cy + 70), f"RSI {rsi:.0f}", font=fonts[0], fill=GRAY_LO)
+
+            # Change %
+            chg_color = GREEN if chg >= 0 else RED_ACC
+            draw.text((cx + cell_w - 70, cy + pad + 4),
+                      f"{'+' if chg >= 0 else ''}{chg:.1f}%", font=fonts[0], fill=chg_color)
+
+            # Mini sparkline
+            spark_x = cx + pad
+            spark_y = cy + 88
+            spark_w = cell_w - 40
+            spark_h = cell_h - 108
+            if spark_h > 10:
+                vals = _fake_sparkline(ticker)
+                _draw_sparkline(draw, spark_x, spark_y, spark_w, spark_h, vals, bar_color)
+
+            # Trend badge bottom-right
+            draw.text((cx + pad, cy + cell_h - 22), trend, font=fonts[0],
+                      fill=bar_color if trend in ("STRONG BUY", "BUY") else GRAY_LO)
+
+        _footer(draw, "Signal alerts daily at", SIGNALS_LINK, fonts)
+        return _to_bytes(img)
+    except Exception as e:
+        print(f"[CARD] signal_matrix: {e}")
+        return None
+
+
+# ── CARD 14 — Market Heatmap (12-ticker color grid) ───────────────────────────
+
+def card_market_heatmap(tickers: list[dict] | None = None) -> bytes | None:
+    """Color-coded heatmap of 12 tickers by score — like Bloomberg market overview."""
+    try:
+        from PIL import Image, ImageDraw
+        fonts = _fonts()
+        img, draw = _new_canvas()
+        _accent_bar(draw, BLUE_ACC)
+        _header(draw, "MARKET HEATMAP — MOMENTUM SCORES", BLUE_ACC, fonts)
+
+        data = tickers or [
+            {"ticker": "NVDA", "score": 81, "change": +2.3},
+            {"ticker": "APP",  "score": 78, "change": +1.8},
+            {"ticker": "COIN", "score": 74, "change": +3.1},
+            {"ticker": "ETH",  "score": 71, "change": +0.9},
+            {"ticker": "MSFT", "score": 70, "change": +1.2},
+            {"ticker": "PLTR", "score": 68, "change": -0.4},
+            {"ticker": "TSLA", "score": 63, "change": -1.1},
+            {"ticker": "AAPL", "score": 61, "change": +0.6},
+            {"ticker": "BTC",  "score": 73, "change": +2.7},
+            {"ticker": "SOL",  "score": 69, "change": +1.5},
+            {"ticker": "META", "score": 58, "change": -0.8},
+            {"ticker": "AMZN", "score": 55, "change": +0.3},
+        ]
+
+        # 4 cols × 3 rows
+        cols, rows_n = 4, 3
+        cell_w = (W - 36) // cols
+        cell_h = (H - 130) // rows_n
+
+        for idx, t in enumerate(data[:12]):
+            col = idx % cols
+            row = idx // cols
+            cx = 18 + col * cell_w
+            cy = 72 + row * cell_h
+
+            sc  = t.get("score", 50)
+            chg = t.get("change", 0.0)
+            tk  = t.get("ticker", "")
+
+            # Color intensity based on score
+            if sc >= 75:   bg = (4, 62, 30);   txt = GREEN
+            elif sc >= 65: bg = (4, 46, 22);   txt = (80, 200, 120)
+            elif sc >= 55: bg = (12, 30, 60);  txt = BLUE_ACC
+            elif sc >= 45: bg = (45, 30, 8);   txt = GOLD
+            else:          bg = (55, 10, 10);  txt = RED_ACC
+
+            draw.rectangle([cx + 3, cy + 3, cx + cell_w - 4, cy + cell_h - 4], fill=bg)
+            draw.rectangle([cx + 3, cy + 3, cx + cell_w - 4, cy + cell_h - 4],
+                           outline=(*txt[:3],), width=1)
+
+            # Ticker
+            draw.text((cx + 10, cy + 12), tk, font=fonts[2], fill=WHITE)
+
+            # Score (large)
+            draw.text((cx + 10, cy + 44), str(sc), font=fonts[1], fill=txt)
+
+            # Change %
+            chg_str = f"{'+' if chg >= 0 else ''}{chg:.1f}%"
+            draw.text((cx + 10, cy + cell_h - 28), chg_str, font=fonts[0],
+                      fill=GREEN if chg >= 0 else RED_ACC)
+
+            # Mini sparkline inside cell
+            spark_x = cx + cell_w // 2
+            spark_w = cell_w // 2 - 10
+            spark_y = cy + 46
+            spark_h = cell_h - 76
+            if spark_h > 8 and spark_w > 20:
+                vals = _fake_sparkline(tk)
+                _draw_sparkline(draw, spark_x, spark_y, spark_w, spark_h, vals, txt)
+
+        _footer(draw, "Live score matrix at", SIGNALS_LINK, fonts)
+        return _to_bytes(img)
+    except Exception as e:
+        print(f"[CARD] market_heatmap: {e}")
+        return None
+
+
+# ── CARD 15 — Composite Multi-Panel Dashboard ─────────────────────────────────
+
+def card_composite_dashboard(signals: list[dict] | None = None) -> bytes | None:
+    """
+    Multi-panel card: left = ranked signal bars with sparklines,
+    right = live stats column, bottom strip = market metrics.
+    Looks like a real trading terminal screenshot.
+    """
+    try:
+        from PIL import Image, ImageDraw
+        fonts = _fonts()
+        img, draw = _new_canvas()
+
+        # No accent bar — use full header strip for a terminal look
+        draw.rectangle([0, 0, W, 56], fill=(8, 14, 32))
+        draw.rectangle([0, 56, W, 57], fill=GREEN)
+        # Left title
+        draw.text((14, 10), "GHE EDGE ENGINE", font=fonts[1], fill=WHITE)
+        draw.text((14, 40), "LIVE SIGNAL DASHBOARD", font=fonts[0], fill=GREEN)
+        # Right: date + regime badge
+        today = datetime.now().strftime("%b %d  %H:%M")
+        draw.rectangle([W - 190, 10, W - 10, 46], fill=(0, 180, 80))
+        draw.text((W - 182, 18), f"BULL  {today}", font=fonts[0], fill=(8, 14, 32))
+
+        rows = signals or [
+            {"ticker": "NVDA", "score": 81, "rsi": 62.1, "price": 145.30, "change": +2.3, "vol_x": 2.3},
+            {"ticker": "APP",  "score": 78, "rsi": 58.4, "price": 512.80, "change": +1.8, "vol_x": 1.9},
+            {"ticker": "COIN", "score": 74, "rsi": 55.2, "price":  268.40, "change": +3.1, "vol_x": 2.7},
+            {"ticker": "ETH",  "score": 71, "rsi": 61.8, "price": 3820.00, "change": +0.9, "vol_x": 1.4},
+            {"ticker": "MSFT", "score": 70, "rsi": 57.3, "price":  441.20, "change": +1.2, "vol_x": 1.1},
+        ]
+
+        LEFT_W  = 780
+        RIGHT_W = W - LEFT_W - 36
+        TOP_Y   = 68
+        BOT_Y   = H - 70
+        content_h = BOT_Y - TOP_Y
+
+        # ── Left panel: signal rows ────────────────────────────────────────────
+        draw.rectangle([14, TOP_Y, LEFT_W + 14, BOT_Y], fill=(11, 18, 38))
+        draw.rectangle([14, TOP_Y, LEFT_W + 14, BOT_Y], outline=DIVIDER, width=1)
+
+        # Column headers
+        hdr_y = TOP_Y + 6
+        draw.text((22,  hdr_y), "#",      font=fonts[0], fill=GRAY_LO)
+        draw.text((46,  hdr_y), "TICKER", font=fonts[0], fill=GRAY_LO)
+        draw.text((148, hdr_y), "SCORE",  font=fonts[0], fill=GRAY_LO)
+        draw.text((380, hdr_y), "RSI",    font=fonts[0], fill=GRAY_LO)
+        draw.text((460, hdr_y), "PRICE",  font=fonts[0], fill=GRAY_LO)
+        draw.text((590, hdr_y), "1D%",    font=fonts[0], fill=GRAY_LO)
+        draw.text((660, hdr_y), "VOL",    font=fonts[0], fill=GRAY_LO)
+        draw.text((730, hdr_y), "CHART",  font=fonts[0], fill=GRAY_LO)
+        draw.rectangle([22, hdr_y + 20, LEFT_W + 8, hdr_y + 21], fill=DIVIDER)
+
+        row_h = (content_h - 36) // max(len(rows), 1)
+        for i, r in enumerate(rows[:5]):
+            ry = TOP_Y + 34 + i * row_h
+            sc = r.get("score", 50)
+            bar_c = GREEN if sc >= 75 else (GOLD if sc >= 62 else BLUE_ACC)
+            alt_bg = (13, 21, 44) if i % 2 == 0 else (10, 17, 38)
+            draw.rectangle([22, ry, LEFT_W + 8, ry + row_h - 2], fill=alt_bg)
+
+            # Rank
+            draw.text((22, ry + 6), f"#{i+1}", font=fonts[0], fill=GRAY_LO)
+            # Ticker
+            draw.text((46, ry + 2), r.get("ticker", ""), font=fonts[2], fill=WHITE)
+            # Score bar
+            bar_x, bar_w = 148, 210
+            draw.rectangle([bar_x, ry + 8, bar_x + bar_w, ry + 22], fill=(18, 30, 58))
+            draw.rectangle([bar_x, ry + 8, bar_x + int(bar_w * sc / 100), ry + 22], fill=bar_c)
+            draw.text((bar_x + bar_w + 6, ry + 8), str(sc), font=fonts[0], fill=bar_c)
+            # RSI
+            rsi = r.get("rsi", 50.0)
+            rsi_c = RED_ACC if rsi > 72 else (GREEN if rsi < 35 else GRAY_LO)
+            draw.text((380, ry + 6), f"{rsi:.0f}", font=fonts[0], fill=rsi_c)
+            # Price
+            price = r.get("price", 0)
+            draw.text((460, ry + 6), f"${price:,.2f}", font=fonts[0], fill=WHITE)
+            # Change
+            chg = r.get("change", 0.0)
+            draw.text((590, ry + 6), f"{'+' if chg >= 0 else ''}{chg:.1f}%",
+                      font=fonts[0], fill=GREEN if chg >= 0 else RED_ACC)
+            # Volume
+            vol = r.get("vol_x", 1.0)
+            draw.text((660, ry + 6), f"{vol:.1f}x", font=fonts[0],
+                      fill=GREEN if vol >= 2.0 else (GOLD if vol >= 1.5 else GRAY_LO))
+            # Sparkline
+            _draw_sparkline(draw, 730, ry + 4, 56, row_h - 10,
+                            _fake_sparkline(r.get("ticker", "X")), bar_c, width=2)
+
+        # ── Right stats panel ──────────────────────────────────────────────────
+        rx = LEFT_W + 26
+        ry0 = TOP_Y
+        draw.rectangle([rx, ry0, W - 14, BOT_Y], fill=(11, 18, 38))
+        draw.rectangle([rx, ry0, W - 14, BOT_Y], outline=DIVIDER, width=1)
+        draw.text((rx + 8, ry0 + 8), "MARKET", font=fonts[0], fill=GRAY_LO)
+        draw.rectangle([rx + 8, ry0 + 28, W - 22, ry0 + 29], fill=DIVIDER)
+
+        stats = [
+            ("SPY",   "532.40", GREEN),
+            ("QQQ",   "461.20", GREEN),
+            ("VIX",    "14.8",  GREEN),
+            ("BTC",  "104.2K",  GREEN),
+            ("FEAR",    "68",   GOLD),
+            ("BULL%",   "74%",  GREEN),
+        ]
+        sy = ry0 + 36
+        for label, val, vc in stats:
+            draw.text((rx + 8, sy), label, font=fonts[0], fill=GRAY_LO)
+            draw.text((rx + 8, sy + 16), val, font=fonts[2], fill=vc)
+            sy += 48
+            draw.rectangle([rx + 8, sy - 6, W - 22, sy - 5], fill=DIVIDER)
+
+        # ── Bottom metrics strip ───────────────────────────────────────────────
+        strip_y = BOT_Y + 4
+        draw.rectangle([14, strip_y, W - 14, strip_y + 42], fill=(10, 18, 36))
+        strip_items = [
+            ("SIGNALS TODAY", "5",     GREEN),
+            ("HIGH CONF",     "3",     GREEN),
+            ("CONGRESS BUY",  "2",     BLUE_ACC),
+            ("AVG SCORE",     "74.8",  GOLD),
+            ("WIN RATE",      "78%",   GREEN),
+        ]
+        sx = 22
+        for label, val, vc in strip_items:
+            draw.text((sx, strip_y + 6),  label, font=fonts[0], fill=GRAY_LO)
+            draw.text((sx, strip_y + 22), val,   font=fonts[2], fill=vc)
+            sx += 230
+
+        _footer(draw, "Full system access", SIGNALS_LINK, fonts)
+        return _to_bytes(img)
+    except Exception as e:
+        print(f"[CARD] composite_dashboard: {e}")
+        return None
+
+
 # ─── Rotation manager ────────────────────────────────────────────────────────
 
 # (name, function, category)
@@ -549,12 +894,16 @@ CARD_REGISTRY: list[tuple[str, callable, str]] = [
     ("vapi_demo",          card_vapi_demo,           "chart"),
     ("product_edge",       card_product_edge,        "chart"),
     ("product_flow",       card_product_flow,        "chart"),
-    ("signal_scorecard",   card_signal_scorecard,    "data"),
-    ("congress_buys",      card_congress_buys,       "data"),
-    ("kelly_table",        card_kelly_table,         "data"),
-    ("wins_scorecard",     card_wins_scorecard,      "data"),
-    ("premarket_setup",    card_premarket_setup,     "data"),
-    ("sports_picks",       card_sports_picks,        "data"),
+    ("signal_scorecard",      card_signal_scorecard,      "data"),
+    ("congress_buys",         card_congress_buys,         "data"),
+    ("kelly_table",           card_kelly_table,           "data"),
+    ("wins_scorecard",        card_wins_scorecard,        "data"),
+    ("premarket_setup",       card_premarket_setup,       "data"),
+    ("sports_picks",          card_sports_picks,          "data"),
+    # complex visual cards
+    ("signal_matrix",         card_signal_matrix,         "visual"),
+    ("market_heatmap",        card_market_heatmap,        "visual"),
+    ("composite_dashboard",   card_composite_dashboard,   "visual"),
 ]
 
 ROTATION_LOG = DATA_DIR / "chart_rotation.json"

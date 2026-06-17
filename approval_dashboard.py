@@ -1377,6 +1377,7 @@ def dashboard():
   <a onclick="showTab('grants')"   id="tab-grants"   class="grants-tab {'active' if active_tab=='grants' else ''}">💰 Grant Agent</a>
   <a onclick="showTab('twitter')"  id="tab-twitter"  class="{'active' if active_tab=='twitter' else ''}" style="color:#1d9bf0;font-weight:bold;">🐦 Twitter</a>
   <a onclick="showTab('upwork')"  id="tab-upwork"  class="{'active' if active_tab=='upwork' else ''}" style="color:#14a800;font-weight:bold;">💼 Upwork ({len(_upwork_opps)} jobs)</a>
+  <a onclick="showTab('wins')"   id="tab-wins"   class="{'active' if active_tab=='wins' else ''}" style="color:#00cd73;font-weight:bold;">📈 Wins Tracker</a>
   <a href="/status" style="color:#22c55e;font-weight:bold;">⚡ System Status</a>
   <a href="/trigger-pipeline" style="color:#f97316;font-weight:bold;" onclick="return confirm('Run pipeline now to fetch fresh leads?')">▶ Run Pipeline Now</a>
   <a href="/purge-bounced" style="color:#ef4444;font-weight:bold;" onclick="return confirm('Purge all role/generic emails (info@, service@, hello@) from queue? This fixes your 26.7% bounce rate.')">🧹 Purge Bounced</a>
@@ -1583,6 +1584,7 @@ function showTab(name) {{
   document.getElementById('content-' + name).classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
   if (name === 'twitter') {{ loadTwitterSuggestions(); }}
+  if (name === 'wins') {{ refreshWinsOutreach(); }}
 }}
 
 function loadTwitterSuggestions() {{
@@ -1765,6 +1767,272 @@ function filterNiche(niche, btn) {{
 
   </div>
 </div><!-- end upwork tab -->
+
+<!-- WINS TRACKER TAB -->
+<div id="content-wins" class="tab-content {'active' if active_tab=='wins' else ''}">
+<div style="padding:20px;max-width:1100px;margin:0 auto;">
+
+  <!-- Header row -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+    <h2 style="color:#00cd73;margin:0;font-size:22px;">GHE Performance Tracker</h2>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <select id="wins-bet-size" onchange="recalcWinsOutreach()" style="background:#0f1a2e;color:#fff;border:1px solid #1e3764;padding:6px 12px;border-radius:6px;font-size:13px;">
+        <option value="500">$500 account</option>
+        <option value="1000" selected>$1,000 account</option>
+        <option value="2500">$2,500 account</option>
+        <option value="5000">$5,000 account</option>
+        <option value="10000">$10,000 account</option>
+        <option value="25000">$25,000 account</option>
+      </select>
+      <button onclick="refreshWinsOutreach()" style="background:#00cd73;color:#000;border:none;padding:7px 16px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px;">Refresh</button>
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div id="wins-stats-row" style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:20px;">
+    <div style="background:#0f1a2e;border:1px solid #1e3764;border-radius:8px;padding:14px;text-align:center;">
+      <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Wins</div>
+      <div id="wo-wins" style="color:#00cd73;font-size:28px;font-weight:bold;">--</div>
+    </div>
+    <div style="background:#0f1a2e;border:1px solid #1e3764;border-radius:8px;padding:14px;text-align:center;">
+      <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Losses</div>
+      <div id="wo-losses" style="color:#dc4646;font-size:28px;font-weight:bold;">--</div>
+    </div>
+    <div style="background:#0f1a2e;border:1px solid #1e3764;border-radius:8px;padding:14px;text-align:center;">
+      <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Win Rate</div>
+      <div id="wo-rate" style="color:#fff;font-size:28px;font-weight:bold;">--</div>
+    </div>
+    <div style="background:#0f1a2e;border:1px solid #1e3764;border-radius:8px;padding:14px;text-align:center;">
+      <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">P&L</div>
+      <div id="wo-pnl" style="font-size:24px;font-weight:bold;">--</div>
+    </div>
+    <div style="background:#0f1a2e;border:1px solid #1e3764;border-radius:8px;padding:14px;text-align:center;">
+      <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Avg Win</div>
+      <div id="wo-avgwin" style="color:#00cd73;font-size:24px;font-weight:bold;">--</div>
+    </div>
+    <div style="background:#0f1a2e;border:1px solid #1e3764;border-radius:8px;padding:14px;text-align:center;">
+      <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Kelly %</div>
+      <div id="wo-kelly" style="color:#e6af00;font-size:24px;font-weight:bold;">--</div>
+    </div>
+  </div>
+
+  <!-- Win rate bar -->
+  <div style="background:#0f1a2e;border:1px solid #1e3764;border-radius:8px;padding:16px;margin-bottom:20px;">
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+      <span style="color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Win Rate Gauge</span>
+      <span id="wo-rate-label" style="color:#00cd73;font-size:12px;font-weight:bold;"></span>
+    </div>
+    <div style="background:#1e3764;border-radius:4px;height:14px;overflow:hidden;">
+      <div id="wo-rate-bar" style="height:14px;border-radius:4px;transition:width 0.6s ease;background:linear-gradient(90deg,#00cd73,#1d8cf8);width:0%"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px;">
+      <span style="color:#94a3b8;font-size:10px;">0%</span>
+      <span style="color:#e6af00;font-size:10px;">50%</span>
+      <span style="color:#00cd73;font-size:10px;">100%</span>
+    </div>
+  </div>
+
+  <!-- Category breakdown + picks table -->
+  <div style="display:grid;grid-template-columns:320px 1fr;gap:16px;margin-bottom:20px;">
+
+    <!-- Category breakdown -->
+    <div style="background:#0f1a2e;border:1px solid #1e3764;border-radius:8px;padding:16px;">
+      <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">By Category</div>
+      <div id="wo-categories"></div>
+    </div>
+
+    <!-- Recent picks table -->
+    <div style="background:#0f1a2e;border:1px solid #1e3764;border-radius:8px;padding:16px;overflow-x:auto;">
+      <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">All Picks</div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;" id="wo-picks-table">
+        <thead>
+          <tr style="border-bottom:1px solid #1e3764;">
+            <th style="text-align:left;padding:6px 8px;color:#94a3b8;font-weight:500;">Pick</th>
+            <th style="text-align:center;padding:6px 8px;color:#94a3b8;font-weight:500;">Outcome</th>
+            <th style="text-align:right;padding:6px 8px;color:#94a3b8;font-weight:500;">Result</th>
+            <th style="text-align:center;padding:6px 8px;color:#94a3b8;font-weight:500;">Category</th>
+            <th style="text-align:right;padding:6px 8px;color:#94a3b8;font-weight:500;">P&L ($)</th>
+            <th style="text-align:right;padding:6px 8px;color:#94a3b8;font-weight:500;">Date</th>
+          </tr>
+        </thead>
+        <tbody id="wo-picks-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Log a new pick -->
+  <div style="background:#0f1a2e;border:1px solid #1e3764;border-radius:8px;padding:16px;">
+    <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Log New Pick</div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:end;">
+      <div>
+        <label style="color:#94a3b8;font-size:11px;display:block;margin-bottom:4px;">Pick / Setup</label>
+        <input id="wo-pick" placeholder="e.g. NVDA breakout" style="width:100%;background:#0a1220;border:1px solid #1e3764;color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="color:#94a3b8;font-size:11px;display:block;margin-bottom:4px;">Outcome</label>
+        <select id="wo-outcome" style="width:100%;background:#0a1220;border:1px solid #1e3764;color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;">
+          <option value="WIN">WIN</option>
+          <option value="LOSS">LOSS</option>
+          <option value="PUSH">PUSH</option>
+        </select>
+      </div>
+      <div>
+        <label style="color:#94a3b8;font-size:11px;display:block;margin-bottom:4px;">Result (e.g. +9.2%)</label>
+        <input id="wo-result" placeholder="+9.2%" style="width:100%;background:#0a1220;border:1px solid #1e3764;color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="color:#94a3b8;font-size:11px;display:block;margin-bottom:4px;">Category</label>
+        <select id="wo-cat" style="width:100%;background:#0a1220;border:1px solid #1e3764;color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;">
+          <option value="stocks">Stocks</option>
+          <option value="crypto">Crypto</option>
+          <option value="sports">Sports</option>
+          <option value="options">Options</option>
+        </select>
+      </div>
+      <button onclick="logWinOutreach()" style="background:#00cd73;color:#000;border:none;padding:9px 20px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px;white-space:nowrap;">Log Pick</button>
+    </div>
+    <div id="wo-log-status" style="margin-top:8px;font-size:12px;color:#94a3b8;"></div>
+  </div>
+
+</div>
+</div><!-- end wins tab -->
+
+<script>
+var _woData = null;
+
+function refreshWinsOutreach() {{
+  fetch('/api/wins-outreach')
+    .then(function(r){{return r.json();}})
+    .then(function(d){{ _woData = d; renderWinsOutreach(d); }})
+    .catch(function(e){{ console.error('wins fetch error', e); }});
+}}
+
+function recalcWinsOutreach() {{ if (_woData) renderWinsOutreach(_woData); }}
+
+function renderWinsOutreach(data) {{
+  var picks   = data.picks || [];
+  var overall = data.overall || {{}};
+  var bankroll = parseFloat(document.getElementById('wins-bet-size').value) || 1000;
+
+  var W = overall.wins || 0;
+  var L = overall.losses || 0;
+  var P = overall.pushes || 0;
+  var total = W + L + P;
+  var rate  = total > 0 ? (W / (W + L)) : 0;
+
+  // Compute pct values from picks
+  var winPcts = [], lossPcts = [];
+  picks.forEach(function(p) {{
+    var m = (p.result || '').match(/([+-]?\\d+\\.?\\d*)%/);
+    var pct = m ? parseFloat(m[1]) : 0;
+    if (p.outcome === 'WIN')  winPcts.push(pct);
+    if (p.outcome === 'LOSS') lossPcts.push(Math.abs(pct));
+  }});
+  var avgWin  = winPcts.length  ? winPcts.reduce(function(a,b){{return a+b;}},0)  / winPcts.length  : 0;
+  var avgLoss = lossPcts.length ? lossPcts.reduce(function(a,b){{return a+b;}},0) / lossPcts.length : 1;
+  var kelly   = rate > 0 && avgLoss > 0 ? Math.max(0, rate - (1 - rate) / (avgWin / avgLoss)) : 0;
+  var kellyDollar = kelly * bankroll;
+
+  // P&L estimate
+  var pnl = 0;
+  picks.forEach(function(p) {{
+    var m = (p.result || '').match(/([+-]?\\d+\\.?\\d*)%/);
+    if (m) pnl += parseFloat(m[1]) / 100 * kellyDollar;
+  }});
+
+  // Update stats
+  document.getElementById('wo-wins').textContent   = W;
+  document.getElementById('wo-losses').textContent = L;
+  document.getElementById('wo-rate').textContent   = total > 0 ? Math.round(rate*100)+'%' : '--';
+  var pnlEl = document.getElementById('wo-pnl');
+  pnlEl.textContent = '$' + pnl.toFixed(0);
+  pnlEl.style.color = pnl >= 0 ? '#00cd73' : '#dc4646';
+  document.getElementById('wo-avgwin').textContent  = avgWin.toFixed(1)+'%';
+  document.getElementById('wo-kelly').textContent   = (kelly*100).toFixed(1)+'%';
+  document.getElementById('wo-rate-label').textContent = Math.round(rate*100)+'% win rate';
+  document.getElementById('wo-rate-bar').style.width = Math.round(rate*100)+'%';
+
+  // Category breakdown
+  var cats = {{}};
+  picks.forEach(function(p) {{
+    var c = p.category || 'other';
+    if (!cats[c]) cats[c] = {{w:0,l:0,pnl:0}};
+    if (p.outcome==='WIN')  cats[c].w++;
+    if (p.outcome==='LOSS') cats[c].l++;
+    var m = (p.result||'').match(/([+-]?\\d+\\.?\\d*)%/);
+    if (m) cats[c].pnl += parseFloat(m[1])/100 * kellyDollar;
+  }});
+  var catOrder = ['stocks','crypto','sports','options'];
+  var catHtml = '';
+  catOrder.forEach(function(c) {{
+    if (!cats[c]) return;
+    var cd = cats[c];
+    var cr = cd.w+cd.l > 0 ? Math.round(cd.w/(cd.w+cd.l)*100) : 0;
+    var catColor = cr>=75?'#00cd73':(cr>=55?'#e6af00':'#dc4646');
+    catHtml += '<div style="margin-bottom:14px;">';
+    catHtml += '<div style="display:flex;justify-content:space-between;margin-bottom:4px;">';
+    catHtml += '<span style="color:#fff;text-transform:capitalize;font-size:13px;">'+c+'</span>';
+    catHtml += '<span style="color:'+catColor+';font-size:13px;font-weight:bold;">'+cd.w+'W / '+cd.l+'L — '+cr+'%</span>';
+    catHtml += '</div>';
+    catHtml += '<div style="background:#1e3764;border-radius:3px;height:8px;">';
+    catHtml += '<div style="width:'+cr+'%;height:8px;border-radius:3px;background:'+catColor+';"></div>';
+    catHtml += '</div>';
+    catHtml += '<div style="text-align:right;font-size:11px;color:'+(cd.pnl>=0?'#00cd73':'#dc4646')+';margin-top:2px;">P&L: $'+cd.pnl.toFixed(0)+'</div>';
+    catHtml += '</div>';
+  }});
+  document.getElementById('wo-categories').innerHTML = catHtml || '<div style="color:#94a3b8;font-size:12px;">No data yet</div>';
+
+  // Picks table
+  var tbody = document.getElementById('wo-picks-body');
+  var rows = '';
+  var sorted = picks.slice().reverse();
+  sorted.forEach(function(p, i) {{
+    var bg = i%2===0?'#0d1828':'#0a1220';
+    var oc = p.outcome==='WIN'?'#00cd73':(p.outcome==='LOSS'?'#dc4646':'#e6af00');
+    var m = (p.result||'').match(/([+-]?\\d+\\.?\\d*)%/);
+    var pct = m ? parseFloat(m[1]) : 0;
+    var dollarPnl = (pct/100 * kellyDollar).toFixed(0);
+    var pnlColor = pct>=0?'#00cd73':'#dc4646';
+    rows += '<tr style="background:'+bg+';border-bottom:1px solid #1e3764;">';
+    rows += '<td style="padding:8px;color:#fff;">'+p.pick+'</td>';
+    rows += '<td style="padding:8px;text-align:center;color:'+oc+';font-weight:bold;">'+p.outcome+'</td>';
+    rows += '<td style="padding:8px;text-align:right;color:'+oc+';">'+p.result+'</td>';
+    rows += '<td style="padding:8px;text-align:center;color:#94a3b8;text-transform:capitalize;">'+p.category+'</td>';
+    rows += '<td style="padding:8px;text-align:right;color:'+pnlColor+';">$'+dollarPnl+'</td>';
+    rows += '<td style="padding:8px;text-align:right;color:#94a3b8;font-size:11px;">'+p.date+'</td>';
+    rows += '</tr>';
+  }});
+  tbody.innerHTML = rows || '<tr><td colspan="6" style="padding:20px;text-align:center;color:#94a3b8;">No picks logged yet</td></tr>';
+}}
+
+function logWinOutreach() {{
+  var pick    = document.getElementById('wo-pick').value.trim();
+  var outcome = document.getElementById('wo-outcome').value;
+  var result  = document.getElementById('wo-result').value.trim();
+  var cat     = document.getElementById('wo-cat').value;
+  if (!pick || !result) {{ document.getElementById('wo-log-status').textContent = 'Fill in pick and result first.'; return; }}
+  fetch('/api/wins/log', {{
+    method: 'POST',
+    headers: {{'Content-Type':'application/json'}},
+    body: JSON.stringify({{pick:pick, outcome:outcome, result:result, category:cat}})
+  }}).then(function(r){{return r.json();}}).then(function(d){{
+    document.getElementById('wo-log-status').textContent = d.status === 'ok' ? 'Logged.' : 'Error: '+d.error;
+    document.getElementById('wo-log-status').style.color = d.status==='ok'?'#00cd73':'#dc4646';
+    document.getElementById('wo-pick').value = '';
+    document.getElementById('wo-result').value = '';
+    refreshWinsOutreach();
+  }});
+}}
+
+// Auto-load wins when tab opens
+document.addEventListener('DOMContentLoaded', function() {{
+  if (document.getElementById('content-wins') && document.getElementById('content-wins').classList.contains('active')) {{
+    refreshWinsOutreach();
+  }}
+}});
+// Also load on tab click
+var _origShowTab = typeof showTab !== 'undefined' ? showTab : null;
+</script>
 
 <script>
 function copyProposal(btn, text) {{
@@ -4181,6 +4449,56 @@ _sms_sent_ids: set = set()  # dedup: one SMS per tool_call_id
 def test_sms_route():
     """Test SMS endpoint — disabled to prevent accidental sends."""
     return "Test SMS endpoint is disabled. Remove this block in approval_dashboard.py to re-enable.", 403
+
+
+@app.route('/api/wins-outreach')
+def api_wins_outreach():
+    """Wins log endpoint for the outreach dashboard wins tracker tab."""
+    import json as _json
+    from pathlib import Path as _Path
+    for p in [
+        _Path(__file__).parent / "wins_log.json",
+        _Path("wins_log.json"),
+    ]:
+        if p.exists():
+            try:
+                return jsonify(_json.loads(p.read_text(encoding="utf-8")))
+            except Exception:
+                pass
+    return jsonify({"picks": [], "overall": {"wins": 0, "losses": 0, "pushes": 0}})
+
+
+@app.route('/api/wins/log', methods=['POST'])
+def api_wins_log_outreach():
+    """Log a new pick from the outreach dashboard wins tab."""
+    import json as _json
+    from pathlib import Path as _Path
+    from datetime import datetime as _dt
+    data = flask_request.get_json(silent=True) or {}
+    pick    = data.get("pick", "").strip()
+    outcome = data.get("outcome", "WIN").upper()
+    result  = data.get("result", "").strip()
+    category= data.get("category", "stocks")
+    if not pick or not result:
+        return jsonify({"status": "error", "error": "pick and result required"}), 400
+    log_path = _Path(__file__).parent / "wins_log.json"
+    if not log_path.exists():
+        log_path.write_text(_json.dumps({"picks": [], "overall": {"wins": 0, "losses": 0, "pushes": 0}}))
+    try:
+        log = _json.loads(log_path.read_text(encoding="utf-8"))
+        log["picks"].append({
+            "pick": pick, "outcome": outcome,
+            "result": result, "category": category,
+            "date": _dt.now().strftime("%Y-%m-%d")
+        })
+        o = log["overall"]
+        if outcome == "WIN":   o["wins"]   = o.get("wins", 0) + 1
+        elif outcome == "LOSS": o["losses"] = o.get("losses", 0) + 1
+        else:                   o["pushes"] = o.get("pushes", 0) + 1
+        log_path.write_text(_json.dumps(log, indent=2))
+        return jsonify({"status": "ok"})
+    except Exception as e:
+        return jsonify({"status": "error", "error": str(e)}), 500
 
 
 @app.route('/vapi-collect', methods=['POST'])

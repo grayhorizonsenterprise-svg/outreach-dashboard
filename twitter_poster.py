@@ -907,6 +907,59 @@ We were already in.
 {SIGNALS_LINK}""",
 ]
 
+VISUAL_POSTS = [
+    f"""6 setups. Scored, ranked, sized. Full matrix below.
+
+Score above 70 = signal.
+Score above 75 = full Kelly.
+Everything else = skip.
+
+{SIGNALS_LINK}""",
+
+    f"""This is what our market heatmap looks like when conditions align.
+
+Green = momentum confirmed.
+Red = stay flat.
+
+Nothing ambiguous about it.
+
+{SIGNALS_LINK}""",
+
+    f"""Live dashboard. 5 active setups. All metrics in one place.
+
+RSI, score, price, volume multiplier, trend arrow.
+
+No guessing. No scrolling through charts.
+
+{SIGNALS_LINK}""",
+
+    f"""When 4 tickers go green on the matrix at the same time, that's a regime shift.
+
+SPY above 20d. NVDA breaking out. Crypto confirming. Congressional flow spiking.
+
+This week was one of those weeks.
+
+{SIGNALS_LINK}""",
+
+    f"""Everything the scanner flagged this morning:
+
+Momentum score, RSI level, volume anomaly, congressional overlap.
+
+All on one card. All updated pre-market.
+
+{SIGNALS_LINK}""",
+
+    f"""Market overview. How the composite looks today.
+
+Most setups: 70+
+VIX: below 18
+Breadth: confirming
+
+When everything aligns, the next move is usually obvious.
+
+{SIGNALS_LINK}""",
+]
+
 ALL_POSTS = {
     "signals":      SIGNALS_POSTS,
     "indicators":   INDICATOR_POSTS,
@@ -914,16 +967,18 @@ ALL_POSTS = {
     "engagement":   ENGAGEMENT_POSTS,
     "chart":        CHART_POSTS,
     "wins":         WINS_POSTS,
+    "visual":       VISUAL_POSTS,
 }
 
 # Image-attached categories — auto-generate or attach a card PNG
-IMAGE_CATEGORIES = {"results", "signals", "chart", "wins"}
+IMAGE_CATEGORIES = {"results", "signals", "chart", "wins", "visual"}
 
-# chart/wins use the chart_card_generator (real screenshots + dynamic cards)
-CHART_CARD_CATEGORIES = {"chart", "wins"}
+# chart/wins/visual use the chart_card_generator (real screenshots + dynamic cards)
+CHART_CARD_CATEGORIES = {"chart", "wins", "visual"}
 
 DAILY_SCHEDULE = [
     ("signals",    "13:00"),   # 8am ET   — morning signal preview (text + auto card)
+    ("visual",     "14:00"),   # 9am ET   — complex heatmap/matrix/composite card
     ("chart",      "15:00"),   # 10am ET  — real chart/dashboard screenshot post
     ("results",    "17:00"),   # 12pm ET  — weekly scorecard (text + auto card)
     ("indicators", "20:00"),   # 3pm ET   — TradingView product post
