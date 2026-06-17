@@ -3794,6 +3794,11 @@ def _send_sms_textbelt(to_phone: str, message: str) -> bool:
         print(f"[SMS] Invalid phone: {to_phone}")
         return False
 
+    # Block 805 area code — do not send test or live SMS to these numbers
+    if digits.startswith("805"):
+        print(f"[SMS] BLOCKED — 805 area code numbers are off-limits: {digits}")
+        return False
+
     # -- Primary: TextBelt --
     tb_key = os.getenv("TEXTBELT_KEY", "textbelt")
     payload = _up.urlencode({
@@ -4174,12 +4179,8 @@ _sms_sent_ids: set = set()  # dedup: one SMS per tool_call_id
 
 @app.route('/test-sms', methods=['GET'])
 def test_sms_route():
-    """Direct SMS test — fires carrier blast to number in ?to= param."""
-    phone = flask_request.args.get("to", "").strip()
-    if not phone:
-        return "Pass ?to=9096448087", 400
-    ok = _send_sms_textbelt(phone, "GHE test: SMS is working from Railway.")
-    return f"SMS {'OK' if ok else 'FAILED'} -> {phone}", 200
+    """Test SMS endpoint — disabled to prevent accidental sends."""
+    return "Test SMS endpoint is disabled. Remove this block in approval_dashboard.py to re-enable.", 403
 
 
 @app.route('/vapi-collect', methods=['POST'])
