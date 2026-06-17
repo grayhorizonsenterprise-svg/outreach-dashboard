@@ -1,0 +1,84 @@
+{
+  "episode_number": 21,
+  "title": "What The Hollow Gate Devours",
+  "logline": "Kuro lures Raizen to a forbidden vantage above the Hollow Gate and reveals its true, monstrous purpose \u2014 a secret that fractures the wolf's reason for fighting.",
+  "narrator_intro": "Every war has a center. Every center has a lie. Tonight, the Raven breaks his silence \u2014 not to the world, but to one wolf. And what Raizen learns at the edge of the Hollow Gate cannot be unheard, cannot be unseen, cannot be undone.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "Frozen tundra ridge above a collapsed valley, pre-dawn, thin fog clinging to the snow",
+      "action": "Raizen trudges alone through knee-deep snow, breath fogging, ice eyes scanning the dark. A single black feather drifts down and lands on his shoulder plate. He stops. He knows.",
+      "narration": "A wolf walks alone. A feather falls. The summons is older than language.",
+      "image_prompt": "lone wolf-faced warrior in scarred dark iron plate trudging through deep snow on a mountain ridge, breath visible in cold air, pale ice-blue eyes, single black feather resting on his shoulder, low ground fog, pre-dawn moonlight only, handheld documentary framing, slight lens grain, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 11,
+      "setting": "Crumbling stone watchtower on a cliff overlooking a vast crater, perpetual mist",
+      "action": "Kuro stands motionless at the broken parapet, feather cloak heavy with frost. He does not turn as Raizen climbs the last steps, sword half-drawn. Kuro's gloved hand raises \u2014 wait.",
+      "narration": "The Raven waited. He always waits. Tonight, he chose to speak.",
+      "image_prompt": "masked figure in heavy black feather cloak standing at the edge of a ruined stone tower, obsidian half-mask catching faint moonlight, cold blue unblinking eyes barely visible, frost on feathers, thick fog rolling beneath the cliff, wolf warrior approaching from behind in shadow, torchlit interior glow far below, handheld camera, rack focus, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 13,
+      "setting": "Same watchtower parapet, the two warriors side by side, the crater below",
+      "action": "Raizen sheathes his blade with a slow scrape. Kuro gestures with one finger toward the mist-choked pit below. The fog thins for a heartbeat \u2014 something vast and circular is visible at the bottom, ringed in dead stone.",
+      "narration": "Look down, wolf. The truth was always beneath your war.",
+      "image_prompt": "two warriors standing at a broken stone parapet looking down into a vast misty crater, wolf warrior in dark iron plate beside a black-cloaked masked figure, dawn light barely breaking, thin fog parting to reveal a massive circular stone structure far below ringed by ancient pillars, handheld documentary angle from behind, lens grain, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 12,
+      "setting": "Close two-shot, Kuro's masked face and Raizen's scarred jaw",
+      "action": "Kuro speaks low. 'It is not a gate. It never was.' Raizen's jaw tightens, the old claw scars across his chest visible beneath shifting plate. 'Then what have we been dying for?'",
+      "narration": "Two leaders. One question. A lie three clans were built upon.",
+      "image_prompt": "extreme close-up two-shot of a wolf warrior with visible skin pores sweat and old claw scars on jaw and chest plate beside a black obsidian half-masked face with cold blue eye barely visible through eyeholes, pre-dawn cold light, breath fog between them, handheld tight framing, rack focus shifting between faces, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 13,
+      "setting": "The crater floor seen from above \u2014 the Hollow Gate revealed in full",
+      "action": "The mist peels back. The Gate is not a door. It is a mouth \u2014 a vast ringed maw carved into the earth, lined with petrified bodies of older warriors fused into the stone, still half-moving.",
+      "narration": "It does not open worlds. It eats them. Slowly. Patiently.",
+      "image_prompt": "vast circular pit in the earth seen from high above, ancient stone ring lined with petrified humanoid figures fused into the walls some still faintly twitching, dense fog peeling back at dawn, distant torch-fires around the rim, decayed ruined architecture, ominous documentary aerial angle, no light beams no rim light, cinematic film grain, desaturated, high contrast, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 12,
+      "setting": "Back on the tower, Raizen reels backward, gripping the stone",
+      "action": "Raizen staggers, one gauntlet slamming the parapet, stone crumbling under his grip. For a single flicker \u2014 one frame \u2014 his ice-eyes flare with raw silver moonlight, then snap back to flesh. Grief and fury, contained.",
+      "narration": "Some truths break a warrior. Others sharpen him into a blade.",
+      "image_prompt": "wolf warrior in scarred dark iron plate staggering back at a broken stone parapet, gauntleted hand crushing the stone edge into dust, face contorted with grief and rage, single frame of pale silver light in his ice-blue eyes, breath ragged in cold air, dawn moonlight only, handheld shaky camera, retro anime flicker only one frame on the eye light, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced bloom, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 12,
+      "setting": "Kuro turning to leave, descending the broken stairs into fog",
+      "action": "Kuro lowers his voice. 'Varn does not know. The Gorillas guard what devours them.' He turns, cloak dragging frost across stone. 'Tell him, or do not. Either ends the same.'",
+      "narration": "The Raven gave no plan. Only the weight of knowing.",
+      "image_prompt": "black feather-cloaked masked figure turning to descend a broken spiral stone staircase into thick fog, frost trailing from cloak hem, faint torchlight from below catching the obsidian half-mask, wolf warrior left behind in background out of focus, ancient ruined tower architecture, handheld over-the-shoulder angle, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 13,
+      "setting": "Distant jungle temple at the same dawn \u2014 Varn alone among the Gorilla Titans",
+      "action": "Cut to Varn in the overgrown ruins, kneeling before a cracked stone slab. The amber runes carved into his skin pulse once \u2014 slow, mournful \u2014 as if sensing something far away. He looks up toward the north. He doesn't know yet. But he feels it.",
+      "narration": "Far away, the stone remembers. The Titan stirs. The war is no longer the war.",
+      "image_prompt": "massive gorilla warrior kneeling in overgrown jungle temple ruins at dawn, ancient stone-plate armor with faintly pulsing amber runes carved into skin and stone slabs, cracked statues and vines around him, dense low fog, distant fire haze, looking up slowly toward the north, somber expression, single flicker frame of amber rune pulse, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced bloom, NO anime shading",
+      "faction": "Gorilla Titans"
+    }
+  ],
+  "narrator_outro": "The wolf knows. The raven walks away. And the titan, half a world away, lifts his head toward a truth still on its way. Next: Raizen must choose \u2014 break the alliance, or break Varn's heart.",
+  "shorts_hook": "The Hollow Gate isn't a door. It's a mouth \u2014 and it's been eating them for centuries.",
+  "youtube_title": "Episode 21 \u2014 Kuro Reveals What The Hollow Gate Really Is (Shadow Clans)",
+  "youtube_description": "In Episode 21 of SHADOW CLANS, Kuro of the Raven Order summons Raizen of the Wolf Clan to a forbidden cliff above the Hollow Gate \u2014 and reveals a truth that rewrites the entire war. The Gate is not a door between worlds. It is something far older, far hungrier. Meanwhile, far in the jungle ruins, Varn of the Gorilla Titans begins to sense what he was never told.\n\nA dark cinematic fantasy series. Three animal warrior clans. One collapsing world. One secret beneath it all.\n\nNew episodes weekly. Subscribe and watch the war unravel.\n\n#ShadowClans #DarkFantasy #WolfClan #RavenOrder #GorillaTitans #HollowGate #CinematicFantasy #AnimatedSeries #EpicFantasy #FantasyLore"
+}

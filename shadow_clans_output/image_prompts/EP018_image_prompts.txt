@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 18: The Oath That Broke the Pack
+Generated: 2026-06-16 07:18
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: Wide handheld shot. Wolf Clan warriors in iron plate stand in a half-circle around a small kneeling figure — a Raven child-spy, hands bound, face hidden under a black hood. Snow drifts sideways. Raizen approaches from the shadow, breath fogging.
+Narration: The pack had caught a shadow. A child wearing the feathers of the enemy.
+
+IMAGE PROMPT:
+Wide handheld shot, frozen mountain courtyard at night, broken stone pillars, wolf warriors in scarred dark iron plate forming a half circle, small bound figure kneeling in snow with black hood, torchlight flickering on armor, drifting snow, breath fog, practical torchlight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: Rack focus from the torch flame to Raizen's face. His ice-pale eyes catch the firelight. A deep claw scar runs across his chestplate. He stops walking. His second-in-command, GREL, holds out a curved iron blade hilt-first.
+Narration: They handed him the blade. They expected the law to be obeyed.
+
+IMAGE PROMPT:
+Extreme close up on grizzled wolf warrior face, pale icy eyes reflecting torchlight, deep scar across cheek, visible skin pores, frost in beard, scarred dark iron chest plate with claw marks, gloved hand offering curved iron dagger hilt first in foreground, rack focus, handheld, practical torchlight, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (12s)
+Action: Grel yanks the hood off. Beneath: a thin boy, no older than twelve, blue Raven markings smudged on his cheek, lips cracked from cold. He doesn't beg. He just stares up at Raizen, unblinking.
+Narration: The hood came off. The enemy had a face. The face was a child.
+
+IMAGE PROMPT:
+Low angle shot of thin pale boy kneeling in snow, twelve years old, faded blue tribal markings smudged on cheek, cracked lips, dirt on face, simple black feather scrap on shoulder, looking up unblinking, bound wrists, torchlight from above, breath fog, gritty realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic skin texture, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: Raizen's hand hovers over the blade. He does not take it. Grel's jaw tightens. The wolves behind them shift, uneasy. A long beat. Raizen slowly closes Grel's fingers back around the hilt and steps in front of the boy, shielding him.
+Narration: He did not take the blade. He stepped between the steel and the child.
+
+IMAGE PROMPT:
+Medium two shot, two wolf warriors facing each other in snow, older scarred leader gently pushing curved dagger back into younger warriors hand, older one stepping protectively in front of bound kneeling boy, torchlight side lit, tense expressions, breath fog, other warriors blurred in background, handheld documentary feel, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (11s)
+Action: Three masked elders in heavy fur cloaks stand on a raised platform. The eldest slams a bone staff into the ice. Raizen stands below them, head unbowed. Falling snow thickens. The verdict is whispered, not shouted.
+Narration: Mercy, the elders ruled, is a wound the pack cannot afford.
+
+IMAGE PROMPT:
+Ancient frozen stone council circle at night, three wolf elders in heavy grey fur cloaks and carved bone masks on raised stone platform, eldest slamming carved bone staff into ice, scarred wolf leader standing below head unbowed, heavy falling snow, distant torches, practical fire light only, cinematic film grain, desaturated, high contrast, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: Grel, jaw locked, draws a knife and cuts the wolf-sigil cord from Raizen's shoulder plate. It falls into the snow. For 1 frame ONLY, a faint silver rune flickers on Raizen's chest — then gone. He doesn't react. He removes his helmet and lets it drop.
+Narration: They cut the sigil from his shoulder. They cut him from the name of wolf.
+
+IMAGE PROMPT:
+Close up on gloved hand cutting braided leather sigil cord from scarred dark iron shoulder plate, falling cord landing in snow, scarred warrior in foreground removing battered helmet, single frame faint silver rune flicker barely visible on chestplate, cold blue moonlight and weak torch glow, heavy snowfall, retro anime flicker only on rune for one frame, otherwise photoreal, cinematic film grain, desaturated, shallow depth of field, 4k, realistic metal and leather textures, NO bloom, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (11s)
+Action: Raizen walks alone through knee-deep snow, no cloak, no banner. The boy walks ten paces behind him, still bound at the wrists, watching. Behind them, the torches of the clan grow smaller. No one follows. No one calls him back.
+Narration: He walked out as he came in — alone. But not, this time, unfollowed.
+
+IMAGE PROMPT:
+Wide long lens shot, scarred wolf warrior walking alone through knee deep snow in narrow mountain pass, no cloak, breath fogging, thin pale boy with bound wrists walking ten paces behind, distant cluster of torches small behind them, pale pre-dawn blue light, faint low fog, handheld, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (12s)
+Action: Cut to KURO of the Raven Order standing motionless atop a broken tower, obsidian half-mask catching faint moonlight. His cold blue eyes track the two distant figures crossing the white pass. A single black feather drifts from his cloak. He does not move. He has been waiting.
+Narration: And in the fog of the dead city, the Raven had been waiting all along.
+
+IMAGE PROMPT:
+Ruined stone tower at dawn shrouded in low thick fog, tall figure in black feather plated cloak and obsidian half mask standing motionless at edge, cold pale blue eyes faintly catching moonlight, single black feather drifting down in foreground, distant tiny figures crossing snow far below, decayed gothic architecture, practical moonlight only, cinematic film grain, desaturated, high contrast, shallow depth of field, 4k, realistic feather and stone textures, NO glow, NO anime shading
+
+----------------------------------------

@@ -1,0 +1,231 @@
+================================================================================
+GHE SERVICE AGREEMENT
+Fill in all [BRACKETED] fields. Send as PDF within 20 minutes of verbal yes.
+Digital signature accepted — use DocuSign free tier or HelloSign.
+================================================================================
+
+
+AI AUTOMATION SERVICES AGREEMENT
+
+This Agreement is entered into as of [DATE] between:
+
+Service Provider:   Gray Horizons Enterprise
+                    grayhorizonsenterprise@gmail.com
+                    grayhorizonsenterprise.com
+
+Client:             [CLIENT FULL NAME / BUSINESS NAME]
+                    [CLIENT ADDRESS]
+                    [CLIENT EMAIL]
+                    [CLIENT PHONE]
+
+Collectively referred to as the "Parties."
+
+
+================================================================================
+1. SCOPE OF WORK
+================================================================================
+
+Gray Horizons Enterprise agrees to provide the following services to Client:
+
+1.1  AI Voice Agent — Design, configure, and deploy an AI voice agent for
+     inbound call handling, lead qualification, and appointment booking for
+     [CLIENT BUSINESS NAME].
+
+1.2  CRM Automation — Configure automated lead capture, pipeline staging,
+     and follow-up sequences within [CRM PLATFORM].
+
+1.3  SMS Automation — Set up instant SMS response, missed call text-back,
+     and multi-touch follow-up sequences.
+
+1.4  Calendar Integration — Connect automated booking to [CLIENT CALENDAR
+     PLATFORM].
+
+1.5  Testing and QA — Conduct live testing across [X] scenarios prior to
+     launch and make adjustments based on Client feedback.
+
+1.6  Documentation — Provide a one-page quick reference guide and 30-minute
+     team briefing at launch.
+
+1.7  Post-Launch Support — Provide 30 days of monitoring and support following
+     system launch.
+
+[If monthly management selected:]
+1.8  Monthly Management — Provide ongoing weekly performance review, system
+     optimization, and monthly ROI reporting for $297/month.
+
+Services not included: paid advertising, lead generation, website redesign,
+ongoing content creation, or services not listed above.
+
+
+================================================================================
+2. TIMELINE
+================================================================================
+
+2.1  Project Start Date: Within 24 hours of contract execution and receipt
+     of initial payment.
+
+2.2  Target Launch Date: [DATE — 14 days from start].
+
+2.3  Timeline is contingent on timely access and approvals from Client as
+     described in Section 6.
+
+
+================================================================================
+3. COMPENSATION
+================================================================================
+
+3.1  One-Time Setup Fee: $[AMOUNT]
+     Payment Schedule:
+       50% ($[AMOUNT]) due at contract signing
+       50% ($[AMOUNT]) due at system launch
+
+3.2  Monthly Management Fee (if selected): $297/month
+     First payment due on system launch date.
+     Subsequent payments billed on the 1st of each month.
+     Either party may cancel monthly management with 30 days written notice.
+
+3.3  Payment Methods: Bank transfer, credit card via Stripe, or other method
+     agreed upon in writing.
+
+3.4  Late Payments: Invoices unpaid after 10 days incur a 1.5% monthly
+     late fee. Work may be paused on accounts 30+ days past due.
+
+
+================================================================================
+4. INTELLECTUAL PROPERTY
+================================================================================
+
+4.1  Client Ownership: Upon receipt of full payment, Client owns all custom
+     configurations, workflows, and automations built specifically for their
+     business.
+
+4.2  Service Provider Ownership: Gray Horizons Enterprise retains ownership
+     of all proprietary templates, frameworks, and tools used in the build.
+     Client receives a perpetual license to use the delivered configurations.
+
+4.3  Third-Party Platforms: Systems built on GoHighLevel, Vapi, Twilio,
+     or other third-party platforms are subject to those platforms' terms of
+     service. Continued operation requires Client to maintain active accounts
+     on applicable platforms.
+
+
+================================================================================
+5. CONFIDENTIALITY
+================================================================================
+
+5.1  Each Party agrees to hold in confidence all non-public information
+     received from the other Party in connection with this Agreement.
+
+5.2  This obligation does not apply to information that is publicly available,
+     independently developed, or required to be disclosed by law.
+
+5.3  Confidentiality obligations survive termination of this Agreement for
+     a period of two (2) years.
+
+
+================================================================================
+6. CLIENT RESPONSIBILITIES
+================================================================================
+
+Client agrees to:
+
+6.1  Provide access to all necessary accounts (phone system, calendar, CRM,
+     website) within 48 hours of project start.
+
+6.2  Attend the onboarding call and the client review call (Section 4 / Phase 2).
+
+6.3  Respond to requests for information or feedback within 48 hours to
+     maintain project timeline.
+
+6.4  Maintain active subscriptions to any required third-party platforms.
+
+Delays caused by Client's failure to provide access or approvals will extend
+the project timeline accordingly and do not constitute a breach by Provider.
+
+
+================================================================================
+7. LIMITATION OF LIABILITY
+================================================================================
+
+7.1  Gray Horizons Enterprise is not liable for revenue lost, leads missed,
+     or business outcomes resulting from system downtime, third-party platform
+     outages, or circumstances outside our direct control.
+
+7.2  Total liability under this Agreement shall not exceed the total fees paid
+     by Client in the 90 days preceding any claim.
+
+7.3  ROI projections in any proposal are estimates based on industry averages
+     and Client-provided data. Actual results may vary.
+
+
+================================================================================
+8. TERMINATION
+================================================================================
+
+8.1  Either Party may terminate this Agreement with 14 days written notice
+     if the other Party materially breaches any term and fails to cure within
+     that period.
+
+8.2  Upon termination, Client pays for all work completed through termination
+     date at the agreed rate. Initial 50% deposit is non-refundable if
+     work has commenced.
+
+8.3  Monthly management may be cancelled with 30 days written notice. No
+     partial-month refunds.
+
+
+================================================================================
+9. DISPUTE RESOLUTION
+================================================================================
+
+9.1  The Parties agree to attempt to resolve any dispute through good-faith
+     negotiation before pursuing formal proceedings.
+
+9.2  If negotiation fails, disputes shall be resolved through binding
+     arbitration in [YOUR STATE], under the rules of the American Arbitration
+     Association.
+
+9.3  This Agreement is governed by the laws of the State of [YOUR STATE].
+
+
+================================================================================
+10. ENTIRE AGREEMENT
+================================================================================
+
+This Agreement constitutes the entire agreement between the Parties and
+supersedes all prior discussions, representations, or agreements, whether
+written or oral. Amendments must be in writing and signed by both Parties.
+
+
+================================================================================
+SIGNATURES
+================================================================================
+
+By signing below, both Parties agree to the terms of this Agreement.
+
+
+GRAY HORIZONS ENTERPRISE
+
+Signature: _________________________________
+
+Name:      Gray Horizons Enterprise
+
+Date:      _________________________________
+
+
+CLIENT
+
+Signature: _________________________________
+
+Name:      [CLIENT FULL NAME]
+
+Title:     [CLIENT TITLE / BUSINESS NAME]
+
+Date:      _________________________________
+
+
+================================================================================
+NOTE: For digital signature, use DocuSign (free for 3 docs/month) or
+HelloSign (free for 3 docs/month). Upload this as PDF, add signature fields,
+send link. Client signs from phone in under 2 minutes.
+================================================================================

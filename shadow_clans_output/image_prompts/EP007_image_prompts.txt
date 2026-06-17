@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 7: The Son Who Bowed to No One
+Generated: 2026-06-10 08:24
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: A hooded figure limps through the broken archway. Mud-caked boots. One hand drags a chipped stone blade across the flagstones. Two Titan sentries lower their spears, uncertain.
+Narration: He came alone, through a gate no living thing should have crossed.
+
+IMAGE PROMPT:
+hooded muscular figure limping through ancient stone archway, dense low jungle fog, wet moss-covered ruins, two gorilla warriors in cracked stone plate armor lowering spears, practical torchlight from iron braziers, handheld camera, rack focus on dragging stone blade, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: Varn looks up as the hood is pulled back. A young gorilla, half his size, face carved with deep ritual scars that are NOT Titan markings. Varn's breath catches. His massive hand grips the armrest until stone cracks.
+Narration: Varn had carved his son's name into seven tombs. None of them held a body.
+
+IMAGE PROMPT:
+massive aged gorilla warrior on cracked stone throne, faint amber rune markings glowing softly under skin of arms, young scarred gorilla revealing face in foreground, deep ritual scars not matching any faction, torchlight from low braziers, dust motes in air, handheld documentary close-up, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (13s)
+Action: Varn rises slowly. He reaches a trembling hand toward Toro's scarred jaw. Toro does not flinch, but he does not lean in. He speaks low: 'I am not yours to command, father.' The silence after is heavier than the words.
+Narration: Seven years of grief. Answered with seven words.
+
+IMAGE PROMPT:
+huge gorilla father reaching trembling calloused hand toward scarred face of young gorilla son, intimate two-shot, low torchlight casting hard shadows, ancient stone walls behind, visible skin texture and old wounds, dust in air, handheld camera slight breath movement, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: Quick cut: young Toro, no older than ten, dragged across the snow by a clawed silhouette. A wolf banner torn in the wind. Then a raven shadow descending. Then black. Three factions. One child. No claim.
+Narration: Wolves took him. Ravens kept him. Something else broke him.
+
+IMAGE PROMPT:
+fragmented memory shot, young gorilla child dragged across bloodied snow battlefield, torn wolf clan banner whipping in wind, raven shadow crossing moon above, scattered broken weapons, moonlight only no other source, handheld unsteady camera, brief single-frame anime flicker only at edge of shadow, cinematic film grain, heavily desaturated, shallow depth of field, 4k, realistic textures, NO glow elsewhere, NO anime shading on figures
+
+----------------------------------------
+
+SCENE 5 (11s)
+Action: An old shaman steps forward, presses a thumb to Toro's forehead scar. The amber runes on the shaman's arm DIE OUT — go black. The elder recoils. 'He carries no clan. The stone does not know him.'
+Narration: The runes that judge every Titan refused to read him at all.
+
+IMAGE PROMPT:
+elderly gorilla shaman in ceremonial bone necklaces pressing thumb to forehead of scarred young gorilla, amber rune tattoos on shaman arm visibly fading to black, single brief 1-frame retro anime flicker at exact moment runes die, surrounding elder gorillas in shadow watching, low torch braziers, ancient temple chamber, handheld documentary angle, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO bloom, NO anime shading on faces
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: Varn and Toro stand apart at the railing. Varn: 'Swear to the Titans. I can protect you.' Toro stares at the distant fires. 'I have seen what your protection costs. I came to warn you. Not to kneel.'
+Narration: He did not come home. He came with a warning.
+
+IMAGE PROMPT:
+two gorilla warriors standing apart on cracked stone balcony overlooking dark jungle at night, distant orange fires on horizon, moonlight as primary source, weathered armor and visible scars, father and son in profile, fog drifting between them, handheld camera slight sway, cinematic film grain, desaturated cold blue and faint amber palette, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (13s)
+Action: Toro exposes his chest. Across the skin, faint symbols pulse — NOT Titan amber, NOT Wolf silver, NOT Raven blue. A fourth color. Sickly green-grey. Varn staggers back one step. His mouth forms a name he will not speak aloud.
+Narration: There was a fourth clan. Varn had spent his life pretending it was a myth.
+
+IMAGE PROMPT:
+young scarred gorilla pulling open ragged cloth tunic revealing chest, faint sickly green-grey symbols subtly pulsing under skin, single 1-frame retro anime flicker at first pulse only, older massive gorilla warrior staggering back one step in horror, torchlight from below, fog drifting, intimate handheld shot, cinematic film grain, desaturated with one unnatural green tint, shallow depth of field, 4k, realistic skin pores and old scars, NO bloom glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (12s)
+Action: Kuro's scout lowers a brass spyglass. Cold blue unblinking eyes. Black feathers wet with mist. The scout whispers into a bone horn: 'The fourth mark has returned. Tell Kuro. The Hollow Gate is already open.' Smash cut to black.
+Narration: Three clans believed they ruled what remained of the world. Tonight, they learned they were wrong.
+
+IMAGE PROMPT:
+raven order scout perched on shattered weathered stone statue high above temple ruins, obsidian half-mask, wet black feather cloak, cold pale blue unblinking eyes catching moonlight, lowering brass spyglass, whispering into carved bone horn, perpetual fog below, distant temple torchlight tiny in background, handheld telephoto compression, cinematic film grain, heavily desaturated, shallow depth of field, 4k, realistic feather and skin texture, NO glow effects, NO anime shading
+
+----------------------------------------

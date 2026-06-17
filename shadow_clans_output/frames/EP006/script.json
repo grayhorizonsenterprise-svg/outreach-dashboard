@@ -1,0 +1,84 @@
+{
+  "episode_number": 6,
+  "title": "The Hollow Gate Begins Speaking",
+  "logline": "An ancient whisper bleeds from the Hollow Gate into Raizen's mind alone, fracturing his command and marking him as either prophet or prey.",
+  "narrator_intro": "Every gate has two sides. The Hollow Gate has more. For three hundred years it stood silent. Tonight, it remembers a name. And only one wolf can hear it.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 11,
+      "setting": "Frozen tundra ridge above the Hollow Gate basin, pre-dawn, low fog clinging to ice",
+      "action": "Raizen kneels in the snow, scarred dark iron plate dusted in frost. His breath is heavy, ragged. He stares down at the distant Gate. A low sound \u2014 almost a word \u2014 passes through him. He flinches, gripping the snow with a clawed gauntlet.",
+      "narration": "Before the others woke, the Gate found him. A whisper across three hundred years of silence.",
+      "image_prompt": "lone wolf warrior kneeling in deep snow on a mountain ridge, scarred dark iron chest plate with deep claw marks, pale ice-blue eyes, dawn fog clinging low, distant black stone gate in the valley below, breath visible, handheld documentary shot, practical moonlight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 12,
+      "setting": "Wolf Clan war camp, snow-covered ruins, torches burning low at dawn",
+      "action": "Raizen walks past his lieutenants without speaking. They watch him, confused. A wolf captain, fur matted with dried blood, asks where he's going. Raizen does not answer. His pupils are dilated. Sweat lines his temple despite the cold.",
+      "narration": "His warriors saw a leader walking. They did not see what walked beside him.",
+      "image_prompt": "scarred wolf warrior walking through a snowy ruined camp at dawn, torchlight flickering on dark iron armor, lieutenants watching with concern, breath fog, dirt and sweat on faces, handheld camera follow shot, rack focus, practical torch lighting, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 12,
+      "setting": "Ruined stone tower of the Raven Order, perpetual fog rolling across the parapet",
+      "action": "Kuro stands motionless on a broken parapet, obsidian half-mask catching faint cold light. A raven lands on his armored shoulder. He tilts his head, listening to something far away. His unblinking blue eyes narrow.",
+      "narration": "Far to the east, the Raven heard nothing \u2014 and that was what unsettled him.",
+      "image_prompt": "tall figure in black feather-plated cloak on a ruined stone tower, obsidian half-mask, cold pale blue eyes, thick fog rolling across crumbling parapet, a black raven on his shoulder, distant dead city below, overcast grey sky, handheld telephoto shot, practical overcast lighting, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 13,
+      "setting": "Overgrown jungle temple ruin, vines breaking through cracked altar stones, mist between trees",
+      "action": "Varn presses his enormous palm to a cracked temple wall. The amber runes carved into his skin flicker faintly \u2014 and for a single frame, glitch like damaged film. He pulls his hand back as if burned. Dust falls from the stones above him.",
+      "narration": "In the jungle, ancient stone answered ancient blood. Varn felt the Gate reaching.",
+      "image_prompt": "massive gorilla warrior pressing palm to mossy cracked temple wall, faint amber runes etched into thick skin, ancient stone shoulder plates with hairline cracks, dense jungle fog, shattered statues behind him, vines hanging, single 1-frame retro anime flicker on rune release, handheld low angle, practical filtered jungle light, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO bloom, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 12,
+      "setting": "Frozen approach to the Hollow Gate, ankle-deep snow, black stone arch towering ahead",
+      "action": "Raizen walks alone toward the Gate. The whisper rises into a chorus \u2014 overlapping voices in a dead tongue. He stops twenty paces away. The Gate's surface ripples like water held still. His hand drifts to his sword grip, trembling.",
+      "narration": "It did not call him by name. It called him by what he had done.",
+      "image_prompt": "wolf warrior alone in deep snow approaching a massive black stone arch gate, faint runes barely visible on the stone, low ground fog, scarred dark iron armor, ice-blue eyes wide and trembling, hand on sword grip, dawn light grey and flat, handheld over-shoulder shot, practical natural light only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 12,
+      "setting": "Directly before the Hollow Gate, snow falling, monolithic black stone filling the frame",
+      "action": "Raizen drops to one knee. Blood trickles from his nose, freezing on his lip. The Gate's surface shows a reflection that is NOT him \u2014 an older wolf, scarred deeper, eyes hollow. For one anime-flicker frame, the reflection smiles. Raizen stops breathing.",
+      "narration": "The Gate showed him a face. His own face. Older. Crueler. Already waiting.",
+      "image_prompt": "wolf warrior kneeling before towering black stone gate, blood trickling from nose freezing on lip, snow falling slow, the gate's surface showing a distorted reflection of an older more scarred wolf face, single 1-frame retro anime flicker on reflection smile, handheld close shot, practical dawn light, cinematic film grain, desaturated, high contrast, shallow depth of field, 4k, realistic skin pores and sweat, NO bloom, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 11,
+      "setting": "Wolf Clan camp, mid-morning, lieutenants gathered around a fire pit",
+      "action": "Raizen returns. Snow on his shoulders, blood dried on his face. He gives one order: break camp, move south, away from the Gate. His second-in-command hesitates \u2014 they were ordered to hold the Gate. Raizen does not look at him. \"It is awake.\"",
+      "narration": "He gave one order. The wolves who trusted him obeyed. The wolves who did not \u2014 would soon.",
+      "image_prompt": "scarred wolf warrior returning to camp, dried blood on face, snow on shoulders, lieutenants around a smoldering fire pit looking unsettled, dark iron armor with claw marks, low overcast morning light, handheld medium shot, practical firelight and grey daylight, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures dirt and sweat, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 12,
+      "setting": "Hollow Gate basin at dusk, empty, snow blowing across black stone",
+      "action": "Wide shot of the Gate. Silent. Then \u2014 slowly \u2014 a single rune on its surface ignites faintly, then dies. Camera pushes in. The whisper returns, this time in multiple overlapping voices. The reflection of the older Raizen is still there, watching. Cut to black.",
+      "narration": "The Gate had spoken once. It would not stop now.",
+      "image_prompt": "massive black stone gate alone in snowy basin at dusk, blowing snow, a single faint rune on the stone barely lit then fading, the surface still showing a ghostly reflection of an older scarred wolf face, low fog, no people, wide cinematic shot pushing in, practical fading daylight only, cinematic film grain, desaturated, high contrast, shallow depth of field, 4k, realistic stone texture, NO bloom, NO glow, NO anime shading",
+      "faction": "neutral"
+    }
+  ],
+  "narrator_outro": "The Gate has chosen a listener. Next: the Raven Order moves on the Wolf Clan's silence \u2014 and Varn unearths what should have stayed buried.",
+  "shorts_hook": "The Hollow Gate showed Raizen his own face \u2014 older, crueler, already waiting.",
+  "youtube_title": "Shadow Clans Episode 6 \u2014 The Hollow Gate Begins Speaking",
+  "youtube_description": "Episode 6 of SHADOW CLANS. For three hundred years the Hollow Gate stood silent. Tonight it whispers \u2014 and only Raizen of the Wolf Clan can hear it. Kuro watches from the fog. Varn feels the ancient stone answer. And the Gate shows Raizen a reflection that should not exist.\n\nA dark cinematic fantasy series. Three animal warrior clans. One collapsing world. One gate that was never meant to open.\n\nNew episodes weekly.\n\n#ShadowClans #DarkFantasy #WolfClan #RavenOrder #GorillaTitans #CinematicFantasy #AnimatedSeries #FantasyLore #HollowGate #Episode6"
+}

@@ -1,0 +1,84 @@
+{
+  "episode_number": 8,
+  "title": "The Oath Before The Gate",
+  "logline": "A nameless scout uncovers a buried mural revealing that Raizen, Kuro, and Varn once swore brotherhood at the Hollow Gate.",
+  "narrator_intro": "Before the clans bled each other dry, before the Hollow Gate split the sky, three students knelt in the same ash. History buried them. Tonight, a nameless scout digs them back up.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 11,
+      "setting": "Cracked stone foothills below the Hollow Gate, pre-dawn, low fog clinging to wet rock",
+      "action": "A hooded scout, face dirt-streaked, crawls between broken pillars. Breath visible. He pauses, listening. A faint amber pulse leaks from a fissure in the rock.",
+      "narration": "He carries no banner. No name. Only orders to watch, and report.",
+      "image_prompt": "hooded human scout crawling through broken stone pillars at dawn, dirt smeared face, breath fogging in cold air, faint amber light leaking from rock crack, low ground fog, handheld documentary camera angle, practical torchlight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 12,
+      "setting": "Narrow collapsed tunnel beneath the foothills, water dripping, walls of carved stone",
+      "action": "The scout squeezes through rubble, oil lamp shaking in his hand. The lamp catches faded paint on the wall \u2014 a curve of mural. He freezes.",
+      "narration": "The mountain remembered something the clans agreed to forget.",
+      "image_prompt": "scout squeezing through rubble in collapsed stone tunnel, trembling oil lamp, dripping water, faded mural paint catching lamp light on rough carved wall, handheld lens, slight lens grain, practical orange lamp light, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 12,
+      "setting": "Interior chamber, mural-covered wall, ancient soot",
+      "action": "Lamp rises. The mural reveals three young figures kneeling \u2014 a wolf, a raven, a gorilla \u2014 hands joined over a circle carved with the Hollow Gate sigil.",
+      "narration": "Three students. One master. One oath, sworn before the Gate cracked open.",
+      "image_prompt": "ancient cracked stone mural showing three young animal warrior figures kneeling, wolf raven and gorilla, hands joined over carved circular sigil, soot stained wall, lit only by handheld oil lamp from below, rack focus on mural detail, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 12,
+      "setting": "Flashback \u2014 training courtyard of a ruined monastery, decades earlier, dusk",
+      "action": "Young Raizen, lean and unscarred, spars with young Varn. Young Kuro watches from a parapet, half-mask not yet worn. They laugh \u2014 a sound that does not belong to who they became.",
+      "narration": "Before the silver eyes. Before the runes. Before the mask. They were only boys.",
+      "image_prompt": "flashback scene young wolf warrior sparring with young gorilla warrior in ruined monastery courtyard at dusk, young raven warrior watching from broken stone parapet without mask, dust kicked up, practical golden hour light, handheld camera, slight lens grain, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 12,
+      "setting": "Same flashback, night, before a primitive version of the Hollow Gate",
+      "action": "The three kneel in ash. A robed master pours dark oil across their joined hands. A single faint rune flickers \u2014 one anime-style flash frame \u2014 then gone. Their faces tighten in pain.",
+      "narration": "The oath bound them. The oath also marked them \u2014 for what would come.",
+      "image_prompt": "three young animal warriors kneeling in ash before primitive stone gate at night, robed master pouring dark oil over their joined hands, single faint rune flash, torchlight only, pained expressions visible skin pores sweat, handheld documentary realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 11,
+      "setting": "Back in the mural chamber, present",
+      "action": "The scout traces the mural with a shaking finger. He sees a fourth figure, half-scratched away \u2014 taller, faceless. He whispers a curse and reaches for his journal.",
+      "narration": "A fourth shadow. Erased. By whose hand, no record will say.",
+      "image_prompt": "scout's dirty trembling hand tracing ancient mural showing fourth scratched out faceless figure, close up shallow focus, oil lamp warm light from side, journal half visible in other hand, sweat on knuckles, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 12,
+      "setting": "Outside the tunnel, the scout fleeing across moonlit scree",
+      "action": "Scout slips, recovers, runs. Behind him, three distant signal fires bloom on three separate horizons \u2014 wolf white, raven blue, gorilla amber. He stops, realizing he is being hunted from every direction.",
+      "narration": "He carried a secret older than the war. All three clans wanted it buried.",
+      "image_prompt": "scout running across moonlit scree slope, three distant signal fires on separate horizons in different cold colors pale white cold blue and warm amber very faint, scout frozen mid-stride looking back, practical moonlight only, handheld camera shake, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 12,
+      "setting": "Raizen's war tent, Wolf Clan camp, frozen ridge",
+      "action": "Raizen reads a torn page slid across the table by a kneeling lieutenant. His silver eyes do not move. He folds the page once. Then burns it slowly in a candle flame.",
+      "narration": "Some brothers were buried with names. Others, with silence.",
+      "image_prompt": "Raizen wolf clan leader in dark scarred iron plate seated in war tent, pale ice silver eyes, deep claw scars across chest visible through open armor, kneeling lieutenant offering torn parchment, candle flame burning page, practical candle light only, slight breath fog, handheld realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    }
+  ],
+  "narrator_outro": "The scout runs east, hunted by three clans at once. And somewhere beneath the Hollow Gate, a fourth name begins to stir. Next episode \u2014 the erased one returns.",
+  "shorts_hook": "Raizen, Kuro, and Varn took the same oath \u2014 and one of them erased the fourth student.",
+  "youtube_title": "Shadow Clans Ep 8 \u2014 The Oath Before The Gate",
+  "youtube_description": "A nameless scout descends into a forgotten tunnel beneath the Hollow Gate and uncovers a mural that rewrites everything: Raizen of the Wolves, Kuro of the Ravens, and Varn of the Gorillas once knelt as brothers under the same master. And a fourth figure was scratched from the stone. Episode 8 of the Shadow Clans cinematic saga.\n\nA dark fantasy animated series shot in cinematic realism \u2014 handheld camera, practical torchlight, no flashy glow. A lost film unearthed.\n\nNew episodes weekly.\n\n#shadowclans #darkfantasy #animatedseries #wolfclan #ravenorder #gorillatitans #cinematic #fantasylore #hollowgate"
+}

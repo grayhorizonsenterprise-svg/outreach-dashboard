@@ -1,0 +1,84 @@
+{
+  "episode_number": 5,
+  "title": "The Night Raizen Defied the Pack",
+  "logline": "When ordered to execute surrendered Raven prisoners, Wolf Clan leader Raizen refuses and is cast out into the frozen wilderness by his own warriors.",
+  "narrator_intro": "There are laws older than kings. Older than gods. In the Wolf Clan, an order from the pack is sacred \u2014 to refuse it is to die, or worse, to be forgotten. On this night, Raizen chose forgetting.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "A snow-buried ridge above a frozen Wolf Clan encampment, torches flickering between black pine trunks",
+      "action": "Handheld push-in on Raizen standing alone on the ridge, breath fogging, silver eyes catching the moon. Snow falls in slow sheets. He grips a war-blade still wet from earlier battle.",
+      "narration": "The mountain was quiet. Too quiet for what the night was about to ask of him.",
+      "image_prompt": "A scarred wolf-warrior in dark dented iron plate standing on a snowy mountain ridge at night, pale moonlight on his face, frosted breath, deep claw scars across chest armor, holding a bloodied iron blade, distant torches in a valley camp below, low fog hugging snow, handheld documentary framing, slight lens grain, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 11,
+      "setting": "Inside a half-collapsed stone war hall lit by iron braziers, snow drifting through broken roof beams",
+      "action": "Rack focus from a snarling Wolf elder to three kneeling Raven prisoners, hands bound in frozen rope, obsidian masks cracked. One prisoner is barely conscious, blood dried on his cheek.",
+      "narration": "Three Ravens. Bound. Silent. Waiting for the verdict every wolf already knew.",
+      "image_prompt": "Three kneeling raven-warriors in cracked black feather cloaks and shattered obsidian half-masks, bound with frozen rope, inside a ruined stone hall lit by iron braziers, snow falling through broken ceiling beams, blood dried on faces, a hulking wolf elder snarling out of focus in foreground, handheld documentary realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 11,
+      "setting": "The war hall, central fire pit",
+      "action": "The elder, a grey-furred wolf in heavy bone-mail, slams a scarred fist on a stone table and points at Raizen. Other wolf warriors line the walls, eyes glinting amber in firelight. The kill order is given.",
+      "narration": "The elder spoke the old word \u2014 Skara. Cleanse. No survivors. No mercy.",
+      "image_prompt": "An old grey wolf-warrior in heavy bone-plated mail slamming a clawed fist on a cracked stone war table, firelight from a central pit, six wolf warriors lined along ruined walls in dark iron armor, scarred snouts, breath fogging in cold air, low torch light, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 12,
+      "setting": "War hall, close on Raizen",
+      "action": "Close-up: Raizen's silver eyes flicker. His jaw tightens. He looks down at the bound, broken Raven prisoner \u2014 a boy, barely a fledgling. Raizen sheathes his blade. The hall goes dead silent.",
+      "narration": "He looked at the boy. He saw not an enemy. He saw a son someone was still waiting for.",
+      "image_prompt": "Extreme close-up of a scarred wolf-warrior with pale silver eyes like frozen moonlight, slowly sheathing a heavy iron blade, jaw clenched, breath visible, firelight flickering across deep facial scars and dirt-streaked fur, out-of-focus bound young raven prisoner in background, handheld documentary realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 11,
+      "setting": "War hall, wide shot",
+      "action": "The elder roars in fury. Wolves draw blades, surrounding Raizen. He raises his hands \u2014 not in surrender, but refusal. For one single frame, his silver eyes pulse with frozen-moonlight light \u2014 the only flicker of supernatural force in the entire scene \u2014 then it's gone.",
+      "narration": "He refused. And in that breath \u2014 the pack became the wolves at his throat.",
+      "image_prompt": "A wide shot of a scarred wolf-warrior surrounded by six other wolf warriors in dark iron plate drawing curved blades inside a ruined stone war hall, central fire pit, snow drifting in, the central wolf raises empty hands, a single brief faint silver flicker in his eyes, low practical torchlight only, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow except a one-frame eye flicker, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 12,
+      "setting": "Outside the war hall, snow-covered courtyard at night",
+      "action": "Raizen is dragged out, armor stripped of its clan sigil. The elder carves the mark of exile into Raizen's chest plate with a slow blade. Blood freezes as it falls. No one speaks. The Raven prisoners watch from the doorway, unbound.",
+      "narration": "They did not kill him. They did something older. They erased him.",
+      "image_prompt": "A scarred wolf-warrior on his knees in deep snow at night, two warriors holding his arms back, an old grey wolf elder carving a rune of exile into his iron chestplate with a curved knife, blood freezing on snow, ruined stone hall behind them, distant torches, three unbound raven prisoners watching silently from a doorway, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 11,
+      "setting": "The frozen tundra beyond the Wolf encampment, before dawn",
+      "action": "Raizen walks alone into a vast white nothing, blade on his back, no cloak. His footprints fill instantly with falling snow. Behind him, the torches of his home shrink to pinpricks, then vanish.",
+      "narration": "No name. No pack. No fire to return to. Only the long white silence.",
+      "image_prompt": "A lone scarred wolf-warrior in damaged dark iron plate walking away into a vast snow-covered tundra before dawn, blade strapped across his back, no cloak, footprints filling with fresh snow behind him, tiny distant torches of an encampment far in the background, low fog along the ground, pale grey-blue pre-dawn light, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 10,
+      "setting": "A high ruined stone tower wrapped in fog, far from the wolf lands",
+      "action": "Cut to Kuro of the Raven Order standing on a broken parapet, cold blue eyes unblinking, reading a small black feather a scout has just placed in his palm. A slow, deliberate smile. He has been told everything.",
+      "narration": "And somewhere, in a tower of fog, a raven smiled. The exile had only just begun.",
+      "image_prompt": "A tall raven-warrior in a black feather-plated cloak and obsidian half-mask standing on the broken parapet of a ruined stone tower, dense grey fog all around, cold pale blue eyes unblinking, holding a single black feather in a gloved hand, faint slow smile beneath the mask, dead city ruins faintly visible below, practical moonlight only, handheld documentary realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    }
+  ],
+  "narrator_outro": "Next, in the ruins beyond the Hollow Gate \u2014 an exiled wolf crosses paths with a Gorilla Titan who remembers his father's name. And neither of them came to make friends.",
+  "shorts_hook": "He refused to kill the prisoners \u2014 so his own pack carved him out of the clan.",
+  "youtube_title": "Episode 5: The Night Raizen Was Exiled From His Own Clan | SHADOW CLANS",
+  "youtube_description": "In Episode 5 of SHADOW CLANS, Wolf Clan leader Raizen is given the ancient kill order \u2014 Skara \u2014 against three captured Raven prisoners. What he chooses next will brand him a traitor, strip him of his name, and send him alone into the frozen tundra. Meanwhile, in a tower of fog far away, Kuro of the Raven Order already knows. A dark cinematic fantasy series set in a collapsing world centered on the Hollow Gate. Three factions. One war none of them can stop. New episodes weekly. #ShadowClans #DarkFantasy #WolfClan #RavenOrder #GorillaTitans #CinematicFantasy #AnimatedSeries #FantasyLore #Raizen #Exile"
+}

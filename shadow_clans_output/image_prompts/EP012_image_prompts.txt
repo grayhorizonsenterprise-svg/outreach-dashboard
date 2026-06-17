@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 12: The Pact That Bled From Within
+Generated: 2026-06-13 06:48
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: Wide handheld shot. RAIZEN walks alone toward the gate, breath visible, snow still clinging to his iron plate. He stops twenty paces out, scanning the fog. A torch hisses to his left.
+Narration: Raizen came first. The wolf never trusted ground he could not see.
+
+IMAGE PROMPT:
+handheld documentary shot of a scarred wolf warrior in dark dented iron plate standing before a cracked stone archway, low ground fog, faint moonlight, breath in cold air, torch flickering off-frame, faint silver-cold eyes barely visible, dead trees, wet mud, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: KURO emerges from the fog without sound, feather cloak heavy with moisture, obsidian half-mask catching torchlight. Two raven attendants flank him at a distance. He nods once. Raizen does not nod back.
+Narration: Kuro arrived without footsteps. The ravens never announce themselves.
+
+IMAGE PROMPT:
+tall lean warrior in black wet feather-plated cloak and obsidian half-mask, faint cold blue under-eye light barely visible, two hooded figures behind him in dense fog, ruined stone tower silhouette, practical torchlight, drifting mist, realistic damp feathers and fabric weight, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (13s)
+Action: Heavy footfalls. VARN steps into the firelight, massive shoulders blocking the gate behind him. Ancient stone plates groan against his skin. He sets down a carved tablet between the leaders — the old treaty stone.
+Narration: Varn brought the only thing older than their hatred. A pact, carved in mourning.
+
+IMAGE PROMPT:
+massive gorilla warrior in cracked ancient stone armor with faintly carved amber rune symbols on slabs, dim ember pulse under skin, kneeling to place a heavy carved tablet on muddy ground between three braziers, dense jungle vines on his shoulders, realistic dirt and sweat, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: Rack focus from Raizen's scarred hand on his knee to Kuro's masked face. Quiet talk. Varn presses a thumb to the tablet — a single rune flickers warm amber for ONE FRAME, then dies. Hands meet over the stone.
+Narration: For one breath, three clans agreed. The Hollow Gate had not seen that in a thousand years.
+
+IMAGE PROMPT:
+three warriors seated close around a flat carved stone tablet on muddy ground, hands meeting over it, gorilla thumb pressed to surface, single faint amber rune flicker for one frame only, torchlight on scarred wolf hand and feathered cloak edge, rack focus shallow depth, fog low, retro early 2000s fantasy film look, cinematic film grain, desaturated, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (11s)
+Action: Close handheld. A hooded raven attendant slips a small folded parchment to a wolf scout in the shadows. Coins change hands. The scout's eyes — pale silver — do not meet the raven's. The parchment is burned in a torch.
+Narration: But one hand had already signed a different name in the dark.
+
+IMAGE PROMPT:
+tight handheld shot behind a cracked stone pillar, hooded figure in damp black feathers passing folded parchment and coins to a scarred wolf scout in dark fur and iron, both faces partially hidden, torch burning the parchment, cold moonlight bleed, wet stone, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: An arrow hisses from the fog and buries itself in the treaty stone, splitting Varn's carved rune. Raizen draws steel. Kuro spins, blade out, shouting at his own ranks — "NOT MINE!" Varn roars. Braziers tip. Fire spreads on the wet grass.
+Narration: One arrow. No banner. And every blade in the clearing chose a throat.
+
+IMAGE PROMPT:
+iron-tipped arrow embedded deep in a cracked carved stone tablet splitting an amber rune, three warriors mid-reaction drawing weapons, masked raven leader shouting with blade raised, scarred wolf warrior pulling sword, massive gorilla mid-roar, brazier knocked over spilling embers on wet grass, chaos in fog, cinematic film grain, desaturated, handheld shake, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (12s)
+Action: Varn slams a fist into the ground — for 2 FRAMES, amber runes flare across his arms in retro-anime flicker — then back to brutal realism as stone cracks outward, throwing wolf and raven warriors apart. Raizen and Kuro lock eyes across the fire, both bleeding.
+Narration: Varn split them apart before they could finish each other. The pact was already dead.
+
+IMAGE PROMPT:
+massive gorilla warrior fist slammed into cracked earth, ground splitting outward, 2-frame retro anime flicker of amber runes flaring on his arms only at impact moment, surrounding warriors thrown back in fog and ember light, scarred wolf and masked raven leaders staring at each other across firelight with blood on faces, brutal realistic textures, cinematic film grain, desaturated, shallow depth of field, 4k, NO glow elsewhere, NO anime shading on faces
+
+----------------------------------------
+
+SCENE 8 (13s)
+Action: Slow handheld push-in on the broken treaty stone, arrow still in it. A single wolf scout watches from a ridge above — the same pale silver eyes from scene 5. He pulls his hood up and disappears into Raizen's marching column.
+Narration: The traitor did not flee. He walked home, under the wolf banner.
+
+IMAGE PROMPT:
+slow push-in shot of a cracked stone tablet with an iron arrow embedded splitting a dead amber rune, smoke drifting, in background a lone hooded wolf scout with faint pale silver eyes on a ridge pulling his hood up, joining a distant marching column of wolf warriors in snow-touched armor, low moonlight, fog, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------

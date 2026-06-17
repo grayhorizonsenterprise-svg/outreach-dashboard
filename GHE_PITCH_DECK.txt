@@ -1,0 +1,129 @@
+================================================================================
+GHE PITCH DECK — SLIDE CONTENT
+Paste into Canva or Venngage. Dark mode. Brand colors: navy #0f172a, accent #0ea5e9.
+Logo: "Gray Horizons Enterprise" top-left every slide.
+================================================================================
+
+SLIDE 1 — TITLE
+----------------
+Headline: Your Business Is Losing Revenue Every Day It Goes Unanswered
+Subhead: A custom AI system that captures, qualifies, and follows up on every lead — automatically.
+Footer: Gray Horizons Enterprise | grayhorizonsenterprise.com
+
+SLIDE 2 — THE PROBLEM
+----------------------
+Headline: The Leak Nobody Talks About
+3 stats (large numbers, each with a one-line caption):
+
+  43%
+  of inbound calls to local service businesses go unanswered after hours
+
+  78%
+  of customers book with the first business that responds — not the best one
+
+  $273,000
+  estimated annual revenue lost for a contractor missing 15 calls/week at $350/job
+
+Caption: You are not losing to better competitors. You are losing to faster ones.
+
+SLIDE 3 — THE COST OF DOING NOTHING
+-------------------------------------
+Headline: What a Missed Call Actually Costs
+Visual: simple table
+
+  Business Type     | Avg Job Value | Missed Calls/Week | Annual Revenue Lost
+  HVAC              | $450          | 12                | $280,800
+  Roofing           | $8,500        | 3                 | $1,326,000
+  Dental (new pt)   | $1,400        | 8                 | $582,400
+  Contractor        | $3,200        | 5                 | $832,000
+
+Caption: These are conservative estimates. Your real number is higher.
+
+SLIDE 4 — THE SOLUTION
+-----------------------
+Headline: An AI System That Works When You Cannot
+3 pillars (icon + label + one line each):
+
+  [clock icon]  24/7 Coverage
+  Answers every inbound call, web form, and after-hours inquiry automatically
+
+  [lightning icon]  60-Second Response
+  Every lead gets a personalized SMS or email within 60 seconds of contact
+
+  [calendar icon]  Automatic Booking
+  Qualifies the lead, handles objections, and books directly to your calendar
+
+SLIDE 5 — HOW IT WORKS
+------------------------
+Headline: 3-Step Implementation
+Timeline style:
+
+  WEEK 1
+  System setup — voice agent, CRM pipeline, SMS automation, booking integration
+  Your role: 1 onboarding call, 30 minutes
+
+  WEEK 2
+  Testing and calibration — live call testing, workflow QA, edge case handling
+  Your role: review 3 test calls, approve
+
+  WEEK 3
+  Go live — system runs independently, you receive daily lead summaries
+  Your role: respond to warm leads only
+
+SLIDE 6 — WHAT YOU GET
+------------------------
+Headline: Everything Included
+Checklist layout (2 columns):
+
+  AI voice agent (answers calls 24/7)          Instant SMS lead response
+  7-touch automated follow-up sequence         Missed call text-back
+  CRM pipeline with stage tracking             Appointment booking integration
+  Weekly performance report                    30-day post-launch support
+
+SLIDE 7 — ROI CALCULATION
+---------------------------
+Headline: One Recovered Lead Pays for the System
+Simple math visual:
+
+  System cost:        $997 one-time + $297/month management
+  Average job value:  [CLIENT'S NUMBER — fill in on discovery call]
+  Leads recovered/mo: [ESTIMATE FROM DISCOVERY CALL]
+
+  Month 1 ROI:        [RECOVERED LEADS x JOB VALUE - SYSTEM COST]
+
+  "For a contractor recovering 3 additional jobs per month at $3,200 each:
+   $9,600 recovered. $1,294 invested. That is a 641% ROI in month one."
+
+SLIDE 8 — ABOUT GRAY HORIZONS ENTERPRISE
+------------------------------------------
+Headline: Built for Service Businesses, Not Enterprise
+3 points:
+
+  We build custom systems — not cookie-cutter templates.
+  Every build is configured to your business, your calendar, your language.
+
+  We specialize in local service businesses.
+  HVAC, roofing, dental, contractors, HOA, plumbing, landscaping.
+
+  We stay involved after launch.
+  Monthly management option keeps the system optimized as your business grows.
+
+SLIDE 9 — NEXT STEPS
+---------------------
+Headline: Ready to Stop Losing Leads?
+3 steps:
+
+  1  Review the attached proposal
+  2  Sign the service agreement
+  3  Schedule your onboarding call — system live within 14 days
+
+CTA box (large, accent color):
+  Book your onboarding call: calendly.com/grayhorizonsenterprise/30min
+
+Footer: Questions? grayhorizonsenterprise@gmail.com
+
+================================================================================
+END OF DECK — 9 slides total
+Customize Slide 7 ROI numbers on every pitch using client's actual job value.
+Send as PDF attached to proposal email within 20 minutes of discovery call.
+================================================================================

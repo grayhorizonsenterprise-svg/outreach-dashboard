@@ -1,0 +1,84 @@
+{
+  "episode_number": 3,
+  "title": "The Grief That Opened the Gate",
+  "logline": "Crushed by the death of his son, VARN of the Gorilla Titans activates the Hollow Gate \u2014 and something older than the clans steps through.",
+  "narrator_intro": "Grief is the oldest key. It fits every forbidden lock. On the night VARN buried his son, he did not pray. He did not weep. He walked to the Hollow Gate \u2014 and he turned it.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "Overgrown temple clearing at dusk, shattered gorilla statues, low jungle fog clinging to wet stone",
+      "action": "VARN kneels beside a small stone slab. A child-sized gorilla body wrapped in vine-cloth. His massive hand trembles as he presses two fingers to the cold chest. No tears. Only a long, broken exhale.",
+      "narration": "Before the war broke open, a father lost a son. That was the true beginning.",
+      "image_prompt": "Massive scarred gorilla warrior kneeling beside small wrapped body on cracked stone slab, ancient temple ruins, faint amber runes barely pulsing on his shoulder plates, dense jungle fog, torchlight flickering off wet moss, handheld documentary framing, rack focus on trembling hand, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 11,
+      "setting": "Inner temple corridor, collapsed roof, moonlight cutting through cracks",
+      "action": "VARN walks alone down a flooded corridor, ankle-deep water. Each step sends ripples across half-submerged carvings. His stone-plate armor drips. The runes carved into his skin pulse once \u2014 slow, like a tired heartbeat.",
+      "narration": "He walked past every warning his ancestors had carved in stone.",
+      "image_prompt": "Hulking gorilla warrior wading through flooded stone corridor, moonlight in vertical shafts through broken ceiling, ankient warning glyphs half-submerged, faint amber rune-scars on his skin pulsing low, water droplets on stone armor, wet fur texture, handheld camera following from behind, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 12,
+      "setting": "The Hollow Gate chamber \u2014 a vast circular pit, the Gate is a ring of black stone half-buried in jungle roots",
+      "action": "VARN steps into the chamber. The Gate is silent, dead. He stops at its edge. Close-up on his eyes \u2014 carved runes around them dim, almost out. He whispers his son's name. Single word, unsubtitled.",
+      "narration": "The Gate had been sealed for a thousand years. It only needed one true grief to wake.",
+      "image_prompt": "Vast circular ancient stone gate ring overgrown with thick roots, dormant, set into a pit floor, gorilla warrior standing at the edge in silhouette, faint torchlight from wall sconces, extreme close-up on weary eyes with carved rune scars barely glowing amber, dust motes, dead air, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 13,
+      "setting": "Same chamber \u2014 VARN places both palms on the Gate",
+      "action": "He presses his massive hands flat against the black stone. The carved symbols on his arms flare \u2014 for ONE FRAME a sharp retro-anime flicker of amber light burns across his body \u2014 then snap back to realism. The Gate groans. Dust falls. Roots crack.",
+      "narration": "He gave it everything he had left.",
+      "image_prompt": "Massive gorilla warrior pressing both palms flat on black stone gate ring, carved amber rune scars across arms igniting in sharp single-frame flare, dust raining from ceiling, ancient roots splitting, practical torchlight only, handheld camera shake, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, minimal glow, NO anime shading, NO bloom",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 11,
+      "setting": "Wolf Clan watchtower on a snow-covered peak, far away",
+      "action": "RAIZEN stands at the cliff's edge, breath fogging. Suddenly his ice-pale eyes snap south. Far on the horizon, a single dim pulse \u2014 like a distant heartbeat in the dark. His scarred hand tightens on the railing. Snow keeps falling.",
+      "narration": "A thousand miles north, the wolf felt it before he heard it.",
+      "image_prompt": "Scarred wolf warrior in dark iron plate armor standing on snow-covered mountain watchtower, ice-pale eyes catching faint distant light, breath visible in cold air, scarred chest plate, heavy snowfall, moonlight only, distant horizon shows tiny dim pulse, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 12,
+      "setting": "Ruined stone tower above a fog-drowned dead city",
+      "action": "KURO crouches motionless on a broken parapet. Ravens scatter from the towers below without sound. His obsidian half-mask tilts toward the south. He does not blink. He whispers a single command to a courier raven, which dives into the fog.",
+      "narration": "And the raven did not need to see it. He already knew its name.",
+      "image_prompt": "Cloaked figure in black feather-plated cloak crouched on broken stone parapet, obsidian half-mask, cold blue unblinking eyes, ruined dead city drowned in fog below, ravens scattering silently into mist, torchlight from inside tower windows, handheld framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 13,
+      "setting": "Back in the Gate chamber \u2014 the Gate is now active, a flat black surface inside the ring, no light",
+      "action": "VARN steps back. The Gate is open but shows nothing \u2014 pure void. Then a sound: bare feet on wet stone. A tall, gaunt figure walks out \u2014 humanoid, wrong-proportioned, skin like cracked dry riverbed, eyes completely white. It stops. It smiles at VARN. It speaks his son's name.",
+      "narration": "Something walked out. It wore a voice he knew.",
+      "image_prompt": "Tall gaunt humanoid figure emerging from flat black void within ancient stone gate ring, skin like cracked dry riverbed, completely white eyes, no pupils, faint unsettling smile, massive gorilla warrior staggering back in foreground out of focus, torchlight catching wet stone floor, low fog at ankle level, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading, horror cinematography",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 12,
+      "setting": "Gate chamber \u2014 final shot",
+      "action": "VARN's face: stone-still, runes dead, one slow tear cutting through dust on his cheek. Behind him, the gaunt figure raises a hand toward the broken ceiling \u2014 and the jungle outside falls completely silent. No birds. No insects. Cut to black.",
+      "narration": "The war the gorillas never wanted had just been invited in \u2014 by their own king.",
+      "image_prompt": "Extreme close-up scarred gorilla warrior face, dead amber rune scars no longer glowing, single tear cutting through dust on cheek, blurred gaunt cracked-skin figure raising hand in background, torchlight dying low, ambient sound of silence, handheld documentary close, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    }
+  ],
+  "narrator_outro": "Next: the wolves march south. The ravens lie to both sides. And the thing wearing a dead boy's voice begins to speak.",
+  "shorts_hook": "He opened the Gate to bring his son back. Something else came through.",
+  "youtube_title": "SHADOW CLANS Episode 3 \u2014 The Grief That Opened the Gate",
+  "youtube_description": "VARN of the Gorilla Titans buries his son \u2014 and breaks a thousand-year seal to do it. The Hollow Gate opens. Something old walks through. Across the world, RAIZEN of the Wolf Clan and KURO of the Raven Order feel it at the same moment \u2014 and neither one is ready for what comes next.\n\nEpisode 3 of the SHADOW CLANS dark fantasy series. New episodes weekly.\n\n#ShadowClans #DarkFantasy #AnimatedSeries #GorillaTitans #WolfClan #RavenOrder #CinematicFantasy #HollowGate #EpicSeries"
+}

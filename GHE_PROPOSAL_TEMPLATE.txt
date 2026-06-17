@@ -1,0 +1,241 @@
+================================================================================
+GHE SERVICE PROPOSAL TEMPLATE
+Fill in all [BRACKETED] fields before sending.
+Subject line: Your AI Automation Roadmap — Next Steps
+Send within 20 minutes of discovery call. Attach as PDF.
+================================================================================
+
+
+GRAY HORIZONS ENTERPRISE
+AI Automation Proposal
+
+Prepared for: [CLIENT BUSINESS NAME]
+Contact:      [CLIENT NAME]
+Date:         [DATE]
+Prepared by:  Gray Horizons Enterprise
+              grayhorizonsenterprise.com
+
+
+================================================================================
+SECTION 1 — INTRODUCTION
+================================================================================
+
+Thank you for taking the time to speak with us. Based on our conversation, we
+have prepared this proposal outlining a custom AI automation system for
+[CLIENT BUSINESS NAME].
+
+This document covers:
+  - The specific problem we identified in your business
+  - The system we will build to solve it
+  - The full scope of work
+  - Timeline and investment
+  - Next steps
+
+Our goal is simple: you should recover the cost of this system within the first
+30 days of operation. The math on that is in Section 5.
+
+
+================================================================================
+SECTION 2 — YOUR CURRENT SITUATION
+================================================================================
+
+Based on our discovery call, here is what we understand about your business:
+
+Business type:        [HVAC / Roofing / Dental / Contractor / Other]
+Current lead volume:  [X] inbound leads per week
+Current response:     [How they currently handle leads — voicemail, manual callback, etc.]
+Biggest pain point:   [Exact words the client used — quote them back]
+
+The core issue we identified:
+
+[Write 2-3 sentences describing exactly what is leaking revenue. Be specific.
+Example: "Your team responds to inbound leads the following morning. By that
+window, 60-70% of prospects have already booked with a competitor who responded
+faster. This is not a sales problem — it is a speed problem."]
+
+Estimated revenue impact:
+  Average job value:          $[X]
+  Estimated missed leads/week: [X]
+  Annual revenue at risk:      $[X x 52 x avg job value]
+
+
+================================================================================
+SECTION 3 — PROPOSED SOLUTION
+================================================================================
+
+We will build a custom AI automation system that handles the first 72 hours of
+every lead relationship without any manual work from your team.
+
+The system has three layers:
+
+LAYER 1 — CAPTURE (responds in under 60 seconds)
+  AI voice agent answers every inbound call 24/7
+  Web form triggers instant SMS to the prospect
+  Missed call triggers automated text-back within 10 seconds
+  After-hours inquiries are captured and sorted for morning review
+
+LAYER 2 — QUALIFY (happens automatically)
+  Voice agent asks qualification questions (service type, location, timeline)
+  Responses logged to CRM with lead score
+  Hot leads flagged for immediate human follow-up
+  Cold leads enter automated nurture sequence
+
+LAYER 3 — FOLLOW UP (runs for 30 days without intervention)
+  Touch 1: Immediate response (under 60 seconds)
+  Touch 2: Follow-up SMS at 24 hours if no reply
+  Touch 3: Email follow-up at 48 hours
+  Touch 4: Second SMS at day 5
+  Touch 5: Final email at day 14
+  All stops automatically when prospect replies or books
+
+
+================================================================================
+SECTION 4 — SCOPE OF WORK
+================================================================================
+
+PHASE 1 — SETUP (Days 1-5)
+  Build and configure AI voice agent for [CLIENT BUSINESS NAME]
+  Set up CRM pipeline with custom stages for [client's workflow]
+  Configure instant SMS response on all lead capture points
+  Integrate with [CLIENT'S CALENDAR — Calendly / Google Calendar / Other]
+  Set up 7-touch follow-up sequence
+  Configure missed call text-back
+  Deliverable: Working system in test mode
+
+PHASE 2 — TESTING (Days 6-10)
+  Live call testing with [X] test scenarios
+  Workflow QA across all automation triggers
+  Edge case handling (out-of-area calls, existing customers, emergency calls)
+  Client review call — you listen to 3 test calls and approve
+  Adjustments based on feedback
+  Deliverable: Approved system ready for launch
+
+PHASE 3 — LAUNCH AND HANDOFF (Days 11-14)
+  Go live — system active on all channels
+  Team briefing (30 minutes) on how to review the daily lead summary
+  Documentation: one-page quick reference guide
+  30-day monitoring period — we review performance weekly
+  Deliverable: Live system + documentation
+
+WHAT IS NOT INCLUDED:
+  GoHighLevel CRM subscription (if applicable — $97/month, we handle setup)
+  Paid advertising or lead generation
+  Website redesign
+  Ongoing content creation
+
+
+================================================================================
+SECTION 5 — ROI PROJECTION
+================================================================================
+
+Conservative estimate based on your numbers:
+
+  Monthly leads currently handled:    [X]
+  Estimated additional leads captured: [X] (conservative: 20-30% lift)
+  Average job value:                  $[X]
+  Additional revenue/month:           $[X x additional leads]
+
+  System investment:                  $[SETUP FEE] one-time
+  Monthly management (optional):      $297/month
+
+  Month 1 net ROI:    $[additional revenue - setup fee]
+  Month 3 net ROI:    $[additional revenue x 3 - setup fee - mgmt x 2]
+  12-month net ROI:   $[additional revenue x 12 - setup fee - mgmt x 11]
+
+Note: These projections are conservative and assume your current close rate
+stays flat. In practice, faster response times typically improve close rates
+by 15-25% on top of the volume increase.
+
+
+================================================================================
+SECTION 6 — INVESTMENT
+================================================================================
+
+OPTION A — ONE-TIME BUILD
+  Complete system build (all 3 phases):   $997
+  Includes: 30-day post-launch support
+  Does not include: ongoing management after 30 days
+
+OPTION B — BUILD + MANAGED SERVICE (Recommended)
+  Complete system build:                  $997 one-time
+  Monthly management retainer:           $297/month
+  Includes: weekly performance review, optimization, system updates,
+            priority support, monthly ROI report
+
+  Most clients on the managed service recover the monthly fee in the first
+  additional lead per month.
+
+OPTION C — RETAINER ONLY (for clients with existing systems)
+  Monthly management and optimization:   $750/month
+  Includes: full system rebuild if needed, weekly optimization,
+            monthly strategy call, priority support
+
+Payment terms:
+  50% due at contract signing
+  50% due at system launch (Phase 3)
+  Monthly management billed on the 1st of each month
+
+
+================================================================================
+SECTION 7 — TIMELINE
+================================================================================
+
+  Day 1:    Contract signed + 50% payment received
+  Days 1-5: Phase 1 — System build
+  Days 6-10: Phase 2 — Testing
+  Day 10:   Client review call
+  Days 11-14: Phase 3 — Launch
+  Day 14:   System live + final payment
+  Days 15-44: 30-day monitoring period
+  Ongoing:  Monthly management (if selected)
+
+Total time to live system: 14 days or less.
+
+
+================================================================================
+SECTION 8 — WHY GRAY HORIZONS ENTERPRISE
+================================================================================
+
+We specialize in one thing: AI automation for local service businesses.
+
+We do not build e-commerce stores, mobile apps, or enterprise software.
+We build the system that keeps your phones answered, your leads followed up,
+and your calendar full — without adding to your payroll.
+
+Every system we build is custom-configured to your business. We do not use
+templates that require you to adapt your workflow to the software. The software
+adapts to how you work.
+
+After launch, we monitor performance and optimize continuously. Most agencies
+hand you a config file and disappear. We stay involved because our results are
+our reputation.
+
+
+================================================================================
+SECTION 9 — NEXT STEPS
+================================================================================
+
+To move forward:
+
+  1  Review this proposal and the attached service agreement
+  2  Sign the service agreement (digital signature accepted)
+  3  Submit 50% payment via the link below
+  4  We schedule your kickoff call within 24 hours
+
+Payment link:  [STRIPE LINK]
+Book kickoff:  calendly.com/grayhorizonsenterprise/30min
+Questions:     grayhorizonsenterprise@gmail.com
+
+This proposal is valid for 7 days from the date above.
+
+We look forward to working with you.
+
+Gray Horizons Enterprise
+grayhorizonsenterprise.com
+
+
+================================================================================
+END OF PROPOSAL
+Version this document: save as [ClientName]_GHE_Proposal_[Date].pdf
+Send within 20 minutes of discovery call.
+================================================================================

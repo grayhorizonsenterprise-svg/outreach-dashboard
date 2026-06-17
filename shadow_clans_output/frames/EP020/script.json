@@ -1,0 +1,84 @@
+{
+  "episode_number": 20,
+  "title": "What the Hollow Gate Promised Varn",
+  "logline": "Haunted by ancestral guilt, Varn returns alone to the Hollow Gate, where an ancient voice offers him the one thing he cannot refuse \u2014 at a cost that may end the Gorilla Titans forever.",
+  "narrator_intro": "Every Titan knows the law. The Gate is never opened twice by the same hand. But Varn has opened it once before \u2014 and tonight, something inside still remembers his name.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "Overgrown temple ruins at dusk, jungle fog rolling between shattered gorilla statues",
+      "action": "Varn walks alone through wet moss and broken stone, stone-plate armor scraping vines. He pauses, breathing heavy, amber runes on his skin pulsing faintly beneath cracked symbols on his shoulder plates.",
+      "narration": "Varn returns to the place his clan forbade him to ever walk again.",
+      "image_prompt": "Massive gorilla warrior in cracked stone-plate armor walking through ruined jungle temple, faint amber rune lines barely visible under skin, wet moss, broken statues, low fog, torch held low, handheld documentary shot, practical torchlight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 11,
+      "setting": "Inner sanctum approach, collapsed archway leading to the Hollow Gate chamber",
+      "action": "Varn kneels at a child-sized stone marker overgrown with roots. He places a calloused hand on it. His jaw tightens. A single tear cuts through dirt on his cheek.",
+      "narration": "He buried his son here. The Gate took him the first time it opened.",
+      "image_prompt": "Close shot of huge gorilla warrior kneeling at small overgrown grave marker in temple ruin, calloused hand on stone, single tear through dirt on cheek, faint moonlight through canopy, rack focus on hand, handheld realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic skin texture, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 12,
+      "setting": "The Hollow Gate chamber \u2014 a massive black stone doorway carved with dead runes",
+      "action": "Varn steps into the chamber. Dust drifts in shafts of broken moonlight. The Gate is silent, cold. He stares up at it, fists trembling. A low whisper begins from inside the stone.",
+      "narration": "The Gate has waited eleven winters for him to come back.",
+      "image_prompt": "Enormous black stone doorway covered in dead carved runes inside ruined temple chamber, gorilla warrior standing small before it, broken moonlight shafts through ceiling cracks, dust particles, handheld wide shot, practical light only, cinematic film grain, desaturated high contrast, shallow depth of field, 4k, realistic stone texture, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 13,
+      "setting": "Inside the Gate chamber \u2014 runes beginning to wake",
+      "action": "The runes on the Gate ignite slowly with deep amber light, matching the ones beneath Varn's skin. A voice \u2014 neither male nor female \u2014 speaks his son's name. Varn staggers back a step.",
+      "narration": "It speaks in the voice of the boy he failed to save.",
+      "image_prompt": "Close shot of massive gorilla warrior's face reacting in shock, faint amber rune light from off-screen casting only on one side of his face, deep scar across brow, sweat and dirt on skin, mouth slightly open, handheld documentary, practical light source only, cinematic film grain, desaturated, shallow depth of field, 4k, hyper realistic skin pores, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 12,
+      "setting": "Gate chamber \u2014 the offering",
+      "action": "The Gate's voice promises: open it one more time, and his son walks back through. Varn's hand rises slowly toward the central rune. His knuckles bleed from clenching. He hesitates.",
+      "narration": "One door. One opening. And the dead come home.",
+      "image_prompt": "Huge gorilla warrior's bloodied knuckled hand reaching toward central rune on black stone gate, hand trembling, low amber light only on the rune itself, rest of frame near darkness, extreme shallow focus on hand, handheld realism, cinematic film grain, desaturated, 4k, realistic skin and blood texture, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 11,
+      "setting": "Gate chamber \u2014 the price revealed",
+      "action": "The voice continues: but every Titan still breathing will fall to stone before sunrise. Varn's hand stops an inch from the rune. His breath catches. His eyes close.",
+      "narration": "His son \u2014 for every brother and sister he leads.",
+      "image_prompt": "Extreme close up of gorilla warrior's eyes closing in agony, faint amber rune light reflecting in tear on lashes, deep facial scars, dirt and sweat visible, single frame retro anime flicker only on rune reflection, otherwise full cinematic realism, handheld, practical light, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 12,
+      "setting": "Gate chamber \u2014 the decision",
+      "action": "Varn opens his eyes. He lowers his hand. He turns his back on the Gate. The voice rises into a furious whisper, calling his son's name again and again. Varn keeps walking.",
+      "narration": "He chose the living. The Gate will not forgive him.",
+      "image_prompt": "Massive gorilla warrior walking away from glowing rune doorway, back to camera, stone-plate armor scratched and dusted, faint amber light fading behind him, fog drifting around his legs, handheld tracking shot, practical light only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic armor and skin textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 13,
+      "setting": "Outside the temple \u2014 pre-dawn jungle, distant fog",
+      "action": "Varn emerges into the cold dawn mist. Behind him, deep inside the temple, a low rumble begins. A crack splits the Gate's outer wall. Something has been let out \u2014 not in. Varn does not look back.",
+      "narration": "But refusing the Gate may have cost more than accepting it.",
+      "image_prompt": "Gorilla warrior emerging from ruined jungle temple at pre-dawn, cold blue mist, distant cracking sound implied by dust falling from doorway behind him, his face exhausted and hollow, wide handheld shot, practical dawn light only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic skin and fabric textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    }
+  ],
+  "narrator_outro": "Next episode: Kuro of the Raven Order hears the Gate crack from a hundred miles away \u2014 and finally understands what has been watching him back.",
+  "shorts_hook": "The Gate offered him his dead son back. The price was every Titan he leads.",
+  "youtube_title": "Episode 20 \u2014 What the Hollow Gate Promised Varn",
+  "youtube_description": "Varn returns alone to the forbidden Hollow Gate, where an ancient voice offers him the impossible \u2014 his lost son, in exchange for every Titan still alive. A cinematic dark fantasy chapter of the SHADOW CLANS saga. Wolf Clan. Raven Order. Gorilla Titans. One collapsing world. One gate that should never open again.\n\nNew episodes weekly.\n\n#shadowclans #darkfantasy #cinematic #gorillatitans #hollowgate #animatedseries #fantasyseries #wolfclan #ravenorder #episode20"
+}

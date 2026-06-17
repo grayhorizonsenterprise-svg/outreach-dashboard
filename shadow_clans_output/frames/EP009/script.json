@@ -1,0 +1,84 @@
+{
+  "episode_number": 9,
+  "title": "Three Fires, One Dawn",
+  "logline": "On the eve of the war for the Hollow Gate, three leaders sit alone with their fires and decide what they are willing to lose.",
+  "narrator_intro": "Tomorrow, the Hollow Gate opens. Tonight, three warlords sit alone with their fires. No banners. No armies. Only the silence before the killing \u2014 and the choice each must make before the sun finds them.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "Frozen mountain ridge above a moonlit tundra, scattered bones in the snow",
+      "action": "Wide handheld shot. RAIZEN sits cross-legged before a low fire, dark iron plate steaming in the cold. He breathes slow, eyes pale as frozen moonlight, staring into the flame. Wind moves his fur.",
+      "narration": "Raizen of the Wolves. Honor told him to fight. Survival told him to run.",
+      "image_prompt": "weathered wolf warrior leader sitting alone at small campfire on snowy mountain ridge at night, scarred dark iron chest plate with deep claw marks, pale ice-blue eyes catching firelight, breath visible in cold air, distant moonlit tundra behind, practical firelight only, handheld documentary shot, slight lens grain, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 11,
+      "setting": "Top of a broken stone tower wrapped in fog, ruined dead city below",
+      "action": "Slow rack focus from a guttering torch to KURO, standing motionless at the tower's edge. Black feather cloak shifting in the wind. Obsidian half-mask catches torchlight. He does not blink. Below, fog swallows the dead city.",
+      "narration": "Kuro of the Ravens. He had already seen tomorrow. He did not look away.",
+      "image_prompt": "raven warlord standing at edge of ruined stone tower at night, black feather-plated cloak rippling in cold wind, obsidian half-mask, single cold blue unblinking eye, low fog rolling over dead city ruins below, single guttering torch as only light source, rack focus, handheld, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 12,
+      "setting": "Overgrown jungle temple courtyard, shattered statues, low mist",
+      "action": "Low angle. VARN kneels before a bonfire built inside a cracked stone basin. His massive stone-plate armor scraped with old battle damage. Amber runes carved into his skin pulse faintly with his breathing. A child's wooden carving rests in his palm.",
+      "narration": "Varn of the Titans. He carried a war he never wanted \u2014 and a name he could not bury.",
+      "image_prompt": "massive gorilla warrior kneeling at bonfire inside cracked stone basin, ancient overgrown ruined jungle temple at night, weathered stone-plate armor with faintly glowing amber runes carved into skin, low jungle fog, shattered statues behind, holding small wooden child's carving in palm, practical firelight, handheld documentary, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced bloom, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 11,
+      "setting": "Raizen's fire, mountain ridge",
+      "action": "Close-up. Raizen unwraps a torn strip of cloth \u2014 a wolf cub's tail-binding. He stares at it, jaw tight. He drops it into the fire. The flame eats it slowly. A single tear cuts through the dirt on his cheek.",
+      "narration": "He burned the last thing his son ever wore. There would be no retreat now.",
+      "image_prompt": "extreme close-up scarred wolf warrior hand dropping small torn cub fur wrap into low campfire, dirt and old blood on weathered fingers, single tear cutting through grime on cheek, pale ice eyes reflecting flame, snow falling lightly, handheld, practical firelight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 11,
+      "setting": "Kuro's tower",
+      "action": "Kuro lowers a tattered map of the Hollow Gate onto cold stone. He draws a slow line across it with charcoal \u2014 through his own forces. He has chosen who dies. He folds the map. His hand does not shake.",
+      "narration": "He drew the line through his own. A betrayal calculated to the breath.",
+      "image_prompt": "gloved hand of raven warlord drawing charcoal line across worn battle map of ancient gate on cold stone floor, torchlight from side, black feather sleeve, obsidian half-mask just visible at edge of frame, ruined tower interior, foggy night, handheld, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 12,
+      "setting": "Varn's temple courtyard",
+      "action": "Varn presses his palm to the carved temple wall. For a single frame \u2014 a brief retro anime flicker \u2014 the amber runes flare hot, ancestral faces flash across the stone. Then back to realism: stone, dust, silence. He bows his head.",
+      "narration": "The old gods answered him once more. They asked him to end it himself.",
+      "image_prompt": "massive gorilla warrior pressing huge scarred palm to ancient carved temple wall, amber runes faintly pulsing under skin, dust falling from cracked stone, brief intense flicker of glowing ancestral symbols on wall, jungle ruin at night, single firelight source, handheld, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced bloom 45 percent, NO anime shading on face",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 11,
+      "setting": "Split intercut \u2014 all three fires at once",
+      "action": "Rapid intercut, matching framing: Raizen stands and lifts his blade. Kuro slides his folded map into his cloak. Varn rises slowly, runes dimming. Each looks toward the same direction \u2014 the Hollow Gate, distant on the horizon.",
+      "narration": "Three fires. Three choices. One gate, waiting at the edge of the world.",
+      "image_prompt": "triptych intercut three warlords rising at their separate fires at night looking toward distant ancient gate on dark horizon, wolf warrior on snow mountain, raven warlord on foggy ruined tower, gorilla warrior in jungle temple, matching low angle framing, practical firelight, distant gate barely visible through haze, handheld, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 10,
+      "setting": "The Hollow Gate, distant valley before dawn",
+      "action": "Wide static shot. The massive broken gate stands in a grey valley, mist crawling at its base. The first cold blue of dawn touches its highest stone. Crows lift from the ruins in a slow black wave. Silence. Then a single distant war horn.",
+      "narration": "Dawn came quietly. The horn did not.",
+      "image_prompt": "wide static shot of enormous ancient broken stone gate in grey misty valley at first cold blue dawn, low fog crawling at base, flock of crows lifting in slow dark wave, no characters, distant overcast horizon, practical natural light only, handheld with slight drift, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, early 2000s lost fantasy film look, NO glow, NO anime shading",
+      "faction": "neutral"
+    }
+  ],
+  "narrator_outro": "Next: the Hollow Gate opens. Three armies. One ancient door. And only one leader walks back through it.",
+  "shorts_hook": "He burned the last thing his son ever wore.",
+  "youtube_title": "SHADOW CLANS Ep 9 \u2014 Three Fires, One Dawn (Before the Final Battle)",
+  "youtube_description": "The night before the war for the Hollow Gate. Raizen of the Wolves burns a memory. Kuro of the Ravens chooses who dies. Varn of the Titans hears the old gods one last time. Three leaders. Three fires. One gate at the edge of the world.\n\nEpisode 9 of SHADOW CLANS \u2014 a dark cinematic fantasy series.\n\n\u25b6 Watch from Episode 1\n\u25b6 Subscribe for the final battle (Ep 10)\n\n#ShadowClans #DarkFantasy #WolfClan #RavenOrder #GorillaTitans #CinematicFantasy #AnimatedSeries #FantasyShortFilm #HollowGate #EpicFantasy"
+}

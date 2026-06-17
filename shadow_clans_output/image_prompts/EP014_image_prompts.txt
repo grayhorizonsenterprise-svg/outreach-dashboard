@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 14: The Pact That Was Never Meant To Hold
+Generated: 2026-06-14 06:48
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: Wide handheld shot. Torches planted in cracked stone. Three banners hang limp in the cold mist — wolf, raven, gorilla. A single long table of black wood waits empty.
+Narration: Neutral ground. Three banners. One last chance to stop the war that ends them all.
+
+IMAGE PROMPT:
+ruined stone temple at dusk, three faded banners hanging in low fog, long black wooden table, planted torches with practical flame, cracked steps overgrown with moss, frost on one side jungle on the other, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: RAIZEN walks alone, breath visible, iron plate scratched, claw scars on his chest catching torchlight. His ice-pale eyes scan the treeline. He grips his blade but does not draw.
+Narration: Raizen came alone. Honor, even now, was the only currency he trusted.
+
+IMAGE PROMPT:
+tall scarred wolf warrior in dented dark iron plate walking through muddy snow, visible breath in cold air, faint silver in pale eyes only, deep claw scars across chest, hand resting on sword hilt, torchlit path, low fog, handheld rack focus, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (12s)
+Action: VARN ducks under the low arch, massive shoulders scraping stone dust loose. Amber runes carved into his skin pulse once — slow, like a heartbeat. He sets a stone tablet on the table: terms of peace.
+Narration: Varn brought no weapon. Only old laws, carved before any of them were born.
+
+IMAGE PROMPT:
+massive gorilla warrior with ancient stone plate armor cracked symbols faintly amber, ducking through low stone archway, dust falling from shoulders, placing carved stone tablet on dark wooden table, candlelight only, weathered skin visible pores, runes etched in flesh barely glowing, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (11s)
+Action: KURO enters with two cloaked Raven lieutenants behind him. Obsidian half-mask catches firelight. His cold blue eyes do not blink. Behind him, one lieutenant — VESS — lingers a half-step too long at the threshold.
+Narration: Kuro arrived with two shadows. One of them was already lying.
+
+IMAGE PROMPT:
+tall raven warrior in black feather-plated cloak obsidian half-mask, faint blue cold in unblinking eyes, two hooded lieutenants behind him, one lingering at stone doorway, thick low fog, torch flicker on feathers, ruined shrine interior, handheld documentary, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (13s)
+Action: Close shots: Raizen's scarred hand pressing a wolf-fang into wax. Varn's massive thumb pressing a rune-mark. Kuro lowering a black feather onto the parchment. The pact is sealed. Eye contact between the three — tense, fragile, almost human.
+Narration: Wolf fang. Stone rune. Black feather. Three seals. One impossible promise.
+
+IMAGE PROMPT:
+close up three hands sealing parchment on dark wood table, scarred wolf hand pressing fang into red wax, huge gorilla thumb pressing carved rune mark, gloved raven hand placing single black feather, candlelight, dust motes, parchment fibers visible, handheld macro, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: VESS slips into shadow, pulls a folded letter from inside the feather cloak, and burns the original pact's duplicate in a brazier. He replaces it on the table with a forged version — terms that demand Wolf territory be surrendered. A single anime-flicker frame as the rune-seal on the forgery ignites cold blue, then gone.
+Narration: One letter swapped. One word changed. One war reborn in a heartbeat.
+
+IMAGE PROMPT:
+hooded raven lieutenant in dim stone corridor burning parchment in iron brazier, swapping it for forged document on table, single brief flash of cold blue rune ignition on wax seal, feather cloak details, hands trembling slightly, torchlight only, handheld, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow except the one brief seal flash, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (12s)
+Action: Raizen rereads the pact. His jaw tightens. He slams the parchment down. Varn stands, stone armor groaning. Kuro's eyes finally narrow — genuine confusion. He did not order this. The alliance dies in three breaths.
+Narration: Raizen saw betrayal. Varn saw insult. Kuro saw, too late, that he had been used.
+
+IMAGE PROMPT:
+three warlords standing around dark wooden table at first grey dawn, wolf leader slamming parchment furious scarred face, gorilla leader rising stone armor creaking, raven leader frozen mask tilted in dawning realization, torches dying, fog rising, tense triangle composition, handheld, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (12s)
+Action: Wide static shot. Raizen walks back into the snow. Varn into the jungle fog. Kuro stands a long moment on the steps, then turns slowly toward VESS — who is already gone. The torches gutter out one by one.
+Narration: By sunrise, three armies were marching. And the true traitor was already running.
+
+IMAGE PROMPT:
+wide shot ruined shrine steps at pale dawn, wolf warrior walking left into snow, gorilla warrior walking right into jungle fog, raven leader alone center on stone steps turning slowly, empty space where lieutenant stood, torches dying, mist rising, three diverging paths, handheld static, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------

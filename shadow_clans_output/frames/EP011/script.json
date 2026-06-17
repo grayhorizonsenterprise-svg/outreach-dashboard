@@ -1,0 +1,84 @@
+{
+  "episode_number": 11,
+  "title": "What the Hollow Gate Promised Varn",
+  "logline": "Haunted by the brother he lost the last time he opened the Hollow Gate, Varn returns alone to hear what it offers him now.",
+  "narrator_intro": "Every Titan knows the price of the Gate. Varn paid it once, and buried his brother under stone. Tonight, the Hollow Gate speaks his name again \u2014 and this time, it offers something he cannot refuse.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "Overgrown temple ruins at the jungle's edge, thick low fog, half-buried statues of fallen Titans",
+      "action": "Varn walks alone through wet undergrowth, stone-plate armor scraping vines. His amber runes pulse faintly, almost reluctant. Handheld camera tracks behind his massive shoulder.",
+      "narration": "He went alone. No guard. No witness. Only the weight he already carried.",
+      "image_prompt": "Massive gorilla warrior with carved amber runes faintly glowing under skin, ancient cracked stone-plate armor, walking through fog-drenched jungle temple ruins at night, broken statues, torchlight from distant brazier, handheld documentary shot from behind shoulder, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 11,
+      "setting": "Inner sanctum of a collapsed temple, the Hollow Gate \u2014 a vertical fissure in black stone \u2014 looming ahead",
+      "action": "Varn stops before the Gate. His breath fogs in the cold. He sets down his stone hammer and kneels, head lowered.",
+      "narration": "The Hollow Gate does not open for soldiers. It opens for the broken.",
+      "image_prompt": "Enormous gorilla warrior kneeling before a tall vertical fissure in black stone, ancient temple interior with collapsed pillars, low natural fog, single torch burning in iron sconce, cold breath visible, weight of armor pressing into wet stone floor, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 13,
+      "setting": "Same sanctum, the Gate fissure beginning to widen",
+      "action": "The runes on Varn's chest pulse harder, dragged toward the Gate. Stone dust spills upward from the floor. A whisper \u2014 not a voice \u2014 fills the chamber.",
+      "narration": "It knew him. It had always known him.",
+      "image_prompt": "Close-up on gorilla warrior chest plate cracked amber runes pulsing dimly, stone dust drifting upward unnaturally, vertical stone fissure widening behind him, low fog, faint moonlight cutting through collapsed ceiling, single brief retro anime flicker frame on rune pulse, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO bloom, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 12,
+      "setting": "Vision inside the Gate \u2014 a memory, a younger Varn carrying a dying gorilla in his arms through ash",
+      "action": "We see the memory the Gate shows him: his brother BHARO bleeding out, eyes going dim. Varn in the vision is screaming silently. Present-Varn flinches.",
+      "narration": "It showed him the brother he buried. Then it showed him a door.",
+      "image_prompt": "Vision sequence, younger gorilla warrior with fewer runes cradling dying gorilla brother covered in ash and blood, devastated battlefield, grey ash falling like snow, silent scream, raw grief on face, washed out memory tone, cinematic film grain, heavily desaturated, shallow depth of field, 4k, realistic textures, dirt sweat tears visible, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 12,
+      "setting": "Back in the sanctum, the Gate fully open \u2014 inside, a still figure standing with its back turned",
+      "action": "Varn rises slowly. Inside the Gate stands a silhouette the exact shape of Bharo. It does not turn. The whisper says one word: 'Open.'",
+      "narration": "The price was one more opening. The promise was his brother, returned.",
+      "image_prompt": "Tall vertical stone fissure fully open revealing a still silhouette of a gorilla warrior with back turned standing in absolute black, present gorilla leader rising slowly in foreground stone-plate armor, faint torchlight on wet stone, low fog crawling toward the opening, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO bloom, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 11,
+      "setting": "Sanctum, Varn reaching one trembling hand toward the Gate",
+      "action": "Varn's hand shakes. A tear cuts a clean line through dirt on his face. His runes flare \u2014 then dim \u2014 then flare again. He is fighting himself.",
+      "narration": "He had buried that hand once already. He remembered the weight.",
+      "image_prompt": "Extreme close-up massive scarred gorilla hand trembling reaching forward, single tear cutting clean line through dirt and old blood on cheek, amber chest runes pulsing irregularly under stone-plate, torchlight flickering, low fog around wrist, raw human emotion in animal eyes, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 12,
+      "setting": "Sanctum exterior, high above on a broken tower \u2014 a Raven scout watches",
+      "action": "A black-cloaked Raven, obsidian half-mask, perched motionless on a shattered statue. Cold blue eyes lock on the open Gate. A single feather drops. He vanishes into fog.",
+      "narration": "Kuro's eyes were already there. Nothing opens that the Raven does not see.",
+      "image_prompt": "Raven warrior in black feather-plated cloak and obsidian half-mask perched motionless atop broken stone statue high above jungle temple ruins, unblinking cold blue eyes faintly catching moonlight, single black feather falling, perpetual fog below, distant fire glow from temple opening, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 12,
+      "setting": "Sanctum, Varn's decision",
+      "action": "Varn lowers his hand. He does not touch the Gate. He picks up his hammer. The silhouette inside finally begins to turn \u2014 and the scene cuts to black before we see its face.",
+      "narration": "He chose to walk away. But the Gate had already started to turn its face toward him.",
+      "image_prompt": "Massive gorilla warrior gripping ancient stone hammer turning to leave, vertical stone fissure behind him with silhouette of figure beginning to rotate toward camera, low fog, single dying torch, devastating restraint on warrior's face, last frame fading to absolute black, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO bloom, NO anime shading",
+      "faction": "Gorilla Titans"
+    }
+  ],
+  "narrator_outro": "Varn walked away tonight. But the Gate is patient \u2014 and the brother inside it has already begun to turn. Next: the Wolf Clan finds the first body the Gate sent back.",
+  "shorts_hook": "The Hollow Gate offered him his dead brother back.",
+  "youtube_title": "SHADOW CLANS Episode 11 \u2014 What the Hollow Gate Promised Varn",
+  "youtube_description": "Varn, leader of the Gorilla Titans, returns alone to the Hollow Gate that took his brother. This time, the Gate offers him something it has never offered anyone: a second chance. But every opening has a price, and Kuro of the Raven Order is already watching from the fog.\n\nSHADOW CLANS is an original dark cinematic fantasy series. Three animal warrior factions. One collapsing world. One gate that should never be opened.\n\nNew episodes weekly.\n\n#ShadowClans #DarkFantasy #CinematicFantasy #GorillaTitans #RavenOrder #WolfClan #HollowGate #AnimatedSeries #FantasyShortFilm #EpicFantasy"
+}

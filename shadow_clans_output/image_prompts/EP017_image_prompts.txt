@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 17: The Hollow Gate Begins Speaking
+Generated: 2026-06-15 08:43
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: Slow handheld push toward the Gate. Snow drifts sideways. A low frequency hum builds. A single faint amber rune flickers awake along the seam of the stone, then dies.
+Narration: The Gate has not moved in a thousand years. Tonight, it remembers how.
+
+IMAGE PROMPT:
+massive cracked stone archway half-buried in black snow valley, dead leafless trees, single faint amber rune barely glowing on stone seam, low ground fog, moonlight only, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: Raizen stands alone at the cliff edge, breath fogging. His pale eyes twitch. He turns his head sharply toward the valley — hearing something no one else can. A scar across his chest is visible beneath the open iron plate.
+Narration: Raizen hears it first. A voice carried on no wind.
+
+IMAGE PROMPT:
+scarred wolf warrior man with pale ice-blue eyes standing on frozen cliff edge, dark iron chest plate with deep claw marks, fur-lined shoulders, breath visible in cold air, distant small campfires far below, moonlit tundra, handheld rack focus on his eyes, visible skin pores and stubble, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (13s)
+Action: Raizen enters. His second-in-command looks up from a map. Raizen says nothing — just stares past him. The lieutenant asks what he heard. Raizen's jaw tightens. He doesn't answer.
+Narration: He cannot explain it. He will not try.
+
+IMAGE PROMPT:
+interior of dim war tent lit only by low fire, fur pelts and worn parchment map on wooden table, scarred wolf warrior leader standing in entrance silhouetted, lieutenant looking up worried, smoke drifting, handheld camera, practical firelight only, visible fabric weave and dirt, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: Kuro stands at a cracked window, obsidian half-mask catching faint blue light. He tilts his head. He felt something shift — not heard it. A raven on his shoulder unsettles and flies into the fog.
+Narration: In the fog towers, Kuro feels the silence break — but cannot name it.
+
+IMAGE PROMPT:
+tall masked figure in black feather-plated cloak at broken stone tower window, obsidian half-mask, cold pale blue unblinking eyes, thick fog outside, raven taking flight from his shoulder, ruined gothic architecture, moonlight diffused through fog, handheld framing, visible feather texture and stone moss, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (12s)
+Action: Varn kneels at a cracked altar stone. The amber runes carved into his skin pulse once — sharp, painful. He grimaces, presses his palm to the altar. Dust falls from the ceiling.
+Narration: Varn's runes answer the Gate before his mind understands why.
+
+IMAGE PROMPT:
+massive gorilla warrior kneeling at cracked stone altar in overgrown jungle temple, ancient stone plate armor with faintly glowing amber carved symbols, deep eye sockets, mist and hanging vines, shattered statues in background, dust falling from broken ceiling, practical torchlight from off-frame, handheld documentary camera, visible skin scars and stone weight, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, minimal glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: Raizen approaches the Gate. Wind dies completely. He places his bare palm against the freezing stone. A whisper — guttural, ancient, in no known tongue — leaks out. His eyes widen.
+Narration: The voice does not speak words. It speaks a name. His.
+
+IMAGE PROMPT:
+scarred wolf warrior alone in deep snow approaching colossal cracked stone gate at night, bare hand pressed against frozen carved stone, wind-still air, breath fogging, expression of dawning horror, faint single rune line lighting beneath his palm, moonlight only, handheld extreme rack focus, visible skin pores and frostbite, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (11s)
+Action: A single hairline crack splits across the Gate's surface beneath Raizen's hand. For 2 frames only — a flash of retro-anime cel shading erupts as ancient power releases — then snaps instantly back to grim realism. Snow lifts off the ground.
+Narration: Something on the other side has been waiting. For him.
+
+IMAGE PROMPT:
+extreme close up of ancient stone gate cracking open in single hairline split beneath a scarred bare hand, snow particles lifting upward in slow motion, brief 2-frame retro anime cel flash of energy release, then immediate cut back to grim photoreal stone texture, moonlight, handheld macro lens, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, minimal glow, NO anime shading except 2 release frames
+
+----------------------------------------
+
+SCENE 8 (12s)
+Action: Raizen stumbles backward from the Gate, shaken. He looks up — the crack is now visible from a distance, a thin black wound across the stone. He whispers a single word. Cut to black.
+Narration: He came as a leader. He leaves as something the Gate has chosen.
+
+IMAGE PROMPT:
+wide shot of scarred wolf warrior small in frame stumbling back from massive cracked stone gate in snow valley, thin dark crack visible across stone face, gray pre-dawn sky, dead trees, handheld camera lowering, no music cues, visible breath and trembling posture, cinematic film grain, desaturated, high contrast filmic, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------

@@ -1,0 +1,84 @@
+{
+  "episode_number": 19,
+  "title": "The Forged Letter That Burned Three Worlds",
+  "logline": "Kuro of the Raven Order forges a single sealed letter \u2014 and three factions march toward a war none of them chose.",
+  "narrator_intro": "Before the wolves bled. Before the gorillas wept over their dead. Before the Hollow Gate cracked open \u2014 there was a letter. One forged signature. One drop of black ink. And a man in a feather cloak who knew exactly what silence costs.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "Highest chamber of a ruined stone tower, perpetual fog rolling past broken windows, single candle burning",
+      "action": "KURO sits at a warped oak desk. Gloved hands. He dips a black quill into ink. Camera handheld, rack focus from his unblinking blue eyes down to the parchment.",
+      "narration": "In a dead tower above a dead city, the Raven began to write.",
+      "image_prompt": "close-up of a hooded man in black feather-plated cloak and obsidian half-mask writing with a black quill on aged parchment, single candle flame, cold practical light, foggy ruined stone tower interior, faint blue tint in his eyes only, handheld documentary framing, rack focus on the quill tip, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 11,
+      "setting": "Same chamber, extreme close-up of the parchment",
+      "action": "The quill carves the forged signature of RAIZEN of the Wolf Clan. A wax stamp slams down \u2014 a wolf sigil pressed in red. Kuro's gloved thumb smudges it intentionally to look battle-worn.",
+      "narration": "He signed it in another man's name. A wolf's name.",
+      "image_prompt": "extreme macro of aged parchment with a freshly forged wolf sigil pressed in dark red wax, a gloved thumb smudging the edge, black ink signature still wet, candlelight from one side, dust particles in the air, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 12,
+      "setting": "Jungle path at dusk near the overgrown Gorilla temple, low fog clinging to roots",
+      "action": "A Raven courier in worn leathers stumbles into view, deliberately bloodied, clutching the letter. Two Gorilla sentries with cracked stone-plate emerge, spears raised. The courier collapses and offers the sealed parchment.",
+      "narration": "The messenger was meant to look hunted. He played the part well.",
+      "image_prompt": "a bloodied courier in worn leather collapsing on a jungle path, handing a sealed parchment up to two massive gorilla warriors in cracked ancient stone-plate armor with faint dim amber rune cracks, overgrown temple ruins behind, low ground fog, dusk light through dense canopy, handheld realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 12,
+      "setting": "Inside the Gorilla temple sanctum, broken statues, torchlight",
+      "action": "VARN reads the letter by torchlight. His carved amber runes pulse once \u2014 a single anime flicker frame as rage hits. The parchment trembles in his massive hand. He says nothing. A tear cuts through dirt on his cheek.",
+      "narration": "Varn read of a wolf raid on his unborn children. He believed every word.",
+      "image_prompt": "massive gorilla warrior leader reading a parchment by torchlight inside a ruined temple sanctum, ancient stone-plate armor with carved amber runes faintly pulsing in the skin, a single tear cutting through dust and dirt on his cheek, broken statues in background, practical torch flame as only light source, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 11,
+      "setting": "Snow-covered mountain pass at night, moonlit tundra, distant fire glow",
+      "action": "RAIZEN crouches over fresh tracks in the snow \u2014 boots that aren't his clan's. His ice-pale eyes narrow. Behind him, a wolf scout points down the ridge toward smoke rising from a Wolf outpost. The outpost is burning.",
+      "narration": "While Varn raged, Raizen found his own outpost in ashes. Not his doing.",
+      "image_prompt": "scarred warrior leader in dark iron plate armor with deep claw marks across the chest crouched over boot prints in fresh snow, pale ice-cold eyes, breath visible, distant burning outpost on a ridge behind him, moonlit frozen tundra, a wolf-helmeted scout pointing toward smoke, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 12,
+      "setting": "Burned Wolf outpost, dawn approaching, ash falling like snow",
+      "action": "Raizen walks among the dead. He kneels by a fallen wolf warrior and pulls a black raven feather from the corpse's mouth \u2014 planted evidence. But he doesn't see it as a frame. He reads it as Gorilla savagery aided by spies.",
+      "narration": "A feather in a dead man's teeth. Misread. The trap was already shut.",
+      "image_prompt": "warrior leader kneeling among burned bodies in a ruined snow outpost, pulling a single black raven feather from the mouth of a fallen armored wolf soldier, falling ash mixed with snow, dawn light just breaking grey on the horizon, deep claw marks across his chest plate visible, handheld realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 12,
+      "setting": "Kuro's tower chamber, hours later, dawn fog rolling in",
+      "action": "Kuro stands at the broken window. A second raven lands on his outstretched arm carrying confirmation. He removes the obsidian half-mask for one second \u2014 we see a thin, exhausted human face \u2014 then puts it back on. He has not slept.",
+      "narration": "Two wars ignited from one piece of paper. The Raven did not smile.",
+      "image_prompt": "a man in black feather-plated cloak standing at a broken stone window of a ruined tower, a real raven landing on his outstretched gloved arm, obsidian half-mask held in his other hand revealing a tired pale unshaven human face, dawn fog rolling through the window, practical grey morning light only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 12,
+      "setting": "The Hollow Gate \u2014 a colossal cracked stone archway at the center of a barren plain, three roads converging",
+      "action": "Wide static shot. Three distant marching columns approach from three directions \u2014 wolves from the north, gorillas from the south jungle, ravens watching from a ridge. None know the others are coming. The Gate's runes flicker faintly. One single anime frame as the runes pulse \u2014 then gone.",
+      "narration": "Three armies. One gate. None of them knew they were already inside the Raven's hand.",
+      "image_prompt": "massive ancient cracked stone archway alone on a barren grey plain, three distant armies marching from three converging roads \u2014 wolves from snowy north, gorilla titans from jungle south, hooded ravens watching from a ridge, faint dim runes barely visible on the gate stones, low ground fog, overcast sky, wide static landscape shot, handheld breathing camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    }
+  ],
+  "narrator_outro": "Next episode \u2014 the first blood at the Hollow Gate. Wolf meets Gorilla. Neither will walk away whole. And Kuro watches from the fog.",
+  "shorts_hook": "He forged ONE letter \u2014 and three armies marched to die.",
+  "youtube_title": "SHADOW CLANS Ep 19 \u2014 The Forged Letter That Started The War",
+  "youtube_description": "Episode 19 of SHADOW CLANS. Kuro of the Raven Order makes his first move \u2014 a single forged letter sealed with a stolen wolf sigil. Varn of the Gorilla Titans believes a lie. Raizen of the Wolf Clan misreads a planted feather. Three factions march toward the Hollow Gate, and none of them know who really pulled the string.\n\nA dark cinematic fantasy series. Live-action realism. Animal warrior factions. A collapsing world.\n\nNew episodes weekly.\n\n#ShadowClans #DarkFantasy #CinematicFantasy #WolfClan #RavenOrder #GorillaTitans #HollowGate #FantasySeries #AnimatedSeries #EpicFantasy"
+}

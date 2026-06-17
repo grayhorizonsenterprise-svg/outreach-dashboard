@@ -114,25 +114,45 @@ def score_job(title: str, description: str) -> int:
 
 
 PROPOSAL_TEMPLATES = [
-    """GHL automation is my core service. I build pipelines, workflows, and lead systems full-time for local service businesses.
+    """I build GHL automation full-time for local service businesses. Not a generalist — this is the only thing I do.
 
 {match_line}
 
-I have built sub-account setups, A2P SMS registration, Meta Ads integration, automated follow-up sequences, appointment booking workflows, and full pipeline QA. Clean builds that hold up after handoff.
+What I deliver on every build:
+- Instant SMS response on lead submission (under 60 seconds)
+- 7-touch follow-up sequence across SMS and email
+- Missed call text-back
+- Pipeline stages with clear entry/exit triggers
+- Full documentation on handoff
 
-Available immediately. {question}
-
-Rate: $35/hr or fixed project pricing available.""",
-
-    """GHL and AI automation is what I do daily — pipelines, voice agents, CRM builds, and workflow QA for service businesses.
-
-{match_line}
-
-Recent builds include: instant SMS follow-up on lead submission, 7-touch nurture sequences, missed call text-back, AI inbound voice agent for appointment booking, and full GHL sub-account setup with documentation.
+Timeline: most builds complete in 3-5 business days. I do not disappear mid-project.
 
 {question}
 
-Rate: $35/hr. Available to start this week.""",
+Rate: $35/hr or fixed project pricing if scope is clear.""",
+
+    """Most GHL problems I see are not setup problems. They are follow-up problems. Leads come in and nobody responds for 4 hours. At that point, 60% of them are gone.
+
+{match_line}
+
+I have built the fix for this repeatedly: instant SMS on form submit, 7-touch automated nurture, missed call text-back, and AI voice agent for after-hours coverage. The result is a system that captures and follows up on every lead without any human involvement in the first 72 hours.
+
+{question}
+
+Available to start immediately. Rate: $35/hr.""",
+
+    """I will be direct about why you should consider someone with fewer reviews: I charge fair rates, I communicate clearly, and I do not overscope then underdeliver.
+
+{match_line}
+
+Specific capability for this job:
+- GHL: sub-accounts, workflows, custom fields, SMS A2P, pipeline stages, Zapier/Make integrations
+- Voice agents: Vapi inbound build, calendar booking, CRM push, tool call dedup
+- Delivery: working build plus documentation, not just a handed-off config nobody can maintain
+
+{question}
+
+Rate: $35/hr. Milestone-based payment available if you prefer that structure.""",
 ]
 
 

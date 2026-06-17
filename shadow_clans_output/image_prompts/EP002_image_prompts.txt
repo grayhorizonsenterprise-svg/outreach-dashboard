@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 2: The Whisper in the Pack
+Generated: 2026-06-08 16:01
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: Wide handheld shot of Raizen walking through camp, breath visible, scarred dark iron plate dusted with snow. Wolves around him bow their heads. He stops, scanning faces — sensing something wrong.
+Narration: The pack gathers, but their leader feels the cold of something else moving among them.
+
+IMAGE PROMPT:
+weathered wolf warrior leader with pale ice-blue eyes and deep claw scars across chest plate, scarred dark iron armor dusted with snow, walking through torchlit snow camp at dusk, fur tents, breath fogging in cold air, other wolf warriors bowing heads, low unnatural fog drifting low, distant frozen ruins on ridge, handheld documentary camera, practical torch lighting only, desaturated filmic color grade, cinematic film grain, shallow depth of field, 4k, realistic skin texture and fabric weight, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: Close-up of a scarred wolf lieutenant, KESH, hunched over a folded parchment. He writes troop positions in tight script. Hands tremble slightly. He folds it into a hollow bone tube.
+Narration: Kesh — second of the pack, brother in battle — sells his oath in silence.
+
+IMAGE PROMPT:
+close-up of grizzled wolf warrior lieutenant writing on parchment inside dim fur-lined tent, single oil lamp casting warm low light, trembling scarred hands, folding parchment into hollow bone tube, sweat on brow, visible skin pores, worn leather and fur garments, rack focus on hands then face, handheld camera, practical lamp light only, desaturated high contrast filmic grade, cinematic film grain, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (12s)
+Action: Kesh ties the bone tube to the leg of a black raven. The bird's eyes catch moonlight — unnaturally still. It takes flight silently across the moonlit tundra toward the south fog.
+Narration: A messenger with no soul. A bird that answers only to ruined towers.
+
+IMAGE PROMPT:
+scarred wolf warrior on frozen moonlit cliff at night tying bone tube to leg of large black raven, dead pine trees, half-moon, raven's eyes catching cold moonlight, breath visible, snow blowing low, distant fog rolling south, handheld camera framing, practical moonlight only, desaturated filmic color, cinematic film grain, shallow depth of field, 4k, realistic feather and fur texture, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: Kuro stands motionless on the balcony, obsidian half-mask catching dim grey light. The raven lands on his outstretched arm. He removes the bone tube, unrolls the parchment, reads — no expression.
+Narration: In the dead city, Kuro reads the Wolf's secrets like scripture.
+
+IMAGE PROMPT:
+tall raven warrior leader wearing black feather-plated cloak and obsidian half-mask standing motionless on crumbling stone balcony, cold pale blue unblinking eyes, perpetual thick fog, ruined gothic towers and dead city architecture behind, black raven landing on outstretched arm, unrolling small parchment from bone tube, overcast grey light, handheld documentary framing, practical ambient light only, desaturated high contrast filmic grade, cinematic film grain, shallow depth of field, 4k, realistic feather and fabric texture, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (11s)
+Action: Raizen leans over the carved map. He moves a wolf token, then stops. He notices a small soot fingerprint on the eastern pass — exactly where the Ravens last struck. His jaw tightens.
+Narration: Every ambush. Every loss. The same hand has touched the map before him.
+
+IMAGE PROMPT:
+wolf clan leader with ice-pale eyes leaning over carved stone map table inside ruined hall, brazier firelight flickering on scarred dark iron armor and deep chest scars, noticing small dark soot fingerprint on map of mountain pass, narrowed eyes, breath visible in cold air, ancient frozen ruins surrounding, low unnatural fog at floor, handheld camera, practical brazier light only, desaturated filmic color grade, cinematic film grain, shallow depth of field, 4k, realistic skin and metal texture, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: Kuro lowers the parchment to a black candle. As it ignites, his palm pulses — for ONE FRAME a retro anime flicker of glowing blue rune lines snaps across his hand, then gone. Smoke rises. He whispers a name: 'Kesh.'
+Narration: The Ravens never repay a debt. They collect.
+
+IMAGE PROMPT:
+raven warrior leader in dim candlelit obsidian chamber lowering small parchment to black candle flame, obsidian half-mask, black feather cloak, single brief flicker of faint blue rune glow across palm at exact moment of ignition, thin smoke rising, parchment curling, lips parted whispering, cold pale eyes catching candlelight, handheld camera, practical candle light only, desaturated filmic grade, cinematic film grain, shallow depth of field, 4k, realistic skin pores and feather texture, NO bloom, NO anime shading except 1 frame supernatural release
+
+----------------------------------------
+
+SCENE 7 (11s)
+Action: Raizen silently approaches Kesh from behind as Kesh stares south. Raizen places a heavy hand on his shoulder. Kesh freezes. Slowly turns. Their eyes meet — no words. Recognition. Betrayal confirmed.
+Narration: Brothers know each other's silence. And Raizen has heard enough.
+
+IMAGE PROMPT:
+wolf clan leader with ice-pale scarred face silently placing heavy gauntleted hand on shoulder of scarred wolf lieutenant from behind at pre-dawn grey light, snowy forest edge, both breaths fogging, lieutenant freezing then slowly turning, eyes meeting in dread recognition, scarred dark iron armor, weathered fur cloaks, low fog drifting, handheld documentary camera, rack focus between two faces, practical natural pre-dawn light, desaturated high contrast filmic color, cinematic film grain, shallow depth of field, 4k, realistic skin pores and fabric weight, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (12s)
+Action: Wide static shot. Raizen drags Kesh to the ridge edge. Across the impossible distance, Kuro's silhouette stands on the far tower — watching through the fog as if he can see them. Raizen unsheathes a curved blade. Cut to black.
+Narration: Two leaders. One traitor between them. The war for the Hollow Gate has its first wound.
+
+IMAGE PROMPT:
+wide static shot from high snowy ridge at dawn, wolf clan leader in scarred dark iron armor dragging scarred lieutenant to cliff edge, unsheathing curved blade, across vast foggy valley a distant silhouette of cloaked raven figure standing on ruined tower watching, low unnatural fog filling valley, pale cold dawn light, handheld documentary framing slightly trembling, practical natural light only, desaturated filmic color grade, high contrast, cinematic film grain, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------

@@ -1,0 +1,53 @@
+{
+  "title": "Three Ways to Deploy Claude Agents So They Run While You Sleep",
+  "summary": "The video covers three methods for deploying Claude Code agents as persistent automations that run without manual intervention. The presenter focuses on the loop or cron method, explaining how Claude Code uses internal scheduling tools to fire off automated tasks at set intervals. A key distinction is made between running loops in the desktop app versus the terminal, with the terminal offering more stability, longer session persistence, and the ability to auto-clear context windows. The video introduces the WAT framework (Workflow, Agent, Tools) as a way to evaluate each deployment method. The presenter positions these techniques as practical solutions for running AI automations around the clock for real business use cases.",
+  "key_takeaways": [
+    "Claude Code has built-in cron tools (cron create, cron list, cron delete) that let you schedule agents to run automatically at set intervals without any external infrastructure",
+    "Running loops in the terminal is more powerful than the desktop app because crons survive a session clear, giving you up to 7 days of persistent automation versus 3 days in the desktop app",
+    "You can set up a secondary cron to run the slash clear command every few minutes to prevent context rot when your agent is processing large amounts of data in a loop",
+    "Crons are session-scoped, meaning multiple independent automation loops can run simultaneously across different terminals without interfering with each other unless they share a resource",
+    "The key deployment decision framework involves two axes: where the agent runs (local machine vs cloud) and how deterministic it is (scripted workflow vs fully autonomous agent loop)"
+  ],
+  "pitch_angles": [
+    "Position 24/7 autonomous AI agents as the replacement for overnight staff or manual follow-up processes, showing local service businesses how a cron-based agent can handle contractor intake, appointment reminders, or HOA requests while the owner sleeps",
+    "Use the concept of persistent loop agents to demonstrate ongoing value in your managed retainer offer, showing clients that their $750/month buys them a system that never clocks out, never calls in sick, and runs every 10 minutes around the clock",
+    "Highlight the low infrastructure cost of cron-based deployments to remove the price objection, explaining that these automations run inside existing Claude Code sessions without expensive server costs, making the ROI on your retainer immediately clear"
+  ],
+  "sales_scripts": [
+    "Most service businesses are losing leads after hours because nobody is there to respond. We set up AI agents that run every 10 minutes, 24 hours a day, handling intake, follow-up, and scheduling automatically. You pay once for the setup and the system works while you sleep.",
+    "Your competitors are still manually following up with leads the next morning. We deploy autonomous agents that loop continuously through your CRM, responding to new inquiries and booking appointments in real time. That speed-to-lead advantage alone is worth more than our monthly retainer."
+  ],
+  "objection_handlers": [
+    {
+      "objection": "I already have a CRM and staff handling follow-up, I do not need automation",
+      "response": "Your staff handles it during business hours, but what happens at 9pm on a Saturday when a homeowner submits a repair request or a contractor fills out your intake form? Our agents run on a loop every 10 minutes all week, so no lead ever waits until Monday morning to hear back."
+    },
+    {
+      "objection": "This sounds too technical and complicated to maintain",
+      "response": "That is exactly why we offer the managed retainer. You never touch the backend. We handle the deployment, monitor the loops, and make sure the agents keep running. You just see the results in your CRM and your calendar."
+    },
+    {
+      "objection": "What if the AI makes a mistake or the automation breaks",
+      "response": "We build these systems with structured workflows, not guesswork. Each loop is scoped, monitored, and designed to handle specific tasks like intake or reminders where the output is predictable. And because we manage it, we catch and fix issues before they affect your business."
+    }
+  ],
+  "revenue_application": "To hit $100K within 2 months, GHE should prioritize landing 5 to 7 managed retainer clients at $750/month each as the recurring base, then stack one-time setup fees of $2,000 to $5,000 per client for deploying cron-based agent systems like contractor intake automation, HOA management loops, or AI voice agent pipelines. Using the video techniques, demonstrate live during sales calls how a loop agent runs every 10 minutes autonomously, making the value of the retainer tangible and undeniable. Layer in TradingView indicator sales and the $49/month AI trading signal subscriptions as lower-friction offers to convert warm leads who are not yet ready for the full retainer. A pipeline of 8 retainer clients plus 20 to 30 signal or indicator sales can realistically cross $100K within the first two months if outreach starts immediately using the pitch angles and scripts above.",
+  "action_items": [
+    "Record a 60-second screen share demo showing a Claude Code cron agent handling a contractor intake form in a live loop, then use it as a lead generation video on LinkedIn and in cold outreach to local service businesses",
+    "Build a ready-to-deploy cron-based intake agent template inside Claude Code for at least one vertical (HVAC, HOA, or general contractor) so you can demo and deliver it within 48 hours of signing a client",
+    "Create a one-page offer sheet positioning the $750/month managed retainer as a 24/7 autonomous AI employee, using the language of persistent loops, zero downtime, and speed-to-lead to justify the price against hiring a part-time admin"
+  ],
+  "twitter_posts": [
+    "Most businesses lose leads after 5pm. We deploy AI agents that loop every 10 minutes, 24/7, handling intake and follow-up automatically. Your competition is still doing it manually.",
+    "You do not need a server farm to run automations that never sleep. Claude Code crons run persistent agent loops for days with zero infrastructure cost. This is what we build for clients.",
+    "Speed to lead wins deals. An AI agent that responds in 10 minutes at midnight beats a human who responds at 9am every single time. This is the edge we give local service businesses."
+  ],
+  "linkedin_posts": [
+    "Most local service businesses are losing revenue every single night and they do not even know it.\n\nLeads come in after hours. Nobody responds until morning. By then the competitor who called back first already booked the job.\n\nWe fix this by deploying AI agent loops that run every 10 minutes, 24 hours a day, 7 days a week. No server required. No staff required. Just persistent automation handling intake, follow-up, and scheduling while the owner is asleep.\n\nThis is not a chatbot. It is a fully autonomous agent running on a scheduled loop inside a managed system we maintain for you.\n\nIf you run a contracting company, HOA management firm, or any local service business and you want to see what this looks like live, send me a message. I will show you the demo in under 5 minutes.",
+    "There is a framework every business owner should understand before buying any AI automation: where does it run, and how autonomous is it?\n\nMost cheap automations run on your machine, which means the moment your computer sleeps, your automation dies. Most overpriced ones require expensive cloud servers you do not need.\n\nThe sweet spot is a managed agent loop that runs persistently in a lightweight cloud session, fires on a schedule, handles a specific business task, and reports results back to your CRM without anyone touching it.\n\nThat is what we build at Gray Horizons Enterprise for service businesses who want to compete on speed and availability without hiring more staff.\n\nThe managed retainer is $750 per month. It includes deployment, monitoring, and ongoing optimization. The first client who reaches out this week gets the setup fee waived.\n\nDrop a comment or send a DM if you want details."
+  ],
+  "relevance_score": 7,
+  "url": "https://youtu.be/xJ5oz63mIec?si=xO1mUebJcOCguV7S",
+  "note": "",
+  "analyzed_at": "2026-06-08T16:11:43.633268"
+}

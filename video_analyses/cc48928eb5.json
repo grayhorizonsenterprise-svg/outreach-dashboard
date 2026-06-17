@@ -1,0 +1,53 @@
+{
+  "title": "Build a Voice Agent in 15 Minutes with Claude Code and ElevenLabs",
+  "summary": "The video demonstrates how to build a fully functional AI voice agent using Claude Code and ElevenLabs in approximately 15 minutes using natural language instructions alone. The creator built a voice agent trained on 400 YouTube transcripts that users can talk to directly from a website. Claude Code handles all the technical configuration automatically including system prompts, knowledge base setup, and tool integration. The video breaks down the four core components of any voice agent: persona, voice, knowledge, and tools. It also covers three deployment methods: dashboard testing, website widget embedding, and phone number integration via Twilio.",
+  "key_takeaways": [
+    "Claude Code can build and fully configure an ElevenLabs voice agent in under 15 minutes using plain language descriptions, eliminating hours of manual dashboard setup",
+    "Every voice agent has four essential components that must be configured: persona (system prompt), voice selection, knowledge base, and tools or API integrations",
+    "Voice agents can be deployed three ways: dashboard testing, embedded website widget, or connected to a phone number via Twilio for inbound and outbound calls",
+    "Knowledge bases can pull from documents, vector stores like Supabase or Pinecone, or even scraped web content, making agents highly customizable for specific business use cases",
+    "Claude Code reads API documentation automatically and configures tools, endpoints, and integrations without the user needing technical knowledge of the underlying platforms"
+  ],
+  "pitch_angles": [
+    "Lead with the speed advantage: tell local service businesses that GHE can deploy a fully trained AI voice agent for their business in under 24 hours, answering calls, qualifying leads, and booking appointments without hiring staff",
+    "Lead with the cost comparison: a human receptionist costs $3,000 to $4,500 per month while GHE deploys a voice agent that works 24 hours a day, 7 days a week for a fraction of that cost on the managed retainer",
+    "Lead with the competitor gap: most agencies are still clicking through dashboards manually to build these agents, which means GHE builds faster, deploys cleaner, and can support more clients at higher margins using Claude Code automation"
+  ],
+  "sales_scripts": [
+    "Most contractors miss calls after hours and lose jobs to whoever picks up first. We build you an AI voice agent that answers every call, qualifies the lead, and books the appointment automatically. You get the job without adding a single employee to your payroll.",
+    "Your HOA or service business gets flooded with repetitive questions that eat your team's time every single day. We deploy a voice agent trained on your exact business info that handles those calls around the clock. Setup takes less than 24 hours and it runs on autopilot from day one."
+  ],
+  "objection_handlers": [
+    {
+      "objection": "We already have someone answering the phones.",
+      "response": "That person is probably spending 60 percent of their time answering the same five questions. Our voice agent handles all of that automatically so your team can focus on the work that actually makes you money. Your staff becomes more productive and you stop paying for repetitive tasks."
+    },
+    {
+      "objection": "AI voice agents sound robotic and will turn customers off.",
+      "response": "ElevenLabs voice cloning technology produces voices that are nearly indistinguishable from a real human. We can even clone a voice from your own team so the agent sounds like someone your customers already trust. Most callers do not realize they are talking to an AI."
+    },
+    {
+      "objection": "This sounds too complicated and expensive to set up.",
+      "response": "We handle every single piece of the setup for you using the latest AI tools, which means your agent can be live within 24 hours. Our managed retainer is $750 per month, which is a fraction of what a part-time receptionist costs. You approve the final product and we maintain it ongoing."
+    }
+  ],
+  "revenue_application": "Use Claude Code and ElevenLabs to productize a done-for-you AI voice agent service under the GHE managed retainer at $750 per month. Target local service businesses like contractors, HOAs, and home service companies who receive high call volume and struggle with after-hours lead capture. Each client takes under 24 hours to onboard using the Claude Code workflow shown in this video, meaning GHE can scale client acquisition quickly without proportional increases in labor. To hit $100K within two months, close 12 to 14 retainer clients at $750 per month for recurring revenue around $9,000 to $10,500 monthly, then layer in upsells including the GHL CRM setup, contractor intake systems, and TradingView indicators to spike one-time revenue. Targeting 8 to 10 clients in month one through outbound outreach to local service business owner communities and demonstrating the live agent demo as a proof-of-concept close, then adding 4 to 6 more in month two while collecting referrals, creates a realistic path to the $100K milestone combining retainer contracts and one-time setup fees.",
+  "action_items": [
+    "Build a live demo voice agent this week using Claude Code and ElevenLabs trained on GHE service information, then embed it on the GHE website as a proof-of-concept to show prospects during sales calls",
+    "Create a 60-second Loom or screen recording of the voice agent demo and send it cold to 20 local contractors or HOA managers per day via email and LinkedIn DM with a direct call to action to book a discovery call",
+    "Package the voice agent buildout as a productized offer with a one-time setup fee of $500 to $1,000 plus the $750 per month managed retainer, and write a one-page offer sheet that outlines deliverables, timeline, and ROI comparison versus hiring a receptionist"
+  ],
+  "twitter_posts": [
+    "Built a fully configured AI voice agent in 15 minutes using Claude Code and ElevenLabs. No dashboard clicking. Just described the idea and it built itself. This is what we deploy for local businesses now.",
+    "Your contractor business misses calls after 5pm. Every missed call is a job you lost to whoever picked up. AI voice agents fix this for less than $25 a day. The tech is ready. Are you?",
+    "AI voice agents have 4 parts: persona, voice, knowledge, and tools. Get those right and you have a 24/7 employee that never calls in sick. We build these for local businesses in under 24 hours."
+  ],
+  "linkedin_posts": [
+    "We just cut our voice agent buildout time from hours to under 15 minutes.\n\nUsing Claude Code paired with ElevenLabs, we describe the agent we want in plain language and the AI reads the documentation, writes the configuration, and deploys everything automatically.\n\nNo manual system prompts. No clicking through dashboards. No endpoint errors.\n\nFor local service businesses this means a fully trained AI receptionist can be live on their website or connected to their phone number in less than 24 hours.\n\nThe businesses that adopt this now will answer more leads, book more jobs, and pay less in overhead than their competitors who are still hiring front desk staff.\n\nIf you run a contracting company, HOA, or local service business and want to see what this looks like for your operation, drop a comment or send me a message.",
+    "Most local service businesses lose 30 to 50 percent of their leads simply because no one picked up the phone.\n\nA missed call at 7pm on a Friday becomes a job for your competitor by Monday morning.\n\nAI voice agents solve this problem completely. They answer every call, ask the right questions, collect contact info, and book appointments automatically around the clock.\n\nThe technology is no longer experimental. We are deploying these for clients using ElevenLabs voice cloning and custom knowledge bases trained on the specific business, its services, and its pricing.\n\nThe cost is a fraction of hiring even a part-time receptionist and the system works harder and more consistently than any human employee could.\n\nGray Horizons Enterprise builds and manages these systems for local service businesses on a simple monthly retainer. If you want to stop losing leads to voicemail, let us show you a live demo."
+  ],
+  "relevance_score": 9,
+  "url": "https://youtu.be/-cdexJWN8YA?si=jQi6pe10bnjoOPE6",
+  "note": "",
+  "analyzed_at": "2026-06-08T15:44:46.410603"
+}

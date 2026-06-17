@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 6: The Hollow Gate Begins Speaking
+Generated: 2026-06-10 07:33
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (11s)
+Action: Raizen kneels in the snow, scarred dark iron plate dusted in frost. His breath is heavy, ragged. He stares down at the distant Gate. A low sound — almost a word — passes through him. He flinches, gripping the snow with a clawed gauntlet.
+Narration: Before the others woke, the Gate found him. A whisper across three hundred years of silence.
+
+IMAGE PROMPT:
+lone wolf warrior kneeling in deep snow on a mountain ridge, scarred dark iron chest plate with deep claw marks, pale ice-blue eyes, dawn fog clinging low, distant black stone gate in the valley below, breath visible, handheld documentary shot, practical moonlight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (12s)
+Action: Raizen walks past his lieutenants without speaking. They watch him, confused. A wolf captain, fur matted with dried blood, asks where he's going. Raizen does not answer. His pupils are dilated. Sweat lines his temple despite the cold.
+Narration: His warriors saw a leader walking. They did not see what walked beside him.
+
+IMAGE PROMPT:
+scarred wolf warrior walking through a snowy ruined camp at dawn, torchlight flickering on dark iron armor, lieutenants watching with concern, breath fog, dirt and sweat on faces, handheld camera follow shot, rack focus, practical torch lighting, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (12s)
+Action: Kuro stands motionless on a broken parapet, obsidian half-mask catching faint cold light. A raven lands on his armored shoulder. He tilts his head, listening to something far away. His unblinking blue eyes narrow.
+Narration: Far to the east, the Raven heard nothing — and that was what unsettled him.
+
+IMAGE PROMPT:
+tall figure in black feather-plated cloak on a ruined stone tower, obsidian half-mask, cold pale blue eyes, thick fog rolling across crumbling parapet, a black raven on his shoulder, distant dead city below, overcast grey sky, handheld telephoto shot, practical overcast lighting, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (13s)
+Action: Varn presses his enormous palm to a cracked temple wall. The amber runes carved into his skin flicker faintly — and for a single frame, glitch like damaged film. He pulls his hand back as if burned. Dust falls from the stones above him.
+Narration: In the jungle, ancient stone answered ancient blood. Varn felt the Gate reaching.
+
+IMAGE PROMPT:
+massive gorilla warrior pressing palm to mossy cracked temple wall, faint amber runes etched into thick skin, ancient stone shoulder plates with hairline cracks, dense jungle fog, shattered statues behind him, vines hanging, single 1-frame retro anime flicker on rune release, handheld low angle, practical filtered jungle light, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO bloom, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (12s)
+Action: Raizen walks alone toward the Gate. The whisper rises into a chorus — overlapping voices in a dead tongue. He stops twenty paces away. The Gate's surface ripples like water held still. His hand drifts to his sword grip, trembling.
+Narration: It did not call him by name. It called him by what he had done.
+
+IMAGE PROMPT:
+wolf warrior alone in deep snow approaching a massive black stone arch gate, faint runes barely visible on the stone, low ground fog, scarred dark iron armor, ice-blue eyes wide and trembling, hand on sword grip, dawn light grey and flat, handheld over-shoulder shot, practical natural light only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: Raizen drops to one knee. Blood trickles from his nose, freezing on his lip. The Gate's surface shows a reflection that is NOT him — an older wolf, scarred deeper, eyes hollow. For one anime-flicker frame, the reflection smiles. Raizen stops breathing.
+Narration: The Gate showed him a face. His own face. Older. Crueler. Already waiting.
+
+IMAGE PROMPT:
+wolf warrior kneeling before towering black stone gate, blood trickling from nose freezing on lip, snow falling slow, the gate's surface showing a distorted reflection of an older more scarred wolf face, single 1-frame retro anime flicker on reflection smile, handheld close shot, practical dawn light, cinematic film grain, desaturated, high contrast, shallow depth of field, 4k, realistic skin pores and sweat, NO bloom, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (11s)
+Action: Raizen returns. Snow on his shoulders, blood dried on his face. He gives one order: break camp, move south, away from the Gate. His second-in-command hesitates — they were ordered to hold the Gate. Raizen does not look at him. "It is awake."
+Narration: He gave one order. The wolves who trusted him obeyed. The wolves who did not — would soon.
+
+IMAGE PROMPT:
+scarred wolf warrior returning to camp, dried blood on face, snow on shoulders, lieutenants around a smoldering fire pit looking unsettled, dark iron armor with claw marks, low overcast morning light, handheld medium shot, practical firelight and grey daylight, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures dirt and sweat, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (12s)
+Action: Wide shot of the Gate. Silent. Then — slowly — a single rune on its surface ignites faintly, then dies. Camera pushes in. The whisper returns, this time in multiple overlapping voices. The reflection of the older Raizen is still there, watching. Cut to black.
+Narration: The Gate had spoken once. It would not stop now.
+
+IMAGE PROMPT:
+massive black stone gate alone in snowy basin at dusk, blowing snow, a single faint rune on the stone barely lit then fading, the surface still showing a ghostly reflection of an older scarred wolf face, low fog, no people, wide cinematic shot pushing in, practical fading daylight only, cinematic film grain, desaturated, high contrast, shallow depth of field, 4k, realistic stone texture, NO bloom, NO glow, NO anime shading
+
+----------------------------------------

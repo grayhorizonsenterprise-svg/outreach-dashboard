@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 21: What The Hollow Gate Devours
+Generated: 2026-06-17 08:54
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: Raizen trudges alone through knee-deep snow, breath fogging, ice eyes scanning the dark. A single black feather drifts down and lands on his shoulder plate. He stops. He knows.
+Narration: A wolf walks alone. A feather falls. The summons is older than language.
+
+IMAGE PROMPT:
+lone wolf-faced warrior in scarred dark iron plate trudging through deep snow on a mountain ridge, breath visible in cold air, pale ice-blue eyes, single black feather resting on his shoulder, low ground fog, pre-dawn moonlight only, handheld documentary framing, slight lens grain, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: Kuro stands motionless at the broken parapet, feather cloak heavy with frost. He does not turn as Raizen climbs the last steps, sword half-drawn. Kuro's gloved hand raises — wait.
+Narration: The Raven waited. He always waits. Tonight, he chose to speak.
+
+IMAGE PROMPT:
+masked figure in heavy black feather cloak standing at the edge of a ruined stone tower, obsidian half-mask catching faint moonlight, cold blue unblinking eyes barely visible, frost on feathers, thick fog rolling beneath the cliff, wolf warrior approaching from behind in shadow, torchlit interior glow far below, handheld camera, rack focus, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (13s)
+Action: Raizen sheathes his blade with a slow scrape. Kuro gestures with one finger toward the mist-choked pit below. The fog thins for a heartbeat — something vast and circular is visible at the bottom, ringed in dead stone.
+Narration: Look down, wolf. The truth was always beneath your war.
+
+IMAGE PROMPT:
+two warriors standing at a broken stone parapet looking down into a vast misty crater, wolf warrior in dark iron plate beside a black-cloaked masked figure, dawn light barely breaking, thin fog parting to reveal a massive circular stone structure far below ringed by ancient pillars, handheld documentary angle from behind, lens grain, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: Kuro speaks low. 'It is not a gate. It never was.' Raizen's jaw tightens, the old claw scars across his chest visible beneath shifting plate. 'Then what have we been dying for?'
+Narration: Two leaders. One question. A lie three clans were built upon.
+
+IMAGE PROMPT:
+extreme close-up two-shot of a wolf warrior with visible skin pores sweat and old claw scars on jaw and chest plate beside a black obsidian half-masked face with cold blue eye barely visible through eyeholes, pre-dawn cold light, breath fog between them, handheld tight framing, rack focus shifting between faces, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (13s)
+Action: The mist peels back. The Gate is not a door. It is a mouth — a vast ringed maw carved into the earth, lined with petrified bodies of older warriors fused into the stone, still half-moving.
+Narration: It does not open worlds. It eats them. Slowly. Patiently.
+
+IMAGE PROMPT:
+vast circular pit in the earth seen from high above, ancient stone ring lined with petrified humanoid figures fused into the walls some still faintly twitching, dense fog peeling back at dawn, distant torch-fires around the rim, decayed ruined architecture, ominous documentary aerial angle, no light beams no rim light, cinematic film grain, desaturated, high contrast, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: Raizen staggers, one gauntlet slamming the parapet, stone crumbling under his grip. For a single flicker — one frame — his ice-eyes flare with raw silver moonlight, then snap back to flesh. Grief and fury, contained.
+Narration: Some truths break a warrior. Others sharpen him into a blade.
+
+IMAGE PROMPT:
+wolf warrior in scarred dark iron plate staggering back at a broken stone parapet, gauntleted hand crushing the stone edge into dust, face contorted with grief and rage, single frame of pale silver light in his ice-blue eyes, breath ragged in cold air, dawn moonlight only, handheld shaky camera, retro anime flicker only one frame on the eye light, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced bloom, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (12s)
+Action: Kuro lowers his voice. 'Varn does not know. The Gorillas guard what devours them.' He turns, cloak dragging frost across stone. 'Tell him, or do not. Either ends the same.'
+Narration: The Raven gave no plan. Only the weight of knowing.
+
+IMAGE PROMPT:
+black feather-cloaked masked figure turning to descend a broken spiral stone staircase into thick fog, frost trailing from cloak hem, faint torchlight from below catching the obsidian half-mask, wolf warrior left behind in background out of focus, ancient ruined tower architecture, handheld over-the-shoulder angle, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (13s)
+Action: Cut to Varn in the overgrown ruins, kneeling before a cracked stone slab. The amber runes carved into his skin pulse once — slow, mournful — as if sensing something far away. He looks up toward the north. He doesn't know yet. But he feels it.
+Narration: Far away, the stone remembers. The Titan stirs. The war is no longer the war.
+
+IMAGE PROMPT:
+massive gorilla warrior kneeling in overgrown jungle temple ruins at dawn, ancient stone-plate armor with faintly pulsing amber runes carved into skin and stone slabs, cracked statues and vines around him, dense low fog, distant fire haze, looking up slowly toward the north, somber expression, single flicker frame of amber rune pulse, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced bloom, NO anime shading
+
+----------------------------------------

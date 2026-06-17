@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 10: The Truth Beneath the Hollow Gate
+Generated: 2026-06-12 06:49
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: RAIZEN climbs the crumbling spiral stairs alone, breath visible, iron plate scraping stone. He grips his blade. A single black feather drifts past him, caught in a draft.
+Narration: He came alone. The Raven asked for no witnesses — and Raizen understood why.
+
+IMAGE PROMPT:
+weathered wolf-warrior in scarred dark iron plate climbing broken spiral stone stairs of a ruined tower at night, breath fogging in cold air, single black feather drifting in foreground, torch flickering below, handheld documentary framing, practical torchlight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: KURO stands with his back turned, feather-cloak heavy with damp. He does not turn as RAIZEN steps onto the platform. The two warriors stand ten paces apart in absolute silence.
+Narration: No greeting. No threat. Only the weight of something neither wanted to say.
+
+IMAGE PROMPT:
+raven warrior in black feather-plated cloak and obsidian half-mask standing with back turned on a ruined fog-choked tower platform, wolf warrior in scarred iron plate stepping into frame behind him, low fog pouring over broken stone, moonlight muted through cloud, rack focus between the two figures, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (13s)
+Action: KURO finally turns. His blue eyes are unblinking, exhausted. He pulls a folded parchment from his cloak — a map fragment, edges burned. He sets it on a broken stone between them.
+Narration: Kuro spoke first. 'What I show you, the Order has killed eleven of its own to keep buried.'
+
+IMAGE PROMPT:
+close-up of raven warrior turning, cold pale blue eyes behind cracked obsidian half-mask, exhausted skin texture with visible pores and scars, gloved hand placing a burned parchment map on weathered stone, low torchlight from below, fog drifting across frame, handheld camera slight shake, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: The map shows the Hollow Gate — but drawn beneath it, in faded red ink, is a vast hollow shape: a sleeping figure, larger than mountains, curled beneath the earth. RAIZEN's clawed hand freezes mid-reach.
+Narration: The Gate was never a door. It was a seal — over something still breathing.
+
+IMAGE PROMPT:
+overhead top-down shot of an ancient burned parchment map on cracked stone, hand-drawn Hollow Gate symbol in black ink with a massive curled sleeping humanoid figure faintly sketched beneath it in faded red ink, two clawed armored hands at edges of frame, single candle flame nearby, paper texture detailed, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (12s)
+Action: RAIZEN's jaw tightens. 'A prisoner.' KURO nods once. 'A god the old clans drowned in stone. The Gorilla rune-carvers built the lock. The Wolves guarded it. My Order was made to forget it existed.'
+Narration: Three factions. One forgotten purpose. And a memory that was being deliberately erased.
+
+IMAGE PROMPT:
+tight two-shot profile of wolf warrior with ice-pale eyes and scarred face opposite raven warrior in obsidian half-mask, both lit by single low candle on stone between them, breath visible in cold air, fog drifting behind, intense quiet tension, slight lens grain, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: FLASH: Gorilla stone-carvers chiseling glowing amber sigils into a massive sealed slab. A single anime-flicker frame as the runes ignite — then back to filmic realism. The slab shudders. Something inside exhales.
+Narration: The Titans remember. That is why Varn's stones are cracking.
+
+IMAGE PROMPT:
+ancient underground stone chamber, massive gorilla warriors carving amber runes into a colossal sealed slab, sweat and dust on skin, hammer and chisel detail, faint warm rune-light as practical source only, low fog at floor, one brief anime-flicker frame on rune ignition, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced bloom, NO cartoon shading
+
+----------------------------------------
+
+SCENE 7 (11s)
+Action: KURO: 'It is waking, Raizen. Not because of us. Because the seal was never meant to last this long.' Far below, a low subsonic tremor rolls through the valley. Dust falls from the broken battlements.
+Narration: The world was not ending by war. The world was ending by memory returning.
+
+IMAGE PROMPT:
+raven warrior leaning close to wolf warrior across stone, obsidian mask catching faint torch flicker, dust and small stone fragments falling from broken battlements above, fog disturbed by a low tremor, expression of grim certainty, handheld camera trembling slightly, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (13s)
+Action: KURO is gone — only a few feathers remain. RAIZEN stares across the fogged valley. Far away, the silhouette of the Hollow Gate pulses faintly, once, like a slow heartbeat. He grips his blade tighter.
+Narration: Raizen left the tower carrying a truth heavier than any blade. And somewhere, the prisoner stirred.
+
+IMAGE PROMPT:
+lone wolf warrior in scarred iron plate standing at the edge of a broken tower at night, looking across a vast fogged valley toward a distant massive stone gate silhouette on the horizon, faint pulse of dim light from the gate like a heartbeat, scattered black feathers on stone beside him, moonlight only, handheld wide shot, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------

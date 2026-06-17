@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 15: The Three Who Shared One Fire
+Generated: 2026-06-14 08:22
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (11s)
+Action: A lean scout in patched leather crawls through a broken archway, breath fogging, torch trembling. He freezes as his light catches faded paint on a wall.
+Narration: He was sent to map the dead places. He found something older than the war.
+
+IMAGE PROMPT:
+lean wiry male scout crawling through broken stone archway, patched leather armor, dirt-streaked face, sweat on brow, holding small flickering torch, faded mural visible in background, jungle vines, low fog, practical torchlight only, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (12s)
+Action: The scout brushes dust from the wall. Three young figures emerge in cracked paint — a wolf pup, a raven fledgling, a young gorilla — kneeling before a single robed master.
+Narration: Three students. One master. The faces were unmistakable.
+
+IMAGE PROMPT:
+close-up of weathered cracked wall mural depicting three young animal warrior figures kneeling before robed master, faded pigments, peeling paint, torchlight raking across stone surface, dust particles, hand entering frame brushing debris, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (13s)
+Action: Young Raizen, Kuro, and Varn spar with wooden staves under grey rain. They laugh. They bleed. A robed elder watches from a doorway, silent.
+Narration: Before the banners. Before the blood. They were boys with bruised hands.
+
+IMAGE PROMPT:
+three young animal warriors sparring with wooden staves in stone courtyard, light rain, grey overcast sky, mud splashes, bruised knuckles, young silver-furred wolf, young black-feathered raven youth, young gorilla with no runes yet, robed elder figure watching from shadowed doorway, practical natural light, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (11s)
+Action: The three young warriors sit shoulder to shoulder around embers, sharing a clay cup. Varn carves a small symbol into the stone between them — the Hollow Gate sigil.
+Narration: They swore an oath. They carved it where no one would look.
+
+IMAGE PROMPT:
+three young animal warriors seated around dying campfire, shoulders touching, passing clay cup, young gorilla carving symbol into flagstone with knife, low orange firelight on faces, sweat and dirt on fur, intimate close framing, practical firelight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (12s)
+Action: The scout sweeps centuries of dust from the flagstone. The same Hollow Gate sigil emerges — the carving from the flashback. His hand trembles.
+Narration: The same mark. The same stone. The war was never inevitable.
+
+IMAGE PROMPT:
+scout kneeling on dusty stone floor, sweeping ash and debris aside with bare hand, revealing carved Hollow Gate sigil in flagstone, torch on ground beside him, trembling fingers, dirt under nails, extreme close detail, handheld camera, practical torchlight, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: Raizen stands alone at the edge of a frozen cliff. His ice eyes catch the moon. He touches an old scar on his palm — a matching mark to the sigil. A single frame flickers: the carving.
+Narration: Some scars remember what we choose to forget.
+
+IMAGE PROMPT:
+Raizen wolf clan leader standing at edge of frozen cliff, scarred dark iron plate armor, deep claw marks across chest, silver fur, ice-pale eyes catching moonlight, snow drifting, looking down at old scar on open palm, breath fogging, distant moonlight only, handheld framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced bloom, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (12s)
+Action: Kuro stands at a tower window, unblinking blue eyes fixed on the south jungle. He already knows the scout found it. He whispers a single name to the fog.
+Narration: Kuro felt the stone shift. He always knew this day would come.
+
+IMAGE PROMPT:
+Kuro raven order leader at ruined tower window, black feather-plated cloak, obsidian half-mask, cold pale blue unblinking eyes, heavy fog rolling past stone arches, distant ruined city below, lips parted in whisper, practical moonlight through fog, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced rim lighting, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (13s)
+Action: Varn kneels before a shattered statue of the old master. The amber runes on his skin pulse once — a single anime-flicker frame — then dim. A tear cuts through stone dust on his cheek.
+Narration: Varn remembered first. And remembering is the heaviest weight of all.
+
+IMAGE PROMPT:
+Varn gorilla titan leader kneeling before shattered stone statue of robed master, massive ancient stone-plate armor, cracked carved symbols faintly lit amber, single tear cutting through dust on cheek, dim temple chamber, broken pillars, jungle roots through ceiling, practical low ember light, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, minimal rune glow, NO anime shading
+
+----------------------------------------

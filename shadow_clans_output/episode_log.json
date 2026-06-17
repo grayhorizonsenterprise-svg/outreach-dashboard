@@ -1,0 +1,163 @@
+{
+  "last_episode": 21,
+  "used_seeds": [
+    "The night RAIZEN refused the kill order and was exiled from his own clan",
+    "What the Hollow Gate promised VARN if he opened it one more time",
+    "KURO's first move \u2014 the forged letter that started the three-faction war",
+    "VARN's son returns scarred, alive, and loyal to no faction",
+    "The Hollow Gate begins speaking \u2014 and only RAIZEN hears it",
+    "The moment VARN activated the Hollow Gate out of grief \u2014 and what came through",
+    "A nameless scout discovers that all three leaders once trained together",
+    "KURO reveals what the Hollow Gate really is \u2014 to RAIZEN alone",
+    "The failed alliance \u2014 and the hand that sabotaged it from inside"
+  ],
+  "episodes": [
+    {
+      "number": 1,
+      "title": "The Forged Letter",
+      "seed": "KURO's first move \u2014 the forged letter that started the three-faction war",
+      "generated": "2026-06-08T08:51:15.726689",
+      "has_video": false
+    },
+    {
+      "number": 2,
+      "title": "The Whisper in the Pack",
+      "seed": "A spy inside Wolf Clan feeding intelligence directly to the Raven Order",
+      "generated": "2026-06-08T16:01:50.646339",
+      "has_video": false
+    },
+    {
+      "number": 3,
+      "title": "The Grief That Opened the Gate",
+      "seed": "The moment VARN activated the Hollow Gate out of grief \u2014 and what came through",
+      "generated": "2026-06-09T07:33:29.053405",
+      "has_video": false
+    },
+    {
+      "number": 4,
+      "title": "The Serpent Who Survived",
+      "seed": "The last survivor of a fourth clan arrives with a warning",
+      "generated": "2026-06-09T08:50:34.213090",
+      "has_video": false
+    },
+    {
+      "number": 5,
+      "title": "The Night Raizen Defied the Pack",
+      "seed": "The night RAIZEN refused the kill order and was exiled from his own clan",
+      "generated": "2026-06-09T16:02:17.384268",
+      "has_video": false
+    },
+    {
+      "number": 6,
+      "title": "The Hollow Gate Begins Speaking",
+      "seed": "The Hollow Gate begins speaking \u2014 and only RAIZEN hears it",
+      "generated": "2026-06-10T07:34:27.324439",
+      "has_video": false
+    },
+    {
+      "number": 7,
+      "title": "The Son Who Bowed to No One",
+      "seed": "VARN's son returns scarred, alive, and loyal to no faction",
+      "generated": "2026-06-10T08:25:10.977427",
+      "has_video": false
+    },
+    {
+      "number": 8,
+      "title": "The Oath Before The Gate",
+      "seed": "A nameless scout discovers that all three leaders once trained together",
+      "generated": "2026-06-11T07:18:34.170411",
+      "has_video": false
+    },
+    {
+      "number": 9,
+      "title": "Three Fires, One Dawn",
+      "seed": "The night before the final battle \u2014 three leaders, three fires, one decision",
+      "generated": "2026-06-11T08:24:36.844336",
+      "has_video": false
+    },
+    {
+      "number": 10,
+      "title": "The Truth Beneath the Hollow Gate",
+      "seed": "KURO reveals what the Hollow Gate really is \u2014 to RAIZEN alone",
+      "generated": "2026-06-12T06:49:32.583174",
+      "has_video": false
+    },
+    {
+      "number": 11,
+      "title": "What the Hollow Gate Promised Varn",
+      "seed": "What the Hollow Gate promised VARN if he opened it one more time",
+      "generated": "2026-06-12T08:35:06.091692",
+      "has_video": false
+    },
+    {
+      "number": 12,
+      "title": "The Pact That Bled From Within",
+      "seed": "The failed alliance \u2014 and the hand that sabotaged it from inside",
+      "generated": "2026-06-13T06:49:13.109237",
+      "has_video": false
+    },
+    {
+      "number": 13,
+      "title": "The Son Who Carries No Banner",
+      "seed": "VARN's son returns scarred, alive, and loyal to no faction",
+      "generated": "2026-06-13T08:23:28.663970",
+      "has_video": false
+    },
+    {
+      "number": 14,
+      "title": "The Pact That Was Never Meant To Hold",
+      "seed": "The failed alliance \u2014 and the hand that sabotaged it from inside",
+      "generated": "2026-06-14T06:49:21.728373",
+      "has_video": false
+    },
+    {
+      "number": 15,
+      "title": "The Three Who Shared One Fire",
+      "seed": "A nameless scout discovers that all three leaders once trained together",
+      "generated": "2026-06-14T08:23:25.408612",
+      "has_video": false
+    },
+    {
+      "number": 16,
+      "title": "The Grief That Opened the Gate",
+      "seed": "The moment VARN activated the Hollow Gate out of grief \u2014 and what came through",
+      "generated": "2026-06-15T07:43:02.082992",
+      "has_video": false
+    },
+    {
+      "number": 17,
+      "title": "The Hollow Gate Begins Speaking",
+      "seed": "The Hollow Gate begins speaking \u2014 and only RAIZEN hears it",
+      "generated": "2026-06-15T08:43:30.156903",
+      "has_video": false
+    },
+    {
+      "number": 18,
+      "title": "The Oath That Broke the Pack",
+      "seed": "The night RAIZEN refused the kill order and was exiled from his own clan",
+      "generated": "2026-06-16T07:24:07.398178",
+      "has_video": false
+    },
+    {
+      "number": 19,
+      "title": "The Forged Letter That Burned Three Worlds",
+      "seed": "KURO's first move \u2014 the forged letter that started the three-faction war",
+      "generated": "2026-06-16T08:48:27.360355",
+      "has_video": false
+    },
+    {
+      "number": 20,
+      "title": "What the Hollow Gate Promised Varn",
+      "seed": "What the Hollow Gate promised VARN if he opened it one more time",
+      "generated": "2026-06-17T07:24:59.009492",
+      "has_video": false
+    },
+    {
+      "number": 21,
+      "title": "What The Hollow Gate Devours",
+      "seed": "KURO reveals what the Hollow Gate really is \u2014 to RAIZEN alone",
+      "generated": "2026-06-17T08:59:26.684777",
+      "has_video": false
+    }
+  ]
+}

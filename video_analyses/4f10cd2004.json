@@ -1,0 +1,53 @@
+{
+  "title": "How to Automate Instagram Carousel Creation with Claude Code and Higgsfield MCP",
+  "summary": "The video demonstrates how to build a fully automated Instagram carousel content pipeline using Claude Code and the Higgsfield image generation platform connected via MCP. The creator shows how plain English prompts can generate research, copy, and visuals for daily social media posts without technical expertise. Claude acts as the workflow architect while Higgsfield handles image creation through an official MCP connector. The automation runs daily so content is ready each morning for one-click approval and publishing. This workflow can be adapted to any social platform or content format once the core logic is understood.",
+  "key_takeaways": [
+    "Claude Code can research a topic, write carousel copy, and generate images entirely through plain English instructions with no coding required",
+    "Connecting Higgsfield to Claude via MCP eliminates app switching and lets you view, edit, and approve AI images directly inside Claude",
+    "Saving a visual style as a skill inside Claude locks in fonts, mascots, layouts, and image vibes so every future post stays on brand automatically",
+    "The daily automation runs overnight so business owners wake up to ready-to-approve content, cutting content creation time by roughly 90 percent",
+    "The same carousel workflow logic applies to any social platform including LinkedIn, Twitter, Facebook, and TikTok by adjusting the output format prompt"
+  ],
+  "pitch_angles": [
+    "Show local service business owners the exact before and after time cost of manual content creation versus a Claude automation that delivers ready-to-post content every morning, positioning GHE as the team that builds and manages that system for them on a retainer",
+    "Use the MCP connector concept to explain how GHE builds invisible bridges between the tools a business already uses, making automation feel like a natural extension of their workflow rather than a tech overhaul",
+    "Frame the carousel automation as a lead generation machine for contractors and HOA managers since consistent daily content builds trust with homeowners and drives inbound calls, which GHE then captures with the AI voice agent and GHL CRM system"
+  ],
+  "sales_scripts": [
+    "Right now your team is spending hours every week creating content that maybe gets posted twice a month. We build a system where Claude researches your niche, writes the posts, generates the images, and has everything ready for your approval by 7am every day. You just hit approve and it goes live while you focus on the job.",
+    "Every one of your competitors is posting manually and burning out. We set up an automation using Claude and AI image tools that produces branded carousel content daily on autopilot. For 750 a month we run the whole thing so you never think about content again and your phone keeps ringing."
+  ],
+  "objection_handlers": [
+    {
+      "objection": "I already have someone doing our social media so I do not need this",
+      "response": "That person is probably spending most of their time on repetitive tasks like research, writing, and resizing images. We automate all of that so they can focus on strategy and engagement. You get more output, better consistency, and your team gets their time back."
+    },
+    {
+      "objection": "I am not sure AI content will sound like our brand",
+      "response": "We train the system on your existing content, your tone, your logos, your fonts, and your visual style. After a few iterations it locks that in as a saved skill so every post looks and sounds like you made it yourself. Most clients cannot tell the difference."
+    },
+    {
+      "objection": "750 a month feels like a lot for social media automation",
+      "response": "Think about what one new client from an inbound inquiry is worth to your business. If this system brings in even two new jobs a month from consistent content, it pays for itself several times over. We track that for you so you can see the return clearly."
+    }
+  ],
+  "revenue_application": "Use this automation workflow as a core deliverable inside the 750 per month managed retainer. Package it as a done-for-you daily content system for contractors and HOA managers who have zero time for social media. Sell the retainer to 10 clients at 750 to generate 7500 per month in recurring revenue, then stack AI trading signal subscriptions at 49 per month and TradingView indicator one-time sales to diversify. To hit 100K within two months, close 5 retainer clients in week one and two generating 3750 per month recurring, run a campaign targeting service business owners with a free content audit as the lead magnet, and upsell each retainer client into the AI voice agent and GHL CRM setup for an additional project fee of 2000 to 5000 per client. Five retainer clients plus three full AI system installs at 3000 each gets you to 18750 in month one and scales toward 100K with continued outbound and referral velocity.",
+  "action_items": [
+    "Set up a Claude Code project folder and connect the Higgsfield MCP today, then build one sample carousel for a local contractor niche to use as a live demo asset in sales calls this week",
+    "Create a one-page retainer proposal that features the daily content automation as the anchor deliverable and add it to your outreach sequence targeting HVAC, plumbing, and HOA management companies",
+    "Record a two-minute Loom video showing the carousel automation running in real time and send it cold to 20 local service business owners on LinkedIn with a call to action to book a free 15-minute demo"
+  ],
+  "twitter_posts": [
+    "I built a system that researches AI news, writes carousel copy, and generates branded images every morning before I wake up. Claude Code plus Higgsfield MCP. Zero coding. Just plain English.",
+    "Your competitors are burning hours on content. I automated 90% of mine with Claude. One prompt. Full carousel. Done. This is the new baseline for social media.",
+    "You do not need a content team. You need Claude connected to the right tools. Daily Instagram carousels on autopilot. Approve and post in under 60 seconds."
+  ],
+  "linkedin_posts": [
+    "Most local businesses I talk to say the same thing. We know we need to post consistently but we just do not have the time.\n\nI built a system using Claude Code and an AI image tool called Higgsfield that runs every morning and produces a fully branded Instagram carousel ready for approval by the time you pour your first coffee.\n\nNo coding. No design skills. Just plain English prompts that Claude turns into research, copy, and visuals automatically.\n\nThe MCP connector between Claude and Higgsfield means everything lives in one place. You see the images inline, request edits in plain English, and approve with one click.\n\nIf your business runs on trust and visibility, this is the system that keeps you top of mind without hiring a content team. Reply or DM me if you want to see it running live.",
+    "I have been running a daily content automation for three days straight and it has not missed once.\n\nEvery morning Claude pulls the latest updates from a target source, writes carousel slides in my brand voice, generates custom images through Higgsfield, and has everything staged for my review.\n\nWhat used to take two to three hours per post now takes me about 90 seconds to approve.\n\nFor service businesses like contractors, HVAC companies, and HOA managers, this kind of consistent content is what builds inbound trust over time. People call the company they have seen posting helpful content every single day.\n\nWe are packaging this as a fully managed system for clients who want the results without touching the tech. If that sounds like something your business needs, let us talk."
+  ],
+  "relevance_score": 7,
+  "url": "https://youtu.be/WvuLxxDY37U?si=Z349K79OAzrUnKab",
+  "note": "",
+  "analyzed_at": "2026-06-08T16:14:02.414038"
+}

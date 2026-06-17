@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 4: The Serpent Who Survived
+Generated: 2026-06-09 08:50
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: A hooded figure drags itself across the cracked ground, one arm twisted, leaving a trail of dark blood. Wind carries ash. The camera handheld, low to the ground, follows the trembling hand clawing forward.
+Narration: He had no name left. Only the warning he carried in his broken mouth.
+
+IMAGE PROMPT:
+Wounded hooded warrior crawling across cracked scorched salt flats at dusk, twisted arm, blood trail, faint distant fog, torn dark robes with reptilian scale patterns, handheld low angle, practical dusk lighting, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: RAIZEN stands at the edge of the broken stone parapet, pale breath in the cold. A scout wolf-warrior runs up the icy steps and kneels, whispering. Raizen's ice-pale eyes shift toward the south horizon.
+Narration: The wolves saw him first. A shape moving where nothing should still live.
+
+IMAGE PROMPT:
+Raizen wolf clan warrior leader on glacier watchtower at night, scarred dark iron chest plate with deep claw marks, pale cold breath, ice-pale eyes, moonlit snow tundra below, kneeling scout in fur cloak, handheld documentary framing, moonlight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (12s)
+Action: KURO perches on a crumbling balcony, half-mask catching faint moonlight. Three ravens circle, then land on his outstretched arm carrying a single bloodied scale. He examines it without expression.
+Narration: The ravens brought him a scale. He had not seen one of these in a hundred years.
+
+IMAGE PROMPT:
+Kuro raven order leader on ruined stone spire balcony, black feather-plated cloak, obsidian half-mask, unblinking cold blue eyes, three real ravens landing on outstretched arm holding bloodied reptilian scale, perpetual fog over dead city below, practical moonlight, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (11s)
+Action: VARN kneels before a cracked stone altar, pressing his palm against carved spiraling glyphs. The amber runes carved into his skin pulse once — a single frame of retro anime flicker — then dim. He exhales, troubled.
+Narration: Varn felt it in the stone. Something old had woken beneath the roots.
+
+IMAGE PROMPT:
+Varn gorilla titan leader kneeling at cracked stone altar in overgrown jungle temple, ancient stone plate armor with cracked etched symbols, amber runes carved into massive skin, jungle fog, vines on shattered statues, palm pressed to spiral glyphs, torchlight only, handheld realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (12s)
+Action: The hooded survivor finally collapses at the gate's threshold. His hood falls back — revealing a reptilian humanoid face, scales cracked and bleeding, slit eyes barely open. He clutches a serpent-carved bone token.
+Narration: He fell at the Hollow Gate. The fourth clan. The serpents. Believed extinct.
+
+IMAGE PROMPT:
+Reptilian humanoid warrior collapsed at base of massive black stone Hollow Gate arch, cracked bleeding scales, slit eyes barely open, clutching carved serpent bone token, low mist coiling at threshold, torn dark scaled robes, handheld low angle close up, practical moonlight and distant fire glow, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: Raizen, Kuro, and Varn arrive from three directions, weapons half-drawn, watching each other more than the dying survivor. The serpent warrior coughs blood, raises a trembling clawed hand toward the gate, and rasps a single word.
+Narration: Three enemies. One dying messenger. And one word none of them wanted to hear.
+
+IMAGE PROMPT:
+Three faction leaders converging at base of Hollow Gate at night, Raizen wolf in iron plate, Kuro raven in feather cloak and obsidian mask, Varn gorilla in stone armor, weapons half drawn, dying reptilian warrior on ground between them coughing blood raising clawed hand, low fog, torchlight, handheld wide shot, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (11s)
+Action: Close on the serpent warrior's bleeding mouth. He whispers: 'The Devourer... wakes.' His clawed hand falls. The bone token rolls between Varn's stone feet. Kuro's eyes narrow. Raizen lowers his blade an inch.
+Narration: The Devourer. A name buried before any of their clans were born.
+
+IMAGE PROMPT:
+Extreme close up of dying reptilian warrior bleeding mouth whispering, cracked scales, single tear of blood, carved bone serpent token rolling on dark stone, firelight flicker on faces in background, handheld macro realism, practical torch lighting only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (12s)
+Action: The three leaders stand silent over the dead survivor. Deep beneath the gate, a low subsonic tremor rolls through the stone. Dust falls from the arch. A single ancient rune on the gate flickers — one retro anime frame — then fades to dead stone. The three look up together.
+Narration: Beneath the gate, something answered. The war they were fighting was the wrong one.
+
+IMAGE PROMPT:
+Wide shot three faction leaders standing silent over dead reptilian survivor at base of colossal black Hollow Gate arch at night, dust falling from arch, ancient carved rune on stone faintly visible, low rolling mist, distant fire glow, all three looking up toward the gate, handheld documentary realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------

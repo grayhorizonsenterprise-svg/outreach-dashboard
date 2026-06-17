@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 8: The Oath Before The Gate
+Generated: 2026-06-11 07:18
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (11s)
+Action: A hooded scout, face dirt-streaked, crawls between broken pillars. Breath visible. He pauses, listening. A faint amber pulse leaks from a fissure in the rock.
+Narration: He carries no banner. No name. Only orders to watch, and report.
+
+IMAGE PROMPT:
+hooded human scout crawling through broken stone pillars at dawn, dirt smeared face, breath fogging in cold air, faint amber light leaking from rock crack, low ground fog, handheld documentary camera angle, practical torchlight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (12s)
+Action: The scout squeezes through rubble, oil lamp shaking in his hand. The lamp catches faded paint on the wall — a curve of mural. He freezes.
+Narration: The mountain remembered something the clans agreed to forget.
+
+IMAGE PROMPT:
+scout squeezing through rubble in collapsed stone tunnel, trembling oil lamp, dripping water, faded mural paint catching lamp light on rough carved wall, handheld lens, slight lens grain, practical orange lamp light, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (12s)
+Action: Lamp rises. The mural reveals three young figures kneeling — a wolf, a raven, a gorilla — hands joined over a circle carved with the Hollow Gate sigil.
+Narration: Three students. One master. One oath, sworn before the Gate cracked open.
+
+IMAGE PROMPT:
+ancient cracked stone mural showing three young animal warrior figures kneeling, wolf raven and gorilla, hands joined over carved circular sigil, soot stained wall, lit only by handheld oil lamp from below, rack focus on mural detail, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: Young Raizen, lean and unscarred, spars with young Varn. Young Kuro watches from a parapet, half-mask not yet worn. They laugh — a sound that does not belong to who they became.
+Narration: Before the silver eyes. Before the runes. Before the mask. They were only boys.
+
+IMAGE PROMPT:
+flashback scene young wolf warrior sparring with young gorilla warrior in ruined monastery courtyard at dusk, young raven warrior watching from broken stone parapet without mask, dust kicked up, practical golden hour light, handheld camera, slight lens grain, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (12s)
+Action: The three kneel in ash. A robed master pours dark oil across their joined hands. A single faint rune flickers — one anime-style flash frame — then gone. Their faces tighten in pain.
+Narration: The oath bound them. The oath also marked them — for what would come.
+
+IMAGE PROMPT:
+three young animal warriors kneeling in ash before primitive stone gate at night, robed master pouring dark oil over their joined hands, single faint rune flash, torchlight only, pained expressions visible skin pores sweat, handheld documentary realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (11s)
+Action: The scout traces the mural with a shaking finger. He sees a fourth figure, half-scratched away — taller, faceless. He whispers a curse and reaches for his journal.
+Narration: A fourth shadow. Erased. By whose hand, no record will say.
+
+IMAGE PROMPT:
+scout's dirty trembling hand tracing ancient mural showing fourth scratched out faceless figure, close up shallow focus, oil lamp warm light from side, journal half visible in other hand, sweat on knuckles, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (12s)
+Action: Scout slips, recovers, runs. Behind him, three distant signal fires bloom on three separate horizons — wolf white, raven blue, gorilla amber. He stops, realizing he is being hunted from every direction.
+Narration: He carried a secret older than the war. All three clans wanted it buried.
+
+IMAGE PROMPT:
+scout running across moonlit scree slope, three distant signal fires on separate horizons in different cold colors pale white cold blue and warm amber very faint, scout frozen mid-stride looking back, practical moonlight only, handheld camera shake, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (12s)
+Action: Raizen reads a torn page slid across the table by a kneeling lieutenant. His silver eyes do not move. He folds the page once. Then burns it slowly in a candle flame.
+Narration: Some brothers were buried with names. Others, with silence.
+
+IMAGE PROMPT:
+Raizen wolf clan leader in dark scarred iron plate seated in war tent, pale ice silver eyes, deep claw scars across chest visible through open armor, kneeling lieutenant offering torn parchment, candle flame burning page, practical candle light only, slight breath fog, handheld realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------

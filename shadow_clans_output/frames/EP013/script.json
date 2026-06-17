@@ -1,0 +1,84 @@
+{
+  "episode_number": 13,
+  "title": "The Son Who Carries No Banner",
+  "logline": "VARN's long-lost son returns to the Gorilla Titans' temple \u2014 scarred, silent, and refusing to swear loyalty to any clan.",
+  "narrator_intro": "Twelve years ago, a child vanished from the temple of the Gorilla Titans. Tonight, he walks back through the broken gate. He carries no flag. He bows to no leader. And the runes on his father's skin have begun to burn.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "Overgrown jungle path at dusk, leading to the shattered outer wall of the Gorilla Titan temple",
+      "action": "A lone hooded figure walks barefoot through wet leaves. His calves are crossed with old burn scars. Distant temple torches flicker through the fog. Handheld camera follows him from behind, slight stumble in the gait.",
+      "narration": "He came back the way he left \u2014 alone, and on foot.",
+      "image_prompt": "lone barefoot hooded young man walking through dense foggy jungle at dusk, old burn scars on calves, wet leaves, distant orange torchlight through trees, ruined stone wall ahead, handheld documentary shot from behind, practical torchlight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 11,
+      "setting": "Temple gate threshold, two Gorilla Titan guards in cracked stone-plate armor",
+      "action": "The guards lower massive stone-headed spears to block him. The hooded figure stops, slowly lifts his head. A long vertical scar runs from his hairline through one milky eye. The guards freeze.",
+      "narration": "The guards remembered the boy. Not the scar. Not the eye.",
+      "image_prompt": "two massive gorilla warriors in cracked stone armor with faint dormant rune carvings, blocking a hooded scarred young man at a ruined temple gate, vertical scar through one milky white eye, torchlit night, fog, handheld rack focus, cinematic film grain, desaturated, shallow depth of field, 4k, realistic skin pores and sweat, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 12,
+      "setting": "Inner sanctum of the temple \u2014 cracked stone throne under collapsed ceiling, moonlight pouring through",
+      "action": "VARN sits hunched on the throne, amber runes on his arms dim and ash-grey. A guard whispers to him. VARN's eyes widen. The runes flicker once \u2014 faintly \u2014 for the first time in years.",
+      "narration": "Varn had not felt his runes stir since the night his son disappeared.",
+      "image_prompt": "massive aged gorilla warlord seated on cracked stone throne, ash-grey dormant runes carved into thick arms, faint amber pulse just beginning, moonlight through collapsed temple ceiling, small guard whispering, overgrown vines, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, practical moonlight only, NO bloom, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 13,
+      "setting": "Sanctum corridor, torch-lit, the son walks toward the throne",
+      "action": "Slow handheld dolly. The young man drops his hood fully. His chest is bare, ribs visible, covered in foreign brand-marks \u2014 not Titan runes, not Wolf, not Raven. Symbols nobody recognizes. He stops ten paces from VARN.",
+      "narration": "His skin told a story written in a language no clan could read.",
+      "image_prompt": "shirtless gaunt scarred young man walking down ancient torchlit temple corridor, foreign unknown brand marks burned into chest and ribs, visible ribs, dirt and sweat on skin, hood pulled back, vertical facial scar, handheld dolly shot, cinematic film grain, desaturated, shallow depth of field, 4k, realistic skin texture, practical torchlight only, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 12,
+      "setting": "Throne chamber, father and son face to face",
+      "action": "VARN rises slowly, the stone floor cracking under his weight. He extends a massive hand. The son does not take it. He speaks one quiet sentence, eyes fixed forward. VARN's hand lowers.",
+      "narration": "I am not your soldier. I am not anyone's soldier.",
+      "image_prompt": "huge aged gorilla warlord standing slowly from broken throne, extending massive scarred hand, scarred gaunt young man standing still refusing the handshake, dim amber runes on gorilla skin, torchlit ruined sanctum, fog drifting low, handheld two-shot, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO bloom, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 11,
+      "setting": "Ruined stone tower of the Raven Order, miles away, perpetual fog",
+      "action": "KURO stands at a cracked window, obsidian half-mask catching moonlight. A raven lands on his gauntlet with a strip of bark tied to its leg. He reads it. His unblinking blue eyes narrow.",
+      "narration": "Even ravens cannot fly fast enough to hide this news.",
+      "image_prompt": "tall lean warrior in black feather-plated cloak and obsidian half-mask at cracked stone tower window, cold pale blue eyes, raven landing on armored gauntlet with bark message, perpetual fog, distant dead city silhouette, moonlight only, handheld slight sway, cinematic film grain, desaturated, shallow depth of field, 4k, realistic feather and skin texture, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 12,
+      "setting": "Snow-covered cliff above frozen Wolf tundra",
+      "action": "RAIZEN crouches over a kill, breath fogging. A scout wolf-warrior arrives, panting, and whispers. RAIZEN's ice-pale eyes flick up. He drives his blade into the snow and stands. No words.",
+      "narration": "The Wolf already knew. He had been waiting twelve winters for this name.",
+      "image_prompt": "scarred wolf warrior leader in dark iron plate crouched over fresh kill on snowy cliff edge, pale ice-blue eyes, deep claw scars across chest plate, exhaled breath fog, scout warrior whispering urgently, blade driven into snow, moonlit tundra, handheld documentary shot, cinematic film grain, desaturated, shallow depth of field, 4k, realistic fur and metal texture, practical moonlight only, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 12,
+      "setting": "Back in the Titan sanctum \u2014 the son turns to leave",
+      "action": "The son turns his back on VARN and walks toward the broken gate. As he passes a crumbled pillar, the foreign brands on his chest pulse once \u2014 a single ONE-FRAME anime flicker of crimson light \u2014 then vanish. VARN sees it. His own runes answer with a faint amber pulse. The screen cuts to black.",
+      "narration": "Two fires answered each other in the dark. Neither belonged to any clan.",
+      "image_prompt": "gaunt scarred young man walking away from camera toward broken temple gate, single brief crimson pulse from brand marks on his back, massive gorilla warlord in background with faintly answering amber runes, torchlit ruined sanctum, fog low to ground, ancient cracked pillars, handheld, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, practical torchlight only, minimal subtle glow, NO bloom, NO anime shading",
+      "faction": "neutral"
+    }
+  ],
+  "narrator_outro": "He walks into the dark with marks no scholar can name. And somewhere beyond the Hollow Gate, something older than the three clans has begun to wake. Next: the Raven Order opens a tomb that was never meant to be opened.",
+  "shorts_hook": "VARN's son came home \u2014 and refused to kneel.",
+  "youtube_title": "SHADOW CLANS Episode 13 \u2014 VARN's Son Returns, Loyal to No One",
+  "youtube_description": "Episode 13 of SHADOW CLANS. Twelve years after he vanished from the Gorilla Titan temple, VARN's son walks back through the broken gate \u2014 scarred, branded with foreign symbols, and refusing to swear loyalty to any clan. The Wolf knows. The Raven knows. And something beneath VARN's dormant runes has begun to stir.\n\nA dark cinematic fantasy series set in a collapsing world centered on the Hollow Gate. Three animal warrior factions. One war none of them can stop.\n\nNew episodes weekly.\n\n#ShadowClans #DarkFantasy #CinematicSeries #GorillaTitans #WolfClan #RavenOrder #FantasySeries #AnimatedSeries #EpicFantasy #HollowGate"
+}

@@ -1,0 +1,84 @@
+{
+  "episode_number": 2,
+  "title": "The Whisper in the Pack",
+  "logline": "As tensions rise on the frozen peaks, a trusted Wolf Clan lieutenant is secretly leaking battle plans to the Raven Order \u2014 and Raizen begins to suspect one of his own.",
+  "narrator_intro": "Trust is the last warmth in a dying world. On the frozen peaks of the Wolf Clan, that warmth is bleeding out \u2014 one whispered secret at a time. Somewhere in Raizen's pack, a voice answers to a colder master. And the Ravens are already listening.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "Snow-covered Wolf Clan war camp at dusk, torches burning low between fur tents, distant frozen ruins on the ridge",
+      "action": "Wide handheld shot of Raizen walking through camp, breath visible, scarred dark iron plate dusted with snow. Wolves around him bow their heads. He stops, scanning faces \u2014 sensing something wrong.",
+      "narration": "The pack gathers, but their leader feels the cold of something else moving among them.",
+      "image_prompt": "weathered wolf warrior leader with pale ice-blue eyes and deep claw scars across chest plate, scarred dark iron armor dusted with snow, walking through torchlit snow camp at dusk, fur tents, breath fogging in cold air, other wolf warriors bowing heads, low unnatural fog drifting low, distant frozen ruins on ridge, handheld documentary camera, practical torch lighting only, desaturated filmic color grade, cinematic film grain, shallow depth of field, 4k, realistic skin texture and fabric weight, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 11,
+      "setting": "Inside a small fur-lined Wolf Clan tent, single oil lamp burning",
+      "action": "Close-up of a scarred wolf lieutenant, KESH, hunched over a folded parchment. He writes troop positions in tight script. Hands tremble slightly. He folds it into a hollow bone tube.",
+      "narration": "Kesh \u2014 second of the pack, brother in battle \u2014 sells his oath in silence.",
+      "image_prompt": "close-up of grizzled wolf warrior lieutenant writing on parchment inside dim fur-lined tent, single oil lamp casting warm low light, trembling scarred hands, folding parchment into hollow bone tube, sweat on brow, visible skin pores, worn leather and fur garments, rack focus on hands then face, handheld camera, practical lamp light only, desaturated high contrast filmic grade, cinematic film grain, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 12,
+      "setting": "Frozen tundra cliff at night, half-moon, dead pine trees",
+      "action": "Kesh ties the bone tube to the leg of a black raven. The bird's eyes catch moonlight \u2014 unnaturally still. It takes flight silently across the moonlit tundra toward the south fog.",
+      "narration": "A messenger with no soul. A bird that answers only to ruined towers.",
+      "image_prompt": "scarred wolf warrior on frozen moonlit cliff at night tying bone tube to leg of large black raven, dead pine trees, half-moon, raven's eyes catching cold moonlight, breath visible, snow blowing low, distant fog rolling south, handheld camera framing, practical moonlight only, desaturated filmic color, cinematic film grain, shallow depth of field, 4k, realistic feather and fur texture, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 12,
+      "setting": "Ruined stone tower of the Raven Order, perpetual fog, crumbling balcony",
+      "action": "Kuro stands motionless on the balcony, obsidian half-mask catching dim grey light. The raven lands on his outstretched arm. He removes the bone tube, unrolls the parchment, reads \u2014 no expression.",
+      "narration": "In the dead city, Kuro reads the Wolf's secrets like scripture.",
+      "image_prompt": "tall raven warrior leader wearing black feather-plated cloak and obsidian half-mask standing motionless on crumbling stone balcony, cold pale blue unblinking eyes, perpetual thick fog, ruined gothic towers and dead city architecture behind, black raven landing on outstretched arm, unrolling small parchment from bone tube, overcast grey light, handheld documentary framing, practical ambient light only, desaturated high contrast filmic grade, cinematic film grain, shallow depth of field, 4k, realistic feather and fabric texture, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 11,
+      "setting": "Wolf Clan war room \u2014 stone ruin lit by braziers, carved map table",
+      "action": "Raizen leans over the carved map. He moves a wolf token, then stops. He notices a small soot fingerprint on the eastern pass \u2014 exactly where the Ravens last struck. His jaw tightens.",
+      "narration": "Every ambush. Every loss. The same hand has touched the map before him.",
+      "image_prompt": "wolf clan leader with ice-pale eyes leaning over carved stone map table inside ruined hall, brazier firelight flickering on scarred dark iron armor and deep chest scars, noticing small dark soot fingerprint on map of mountain pass, narrowed eyes, breath visible in cold air, ancient frozen ruins surrounding, low unnatural fog at floor, handheld camera, practical brazier light only, desaturated filmic color grade, cinematic film grain, shallow depth of field, 4k, realistic skin and metal texture, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 12,
+      "setting": "Raven Order inner sanctum, candlelit obsidian chamber",
+      "action": "Kuro lowers the parchment to a black candle. As it ignites, his palm pulses \u2014 for ONE FRAME a retro anime flicker of glowing blue rune lines snaps across his hand, then gone. Smoke rises. He whispers a name: 'Kesh.'",
+      "narration": "The Ravens never repay a debt. They collect.",
+      "image_prompt": "raven warrior leader in dim candlelit obsidian chamber lowering small parchment to black candle flame, obsidian half-mask, black feather cloak, single brief flicker of faint blue rune glow across palm at exact moment of ignition, thin smoke rising, parchment curling, lips parted whispering, cold pale eyes catching candlelight, handheld camera, practical candle light only, desaturated filmic grade, cinematic film grain, shallow depth of field, 4k, realistic skin pores and feather texture, NO bloom, NO anime shading except 1 frame supernatural release",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 11,
+      "setting": "Wolf Clan camp, edge of forest, pre-dawn grey light",
+      "action": "Raizen silently approaches Kesh from behind as Kesh stares south. Raizen places a heavy hand on his shoulder. Kesh freezes. Slowly turns. Their eyes meet \u2014 no words. Recognition. Betrayal confirmed.",
+      "narration": "Brothers know each other's silence. And Raizen has heard enough.",
+      "image_prompt": "wolf clan leader with ice-pale scarred face silently placing heavy gauntleted hand on shoulder of scarred wolf lieutenant from behind at pre-dawn grey light, snowy forest edge, both breaths fogging, lieutenant freezing then slowly turning, eyes meeting in dread recognition, scarred dark iron armor, weathered fur cloaks, low fog drifting, handheld documentary camera, rack focus between two faces, practical natural pre-dawn light, desaturated high contrast filmic color, cinematic film grain, shallow depth of field, 4k, realistic skin pores and fabric weight, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 12,
+      "setting": "High ridge over Wolf Clan camp, distant Raven tower silhouette across the valley",
+      "action": "Wide static shot. Raizen drags Kesh to the ridge edge. Across the impossible distance, Kuro's silhouette stands on the far tower \u2014 watching through the fog as if he can see them. Raizen unsheathes a curved blade. Cut to black.",
+      "narration": "Two leaders. One traitor between them. The war for the Hollow Gate has its first wound.",
+      "image_prompt": "wide static shot from high snowy ridge at dawn, wolf clan leader in scarred dark iron armor dragging scarred lieutenant to cliff edge, unsheathing curved blade, across vast foggy valley a distant silhouette of cloaked raven figure standing on ruined tower watching, low unnatural fog filling valley, pale cold dawn light, handheld documentary framing slightly trembling, practical natural light only, desaturated filmic color grade, high contrast, cinematic film grain, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    }
+  ],
+  "narrator_outro": "The traitor falls. But the Ravens already have what they need. And in the jungle ruins, Varn of the Gorilla Titans hears war drums in the stone. Next: the Titans wake.",
+  "shorts_hook": "His own brother sold the pack to the Ravens.",
+  "youtube_title": "SHADOW CLANS Episode 2 \u2014 The Whisper in the Pack",
+  "youtube_description": "Episode 2 of SHADOW CLANS. A traitor inside the Wolf Clan feeds Raizen's battle plans straight into the obsidian hands of Kuro and the Raven Order. As the Hollow Gate war deepens, the first wound is carved \u2014 and it comes from within. A dark cinematic fantasy series set in a collapsing world of three warring animal clans. New episode every week.\n\n#ShadowClans #DarkFantasy #WolfClan #RavenOrder #GorillaTitans #CinematicFantasy #HollowGate #FantasySeries #AnimalWarriors #EpicFantasy"
+}

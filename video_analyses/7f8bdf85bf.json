@@ -1,0 +1,53 @@
+{
+  "title": "I Built an AI Agent in 2 Hours and Got Paid $2,600",
+  "summary": "A developer built a student onboarding automation system using n8n in under 2 hours and sold it to a client for $2,600. The system handled payment triggered CRM creation, automated follow up emails, internal Slack notifications, and a personalized AI welcome email. The builder emphasized that minimal AI was used, making the system fast to build and extremely reliable. The video walks through the exact n8n build live, including webhook triggers, Gmail nodes, and Slack integrations. The creator positions this as a repeatable model anyone can use to start selling automation services.",
+  "key_takeaways": [
+    "You do not need advanced AI to build sellable automations. Simple logic based workflows with one AI touchpoint at the end can command thousands of dollars.",
+    "Wireframing before building aligns client expectations and speeds up development dramatically, often cutting build time by more than half.",
+    "Automating follow up sequences with CRM status checks eliminates manual chase work for clients, which is a tangible pain point worth paying to solve.",
+    "Using webhooks from payment processors as triggers creates seamless end to end onboarding without any manual steps, making the value immediately visible to clients.",
+    "Keeping AI usage minimal and strategic reduces the complexity and testing burden while increasing system stability, which makes delivery faster and client satisfaction higher."
+  ],
+  "pitch_angles": [
+    "Lead with the pain of manual onboarding. Ask local service businesses how many leads or new clients fall through the cracks because no one followed up. Show them a system that triggers automatically on payment, sends welcome emails, tracks account creation, and escalates to staff only when needed. Position GHE as the team that removes that entire burden for a flat retainer.",
+    "Use the 2 hour build story as a credibility anchor. Tell prospects that what used to require a full time admin or developer can now be built in hours and run forever. This reframes the $750 monthly retainer as saving a part time salary while delivering faster and more consistent results.",
+    "Focus on revenue recovery. Every contractor, HOA manager, or service business loses money when new clients do not complete onboarding. Position GHEs automation as a direct revenue protection tool that pays for itself with even one recovered client per month."
+  ],
+  "sales_scripts": [
+    "Right now your team is probably chasing down new clients manually after they pay, and some of them are slipping through without ever getting started. We build a system that handles all of that automatically from the moment someone pays to their first day fully onboarded. For $750 a month we manage the whole thing so your team focuses on delivery, not follow up.",
+    "We recently built an onboarding automation for an online education company that eliminated manual follow up entirely and flagged unresponsive clients to the team automatically. The same system works for service businesses like yours, and we can have it running in days not weeks. If one recovered client per month covers the retainer, everything else is pure profit."
+  ],
+  "objection_handlers": [
+    {
+      "objection": "We already have a system for onboarding, we do not need automation.",
+      "response": "Most businesses have a process but it depends on someone remembering to do it. Our system runs 24 hours a day without anyone thinking about it, and it escalates to your team only when a human touch is actually needed. That means your current process gets faster, cheaper, and more consistent without replacing your people."
+    },
+    {
+      "objection": "This seems expensive at $750 a month.",
+      "response": "Think about what one missed follow up costs you. If a single new client does not complete onboarding or churns early because they felt ignored, that is often more than $750 in lost revenue. Our system pays for itself with one recovered client and everything after that is margin you were leaving on the table."
+    },
+    {
+      "objection": "We are not sure AI is reliable enough for our business.",
+      "response": "That is actually why we build these systems the way we do. The core logic is straightforward automation with no AI involved, which makes it highly reliable. We only bring in AI for the parts where personalization adds real value, like a welcome message. The result is a system that is robust enough to run your business and smart enough to feel personal."
+    }
+  ],
+  "revenue_application": "To hit $100K within 2 months GHE needs roughly 4 to 5 managed retainer clients at $750 per month combined with a push on one time sales and monthly signal subscriptions. The onboarding automation model from this video is a perfect entry point for local service businesses because it solves an immediate visible pain. Lead with a free wireframe call to map their current onboarding gaps, then propose a $2,500 to $3,500 setup fee plus the $750 monthly retainer. Targeting contractors, HOA managers, and local service businesses already in the GHL CRM ecosystem makes integration faster and upsell paths cleaner. With 3 setup fees and 5 retainers closed in the first 4 weeks that brings in $12,750 to $14,250 in month one. Stacking TradingView indicator sales at $79 and AI signal subscriptions at $49 per month to an existing audience running in parallel can add $5,000 to $15,000 more depending on list size. Month two should focus on retainer retention and referrals from early clients to compound toward and past $100K cumulative.",
+  "action_items": [
+    "Build a sample onboarding automation this week using a free n8n instance with a mock webhook, Gmail node, and Slack notification, then record a short screen share walkthrough to use as a sales asset in outreach to contractors and HOA management companies.",
+    "Identify 10 local service businesses in your market that use manual onboarding or intake processes, reach out with a one paragraph message offering a free 20 minute workflow audit, and use the wireframe method from this video to present a simple before and after automation map on the call.",
+    "Create a one page offer sheet for the GHE managed retainer that clearly shows the three automation tiers, setup fee, monthly cost, and a single line ROI example showing how one recovered client covers the monthly fee, then attach it to every outreach and follow up message sent this week."
+  ],
+  "twitter_posts": [
+    "Someone paid $2,600 for an automation built in 2 hours. No fancy AI. Just webhooks, Gmail, Slack, and a CRM. The simpler the system the faster you get paid.",
+    "Your onboarding process is leaking revenue every time a new client does not complete setup. We build automations that follow up, escalate, and never forget. DM to see how.",
+    "You do not need to be a developer to sell automation. You need a wireframe, a clear problem, and n8n. GHE builds these systems for local businesses starting at $750 per month."
+  ],
+  "linkedin_posts": [
+    "A developer built a client onboarding automation in 2 hours and sold it for $2,600. No complex AI. Just a webhook, a few emails, a Slack message, and a CRM update.\n\nHere is what made it worth that price. It solved a real problem. New students were paying and then disappearing before they created their accounts. The business was losing money chasing people down manually.\n\nThe automation triggered on payment, sent a welcome email, notified the team on Slack, checked daily whether the student had made an account, and escalated to a human only when necessary. One AI step at the very end wrote a personalized welcome message.\n\nThe lesson is not about the technology. It is about identifying where a business is bleeding time or money and building something that stops the bleed.\n\nAt Gray Horizons Enterprise we do this for local service businesses, contractors, and HOA managers. If your onboarding process depends on someone remembering to follow up, we should talk.",
+    "Most business owners think automation means replacing their team with robots. It does not.\n\nThe best automations do the repetitive invisible work so your team can focus on the high value human moments. Things like following up with a new client who has not responded, tagging a CRM record with the right status, or alerting a manager when something needs attention.\n\nWe recently mapped out a system for a client where three of the four automation flows had zero AI in them. Just clean logic. That made the system fast to build, easy to test, and reliable from day one.\n\nAI came in only at the end to write a personalized welcome email. That single touch made the client feel seen without adding any operational risk.\n\nIf you run a service business and your onboarding still lives in someone's head or a spreadsheet, that is the problem we solve. Gray Horizons Enterprise builds and manages these systems for a flat monthly retainer so you get the result without hiring a developer."
+  ],
+  "relevance_score": 9,
+  "url": "https://youtu.be/bxGE_LXPyAU?si=AT6fso4L4Cpzs50p",
+  "note": "",
+  "analyzed_at": "2026-06-08T15:53:13.461838"
+}

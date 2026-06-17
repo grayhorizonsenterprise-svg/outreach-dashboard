@@ -1,0 +1,84 @@
+{
+  "episode_number": 15,
+  "title": "The Three Who Shared One Fire",
+  "logline": "A nameless scout uncovers a buried mural proving Raizen, Kuro, and Varn once trained as brothers under the same master.",
+  "narrator_intro": "Every war begins with a lie. The lie of the Hollow Gate is that its three leaders were always enemies. Tonight, a scout with no name finds the truth carved in stone \u2014 and the truth has teeth.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 11,
+      "setting": "A collapsed monastery half-buried in jungle vines, between Gorilla and Raven territory, dusk",
+      "action": "A lean scout in patched leather crawls through a broken archway, breath fogging, torch trembling. He freezes as his light catches faded paint on a wall.",
+      "narration": "He was sent to map the dead places. He found something older than the war.",
+      "image_prompt": "lean wiry male scout crawling through broken stone archway, patched leather armor, dirt-streaked face, sweat on brow, holding small flickering torch, faded mural visible in background, jungle vines, low fog, practical torchlight only, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 12,
+      "setting": "Inside the ruined monastery hall, torch-lit",
+      "action": "The scout brushes dust from the wall. Three young figures emerge in cracked paint \u2014 a wolf pup, a raven fledgling, a young gorilla \u2014 kneeling before a single robed master.",
+      "narration": "Three students. One master. The faces were unmistakable.",
+      "image_prompt": "close-up of weathered cracked wall mural depicting three young animal warrior figures kneeling before robed master, faded pigments, peeling paint, torchlight raking across stone surface, dust particles, hand entering frame brushing debris, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 13,
+      "setting": "Flashback \u2014 a stone training courtyard at dawn, decades ago",
+      "action": "Young Raizen, Kuro, and Varn spar with wooden staves under grey rain. They laugh. They bleed. A robed elder watches from a doorway, silent.",
+      "narration": "Before the banners. Before the blood. They were boys with bruised hands.",
+      "image_prompt": "three young animal warriors sparring with wooden staves in stone courtyard, light rain, grey overcast sky, mud splashes, bruised knuckles, young silver-furred wolf, young black-feathered raven youth, young gorilla with no runes yet, robed elder figure watching from shadowed doorway, practical natural light, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 11,
+      "setting": "Flashback \u2014 same courtyard, night, fire burning low",
+      "action": "The three young warriors sit shoulder to shoulder around embers, sharing a clay cup. Varn carves a small symbol into the stone between them \u2014 the Hollow Gate sigil.",
+      "narration": "They swore an oath. They carved it where no one would look.",
+      "image_prompt": "three young animal warriors seated around dying campfire, shoulders touching, passing clay cup, young gorilla carving symbol into flagstone with knife, low orange firelight on faces, sweat and dirt on fur, intimate close framing, practical firelight only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 12,
+      "setting": "Back to present \u2014 the scout in the ruin, kneeling at the floor",
+      "action": "The scout sweeps centuries of dust from the flagstone. The same Hollow Gate sigil emerges \u2014 the carving from the flashback. His hand trembles.",
+      "narration": "The same mark. The same stone. The war was never inevitable.",
+      "image_prompt": "scout kneeling on dusty stone floor, sweeping ash and debris aside with bare hand, revealing carved Hollow Gate sigil in flagstone, torch on ground beside him, trembling fingers, dirt under nails, extreme close detail, handheld camera, practical torchlight, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 12,
+      "setting": "Wolf Clan camp, snowfield, same night",
+      "action": "Raizen stands alone at the edge of a frozen cliff. His ice eyes catch the moon. He touches an old scar on his palm \u2014 a matching mark to the sigil. A single frame flickers: the carving.",
+      "narration": "Some scars remember what we choose to forget.",
+      "image_prompt": "Raizen wolf clan leader standing at edge of frozen cliff, scarred dark iron plate armor, deep claw marks across chest, silver fur, ice-pale eyes catching moonlight, snow drifting, looking down at old scar on open palm, breath fogging, distant moonlight only, handheld framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced bloom, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 12,
+      "setting": "Raven Order watchtower, fog-choked dead city",
+      "action": "Kuro stands at a tower window, unblinking blue eyes fixed on the south jungle. He already knows the scout found it. He whispers a single name to the fog.",
+      "narration": "Kuro felt the stone shift. He always knew this day would come.",
+      "image_prompt": "Kuro raven order leader at ruined tower window, black feather-plated cloak, obsidian half-mask, cold pale blue unblinking eyes, heavy fog rolling past stone arches, distant ruined city below, lips parted in whisper, practical moonlight through fog, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, reduced rim lighting, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 13,
+      "setting": "Gorilla Titan temple chamber, amber-lit",
+      "action": "Varn kneels before a shattered statue of the old master. The amber runes on his skin pulse once \u2014 a single anime-flicker frame \u2014 then dim. A tear cuts through stone dust on his cheek.",
+      "narration": "Varn remembered first. And remembering is the heaviest weight of all.",
+      "image_prompt": "Varn gorilla titan leader kneeling before shattered stone statue of robed master, massive ancient stone-plate armor, cracked carved symbols faintly lit amber, single tear cutting through dust on cheek, dim temple chamber, broken pillars, jungle roots through ceiling, practical low ember light, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, minimal rune glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    }
+  ],
+  "narrator_outro": "The scout has a name now \u2014 Witness. And three leaders who buried their past will hunt him before dawn. Next: the chase begins, and only one of the three wants him alive.",
+  "shorts_hook": "All three warlords trained under the same master \u2014 and only one of them remembers.",
+  "youtube_title": "Shadow Clans Episode 15 \u2014 The Three Who Shared One Fire",
+  "youtube_description": "A nameless scout crawls into a forgotten monastery and uncovers the truth that could end the war of the Hollow Gate \u2014 Raizen, Kuro, and Varn were once brothers in training. Episode 15 of SHADOW CLANS, a dark cinematic fantasy series set in a collapsing world of animal warrior factions. Wolves. Ravens. Titans. One buried oath. \n\nNew episodes weekly.\n\n#ShadowClans #DarkFantasy #WolfClan #RavenOrder #GorillaTitans #CinematicFantasy #AnimatedSeries #FantasyLore #Episode15 #HollowGate"
+}

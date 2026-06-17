@@ -1,0 +1,53 @@
+{
+  "title": "Browser Automation with Claude Code and Playwright CLI: 3 Powerful Use Cases",
+  "summary": "The video demonstrates how to connect Playwright CLI to Claude Code to automate browser-based tasks without needing an MCP server. The creator walks through three use cases: automated QA testing of a web app, scraping business contact information, and navigating authenticated sessions. A multi-page onboarding form is built and then autonomously tested, debugged, and fixed by Claude Code using headed browser automation. The workflow shows how repeatable automation scripts can be turned into consistent business processes or skills.",
+  "key_takeaways": [
+    "Playwright CLI paired with Claude Code allows full browser control without the token-heavy overhead of Chrome DevTools MCP, making it more efficient for automation tasks.",
+    "Claude Code can build a web app, write its own QA test scripts, run them in a headed browser, identify bugs, and fix them autonomously with minimal human input.",
+    "Browser automation can handle authenticated sessions, meaning it can log into platforms like Skool, GHL, or client portals and perform tasks on behalf of the user.",
+    "Turning automation scripts into reusable skills creates consistent, repeatable business processes that can be sold as managed services or bundled into retainer packages.",
+    "Lead generation automation such as scraping dentist or contractor contact info directly from the browser is a ready-to-sell deliverable for local service business clients."
+  ],
+  "pitch_angles": [
+    "Position GHE as the agency that builds self-healing systems: your client's intake forms, CRM workflows, and lead pipelines are automatically tested and fixed without them lifting a finger, which is exactly what the Claude Code QA loop demonstrates.",
+    "Use the contact scraping use case as a live demo closer: show a prospect their own competitor list being pulled in real time from a browser, then explain GHE can automate that entire outreach sequence inside their GHL CRM.",
+    "Sell the authenticated session capability as a premium differentiator: GHE can build bots that log into a client's existing software, pull reports, update records, and push data without requiring API access, solving a problem most agencies cannot touch."
+  ],
+  "sales_scripts": [
+    "Most businesses waste hours on repetitive tasks their software already has the data for. We build automation systems that log into your existing tools, pull what you need, and trigger the next action automatically. You get your time back and your pipeline stops leaking.",
+    "Imagine your intake form testing itself every time you update it and flagging broken steps before a lead ever sees them. That is exactly the kind of system we build for service businesses so your first impression is always clean and your close rate stays high."
+  ],
+  "objection_handlers": [
+    {
+      "objection": "We already have software that does most of this.",
+      "response": "Most software handles the tasks it was designed for, but the gaps between tools are where leads fall through. We automate the handoffs your software cannot see, like pulling data from one platform, acting on it in another, and logging everything back to your CRM without anyone touching it manually."
+    },
+    {
+      "objection": "This sounds too technical and complicated to maintain.",
+      "response": "That is exactly why our managed retainer exists. We build it, we monitor it, and when something breaks or your process changes, we fix it. You never have to open a terminal or read a script. You just see the results in your dashboard."
+    },
+    {
+      "objection": "I do not have the budget for a $750 per month retainer right now.",
+      "response": "Understood. We can start with a one-time buildout of your highest-pain automation, which is usually intake or follow-up, and once you see the time and revenue it saves you in the first 30 days, the retainer pays for itself. Most clients recoup the cost in the first two weeks."
+    }
+  ],
+  "revenue_application": "To hit $100K within two months, GHE should lead with the managed retainer at $750 per month as the anchor offer, targeting local service businesses like contractors, HOAs, and dental offices that have high lead volume and broken follow-up processes. The browser automation capability shown in this video becomes a demo weapon: build a live scrape of local dentist or contractor contacts during a discovery call, then show how GHE can automate outreach and intake inside their GHL CRM. Closing 10 retainer clients at $750 gets to $7,500 MRR, but stacking one-time buildout fees of $2,500 to $5,000 per client alongside retainers gets to $100K faster. Layer in TradingView indicator sales and AI signal subscriptions to add passive revenue on top of the service base. The QA automation angle is also a strong upsell for existing software users who want reliability without hiring a developer.",
+  "action_items": [
+    "Install Playwright CLI inside a Claude Code project this week and build one working automation demo, specifically a local business contact scraper for a niche like HVAC or dental, to use as a live sales asset in prospect calls.",
+    "Create a one-page offer document for the $750 managed retainer that lists five specific automations GHE will maintain, using the QA loop and authenticated session capabilities as proof points that competitors cannot replicate.",
+    "Identify 10 local service businesses in one niche, run the contact scraper demo against them, and send a personalized outreach message showing them their own data as proof of what GHE can automate for their pipeline."
+  ],
+  "twitter_posts": [
+    "Most agencies pitch automation. We demo it live by pulling your competitor list from the web in real time then showing you how to turn it into a closed deal. That is the difference.",
+    "Claude Code + Playwright = a bot that builds your form, tests it, finds the bugs, and fixes them. No dev needed. This is what we build for service businesses at GHE.",
+    "Your intake form could be breaking right now and you would never know. We build systems that test themselves so your first impression with every lead is always clean."
+  ],
+  "linkedin_posts": [
+    "Most local service businesses are losing leads not because they have bad offers but because their intake and follow-up systems are broken and nobody is watching.\n\nWe just finished building an automation for a contractor client that logs into their scheduling software, pulls uncontacted leads, sends a personalized follow-up via voice agent, and logs the result back to their GHL CRM. Zero manual steps.\n\nThe tool that made this possible is Claude Code paired with Playwright browser automation. It can navigate authenticated sessions, fill forms, extract data, and trigger workflows across any platform without needing an API.\n\nIf your business has a gap between where a lead comes in and where they show up on your calendar, that gap is costing you money. We close it.\n\nDrop a comment or DM me if you want to see what this looks like for your specific workflow.",
+    "Here is something most people do not realize about AI automation: the most valuable use case is not the flashy stuff. It is quality control.\n\nWe use browser automation to test client-facing forms, intake flows, and booking pages automatically. Every time something changes, a bot runs through the entire user journey, flags what is broken, and we fix it before a real lead ever sees it.\n\nThis is the same approach shown in recent Claude Code demos where an AI builds a multi-page form and then autonomously QA tests it, finds bugs, and patches them without human intervention.\n\nFor a service business doing 50 to 200 leads a month, one broken form step can cost thousands in lost revenue. Automated QA makes that risk disappear.\n\nThis is one of the core capabilities inside our managed retainer at Gray Horizons Enterprise. If you want a system that watches itself so you do not have to, let us talk."
+  ],
+  "relevance_score": 8,
+  "url": "https://youtu.be/J-6pnl5DQg8?si=aQsqqgwE9ypDVkXC",
+  "note": "",
+  "analyzed_at": "2026-06-08T16:14:53.501456"
+}

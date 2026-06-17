@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 5: The Night Raizen Defied the Pack
+Generated: 2026-06-09 16:01
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: Handheld push-in on Raizen standing alone on the ridge, breath fogging, silver eyes catching the moon. Snow falls in slow sheets. He grips a war-blade still wet from earlier battle.
+Narration: The mountain was quiet. Too quiet for what the night was about to ask of him.
+
+IMAGE PROMPT:
+A scarred wolf-warrior in dark dented iron plate standing on a snowy mountain ridge at night, pale moonlight on his face, frosted breath, deep claw scars across chest armor, holding a bloodied iron blade, distant torches in a valley camp below, low fog hugging snow, handheld documentary framing, slight lens grain, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: Rack focus from a snarling Wolf elder to three kneeling Raven prisoners, hands bound in frozen rope, obsidian masks cracked. One prisoner is barely conscious, blood dried on his cheek.
+Narration: Three Ravens. Bound. Silent. Waiting for the verdict every wolf already knew.
+
+IMAGE PROMPT:
+Three kneeling raven-warriors in cracked black feather cloaks and shattered obsidian half-masks, bound with frozen rope, inside a ruined stone hall lit by iron braziers, snow falling through broken ceiling beams, blood dried on faces, a hulking wolf elder snarling out of focus in foreground, handheld documentary realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (11s)
+Action: The elder, a grey-furred wolf in heavy bone-mail, slams a scarred fist on a stone table and points at Raizen. Other wolf warriors line the walls, eyes glinting amber in firelight. The kill order is given.
+Narration: The elder spoke the old word — Skara. Cleanse. No survivors. No mercy.
+
+IMAGE PROMPT:
+An old grey wolf-warrior in heavy bone-plated mail slamming a clawed fist on a cracked stone war table, firelight from a central pit, six wolf warriors lined along ruined walls in dark iron armor, scarred snouts, breath fogging in cold air, low torch light, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: Close-up: Raizen's silver eyes flicker. His jaw tightens. He looks down at the bound, broken Raven prisoner — a boy, barely a fledgling. Raizen sheathes his blade. The hall goes dead silent.
+Narration: He looked at the boy. He saw not an enemy. He saw a son someone was still waiting for.
+
+IMAGE PROMPT:
+Extreme close-up of a scarred wolf-warrior with pale silver eyes like frozen moonlight, slowly sheathing a heavy iron blade, jaw clenched, breath visible, firelight flickering across deep facial scars and dirt-streaked fur, out-of-focus bound young raven prisoner in background, handheld documentary realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (11s)
+Action: The elder roars in fury. Wolves draw blades, surrounding Raizen. He raises his hands — not in surrender, but refusal. For one single frame, his silver eyes pulse with frozen-moonlight light — the only flicker of supernatural force in the entire scene — then it's gone.
+Narration: He refused. And in that breath — the pack became the wolves at his throat.
+
+IMAGE PROMPT:
+A wide shot of a scarred wolf-warrior surrounded by six other wolf warriors in dark iron plate drawing curved blades inside a ruined stone war hall, central fire pit, snow drifting in, the central wolf raises empty hands, a single brief faint silver flicker in his eyes, low practical torchlight only, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow except a one-frame eye flicker, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: Raizen is dragged out, armor stripped of its clan sigil. The elder carves the mark of exile into Raizen's chest plate with a slow blade. Blood freezes as it falls. No one speaks. The Raven prisoners watch from the doorway, unbound.
+Narration: They did not kill him. They did something older. They erased him.
+
+IMAGE PROMPT:
+A scarred wolf-warrior on his knees in deep snow at night, two warriors holding his arms back, an old grey wolf elder carving a rune of exile into his iron chestplate with a curved knife, blood freezing on snow, ruined stone hall behind them, distant torches, three unbound raven prisoners watching silently from a doorway, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (11s)
+Action: Raizen walks alone into a vast white nothing, blade on his back, no cloak. His footprints fill instantly with falling snow. Behind him, the torches of his home shrink to pinpricks, then vanish.
+Narration: No name. No pack. No fire to return to. Only the long white silence.
+
+IMAGE PROMPT:
+A lone scarred wolf-warrior in damaged dark iron plate walking away into a vast snow-covered tundra before dawn, blade strapped across his back, no cloak, footprints filling with fresh snow behind him, tiny distant torches of an encampment far in the background, low fog along the ground, pale grey-blue pre-dawn light, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (10s)
+Action: Cut to Kuro of the Raven Order standing on a broken parapet, cold blue eyes unblinking, reading a small black feather a scout has just placed in his palm. A slow, deliberate smile. He has been told everything.
+Narration: And somewhere, in a tower of fog, a raven smiled. The exile had only just begun.
+
+IMAGE PROMPT:
+A tall raven-warrior in a black feather-plated cloak and obsidian half-mask standing on the broken parapet of a ruined stone tower, dense grey fog all around, cold pale blue eyes unblinking, holding a single black feather in a gloved hand, faint slow smile beneath the mask, dead city ruins faintly visible below, practical moonlight only, handheld documentary realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------

@@ -1,0 +1,53 @@
+{
+  "title": "Prompt Caching Explained: How to Stop Burning Your Claude Session Limits",
+  "summary": "The video explains how Claude's prompt caching system works and how to maximize token efficiency when using Claude Code or Claude API. Cached tokens cost only 10% of normal input tokens, making cache hit rate critical for cost savings and session longevity. The cache time-to-live is one hour for Claude subscriptions but only five minutes for API and sub-agents. The presenter shares a personal dashboard showing over 300 million tokens saved in a week through smart caching habits. Three core habits cover 95% of users and prevent the most common session burnout issues.",
+  "key_takeaways": [
+    "Cached tokens cost only 10% of normal input tokens, meaning high cache hit rates dramatically reduce costs and extend session limits",
+    "The cache TTL is one hour for Claude subscriptions, but drops to five minutes for API usage and sub-agents, which can silently drain your budget",
+    "Changing your system prompt or waiting more than an hour forces a full recache of everything, which is expensive mid-session",
+    "There are three caching layers: system layer (global instructions and tools), project layer (Claude.md and memory), and conversation layer (messages and replies)",
+    "Anthropic internally monitors cache hit rates and treats low hit rates as a service emergency, signaling how important this is to performance and cost"
+  ],
+  "pitch_angles": [
+    "Position GHE's AI automation systems as cost-optimized from day one by explaining that your team builds agents using proper caching architecture, meaning clients get faster responses and lower ongoing API costs compared to DIY setups",
+    "Use the complexity of token management and session limits as proof that local service businesses need a managed retainer, because without expert oversight they will burn through API budgets without knowing why",
+    "Frame the $750 managed retainer as infrastructure protection by showing prospects that without someone monitoring caching, TTL windows, and sub-agent costs, their automation could silently cost two to three times more than it should"
+  ],
+  "sales_scripts": [
+    "Most businesses that try to run AI agents on their own end up burning through their API budget in days without knowing why. The reason is almost always poor caching architecture and unmanaged session windows. We build and monitor your system so that never happens to you.",
+    "When we set up your AI voice agent or contractor intake system, we build it the right way from the start, with proper token caching so your costs stay predictable and your agents stay fast. That is part of what the managed retainer covers so you are never flying blind on AI spend."
+  ],
+  "objection_handlers": [
+    {
+      "objection": "We can just set up the AI ourselves and save money",
+      "response": "Most teams that go DIY end up paying three to five times more in API costs because of poor caching and session management. We handle the technical architecture so your system runs efficiently from day one, and the retainer pays for itself in cost savings alone."
+    },
+    {
+      "objection": "I do not understand AI well enough to know if I need this",
+      "response": "That is exactly the point. You should not have to understand token limits, cache TTL windows, or sub-agent costs. That is our job. You focus on running your business and we make sure the AI works reliably and affordably in the background."
+    },
+    {
+      "objection": "Is the monthly retainer worth it long term?",
+      "response": "The retainer covers ongoing monitoring, optimization, and updates. Without it, one system prompt change or one hour of inactivity can silently double your AI costs. We prevent that and keep your automation running at peak efficiency every month."
+    }
+  ],
+  "revenue_application": "Use prompt caching knowledge as a technical differentiator when pitching the $750 managed retainer. Position GHE as the only local service automation provider that actively monitors token efficiency, cache hit rates, and session architecture. Closing just 14 retainer clients at $750 per month hits $10,500 monthly recurring revenue. Stack that with onboarding fees for GHL CRM setups and AI voice agent deployments, targeting four to six new clients per month, to accelerate toward $100K. The managed retainer creates predictable recurring revenue while AI system buildouts create lump-sum income. Combining five retainer clients, four CRM builds at $3,000 to $5,000 each, and ongoing indicator and signals sales creates a realistic path to $100K within two months of landing the first anchor client.",
+  "action_items": [
+    "Build a one-page explainer for prospects showing the hidden cost of unmanaged AI agents, using the caching data from this video as proof, and add it to your sales deck for the managed retainer pitch",
+    "Set up a token usage dashboard similar to the one shown in the video to track your own GHE AI system costs, so you can show real numbers to prospects and demonstrate your technical credibility",
+    "Identify five local service businesses in your pipeline and schedule discovery calls this week, leading with the question of whether they have tried AI tools before and what happened to their costs, then use caching inefficiency as the pain point that justifies the retainer"
+  ],
+  "twitter_posts": [
+    "Most businesses try DIY AI and wonder why costs explode. Bad caching architecture is usually the reason. We build it right so your agents stay fast and affordable from day one.",
+    "Cached tokens cost 10% of normal input. High cache hit rate means lower costs and longer sessions. This is why AI setup matters more than most people think.",
+    "One hour of inactivity in your AI session can silently double your costs. This is why managed AI retainers exist. Set it and forget it is a myth without proper oversight."
+  ],
+  "linkedin_posts": [
+    "Most local service businesses that try to run AI automation themselves hit the same wall. Costs spike unexpectedly, the system slows down, and no one knows why.\n\nThe answer is almost always poor caching architecture. Cached tokens cost only 10% of normal input. A well-built system keeps that cache hit rate high. A poorly built one burns through budget silently.\n\nThis is the technical gap between a DIY AI setup and a professionally managed one. It is not about the tools. It is about how the system is architected and monitored over time.\n\nAt Gray Horizons Enterprise we build AI automation for contractors, HOAs, and local service businesses with cost efficiency built in from the start. That is what the managed retainer is designed to protect.",
+    "Here is something most people do not tell you about AI agents for your business. The setup is only half the problem.\n\nThe other half is ongoing monitoring. Session limits, token costs, cache windows, and sub-agent behavior all change how your system performs and what it costs you each month.\n\nWithout someone watching those numbers, a single system change can silently triple your AI spend. We have seen it happen repeatedly with businesses that tried to manage it themselves.\n\nThe businesses winning with AI automation right now are the ones who treat it like infrastructure, not a one-time install. That means regular optimization, cost tracking, and architecture updates.\n\nIf you are a contractor, HOA manager, or local service business owner exploring AI, ask any vendor you talk to how they handle caching and session management. The answer will tell you a lot about whether they actually know what they are doing."
+  ],
+  "relevance_score": 6,
+  "url": "https://youtu.be/6cEQEba0i2A?si=oNdznToRlWOZBRuj",
+  "note": "",
+  "analyzed_at": "2026-06-08T15:41:56.432526"
+}

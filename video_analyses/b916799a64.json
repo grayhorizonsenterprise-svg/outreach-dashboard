@@ -1,0 +1,53 @@
+{
+  "title": "Claude Code Agent View: Managing Multiple AI Agents From One Terminal Tab",
+  "summary": "The video introduces Claude Code's new Agent View feature, which allows developers to manage multiple concurrent AI coding sessions from a single terminal tab. Users can navigate between sessions using arrow keys, see status indicators showing which agents need input or have completed tasks, and launch new sessions directly from the agent view. A companion feature called slash goal enables long-running autonomous agents that work toward a defined objective for hours without manual intervention. The presenter emphasizes using the CLI over the VS Code extension to access the most functionality.",
+  "key_takeaways": [
+    "Claude Code's Agent View lets you run and monitor multiple AI coding agents simultaneously from one terminal tab, eliminating tab confusion and context switching",
+    "Status indicators show green for completed, yellow for needs input, and active for in-progress sessions, making it easy to prioritize attention across agents",
+    "The slash goal command enables autonomous agents that run for hours pursuing a defined objective, ideal for overnight or long-running build tasks",
+    "Launching new agent sessions is as simple as typing a task description directly in the agent view without memorizing complex commands",
+    "Parallel agent workflows can dramatically compress development timelines, allowing multiple features or client deliverables to be built simultaneously"
+  ],
+  "pitch_angles": [
+    "Show local service business owners how GHE uses cutting-edge multi-agent AI tools to build and deploy their automation systems faster than any competitor, positioning speed as a premium value driver for the $750 retainer",
+    "Demonstrate that GHE's internal use of parallel AI agents means clients get more deliverables per dollar since multiple workflows like CRM setup, voice agent training, and intake forms can be built concurrently rather than sequentially",
+    "Use the concept of autonomous overnight agents as proof that GHE operates an always-on development shop, meaning client systems are being refined and optimized even outside of business hours, justifying recurring retainer fees"
+  ],
+  "sales_scripts": [
+    "Most agencies bill you for hours of work done one task at a time. We run multiple AI agents in parallel building your CRM flows, voice scripts, and intake automations simultaneously. You get more done in days instead of weeks, which means faster ROI on your investment with us.",
+    "Our team uses the same frontier AI tools that top software engineers use, including autonomous agents that work overnight toward specific goals. When you hire GHE on retainer, you are not just getting a consultant, you are getting an always-on AI-powered build team working toward your business outcomes around the clock."
+  ],
+  "objection_handlers": [
+    {
+      "objection": "I am not sure AI automation is worth $750 a month for my business.",
+      "response": "Totally fair question. Because we use parallel AI agents, we compress what used to take weeks of development into days. That means you are not paying for slow hourly work. You are paying for a system that is already generating leads, qualifying callers, and managing follow-up while you focus on doing the actual service work."
+    },
+    {
+      "objection": "Can you not just set this up once and I will manage it myself?",
+      "response": "You absolutely can take ownership of the system. The retainer exists because AI tools evolve fast and your business needs change. We use autonomous agents that run continuous improvement cycles, so your automation gets smarter over time. One-time setups go stale. We keep yours sharp."
+    },
+    {
+      "objection": "How do I know your team actually knows what they are doing with AI?",
+      "response": "We are actively using the same multi-agent frameworks that top AI engineers use to build your system, not generic no-code tools. We can walk you through exactly how we build and monitor concurrent AI workflows tailored to your business. The technology is real and we can show you the process live."
+    }
+  ],
+  "revenue_application": "Use parallel Claude Code agent sessions to build out multiple client automation stacks simultaneously rather than sequentially. Onboard two to three local service businesses at once at $750 per month each by having separate agents handle CRM configuration, voice agent scripting, and intake flow development concurrently. Layer in TradingView indicator sales and AI signal subscriptions as passive income streams running in the background. With three retainer clients generating $2,250 per month and aggressive outbound to add new clients weekly, reaching $100K within two months becomes achievable by combining retainer revenue, one-time indicator sales at $79, and signal subscriptions at $49 per month across a growing user base. The speed advantage from multi-agent development means you can onboard more clients per month than a traditional agency, making volume-based growth realistic within the target window.",
+  "action_items": [
+    "Install Claude Code CLI and practice launching three to four parallel agent sessions today to build familiarity with Agent View before using it for client deliverables",
+    "Create a parallel build template that maps out which agent handles CRM setup, which handles voice agent scripting, and which handles intake forms so every new client onboarding can be executed concurrently from day one",
+    "Record a short screen capture demo of your multi-agent workflow in action and use it as a sales asset in outreach to local service businesses to visually demonstrate why GHE delivers faster results than competitors"
+  ],
+  "twitter_posts": [
+    "Running 4 AI coding agents at once from one tab is now real with Claude Code Agent View. This is how GHE builds client automation systems faster than anyone else in the market.",
+    "Parallel AI agents mean your CRM setup, voice scripts, and intake flows get built simultaneously not one at a time. Faster delivery is a competitive advantage worth paying for.",
+    "Overnight autonomous AI agents working toward a goal while you sleep. That is the kind of always-on build capacity GHE brings to every retainer client. This is the new standard."
+  ],
+  "linkedin_posts": [
+    "Most automation agencies are still building client systems one task at a time. We are not.\n\nAt GHE we use Claude Code's new Agent View to run multiple AI development sessions in parallel. While one agent is configuring your CRM pipeline, another is scripting your AI voice agent, and a third is building your contractor intake flow.\n\nThe result is that what used to take weeks gets compressed into days. Faster onboarding means faster ROI for every client we work with.\n\nIf your current agency makes you wait months to see results, it might be time to ask whether they are using 2024 tools or 2020 tools. We can show you the difference live.",
+    "There is a feature in Claude Code called slash goal that lets you set an objective and have an AI agent work toward it autonomously for hours, even overnight.\n\nWe are building this kind of always-on development capacity into how GHE serves clients on retainer. Your automation systems are not just set up and forgotten. They are continuously worked on, refined, and improved even outside of business hours.\n\nFor local service businesses like contractors, HOA managers, and service providers, this means your lead intake, follow-up sequences, and customer communication tools stay sharp as your business evolves.\n\nThe $750 monthly retainer is not just maintenance. It is an active AI-powered build team running in the background of your business every single day."
+  ],
+  "relevance_score": 6,
+  "url": "https://youtu.be/ZAaxx3qyT8g?si=OWCst78yFkQMkhBB",
+  "note": "",
+  "analyzed_at": "2026-06-08T15:42:50.212338"
+}

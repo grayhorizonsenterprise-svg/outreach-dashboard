@@ -1,0 +1,53 @@
+{
+  "title": "Claude Code Hacks: Beginner to Advanced Power User Workflows",
+  "summary": "This video walks through productivity hacks for using Claude Code to build websites, apps, and AI agents faster. The presenter covers context management techniques like compacting at 60 percent and using slash init to auto-document projects. It introduces workflow strategies like plan mode, sub-agents, and custom skills to reduce revision cycles and improve output quality. The hacks range from beginner tips like status lines and voice input to advanced patterns like parallel sub-agent deployment. Overall the video is a practical guide to using Claude Code as a force multiplier for development speed.",
+  "key_takeaways": [
+    "Run slash init on every project so Claude auto-generates a context file that eliminates re-explaining your codebase each session",
+    "Use plan mode before any execution to reduce revision cycles and get Claude to ask clarifying questions until it is 95 percent confident",
+    "Compact your context at 60 percent usage and use selective preservation to keep critical decisions like API integrations or database schemas",
+    "Deploy parallel sub-agents for complex tasks so the main thread stays clean while specialized agents handle research, testing, and exploration simultaneously",
+    "Build verification steps directly into to-do lists so Claude checks its own work before handing output back to you, dramatically improving first-pass quality"
+  ],
+  "pitch_angles": [
+    "Show local service business owners how AI automation built with these workflows cuts their intake and follow-up time in half, framing GHE as the team that builds and maintains the system so they never have to touch code",
+    "Position GHE as a premium automation partner that uses cutting-edge AI development practices to deliver faster, more reliable systems than freelancers or generic SaaS tools",
+    "Use the sub-agent parallel work concept as a metaphor when pitching managed retainers, explaining that GHE runs multiple automation systems simultaneously for the client so their business operates like a larger company without the headcount"
+  ],
+  "sales_scripts": [
+    "Most service businesses are losing leads because no one is following up fast enough. We build AI voice agents and CRM automations that respond instantly, qualify prospects, and book appointments without you lifting a finger. The result is more booked jobs with zero extra staff.",
+    "Right now your competitors are still manually handling every call and intake form. We deploy AI automation systems that run 24 hours a day, capture every lead, and keep your pipeline full. Our clients see the difference within the first week of going live."
+  ],
+  "objection_handlers": [
+    {
+      "objection": "I already have a CRM and it works fine",
+      "response": "That is great, and we can actually integrate directly with what you have. The difference is layering AI voice agents and automated follow-up on top so your existing CRM works harder without you changing your process at all."
+    },
+    {
+      "objection": "This sounds expensive and I am not sure about the ROI",
+      "response": "One missed job a week at your average ticket price likely costs more than our retainer. We track every lead captured and every appointment booked through the system so you can see exactly what the automation is generating for you."
+    },
+    {
+      "objection": "I do not have time to learn new software",
+      "response": "You do not have to learn anything. We handle the entire build, setup, and ongoing management. You just see the results in your calendar and inbox."
+    }
+  ],
+  "revenue_application": "Use these Claude Code workflow hacks to dramatically accelerate the build time for each client's automation stack. With plan mode, sub-agents, and custom skills, a single GHE operator can deliver a full GHL CRM plus AI voice agent setup in days rather than weeks. This means GHE can onboard multiple clients simultaneously in the first two months. Targeting three to four managed retainer clients at $750 per month each gets to $2,250 to $3,000 monthly recurring quickly, but the real path to $100K is stacking five to six automation buildouts at $10,000 to $15,000 each alongside retainers and indicator sales. Faster delivery using these hacks also increases client satisfaction and referrals, compressing the timeline to hit that target.",
+  "action_items": [
+    "Set up a Claude Code project for GHE's core automation stack using slash init and build a CLAUDE.md file that documents the GHL CRM architecture, AI voice agent templates, and contractor intake flows so every future build starts with full context",
+    "Create a custom skills directory with reusable prompt files for common GHE deliverables like onboarding flows, HOA management setups, and AI voice agent configurations so new client builds can be executed faster with consistent quality",
+    "Use the sub-agent parallel workflow to simultaneously build out the trading indicator landing pages, the automation services sales page, and the AI signals onboarding sequence so all revenue streams are active and converting within the first two weeks"
+  ],
+  "twitter_posts": [
+    "Most people use AI tools reactively. The ones winning use plan mode, sub-agents, and self-checking to-do lists. Build smarter not just faster.",
+    "If your AI keeps needing corrections, stop giving it commands. Give it problems. Let it reason first. Output quality jumps immediately.",
+    "Context rot is silently killing your AI workflows. Compact at 60 percent, clear between tasks, and keep your files focused. Speed comes from staying clean."
+  ],
+  "linkedin_posts": [
+    "Most business owners think AI automation is complicated. It is not. The complexity is on our side, not yours.\n\nWe use advanced AI development workflows to build your intake systems, follow-up sequences, and voice agents faster and more reliably than traditional developers. You get a finished system without sitting through a single technical meeting.\n\nThe businesses growing fastest right now are not the ones with the biggest teams. They are the ones with the best systems running in the background.\n\nIf you are a service business still manually handling every lead and call, we should talk. The gap between you and your competitors is closing faster than you think.",
+    "Here is something most people miss about AI automation: the quality of what gets built depends entirely on how well the AI is directed.\n\nAt GHE we use structured workflows where AI plans before it builds, checks its own work, and runs parallel processes to deliver faster results. This is how we build CRM automations, AI voice agents, and contractor intake systems that actually hold up in production.\n\nThe result for our clients is a system that feels like having an extra employee who never sleeps, never misses a lead, and never forgets to follow up.\n\nIf your service business is ready to stop leaking revenue through the cracks, our managed retainer is the most direct path to getting there."
+  ],
+  "relevance_score": 6,
+  "url": "https://youtu.be/jqoFP9QapXI?si=SVj_hayuoRPqAz3V",
+  "note": "",
+  "analyzed_at": "2026-06-08T15:46:26.107041"
+}

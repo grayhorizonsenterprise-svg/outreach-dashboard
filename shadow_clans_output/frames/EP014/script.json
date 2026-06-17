@@ -1,0 +1,84 @@
+{
+  "episode_number": 14,
+  "title": "The Pact That Was Never Meant To Hold",
+  "logline": "Three broken factions meet at neutral ground to forge an alliance against the Hollow Gate, but a hidden traitor within the Raven Order ensures the pact dies before dawn.",
+  "narrator_intro": "Some alliances are born from desperation. Others are born to be broken. On the cracked steps of the Forgotten Shrine, three warlords gathered with blood-oaths in hand. None of them knew a knife was already moving in the dark.",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 12,
+      "setting": "The Forgotten Shrine \u2014 a half-collapsed stone temple at the border of jungle, fog, and frostline. Neutral ground.",
+      "action": "Wide handheld shot. Torches planted in cracked stone. Three banners hang limp in the cold mist \u2014 wolf, raven, gorilla. A single long table of black wood waits empty.",
+      "narration": "Neutral ground. Three banners. One last chance to stop the war that ends them all.",
+      "image_prompt": "ruined stone temple at dusk, three faded banners hanging in low fog, long black wooden table, planted torches with practical flame, cracked steps overgrown with moss, frost on one side jungle on the other, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 11,
+      "setting": "Approach path to the Shrine, moonlit snow giving way to mud.",
+      "action": "RAIZEN walks alone, breath visible, iron plate scratched, claw scars on his chest catching torchlight. His ice-pale eyes scan the treeline. He grips his blade but does not draw.",
+      "narration": "Raizen came alone. Honor, even now, was the only currency he trusted.",
+      "image_prompt": "tall scarred wolf warrior in dented dark iron plate walking through muddy snow, visible breath in cold air, faint silver in pale eyes only, deep claw scars across chest, hand resting on sword hilt, torchlit path, low fog, handheld rack focus, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Wolf Clan"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 12,
+      "setting": "Inside the shrine, candlelit chamber.",
+      "action": "VARN ducks under the low arch, massive shoulders scraping stone dust loose. Amber runes carved into his skin pulse once \u2014 slow, like a heartbeat. He sets a stone tablet on the table: terms of peace.",
+      "narration": "Varn brought no weapon. Only old laws, carved before any of them were born.",
+      "image_prompt": "massive gorilla warrior with ancient stone plate armor cracked symbols faintly amber, ducking through low stone archway, dust falling from shoulders, placing carved stone tablet on dark wooden table, candlelight only, weathered skin visible pores, runes etched in flesh barely glowing, handheld camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Gorilla Titans"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 11,
+      "setting": "Shrine entrance, fog thick at floor level.",
+      "action": "KURO enters with two cloaked Raven lieutenants behind him. Obsidian half-mask catches firelight. His cold blue eyes do not blink. Behind him, one lieutenant \u2014 VESS \u2014 lingers a half-step too long at the threshold.",
+      "narration": "Kuro arrived with two shadows. One of them was already lying.",
+      "image_prompt": "tall raven warrior in black feather-plated cloak obsidian half-mask, faint blue cold in unblinking eyes, two hooded lieutenants behind him, one lingering at stone doorway, thick low fog, torch flicker on feathers, ruined shrine interior, handheld documentary, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 13,
+      "setting": "The table, all three leaders seated.",
+      "action": "Close shots: Raizen's scarred hand pressing a wolf-fang into wax. Varn's massive thumb pressing a rune-mark. Kuro lowering a black feather onto the parchment. The pact is sealed. Eye contact between the three \u2014 tense, fragile, almost human.",
+      "narration": "Wolf fang. Stone rune. Black feather. Three seals. One impossible promise.",
+      "image_prompt": "close up three hands sealing parchment on dark wood table, scarred wolf hand pressing fang into red wax, huge gorilla thumb pressing carved rune mark, gloved raven hand placing single black feather, candlelight, dust motes, parchment fibers visible, handheld macro, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 6,
+      "duration_seconds": 12,
+      "setting": "Side corridor of the shrine, minutes later.",
+      "action": "VESS slips into shadow, pulls a folded letter from inside the feather cloak, and burns the original pact's duplicate in a brazier. He replaces it on the table with a forged version \u2014 terms that demand Wolf territory be surrendered. A single anime-flicker frame as the rune-seal on the forgery ignites cold blue, then gone.",
+      "narration": "One letter swapped. One word changed. One war reborn in a heartbeat.",
+      "image_prompt": "hooded raven lieutenant in dim stone corridor burning parchment in iron brazier, swapping it for forged document on table, single brief flash of cold blue rune ignition on wax seal, feather cloak details, hands trembling slightly, torchlight only, handheld, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow except the one brief seal flash, NO anime shading",
+      "faction": "Raven Order"
+    },
+    {
+      "scene_number": 7,
+      "duration_seconds": 12,
+      "setting": "Back at the table, dawn approaching.",
+      "action": "Raizen rereads the pact. His jaw tightens. He slams the parchment down. Varn stands, stone armor groaning. Kuro's eyes finally narrow \u2014 genuine confusion. He did not order this. The alliance dies in three breaths.",
+      "narration": "Raizen saw betrayal. Varn saw insult. Kuro saw, too late, that he had been used.",
+      "image_prompt": "three warlords standing around dark wooden table at first grey dawn, wolf leader slamming parchment furious scarred face, gorilla leader rising stone armor creaking, raven leader frozen mask tilted in dawning realization, torches dying, fog rising, tense triangle composition, handheld, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    },
+    {
+      "scene_number": 8,
+      "duration_seconds": 12,
+      "setting": "Shrine steps, leaders departing in opposite directions.",
+      "action": "Wide static shot. Raizen walks back into the snow. Varn into the jungle fog. Kuro stands a long moment on the steps, then turns slowly toward VESS \u2014 who is already gone. The torches gutter out one by one.",
+      "narration": "By sunrise, three armies were marching. And the true traitor was already running.",
+      "image_prompt": "wide shot ruined shrine steps at pale dawn, wolf warrior walking left into snow, gorilla warrior walking right into jungle fog, raven leader alone center on stone steps turning slowly, empty space where lieutenant stood, torches dying, mist rising, three diverging paths, handheld static, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading",
+      "faction": "neutral"
+    }
+  ],
+  "narrator_outro": "Three banners. Three roads. One forged letter. Next episode \u2014 Raizen hunts the traitor through the frozen ruins, and finds something far worse waiting beneath the ice.",
+  "shorts_hook": "He sealed the pact with a black feather \u2014 then burned it in the next room.",
+  "youtube_title": "Shadow Clans Episode 14 \u2014 The Alliance That Died Before Dawn",
+  "youtube_description": "Three broken factions. One last chance for peace. One hidden hand that made sure it would never happen. In Episode 14 of SHADOW CLANS, Raizen of the Wolf Clan, Varn of the Gorilla Titans, and Kuro of the Raven Order meet on neutral ground at the Forgotten Shrine \u2014 but a traitor inside Kuro's own ranks forges the pact and sets all three armies on a collision course. Dark cinematic fantasy in the style of a lost early 2000s film. Watch every episode in order to follow the road to the Hollow Gate. #ShadowClans #DarkFantasy #CinematicFantasy #WolfClan #RavenOrder #GorillaTitans #HollowGate #AnimatedSeries #FantasyStory #Episode14"
+}

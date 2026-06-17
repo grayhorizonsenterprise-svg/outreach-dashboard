@@ -1,0 +1,77 @@
+SHADOW CLANS — Episode 19: The Forged Letter That Burned Three Worlds
+Generated: 2026-06-16 08:43
+============================================================
+
+PASTE EACH PROMPT INTO MIDJOURNEY OR STABLE DIFFUSION:
+
+SCENE 1 (12s)
+Action: KURO sits at a warped oak desk. Gloved hands. He dips a black quill into ink. Camera handheld, rack focus from his unblinking blue eyes down to the parchment.
+Narration: In a dead tower above a dead city, the Raven began to write.
+
+IMAGE PROMPT:
+close-up of a hooded man in black feather-plated cloak and obsidian half-mask writing with a black quill on aged parchment, single candle flame, cold practical light, foggy ruined stone tower interior, faint blue tint in his eyes only, handheld documentary framing, rack focus on the quill tip, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 2 (11s)
+Action: The quill carves the forged signature of RAIZEN of the Wolf Clan. A wax stamp slams down — a wolf sigil pressed in red. Kuro's gloved thumb smudges it intentionally to look battle-worn.
+Narration: He signed it in another man's name. A wolf's name.
+
+IMAGE PROMPT:
+extreme macro of aged parchment with a freshly forged wolf sigil pressed in dark red wax, a gloved thumb smudging the edge, black ink signature still wet, candlelight from one side, dust particles in the air, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 3 (12s)
+Action: A Raven courier in worn leathers stumbles into view, deliberately bloodied, clutching the letter. Two Gorilla sentries with cracked stone-plate emerge, spears raised. The courier collapses and offers the sealed parchment.
+Narration: The messenger was meant to look hunted. He played the part well.
+
+IMAGE PROMPT:
+a bloodied courier in worn leather collapsing on a jungle path, handing a sealed parchment up to two massive gorilla warriors in cracked ancient stone-plate armor with faint dim amber rune cracks, overgrown temple ruins behind, low ground fog, dusk light through dense canopy, handheld realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 4 (12s)
+Action: VARN reads the letter by torchlight. His carved amber runes pulse once — a single anime flicker frame as rage hits. The parchment trembles in his massive hand. He says nothing. A tear cuts through dirt on his cheek.
+Narration: Varn read of a wolf raid on his unborn children. He believed every word.
+
+IMAGE PROMPT:
+massive gorilla warrior leader reading a parchment by torchlight inside a ruined temple sanctum, ancient stone-plate armor with carved amber runes faintly pulsing in the skin, a single tear cutting through dust and dirt on his cheek, broken statues in background, practical torch flame as only light source, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 5 (11s)
+Action: RAIZEN crouches over fresh tracks in the snow — boots that aren't his clan's. His ice-pale eyes narrow. Behind him, a wolf scout points down the ridge toward smoke rising from a Wolf outpost. The outpost is burning.
+Narration: While Varn raged, Raizen found his own outpost in ashes. Not his doing.
+
+IMAGE PROMPT:
+scarred warrior leader in dark iron plate armor with deep claw marks across the chest crouched over boot prints in fresh snow, pale ice-cold eyes, breath visible, distant burning outpost on a ridge behind him, moonlit frozen tundra, a wolf-helmeted scout pointing toward smoke, handheld documentary framing, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 6 (12s)
+Action: Raizen walks among the dead. He kneels by a fallen wolf warrior and pulls a black raven feather from the corpse's mouth — planted evidence. But he doesn't see it as a frame. He reads it as Gorilla savagery aided by spies.
+Narration: A feather in a dead man's teeth. Misread. The trap was already shut.
+
+IMAGE PROMPT:
+warrior leader kneeling among burned bodies in a ruined snow outpost, pulling a single black raven feather from the mouth of a fallen armored wolf soldier, falling ash mixed with snow, dawn light just breaking grey on the horizon, deep claw marks across his chest plate visible, handheld realism, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 7 (12s)
+Action: Kuro stands at the broken window. A second raven lands on his outstretched arm carrying confirmation. He removes the obsidian half-mask for one second — we see a thin, exhausted human face — then puts it back on. He has not slept.
+Narration: Two wars ignited from one piece of paper. The Raven did not smile.
+
+IMAGE PROMPT:
+a man in black feather-plated cloak standing at a broken stone window of a ruined tower, a real raven landing on his outstretched gloved arm, obsidian half-mask held in his other hand revealing a tired pale unshaven human face, dawn fog rolling through the window, practical grey morning light only, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------
+
+SCENE 8 (12s)
+Action: Wide static shot. Three distant marching columns approach from three directions — wolves from the north, gorillas from the south jungle, ravens watching from a ridge. None know the others are coming. The Gate's runes flicker faintly. One single anime frame as the runes pulse — then gone.
+Narration: Three armies. One gate. None of them knew they were already inside the Raven's hand.
+
+IMAGE PROMPT:
+massive ancient cracked stone archway alone on a barren grey plain, three distant armies marching from three converging roads — wolves from snowy north, gorilla titans from jungle south, hooded ravens watching from a ridge, faint dim runes barely visible on the gate stones, low ground fog, overcast sky, wide static landscape shot, handheld breathing camera, cinematic film grain, desaturated, shallow depth of field, 4k, realistic textures, NO glow, NO anime shading
+
+----------------------------------------

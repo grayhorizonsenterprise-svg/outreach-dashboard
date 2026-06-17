@@ -1,0 +1,53 @@
+{
+  "title": "How to Build an AI Agent That Makes Phone Calls While You Sleep (n8n + Vapi)",
+  "summary": "This video demonstrates how to build an outbound AI voice agent using n8n and Vapi that automatically calls and qualifies leads the moment they submit a form on your website. The agent collects deeper qualification data such as budget, urgency, past experience, and intent beyond what the form captures. All call data is automatically logged into a Google Sheet for sales follow-up. The creator walks through a live demo with a mock prospect and then breaks down the workflow node by node. The system is fully automatable and runs without human involvement, making it ideal for local service businesses and AI automation agencies.",
+  "key_takeaways": [
+    "n8n and Vapi can be combined to create outbound AI voice agents that call leads instantly after form submission, removing the delay between interest and first contact.",
+    "Phone number normalization is a critical step before triggering any call to prevent workflow errors from inconsistent user inputs like dashes, parentheses, or missing country codes.",
+    "AI voice agents can dynamically receive form data such as name, company, and request to personalize each call, making the conversation feel relevant rather than robotic.",
+    "All call outcomes including motivation, urgency, budget, and intent can be automatically structured and logged into a Google Sheet without any manual data entry.",
+    "The system has multiple use cases beyond lead qualification including review collection, lead reactivation, and survey automation, all of which are sellable services to local businesses."
+  ],
+  "pitch_angles": [
+    "Position this as a speed-to-lead solution for contractors and local service businesses. When a homeowner fills out a form at 11pm, the AI calls them within seconds, qualifies them, and logs the data so your client wakes up to a warm qualified lead instead of a cold contact.",
+    "Sell it as a replacement for missed calls and slow follow-up. Most local businesses lose jobs because they do not respond fast enough. This system eliminates that gap entirely and works around the clock without adding payroll.",
+    "Frame it as a discovery and intake upgrade. Instead of just collecting basic form data, your client now gets a full qualification profile including budget range, timeline, and decision intent before a human ever picks up the phone."
+  ],
+  "sales_scripts": [
+    "Right now most of your leads are going cold because no one is following up fast enough. We build an AI agent that calls every new form submission within seconds, qualifies them on the spot, and logs everything into a simple spreadsheet. You wake up every morning with pre-qualified leads ready to close.",
+    "Imagine never losing a lead to slow response time again. Our system connects directly to your website and automatically calls new inquiries the moment they submit their information. You get the full picture on every lead including budget and urgency before you ever pick up the phone."
+  ],
+  "objection_handlers": [
+    {
+      "objection": "We already follow up with leads manually, we do not need this.",
+      "response": "Manual follow-up works until it does not. After hours, on weekends, during busy seasons, leads go unanswered and they call your competitor. This system fills every gap without adding a single hour to your team's workload."
+    },
+    {
+      "objection": "I do not trust AI to talk to my customers.",
+      "response": "The agent only calls to qualify, not to close. It asks a few straightforward questions and collects information your team needs. Your team still handles the relationship, they just walk in better prepared and with more context."
+    },
+    {
+      "objection": "This sounds expensive and complicated to set up.",
+      "response": "The setup is a one-time build and once it is live it runs on its own. Most clients recover the cost within the first month just from leads they would have otherwise lost to slow response times."
+    }
+  ],
+  "revenue_application": "To hit $100K within 2 months, use this AI calling system as your flagship onboarding service bundled into the $750/month managed retainer. Target contractors, HOA managers, and local service businesses with high inbound lead volume. Offer 3 to 5 retainer clients at $750/month for recurring base revenue while upselling one-time build fees of $1,500 to $3,000 for the initial automation setup. Combine this with GHL CRM configuration and AI voice agent deployment as a complete intake package. Reaching 10 retainer clients at $750 generates $7,500/month recurring. Layer in 5 to 8 setup fees at $2,000 each and you approach $25,000 to $30,000 in month one. Stack TradingView indicator sales and AI signal subscriptions as passive income to close the gap toward $100K by month two. The key is leading with the AI calling demo as a live proof of concept in every sales conversation so prospects see the value immediately without needing a lengthy proposal.",
+  "action_items": [
+    "Build a live demo version of the n8n and Vapi outbound calling workflow using a mock local service business like a landscaping or HVAC company and record a short screen share to use as a sales asset in outreach.",
+    "Create a tiered service menu that includes a one-time AI voice agent setup fee, GHL CRM onboarding, and the $750/month managed retainer so prospects can clearly see what they are buying and at what price point.",
+    "Identify 10 to 20 local service businesses in your area that have web forms but slow follow-up, reach out via cold email or DM with the demo video, and offer a free 30-minute discovery call to show them exactly what the system does for their business."
+  ],
+  "twitter_posts": [
+    "Your leads fill out a form at 10pm. AI calls them in seconds, qualifies them, logs budget and urgency, and schedules follow-up. You wake up to warm leads. That is the automation gap most local businesses do not even know exists.",
+    "Stop losing jobs to slow follow-up. An AI voice agent built on n8n and Vapi can call every new lead instantly, ask the right questions, and log everything before you ever pick up the phone.",
+    "The real value of AI calling is not replacing your sales team. It is making sure no lead ever goes cold again. Speed to lead wins deals. Automation makes speed free."
+  ],
+  "linkedin_posts": [
+    "Most local service businesses lose more jobs to slow follow-up than to bad pricing.\n\nA homeowner fills out a form on your website at 9pm. You see it the next morning, call them, and find out they already booked someone else at 9:15pm the night before.\n\nThat gap is the problem. And it is completely solvable.\n\nWe build AI voice agents that call every new form submission within seconds. The agent introduces itself, asks a few qualifying questions about budget, timeline, and urgency, and logs everything into a simple spreadsheet before any human is involved.\n\nBy the time your team follows up, they already know the prospect is serious, what they can spend, and how fast they need the work done.\n\nIf your business runs on inbound leads, this is the single highest-leverage automation you can add right now.",
+    "I watched an AI agent call a mock prospect, ask about their budget, qualify their urgency, handle a question about discovery calls, and end the conversation professionally in under 3 minutes.\n\nNo human was involved. No delay. No missed opportunity.\n\nThe entire call was triggered by a form submission. The moment someone hit submit, the workflow fired, normalized the phone number, passed the lead data to the voice agent, and placed the call.\n\nAfter the call ended, the agent's notes including motivation, past experience, budget range, and status were automatically logged into a Google Sheet.\n\nThis is not a future capability. It exists right now and it runs on tools that are accessible to any business willing to invest in their systems.\n\nFor local service businesses like contractors, landscapers, and property managers, this is the difference between a full calendar and a missed season."
+  ],
+  "relevance_score": 9,
+  "url": "https://youtu.be/BO-jFbN4p8Y?si=xOxeVRqsxWahJTUJ",
+  "note": "",
+  "analyzed_at": "2026-06-08T15:48:04.639956"
+}
