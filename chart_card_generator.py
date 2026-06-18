@@ -538,6 +538,33 @@ def card_sports_picks(picks: list[dict] | None = None) -> bytes | None:
         return None
 
 
+# ─── Mock candlestick chart cards ────────────────────────────────────────────
+
+def card_mock_nvda() -> bytes | None:
+    p = INDICATORS / "mock_chart_nvda.png"
+    if not p.exists(): return None
+    return _screenshot_card(p, "NVDA — GHE SIGNAL FIRED", "SCORE: 81  STRONG BUY",
+                            "Full signals", SIGNALS_LINK, GREEN)
+
+def card_mock_app() -> bytes | None:
+    p = INDICATORS / "mock_chart_app.png"
+    if not p.exists(): return None
+    return _screenshot_card(p, "APP — EMA BREAKOUT CONFIRMED", "SCORE: 78  BUY",
+                            "Full signals", SIGNALS_LINK, GREEN)
+
+def card_mock_btc() -> bytes | None:
+    p = INDICATORS / "mock_chart_btc.png"
+    if not p.exists(): return None
+    return _screenshot_card(p, "BTC — ABOVE $104K CONFIRMED", "SCORE: 74  BUY",
+                            "Full signals", SIGNALS_LINK, GOLD)
+
+def card_mock_coin() -> bytes | None:
+    p = INDICATORS / "mock_chart_coin.png"
+    if not p.exists(): return None
+    return _screenshot_card(p, "COIN — MOMENTUM SCORE 71", "SCORE: 71  WATCH→BUY",
+                            "Full signals", SIGNALS_LINK, BLUE_ACC)
+
+
 # ─── Complex visual cards ────────────────────────────────────────────────────
 
 def _fake_sparkline(ticker: str, n: int = 32) -> list[float]:
@@ -904,6 +931,11 @@ CARD_REGISTRY: list[tuple[str, callable, str]] = [
     ("signal_matrix",         card_signal_matrix,         "visual"),
     ("market_heatmap",        card_market_heatmap,        "visual"),
     ("composite_dashboard",   card_composite_dashboard,   "visual"),
+    # mock candlestick charts
+    ("mock_nvda",             card_mock_nvda,             "chart"),
+    ("mock_app",              card_mock_app,              "chart"),
+    ("mock_btc",              card_mock_btc,              "chart"),
+    ("mock_coin",             card_mock_coin,             "chart"),
 ]
 
 ROTATION_LOG = DATA_DIR / "chart_rotation.json"
