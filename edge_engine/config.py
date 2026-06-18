@@ -65,7 +65,7 @@ SPACEX_ECOSYSTEM = {
     "KTOS":  "Kratos Defense — rocket engines, space vehicles",
 
     # Supply chain — components that go into rockets & spacecraft
-    "MOG.A": "Moog Inc — precision motion control (flight controls, valves)",
+    "TDY":  "Teledyne — aerospace instruments & imaging systems",
     "TDG":   "TransDigm — highly engineered aerospace components",
     "HEI":   "HEICO — FAA-approved aerospace replacement parts",
     "DCO":   "Ducommun — aerospace structures & electronic systems",
@@ -98,7 +98,7 @@ NICHE_STOCKS = [
     # AI infrastructure
     "SMCI","ARM","ALAB","ASML",
     # Biotech high-volatility
-    "MRNA","CRSP","BEAM","EDIT","NTLA","RXRX","ARKG",
+    "MRNA","CRSP","BEAM","EDIT","NTLA","RXRX","VCNX",
     # Clean energy
     "FSLR","ENPH","SEDG","BE","PLUG","CHPT","BLNK",
     # Defense emerging tech
