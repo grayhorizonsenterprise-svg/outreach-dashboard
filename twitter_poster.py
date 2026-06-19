@@ -31,6 +31,8 @@ import time
 import requests
 from datetime import datetime
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 try:
     from chart_card_generator import next_card as _next_card

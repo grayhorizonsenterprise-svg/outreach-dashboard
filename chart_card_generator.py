@@ -22,9 +22,14 @@ import random
 from pathlib import Path
 from datetime import datetime
 
-DATA_DIR   = Path(os.path.dirname(os.path.abspath(__file__)))
-INDICATORS = DATA_DIR / "indicators"
-WINS_LOG   = DATA_DIR / "wins_log.json"
+DATA_DIR        = Path(os.path.dirname(os.path.abspath(__file__)))
+INDICATORS      = DATA_DIR / "indicators"
+TRADING_CHARTS  = INDICATORS / "trading"   # X-only: signal/chart PNGs live here ONLY
+PORTFOLIO_IMGS  = INDICATORS / "portfolio" # LinkedIn/Fiverr/Upwork — never posted on X
+WINS_LOG        = DATA_DIR / "wins_log.json"
+
+TRADING_CHARTS.mkdir(exist_ok=True)
+PORTFOLIO_IMGS.mkdir(exist_ok=True)
 
 GUMROAD_LINK = "https://horizons56.gumroad.com"
 SIGNALS_LINK = os.getenv("SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
@@ -150,25 +155,15 @@ def _screenshot_card(
 
 # ─── CARD 1 — Live TradingView Chart ─────────────────────────────────────────
 
-# All TradingView screenshots in the indicators folder (add more by dropping .png files there)
-_TV_CHART_GLOBS = ["*chart*.png", "*Chart*.png", "*live*.png", "*Live*.png",
-                   "GHE Edge*.png", "*Scanner*.png", "*Flow*.png"]
-
-
+# X-only: only looks in indicators/trading/ — drop PNGs there to add to X rotation
 def card_tradingview_chart(signal_data: dict | None = None) -> bytes | None:
-    charts: list[Path] = []
-    for pat in _TV_CHART_GLOBS:
-        charts.extend(INDICATORS.glob(pat))
-    charts = list({p.resolve() for p in charts if p.exists()})  # deduplicate
-    if not charts:
-        # Fall back to any PNG in indicators/
-        charts = [p for p in INDICATORS.glob("*.png") if "mockup" not in p.name.lower()]
+    charts = [p for p in TRADING_CHARTS.glob("*.png") if p.exists()]
     if not charts:
         return None
     chosen = random.choice(charts)
-    ticker  = signal_data.get("ticker", "LIVE") if signal_data else "LIVE"
-    score   = signal_data.get("score", "") if signal_data else ""
-    badge   = f"SCORE: {score}" if score else "LIVE SIGNAL"
+    ticker = signal_data.get("ticker", "LIVE") if signal_data else "LIVE"
+    score  = signal_data.get("score", "") if signal_data else ""
+    badge  = f"SCORE: {score}" if score else "LIVE SIGNAL"
     return _screenshot_card(chosen, f"GHE EDGE SCANNER — {ticker}", badge, "Get access", WHOP_LINK, GREEN)
 
 
@@ -541,61 +536,61 @@ def card_sports_picks(picks: list[dict] | None = None) -> bytes | None:
 # ─── Mock candlestick chart cards ────────────────────────────────────────────
 
 def card_mock_nvda() -> bytes | None:
-    p = INDICATORS / "mock_chart_nvda.png"
+    p = TRADING_CHARTS / "mock_chart_nvda.png"
     if not p.exists(): return None
     return _screenshot_card(p, "NVDA — GHE SIGNAL FIRED", "SCORE: 81  STRONG BUY",
                             "Full signals", SIGNALS_LINK, GREEN)
 
 def card_mock_app() -> bytes | None:
-    p = INDICATORS / "mock_chart_app.png"
+    p = TRADING_CHARTS / "mock_chart_app.png"
     if not p.exists(): return None
     return _screenshot_card(p, "APP — EMA BREAKOUT CONFIRMED", "SCORE: 78  BUY",
                             "Full signals", SIGNALS_LINK, GREEN)
 
 def card_mock_btc() -> bytes | None:
-    p = INDICATORS / "mock_chart_btc.png"
+    p = TRADING_CHARTS / "mock_chart_btc.png"
     if not p.exists(): return None
     return _screenshot_card(p, "BTC — ABOVE $104K CONFIRMED", "SCORE: 74  BUY",
                             "Full signals", SIGNALS_LINK, GOLD)
 
 def card_mock_coin() -> bytes | None:
-    p = INDICATORS / "mock_chart_coin.png"
+    p = TRADING_CHARTS / "mock_chart_coin.png"
     if not p.exists(): return None
     return _screenshot_card(p, "COIN — MOMENTUM SCORE 71", "SCORE: 71  WATCH→BUY",
                             "Full signals", SIGNALS_LINK, BLUE_ACC)
 
 def card_mock_tsla() -> bytes | None:
-    p = INDICATORS / "mock_chart_tsla.png"
+    p = TRADING_CHARTS / "mock_chart_tsla.png"
     if not p.exists(): return None
     return _screenshot_card(p, "TSLA — EMA CROSS + VOLUME SURGE", "SCORE: 77  BUY",
                             "Full signals", SIGNALS_LINK, GREEN)
 
 def card_mock_meta() -> bytes | None:
-    p = INDICATORS / "mock_chart_meta.png"
+    p = TRADING_CHARTS / "mock_chart_meta.png"
     if not p.exists(): return None
     return _screenshot_card(p, "META — STRONG MOMENTUM SIGNAL", "SCORE: 83  STRONG BUY",
                             "Full signals", SIGNALS_LINK, GREEN)
 
 def card_mock_eth() -> bytes | None:
-    p = INDICATORS / "mock_chart_eth.png"
+    p = TRADING_CHARTS / "mock_chart_eth.png"
     if not p.exists(): return None
     return _screenshot_card(p, "ETH — BREAKOUT ABOVE $3,600", "SCORE: 72  BUY",
                             "Full signals", SIGNALS_LINK, GOLD)
 
 def card_mock_sol() -> bytes | None:
-    p = INDICATORS / "mock_chart_sol.png"
+    p = TRADING_CHARTS / "mock_chart_sol.png"
     if not p.exists(): return None
     return _screenshot_card(p, "SOL — WATCHING BREAKOUT ZONE", "SCORE: 69  WATCH",
                             "Full signals", SIGNALS_LINK, GOLD)
 
 def card_mock_amd() -> bytes | None:
-    p = INDICATORS / "mock_chart_amd.png"
+    p = TRADING_CHARTS / "mock_chart_amd.png"
     if not p.exists(): return None
     return _screenshot_card(p, "AMD — MOMENTUM BUILD + RSI 59", "SCORE: 75  BUY",
                             "Full signals", SIGNALS_LINK, GREEN)
 
 def card_mock_spy() -> bytes | None:
-    p = INDICATORS / "mock_chart_spy.png"
+    p = TRADING_CHARTS / "mock_chart_spy.png"
     if not p.exists(): return None
     return _screenshot_card(p, "SPY — REGIME: BULL | HOLD ABOVE 548", "SCORE: 68  HOLD",
                             "Full signals", SIGNALS_LINK, BLUE_ACC)
