@@ -564,6 +564,42 @@ def card_mock_coin() -> bytes | None:
     return _screenshot_card(p, "COIN — MOMENTUM SCORE 71", "SCORE: 71  WATCH→BUY",
                             "Full signals", SIGNALS_LINK, BLUE_ACC)
 
+def card_mock_tsla() -> bytes | None:
+    p = INDICATORS / "mock_chart_tsla.png"
+    if not p.exists(): return None
+    return _screenshot_card(p, "TSLA — EMA CROSS + VOLUME SURGE", "SCORE: 77  BUY",
+                            "Full signals", SIGNALS_LINK, GREEN)
+
+def card_mock_meta() -> bytes | None:
+    p = INDICATORS / "mock_chart_meta.png"
+    if not p.exists(): return None
+    return _screenshot_card(p, "META — STRONG MOMENTUM SIGNAL", "SCORE: 83  STRONG BUY",
+                            "Full signals", SIGNALS_LINK, GREEN)
+
+def card_mock_eth() -> bytes | None:
+    p = INDICATORS / "mock_chart_eth.png"
+    if not p.exists(): return None
+    return _screenshot_card(p, "ETH — BREAKOUT ABOVE $3,600", "SCORE: 72  BUY",
+                            "Full signals", SIGNALS_LINK, GOLD)
+
+def card_mock_sol() -> bytes | None:
+    p = INDICATORS / "mock_chart_sol.png"
+    if not p.exists(): return None
+    return _screenshot_card(p, "SOL — WATCHING BREAKOUT ZONE", "SCORE: 69  WATCH",
+                            "Full signals", SIGNALS_LINK, GOLD)
+
+def card_mock_amd() -> bytes | None:
+    p = INDICATORS / "mock_chart_amd.png"
+    if not p.exists(): return None
+    return _screenshot_card(p, "AMD — MOMENTUM BUILD + RSI 59", "SCORE: 75  BUY",
+                            "Full signals", SIGNALS_LINK, GREEN)
+
+def card_mock_spy() -> bytes | None:
+    p = INDICATORS / "mock_chart_spy.png"
+    if not p.exists(): return None
+    return _screenshot_card(p, "SPY — REGIME: BULL | HOLD ABOVE 548", "SCORE: 68  HOLD",
+                            "Full signals", SIGNALS_LINK, BLUE_ACC)
+
 
 # ─── Complex visual cards ────────────────────────────────────────────────────
 
@@ -915,12 +951,14 @@ def card_composite_dashboard(signals: list[dict] | None = None) -> bytes | None:
 # (name, function, category)
 # category: "chart" = screenshot-based | "data" = dynamic generated
 CARD_REGISTRY: list[tuple[str, callable, str]] = [
+    # X-only: trading/signals cards — no contractor/GHL/Vapi content on X
     ("tradingview_chart",  card_tradingview_chart,  "chart"),
-    ("ghl_dashboard",      card_ghl_dashboard,      "chart"),
-    ("contractor_intake",  card_contractor_intake,  "chart"),
-    ("vapi_demo",          card_vapi_demo,           "chart"),
     ("product_edge",       card_product_edge,        "chart"),
     ("product_flow",       card_product_flow,        "chart"),
+    # moved to "portfolio" category — only posted via portfolio slot, never chart slot
+    ("ghl_dashboard",      card_ghl_dashboard,      "portfolio"),
+    ("contractor_intake",  card_contractor_intake,  "portfolio"),
+    ("vapi_demo",          card_vapi_demo,           "portfolio"),
     ("signal_scorecard",      card_signal_scorecard,      "data"),
     ("congress_buys",         card_congress_buys,         "data"),
     ("kelly_table",           card_kelly_table,           "data"),
@@ -936,6 +974,12 @@ CARD_REGISTRY: list[tuple[str, callable, str]] = [
     ("mock_app",              card_mock_app,              "chart"),
     ("mock_btc",              card_mock_btc,              "chart"),
     ("mock_coin",             card_mock_coin,             "chart"),
+    ("mock_tsla",             card_mock_tsla,             "chart"),
+    ("mock_meta",             card_mock_meta,             "chart"),
+    ("mock_eth",              card_mock_eth,              "chart"),
+    ("mock_sol",              card_mock_sol,              "chart"),
+    ("mock_amd",              card_mock_amd,              "chart"),
+    ("mock_spy",              card_mock_spy,              "chart"),
 ]
 
 ROTATION_LOG = DATA_DIR / "chart_rotation.json"
@@ -962,7 +1006,7 @@ def next_card(category_filter: str | None = None) -> tuple[str, bytes | None]:
     """
     rot   = _load_rotation()
     pool  = [(n, fn, c) for n, fn, c in CARD_REGISTRY
-             if category_filter is None or c == category_filter]
+             if c != "portfolio" and (category_filter is None or c == category_filter)]
     if not pool:
         return ("none", None)
 
