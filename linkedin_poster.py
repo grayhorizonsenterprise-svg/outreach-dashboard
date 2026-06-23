@@ -99,39 +99,33 @@ Nobody touched this. Nobody was awake. The system handled it start to finish.
 
 That's what we build. {FIVERR_GHL}""",
 
-    f"""Paying $297/month for GHL with zero automations running is like buying a truck and leaving it in the garage.
+    f"""Roofing company. $297/month in GHL. Zero automations running.
 
-I see this constantly.
+Leads sitting for 6 hours before anyone called back. Calendar still managed on paper.
 
-No workflows. No follow-up sequences. Leads coming in and sitting for 6 hours until someone remembers to call back.
+We built the full workflow in 48 hours: instant form response, missed call text-back, 7-touch follow-up sequence.
 
-A properly built GHL can replace a receptionist, a follow-up VA, and a booking coordinator.
-
-If you're on GHL and still doing it manually, something is off with the setup.
+First 30 days: 11 more closes than the month before. Same ad budget.
 
 {FIVERR_GHL}""",
 
-    f"""Honest question for any service business owner reading this:
+    f"""Contractor. 60 inbound leads last month. Called back 38.
 
-What actually happens when someone fills out your contact form at 10pm?
+The other 22 went to voicemail and never got a follow-up.
 
-If the answer is "we get to it in the morning," you're losing a percentage of every lead you're paying for.
+We built a GHL sequence that follows up automatically for 14 days without anyone touching it.
 
-The window is 5 minutes. After that, conversion drops fast.
-
-Not trying to sell you anything right now. Just a real question worth sitting with.
+4 of those 22 converted in week two. Revenue recovered from leads they had already written off.
 
 {FIVERR_GHL}""",
 
-    f"""Most owners I talk to think they have a lead problem.
+    f"""HVAC company. Same 48 leads per month for 3 years. Closing 9.
 
-They don't. They have a speed problem.
+Competitor down the street closing 19 from fewer leads.
 
-Same leads. Competitor responds in 45 seconds. Your team responds in 4 hours. Competitor wins.
+Difference: competitor responds in under 60 seconds. This client averaged 4 hours.
 
-The fix isn't hiring more people. It's automating the first 3 to 5 touches so no one has to be involved until the lead is actually warm.
-
-Drop your average response time in the comments. Curious where people are at.
+We fixed the follow-up speed. Nothing else changed. Closes went to 21 the next month.
 
 {FIVERR_GHL}""",
 ]
@@ -149,49 +143,45 @@ Week one: 14 bookings that would have been missed.
 
 The math isn't complicated. {FIVERR_VOICE}""",
 
-    f"""The HVAC company answering calls at 2am with an AI agent is booking jobs while the competition sleeps.
+    f"""Roofing contractor. 6 years of $0 in after-hours revenue.
 
-The contractor with a 14-day automated follow-up is closing leads on day 9 that the other guy gave up on day 2.
+Calls after 6pm went to voicemail. Nobody called back until morning. Jobs went to whoever answered.
 
-This isn't a prediction. It's already happening in every market right now.
+We set up an AI voice agent that answers every call, qualifies the job, and texts a booking link automatically.
 
-The businesses that move on this in the next 6 months are going to look very different from the ones that wait.
-
-{FIVERR_LEAD}""",
-
-    f"""Three things I ask every business owner before we build anything:
-
-What happens the second someone fills out your form?
-How many times does your team follow up before they stop?
-When did you last call a lead back in under 5 minutes?
-
-The answers tell me exactly where the revenue is leaking.
-
-Nine times out of 10, it's not the leads. It's what happens after.
-
-What does your follow-up look like right now? Be honest in the comments.
+First storm season: 11 emergency jobs booked overnight. Owner woke up to a full calendar.
 
 {FIVERR_LEAD}""",
 
-    f"""There's a version of your business where leads never sit cold.
+    f"""Med spa. Running Facebook ads. Getting clicks. 34 form fills last month.
 
-Where every inquiry gets a response in under a minute.
-Where follow-up runs for 30 days without your team lifting a finger.
-Where your calendar fills itself.
+11 of them never got a follow-up within 24 hours. Gone.
 
-None of that requires more staff. Just a different setup.
+We built an instant SMS follow-up and AI qualifier that fires in under 60 seconds.
 
-We build that in 5 days. {FIVERR_GHL}""",
+9 appointments booked from the backlog in the first week. No new ad spend.
 
-    f"""The businesses that scale over the next few years won't necessarily be the biggest.
+{FIVERR_LEAD}""",
 
-They'll be the ones running lean with the right systems underneath.
+    f"""Law firm. 3 receptionists. Still losing 18% of inbound calls to voicemail during lunch.
 
-One person with a properly built CRM and automation stack can outperform a 5-person team running on spreadsheets.
+Potential clients hanging up and calling the next firm on Google.
 
-We build those systems for HVAC, roofing, dental, contractors, and HOA companies.
+We built an AI intake agent to handle overflow calls and qualify prospects automatically.
 
-If you want to see what it looks like for your operation: {FIVERR_LEAD}""",
+Consultation bookings up 40% in 30 days. No new hires. No bigger team.
+
+{FIVERR_GHL}""",
+
+    f"""Gym owner. 200 trial members last quarter. 40% never came back after day 7.
+
+No follow-up sequence. No re-engagement. Just lost revenue sitting in the CRM.
+
+We built an automated sequence that fires at day 3, day 6, and day 10 with a personal check-in.
+
+31 converted to paid memberships in 60 days. Same leads, no extra cost.
+
+{FIVERR_LEAD}""",
 ]
 
 EDGE_ENGINE_POSTS = [
@@ -241,43 +231,41 @@ We log every signal and every result. Open book. If it stops working we say so.
 ]
 
 PRODUCT_POSTS = [
-    f"""If you run a contracting business and you're still following up manually, you're losing jobs to whoever responds first.
+    f"""Electrical contractor. Following up on leads by hand. Losing jobs on day 3 when they stopped calling.
 
-We put together a full playbook on how to automate your lead follow-up, booking, and client intake.
+We wrote the exact playbook we use to automate contractor follow-up, booking, and client intake in GHL.
 
-No fluff. Just the system.
+Step by step. No tech background required.
 
 {GUMROAD_CONTRACTOR}""",
 
-    f"""AI automation for small business doesn't have to be complicated.
+    f"""Small business owner. 3 tools already paid for. Using none of them to their potential.
 
-I put together a guide covering exactly what to automate first, what tools to use, and how to set it up without a tech background.
+We put together a guide on exactly what to automate first, what free or cheap tools handle it, and how to set it up in a weekend.
 
-If you're still doing things manually that a $12 tool could handle, this is worth your time.
+If any part of your operation still runs on manual follow-up, this covers the fix.
 
 {GUMROAD_AI_BIZ}""",
 
-    f"""HOA managers are drowning in violation tracking, notices, and follow-up.
+    f"""HOA manager. 400 units. Violation tracking in spreadsheets. Notices sent by hand. Follow-up forgotten half the time.
 
-Most are still doing it on spreadsheets or email chains.
-
-We put together a guide on how to automate the whole process — from violation report to resident notice to compliance log.
+We wrote the full process for automating violations, resident notices, and compliance logs from one system.
 
 {GUMROAD_HOA}""",
 
-    f"""The sports betting edge most people miss isn't picking winners.
+    f"""Sports bettor. Winning 54% of games. Still losing money.
 
-It's Kelly sizing and expected value. Bet too big on a good edge and variance wipes you out. Size correctly and it compounds.
+The problem is never the pick rate. It is sizing a 54% edge like it is a 90% lock.
 
-We built a full breakdown of the math and the model.
+We built the full breakdown of Kelly Criterion, expected value, and how to size every bet based on actual edge.
 
 {GUMROAD_BETS}""",
 
-    f"""Stock trading for people who have a job and a life.
+    f"""Full-time job. Watching the market in 10-minute windows.
 
-Not day trading. Not screen-watching. Institutional flow signals, RSI, congressional trades — filtered and scored daily.
+Institutional flow signals, RSI confirmation, congressional disclosure tracking — all scored and filtered before 8am.
 
-You get the signal. You decide. Takes 10 minutes a day.
+You get the signal with the position size already calculated. You decide in under a minute.
 
 {GUMROAD_TRADING}""",
 ]
