@@ -185,14 +185,14 @@ threading.Thread(target=run_pipeline_loop, daemon=True).start()
 # =========================
 def keep_alive():
     time.sleep(60)
-    # Support Render (RENDER_EXTERNAL_URL) and Railway (RAILWAY_PUBLIC_DOMAIN)
-    render_url = os.getenv("RENDER_EXTERNAL_URL", "")
-    railway_domain = os.getenv("RAILWAY_PUBLIC_DOMAIN", "")
     port = os.getenv("PORT", "8080")
-    if render_url:
+    # Always ping self — use external URL if available, otherwise localhost
+    render_url = os.getenv("RENDER_EXTERNAL_URL", "")
+    self_url = os.getenv("SELF_URL", "")  # set SELF_URL=https://outreach-dashboard-production-6894.up.railway.app
+    if self_url:
+        target = self_url.rstrip("/")
+    elif render_url:
         target = render_url.rstrip("/")
-    elif railway_domain:
-        target = f"https://{railway_domain.rstrip('/')}"
     else:
         target = f"http://127.0.0.1:{port}"
     print(f"[KeepAlive] Pinging {target}/health every 10 min", flush=True)
