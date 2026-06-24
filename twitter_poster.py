@@ -738,44 +738,6 @@ Are you tracking congressional timing?
 
 {WHOP_LINK}""",
 
-    f"""Automation workflow live inside GoHighLevel.
-
-Lead submits form. Instant SMS fires. 7-touch sequence begins automatically.
-
-No manual steps. Zero missed leads.
-
-What's your current follow-up rate?
-
-{GUMROAD_LINK}""",
-
-    f"""AI voice agent confirmed the booking. No human involved.
-
-Caller said they need HVAC repair. Agent collected name, address, issue, preferred time.
-
-Job booked. Calendar updated. Owner notified.
-
-This runs 24/7.
-
-{GUMROAD_LINK}""",
-
-    f"""GHL dashboard — live pipeline data for a home services client.
-
-Every lead tracked. Every stage visible. Revenue value by opportunity.
-
-This is what running a business with a real CRM looks like.
-
-What are you using to track your pipeline?
-
-{GUMROAD_LINK}""",
-
-    f"""Contractor intake system — both sides live.
-
-Client submits. Contractor gets notified instantly. No phone tag. No lost jobs.
-
-Built and deployed in under a week.
-
-{GUMROAD_LINK}""",
-
     f"""Real chart. Real signal. Real entry zone.
 
 GHE Edge Scanner + Institutional Flow running simultaneously on APP.
@@ -802,14 +764,6 @@ This chart. This volume pattern. This momentum build.
 The pattern shows up. Most people miss it.
 
 {SIGNALS_LINK}""",
-
-    f"""Dashboard screenshot — outreach system live and running.
-
-Lead status, pipeline value, outreach history — one screen.
-
-Built for scale. Runs automatically.
-
-{GUMROAD_LINK}""",
 
     f"""GHE Institutional Flow indicator — live on NASDAQ.
 
@@ -962,6 +916,55 @@ When everything aligns, the next move is usually obvious.
 {SIGNALS_LINK}""",
 ]
 
+# GHL / AI automation posts — text ONLY, never paired with a trading chart image
+AUTOMATION_POSTS = [
+    f"""Automation workflow live inside GoHighLevel.
+
+Lead submits form. Instant SMS fires. 7-touch sequence begins automatically.
+
+No manual steps. Zero missed leads.
+
+What's your current follow-up rate?
+
+{GUMROAD_LINK}""",
+
+    f"""AI voice agent confirmed the booking. No human involved.
+
+Caller said they need HVAC repair. Agent collected name, address, issue, preferred time.
+
+Job booked. Calendar updated. Owner notified.
+
+This runs 24/7.
+
+{GUMROAD_LINK}""",
+
+    f"""GHL dashboard — live pipeline data for a home services client.
+
+Every lead tracked. Every stage visible. Revenue value by opportunity.
+
+This is what running a business with a real CRM looks like.
+
+What are you using to track your pipeline?
+
+{GUMROAD_LINK}""",
+
+    f"""Contractor intake system — both sides live.
+
+Client submits. Contractor gets notified instantly. No phone tag. No lost jobs.
+
+Built and deployed in under a week.
+
+{GUMROAD_LINK}""",
+
+    f"""Dashboard screenshot — outreach system live and running.
+
+Lead status, pipeline value, outreach history — one screen.
+
+Built for scale. Runs automatically.
+
+{GUMROAD_LINK}""",
+]
+
 ALL_POSTS = {
     "signals":      SIGNALS_POSTS,
     "indicators":   INDICATOR_POSTS,
@@ -970,6 +973,7 @@ ALL_POSTS = {
     "chart":        CHART_POSTS,
     "wins":         WINS_POSTS,
     "visual":       VISUAL_POSTS,
+    "automation":   AUTOMATION_POSTS,
 }
 
 # Image-attached categories — auto-generate or attach a card PNG
@@ -977,12 +981,14 @@ IMAGE_CATEGORIES = {"results", "signals", "chart", "wins", "visual"}
 
 # chart/wins/visual use the chart_card_generator (real screenshots + dynamic cards)
 CHART_CARD_CATEGORIES = {"chart", "wins", "visual"}
+# NOTE: "automation" is intentionally excluded — text-only, no image attached
 
 DAILY_SCHEDULE = [
     ("signals",    "13:00"),   # 8am ET   — morning signal preview (text + auto card)
     ("visual",     "14:00"),   # 9am ET   — complex heatmap/matrix/composite card
-    ("chart",      "15:00"),   # 10am ET  — real chart/dashboard screenshot post
+    ("chart",      "15:00"),   # 10am ET  — trading chart post only
     ("results",    "17:00"),   # 12pm ET  — weekly scorecard (text + auto card)
+    ("automation", "18:30"),   # 1:30pm ET — GHL/AI automation text post (NO image)
     ("indicators", "20:00"),   # 3pm ET   — TradingView product post
     ("wins",       "21:30"),   # 4:30pm ET — wins recap (text + wins card)
     ("engagement", "23:00"),   # 6pm ET   — engagement question
