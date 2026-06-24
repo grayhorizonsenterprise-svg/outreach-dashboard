@@ -1374,9 +1374,9 @@ def dashboard():
   <div style="display:flex;align-items:center;gap:10px;">
     <span style="background:#00cd7322;color:#00cd73;font-size:10px;font-weight:700;letter-spacing:2px;padding:4px 12px;border-radius:10px;border:1px solid #00cd7344;">DEMO</span>
     <span style="color:#fff;font-size:15px;font-weight:700;">GHE Edge Engine</span>
-    <span style="color:#94a3b8;font-size:12px;">Sample performance data — live system available on request</span>
+    <span style="color:#94a3b8;font-size:12px;">Live signals delivered every morning before 8am ET</span>
   </div>
-  <a href="mailto:grayhorizonsenterprise@gmail.com?subject=GHE Edge Engine Access Request" style="background:#00cd73;color:#000;font-weight:700;font-size:12px;padding:8px 18px;border-radius:6px;text-decoration:none;">Request Full Access</a>
+  <a href="https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01" target="_blank" style="background:#00cd73;color:#000;font-weight:700;font-size:13px;padding:10px 22px;border-radius:6px;text-decoration:none;letter-spacing:.02em;">Subscribe — $49/month →</a>
 </div>
 <div class="header">Gray Horizons Enterprise | Command Center</div>
 
