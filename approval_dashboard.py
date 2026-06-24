@@ -4911,6 +4911,9 @@ try:
 except Exception as _gmail_err:
     print(f"[STARTUP] Gmail monitor skipped: {_gmail_err}")
 
+_demo_routes = [r.rule for r in app.url_map.iter_rules() if "demo" in r.rule]
+print(f"[DEMO] Registered routes: {_demo_routes}", flush=True)
+
 # =========================
 # RUN
 # =========================
