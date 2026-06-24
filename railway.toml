@@ -2,5 +2,6 @@
 builder = "NIXPACKS"
 
 [deploy]
+startCommand = "python approval_dashboard.py"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
