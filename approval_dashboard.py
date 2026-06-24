@@ -4793,6 +4793,115 @@ Reference: <b>#{job_id}</b></p>
         return f"<p style='color:red;padding:40px;font-family:Arial;'>Upload error: {e}</p>", 500
 
 # =========================
+# TIME-LIMITED PROSPECT DEMO
+# =========================
+import hashlib, hmac as _hmac, base64 as _b64
+
+_DEMO_SECRET  = os.getenv("DEMO_SECRET", "ghe-demo-key-2026")
+_STRIPE_LINK  = "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01"
+_EE_URL       = os.getenv("EDGE_ENGINE_URL", "https://outreach-dashboard-production-6894.up.railway.app")
+
+def _make_demo_token(email: str, days: int) -> str:
+    exp     = int(time.time()) + days * 86400
+    payload = _b64.urlsafe_b64encode(f"{email}|{exp}".encode()).decode()
+    sig     = _hmac.new(_DEMO_SECRET.encode(), payload.encode(), hashlib.sha256).hexdigest()[:20]
+    return f"{payload}.{sig}"
+
+def _verify_demo_token(token: str):
+    try:
+        b64, sig = token.rsplit(".", 1)
+        expected = _hmac.new(_DEMO_SECRET.encode(), b64.encode(), hashlib.sha256).hexdigest()[:20]
+        if not _hmac.compare_digest(sig, expected):
+            return None, "invalid"
+        email, exp = _b64.urlsafe_b64decode(b64).decode().split("|", 1)
+        if time.time() > float(exp):
+            return {"email": email, "exp": float(exp)}, "expired"
+        return {"email": email, "exp": float(exp)}, "valid"
+    except Exception:
+        return None, "invalid"
+
+@app.route('/create-demo')
+def create_demo():
+    if flask_request.args.get("key", "") != _DEMO_SECRET:
+        return "Unauthorized", 403
+    email = flask_request.args.get("email", "prospect")
+    days  = max(1, min(14, int(flask_request.args.get("days", 2))))
+    token = _make_demo_token(email, days)
+    url   = flask_request.host_url.rstrip("/") + f"/demo/{token}"
+    return f"""<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Demo Link</title>
+<style>body{{font-family:monospace;background:#060d1a;color:#00cd73;padding:48px;}}
+input{{width:100%;padding:14px;background:#0f1e35;color:#00cd73;border:1px solid #1e3764;border-radius:6px;font-size:14px;margin:16px 0;}}
+a{{color:#00cd73;}} h2{{margin-bottom:8px;}} p{{color:#64748b;margin:4px 0;}}
+.copy-btn{{background:#00cd73;color:#000;border:none;padding:10px 22px;border-radius:6px;cursor:pointer;font-weight:800;font-size:13px;margin-left:8px;}}
+</style></head><body>
+<h2>Demo Link Created</h2>
+<p>Recipient: {email}</p>
+<p>Expires in: {days} day{'s' if days!=1 else ''}</p>
+<div style="display:flex;align-items:center;">
+  <input id="durl" value="{url}" onclick="this.select()">
+  <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('durl').value);this.textContent='Copied!'">Copy</button>
+</div>
+<a href="{url}" target="_blank">Preview →</a>
+</body></html>"""
+
+@app.route('/demo/<token>')
+def demo_view(token):
+    data, status = _verify_demo_token(token)
+
+    if status == "invalid":
+        return redirect("/")
+
+    if status == "expired":
+        return f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Preview Expired | GHE Edge Engine</title>
+<style>
+*{{box-sizing:border-box;margin:0;padding:0;}}
+body{{background:#060d1a;font-family:'Helvetica Neue',Arial,sans-serif;color:#e2e8f0;min-height:100vh;display:flex;align-items:center;justify-content:center;}}
+.card{{text-align:center;max-width:460px;padding:48px 40px;}}
+.logo{{font-size:12px;font-weight:800;letter-spacing:3px;color:#00cd73;text-transform:uppercase;margin-bottom:32px;}}
+h1{{font-size:26px;font-weight:800;color:#fff;margin-bottom:16px;line-height:1.3;}}
+p{{color:#64748b;font-size:15px;line-height:1.7;margin-bottom:32px;}}
+.btn{{display:inline-block;background:#00cd73;color:#000;font-weight:800;font-size:16px;padding:16px 36px;border-radius:8px;text-decoration:none;}}
+.sub{{font-size:12px;color:#334155;margin-top:20px;line-height:1.6;}}
+</style></head>
+<body><div class="card">
+  <div class="logo">GHE Edge Engine</div>
+  <h1>This preview has expired.</h1>
+  <p>Your time-limited access to the live signal feed has ended.<br>Subscribe to get daily picks delivered before 8am ET.</p>
+  <a href="{_STRIPE_LINK}" class="btn">Subscribe — $49/month →</a>
+  <p class="sub">Stocks · Crypto · Congressional Flow · Sports Edge<br>Cancel anytime.</p>
+</div></body></html>""", 410
+
+    exp_str = datetime.fromtimestamp(data["exp"]).strftime("%b %d at %I:%M %p")
+    return f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GHE Edge Engine — Live Preview</title>
+<style>
+*{{box-sizing:border-box;margin:0;padding:0;}}
+body{{background:#060d1a;font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;height:100vh;overflow:hidden;}}
+.bar{{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:#060d1a;border-bottom:1px solid #0f2040;flex-shrink:0;flex-wrap:wrap;gap:8px;}}
+.left{{display:flex;align-items:center;gap:12px;}}
+.logo{{font-size:12px;font-weight:800;letter-spacing:2px;color:#00cd73;text-transform:uppercase;}}
+.live{{font-size:10px;font-weight:700;letter-spacing:2px;padding:3px 10px;border-radius:10px;background:rgba(0,205,115,.12);border:1px solid rgba(0,205,115,.3);color:#00cd73;}}
+.exp{{font-size:11px;color:#475569;}}
+.cta{{background:#00cd73;color:#000;font-weight:800;font-size:13px;padding:10px 22px;border-radius:6px;text-decoration:none;white-space:nowrap;}}
+iframe{{flex:1;border:none;width:100%;}}
+</style></head>
+<body>
+<div class="bar">
+  <div class="left">
+    <span class="logo">GHE Edge Engine</span>
+    <span class="live">LIVE</span>
+    <span class="exp">Preview expires {exp_str}</span>
+  </div>
+  <a href="{_STRIPE_LINK}" target="_blank" class="cta">Subscribe — $49/month →</a>
+</div>
+<iframe src="{_EE_URL}" allowfullscreen></iframe>
+</body></html>"""
+
+# =========================
 # GMAIL REPLY MONITOR
 # =========================
 try:
