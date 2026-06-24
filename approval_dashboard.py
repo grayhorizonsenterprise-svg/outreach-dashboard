@@ -23,6 +23,10 @@ except Exception:
 
 app = Flask(__name__)
 
+@app.route('/test')
+def _test_route():
+    return "GHE OK", 200
+
 DATA_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
 os.makedirs(DATA_DIR, exist_ok=True)
 
