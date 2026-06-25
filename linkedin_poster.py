@@ -270,7 +270,7 @@ You get the signal with the position size already calculated. You decide in unde
 {GUMROAD_TRADING}""",
 ]
 
-ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS + EDGE_ENGINE_POSTS + PRODUCT_POSTS
+ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
