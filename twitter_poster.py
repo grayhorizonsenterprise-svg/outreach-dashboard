@@ -984,13 +984,8 @@ CHART_CARD_CATEGORIES = {"chart", "wins", "visual"}
 # NOTE: "automation" is intentionally excluded — text-only, no image attached
 
 DAILY_SCHEDULE = [
-    ("signals",    "13:00"),   # 8am ET   — morning signal preview (text + auto card)
-    ("visual",     "14:00"),   # 9am ET   — complex heatmap/matrix/composite card
-    ("chart",      "15:00"),   # 10am ET  — trading chart post only
-    ("results",    "17:00"),   # 12pm ET  — weekly scorecard (text + auto card)
+    ("chart",      "13:00"),   # 8am ET   — trading chart/signal post
     ("automation", "18:30"),   # 1:30pm ET — GHL/AI automation text post (NO image)
-    ("indicators", "20:00"),   # 3pm ET   — TradingView product post
-    ("wins",       "21:30"),   # 4:30pm ET — wins recap (text + wins card)
     ("engagement", "23:00"),   # 6pm ET   — engagement question
 ]
 
