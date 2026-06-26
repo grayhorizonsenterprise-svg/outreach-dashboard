@@ -708,72 +708,57 @@ PORTFOLIO_POSTS    = [item[0] for item in _PORTFOLIO_ITEMS]
 PORTFOLIO_IMAGE_MAP = {item[0]: item[1] for item in _PORTFOLIO_ITEMS}
 
 CHART_POSTS = [
-    f"""TradingView screenshot — this is what a 70+ signal looks like on the chart.
+    """TradingView screenshot — this is what a 70+ signal looks like on the chart.
 
 RSI in range. Volume anomaly confirmed. EMA alignment clean.
 
 Score 78. Entry zone active.
 
-How often do all 3 line up at the same time for you?
+How often do all 3 line up at the same time for you?""",
 
-{WHOP_LINK}""",
-
-    f"""This is the GHE Edge Scanner live on a daily chart.
+    """This is the GHE Edge Scanner live on a daily chart.
 
 Green bar = momentum score 70+. Volume confirmation. EMA cross.
 
 Most traders look at price. We look at score.
 
-What does your TradingView setup look like?
+What does your TradingView setup look like?""",
 
-{WHOP_LINK}""",
-
-    f"""Congressional buy flagged. Volume spike confirmed. Score building.
+    """Congressional buy flagged. Volume spike confirmed. Score building.
 
 This is what the institutional flow indicator looks like before the move.
 
 Retail sees this 3 weeks after it already ran.
 
-Are you tracking congressional timing?
+Are you tracking congressional timing?""",
 
-{WHOP_LINK}""",
-
-    f"""Real chart. Real signal. Real entry zone.
+    """Real chart. Real signal. Real entry zone.
 
 GHE Edge Scanner + Institutional Flow running simultaneously on APP.
 
-Score 78. Congressional flag active. Pre-move identification.
+Score 78. Congressional flag active. Pre-move identification.""",
 
-{WHOP_LINK}""",
+    """3 indicators. 1 decision framework.
 
-    f"""Product showcase — GHE Edge Scanner for TradingView.
-
-3 indicators. 1 decision framework.
 When to enter. How much to risk. Congressional activity.
 
-$79 once.
+Most traders have zero of these systematized. All three run automatically.""",
 
-{WHOP_LINK}""",
-
-    f"""What retail traders don't see until it's too late:
+    """What retail traders don't see until it's too late:
 
 This chart. This volume pattern. This momentum build.
 
 7 days before the disclosure hit the news.
 
-The pattern shows up. Most people miss it.
+The pattern shows up. Most people miss it.""",
 
-{SIGNALS_LINK}""",
-
-    f"""GHE Institutional Flow indicator — live on NASDAQ.
+    """GHE Institutional Flow indicator — live on NASDAQ.
 
 Blue zone = institutional accumulation. Red zone = distribution.
 
 You don't need to guess which side of the trade is active.
 
-The chart tells you.
-
-{WHOP_LINK}""",
+The chart tells you.""",
 ]
 
 WINS_POSTS = [
