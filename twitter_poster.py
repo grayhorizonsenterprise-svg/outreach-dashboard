@@ -1545,31 +1545,10 @@ def run(force: bool = False):
         text = pick_post(category, posted)
         print(f"\n[{category.upper()}] Posting ({datetime.utcnow().strftime('%H:%M UTC')})...")
 
+        # Media uploads disabled — each upload burns paid API credits (ContentCreateWithUrl).
+        # Text-only posts cost 1 credit each. Re-enable only after credits reset and
+        # follower count justifies the spend.
         media_id = None
-        if category in CHART_CARD_CATEGORIES:
-            # Use chart_card_generator — real screenshots + dynamic data cards
-            cat_filter = "chart" if category == "chart" else None
-            card_name, img_bytes = _next_card(cat_filter)
-            if img_bytes:
-                print(f"  [{category.upper()}] Card: {card_name}")
-                media_id = upload_media(img_bytes)
-            else:
-                print(f"  [{category.upper()}] Card generator returned None — posting text only")
-        elif category in IMAGE_CATEGORIES:
-            # Existing text card generator for signals/results
-            card_lines = _extract_card_lines(text)
-            card_type  = "signals" if category == "signals" else "results"
-            img_bytes  = _generate_signal_card(card_lines, card_type)
-            if img_bytes:
-                media_id = upload_media(img_bytes)
-        elif category == "portfolio":
-            img_rel = PORTFOLIO_IMAGE_MAP.get(text)
-            if img_rel:
-                img_path = DATA_DIR / img_rel
-                if img_path.exists():
-                    media_id = upload_media(img_path.read_bytes())
-                else:
-                    print(f"  [PORTFOLIO] Image not found: {img_path}")
 
         ok = post_tweet(text, media_id=media_id)
         if ok:
@@ -1577,14 +1556,20 @@ def run(force: bool = False):
         time.sleep(random.uniform(10, 20))
 
     save_posted(posted)
-    print(f"\n[TWITTER] Done — {sent}/{len(due)} posts sent")
 
-    # Auto-follow disabled — preserving API credits ($3.53 remaining)
-    # Re-enable once credits are topped up
-    # try:
-    #     auto_follow_accounts(max_follows=20)
-    # except Exception as e:
-    #     print(f"[TWITTER] Follow error (non-fatal): {e}")
+    # Track monthly credit usage — 1 credit per text post
+    _credit_log = DATA_DIR / "twitter_credits.json"
+    try:
+        month_key = datetime.utcnow().strftime("%Y-%m")
+        data = json.loads(_credit_log.read_text()) if _credit_log.exists() else {}
+        data[month_key] = data.get(month_key, 0) + sent
+        _credit_log.write_text(json.dumps(data, indent=2))
+        print(f"[TWITTER] Credits used this month: {data[month_key]}")
+    except Exception:
+        pass
+
+    print(f"\n[TWITTER] Done — {sent}/{len(due)} posts sent")
+    # Auto-follow permanently disabled — wasted paid API credits with no follower return.
 
 
 if __name__ == "__main__":
