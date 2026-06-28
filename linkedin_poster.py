@@ -59,127 +59,145 @@ GUMROAD_LINK      = GUMROAD_SIGNALS
 # ── Content Pools ──────────────────────────────────────────────────────────────
 
 GHL_POSTS = [
-    f"""Talked to an HVAC owner last week spending $4k/month on Google Ads.
+    f"""This HVAC owner was spending $4,000 a month on Google Ads and closing 9 out of 48 leads every month.
 
-48 leads a month. Closing 9.
+Same leads for three years. He thought it was a traffic problem.
 
-Not a lead problem. A follow-up problem.
+It was not. It was a follow-up problem.
 
-We built out his GHL: instant SMS on every form submission, missed call text-back, 7 touches over 2 weeks.
+We built out his GHL with instant SMS on every form submission, missed call text-back, and 7 touches over 2 weeks.
 
-Next month, same 48 leads. 23 closes. Same budget.
+Next month: same 48 leads, same budget. 23 closes.
 
-Just fixed what happens after the lead comes in.
+Nothing changed except what happened after the lead came in.
+
+What is your lead-to-close rate right now?
 
 {FIVERR_GHL}""",
 
-    f"""Real scenario from a roofing client I worked with last quarter.
-
-Lead called at 7pm. Went to voicemail. No callback until the next morning.
+    f"""A roofing lead called at 7pm. Nobody answered. No callback until the next morning.
 
 By then they had already booked with someone else.
 
-We set up a missed call text-back that fires in under 10 seconds. "Hey, sorry I missed you. What can I help with?"
+That lead was worth $4,800. Gone because of one missed call and a 14-hour response gap.
 
-Recovered 6 leads in the first month that would have walked.
+We set up a missed call text-back that fires in under 10 seconds: "Hey, sorry I missed you. What can I help with?"
 
-What does a missed call actually cost you? I'm genuinely curious.
+That one client recovered 6 leads in the first month that would have walked.
+
+How many calls does your business miss after 5pm each week?
 
 {FIVERR_GHL}""",
 
-    f"""11:47pm. Someone fills out an HVAC form.
+    f"""11:47pm. A lead filled out an HVAC form.
 
-11:47:52. Automated SMS goes out.
+11:47:52. Automated SMS fires.
 
-11:51. They reply: "Tomorrow morning works."
+11:51pm. They reply: "Tomorrow morning works."
 
-Calendar invite sent. Owner gets notified. Done.
+Calendar invite sent. Owner notified. Done.
 
 Nobody touched this. Nobody was awake. The system handled it start to finish.
 
-That's what we build. {FIVERR_GHL}""",
+What happens to leads that come into your business after hours right now?
 
-    f"""Roofing company. $297/month in GHL. Zero automations running.
+{FIVERR_GHL}""",
 
-Leads sitting for 6 hours before anyone called back. Calendar still managed on paper.
+    f"""A roofing company was paying $297 a month for GHL with zero automations running.
+
+Leads were sitting for 6 hours before anyone called back. Calendar managed on paper.
 
 We built the full workflow in 48 hours: instant form response, missed call text-back, 7-touch follow-up sequence.
 
-First 30 days: 11 more closes than the month before. Same ad budget.
+First 30 days: 11 more closes than the month before. Same ad budget. Nothing else changed.
+
+Is your CRM actually doing anything for you right now?
 
 {FIVERR_GHL}""",
 
-    f"""Contractor. 60 inbound leads last month. Called back 38.
+    f"""This contractor had 60 inbound leads last month. He only followed up on 38 of them.
 
-The other 22 went to voicemail and never got a follow-up.
+The other 22 went to voicemail and were never contacted again. He had no idea.
 
 We built a GHL sequence that follows up automatically for 14 days without anyone touching it.
 
-4 of those 22 converted in week two. Revenue recovered from leads they had already written off.
+4 of those 22 converted in week two. Revenue recovered from leads he had already written off.
+
+How many leads did your team write off last month without realizing it?
 
 {FIVERR_GHL}""",
 
-    f"""HVAC company. Same 48 leads per month for 3 years. Closing 9.
+    f"""Two HVAC companies. Same neighborhood. Same ad budget. One closing 9 leads a month, the other closing 19.
 
-Competitor down the street closing 19 from fewer leads.
+Same product. Same price. Same market.
 
-Difference: competitor responds in under 60 seconds. This client averaged 4 hours.
+The difference: one responds to new leads in under 60 seconds. The other averaged 4 hours.
 
-We fixed the follow-up speed. Nothing else changed. Closes went to 21 the next month.
+We fixed the response speed for the slower one. Nothing else changed. Closes went from 9 to 21 the next month.
+
+How long does it take your team to respond to a new lead that just came in?
 
 {FIVERR_GHL}""",
 ]
 
 AI_SERVICES_POSTS = [
-    f"""Dental office. 22 missed calls a week.
+    f"""A dental office was missing 22 calls a week and nobody had done the math on what that actually cost them.
 
-They tracked the number. They never did the math on the revenue.
+New patient average value: $1,400. If 30% of those calls would have booked, that is $9,240 a week going to voicemail.
 
-New patient average value: $1,400. If 30% of those calls would have converted, that's $9,240 a week going to voicemail.
+We put an AI voice agent on their inbound line. It answers every call, qualifies in 90 seconds, and books straight to the calendar.
 
-We put an AI voice agent on their inbound line. Answers every call, qualifies in 90 seconds, books straight to the calendar.
+Week one: 14 appointments booked that would have been missed calls.
 
-Week one: 14 bookings that would have been missed.
+Do you know how many calls your business misses in a week?
 
-The math isn't complicated. {FIVERR_VOICE}""",
+{FIVERR_VOICE}""",
 
-    f"""Roofing contractor. 6 years of $0 in after-hours revenue.
+    f"""This roofing contractor had never booked a single job after 6pm in 6 years of being open.
 
-Calls after 6pm went to voicemail. Nobody called back until morning. Jobs went to whoever answered.
+Every after-hours call went to voicemail. Nobody called back until morning. By then the job was gone.
 
 We set up an AI voice agent that answers every call, qualifies the job, and texts a booking link automatically.
 
-First storm season: 11 emergency jobs booked overnight. Owner woke up to a full calendar.
+First storm season after launch: 11 emergency jobs booked overnight. Owner woke up to a full calendar.
+
+What happens when someone calls your business after hours tonight?
 
 {FIVERR_LEAD}""",
 
-    f"""Med spa. Running Facebook ads. Getting clicks. 34 form fills last month.
+    f"""34 people filled out a form on this med spa's website last month. 11 of them never heard back within 24 hours.
 
-11 of them never got a follow-up within 24 hours. Gone.
+Those 11 people were gone. They booked somewhere else.
 
-We built an instant SMS follow-up and AI qualifier that fires in under 60 seconds.
+We built an instant SMS follow-up and AI qualifier that fires in under 60 seconds of form submission.
 
-9 appointments booked from the backlog in the first week. No new ad spend.
+9 appointments booked from the backlog in the first week. Zero new ad spend.
+
+How fast does your team follow up on a new form submission right now?
 
 {FIVERR_LEAD}""",
 
-    f"""Law firm. 3 receptionists. Still losing 18% of inbound calls to voicemail during lunch.
+    f"""A law firm with 3 receptionists was still losing 18% of their inbound calls every single day.
 
-Potential clients hanging up and calling the next firm on Google.
+Potential clients were hanging up during lunch hour and calling the next firm on Google.
 
 We built an AI intake agent to handle overflow calls and qualify prospects automatically.
 
-Consultation bookings up 40% in 30 days. No new hires. No bigger team.
+Consultation bookings up 40% in 30 days. No new hires. No bigger team. Same staff.
+
+What does your business do when all your lines are busy?
 
 {FIVERR_GHL}""",
 
-    f"""Gym owner. 200 trial members last quarter. 40% never came back after day 7.
+    f"""200 people started a free trial at this gym last quarter. 80 of them disappeared after day 7 with no follow-up at all.
 
-No follow-up sequence. No re-engagement. Just lost revenue sitting in the CRM.
+No check-in. No message. No reason to come back.
 
-We built an automated sequence that fires at day 3, day 6, and day 10 with a personal check-in.
+We built an automated sequence that fires at day 3, day 6, and day 10 with a personal check-in message.
 
 31 converted to paid memberships in 60 days. Same leads, no extra cost.
+
+What does your follow-up look like after someone goes quiet?
 
 {FIVERR_LEAD}""",
 ]
