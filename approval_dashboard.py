@@ -495,10 +495,11 @@ def _vapi_followup_scheduler():
 for _fn in [
     _twitter_scheduler,
     _shadow_clans_nightly,
+    _signals_engine_daily,
 ]:
     threading.Thread(target=_fn, daemon=True).start()
 
-print("[ENGINES] Essential schedulers started (Twitter, Shadow Clans)", flush=True)
+print("[ENGINES] Essential schedulers started (Twitter, Shadow Clans, LinkedIn)", flush=True)
 
 CSV_FILE      = os.path.join(DATA_DIR, "outreach_queue.csv")
 SOCIAL_FILE   = os.path.join(DATA_DIR, "social_pipeline.csv")
