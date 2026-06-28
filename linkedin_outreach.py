@@ -79,88 +79,97 @@ def save_contacted(contacted: set):
 
 def get_headers() -> dict:
     return {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
         "Accept": "application/vnd.linkedin.normalized+json+2.1",
         "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
         "Cookie": f"li_at={LI_AT}; JSESSIONID=\"{CSRF_TOKEN}\"",
         "Csrf-Token": CSRF_TOKEN,
         "X-Li-Lang": "en_US",
+        "X-Li-Track": '{"clientVersion":"1.13.9196","mpVersion":"1.13.9196","osName":"web","timezoneOffset":-7,"timezone":"America/Los_Angeles","deviceFormFactor":"DESKTOP","mpName":"voyager-web"}',
         "X-RestLi-Protocol-Version": "2.0.0",
-        "Referer": "https://www.linkedin.com/",
+        "Referer": "https://www.linkedin.com/search/results/people/",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
     }
 
 
+def _parse_clusters(data: dict) -> list:
+    """Parse people from LinkedIn dash/clusters or graphql cluster response."""
+    people = []
+    # dash/clusters REST response: top-level "elements" list
+    top = data.get("elements", [])
+    # graphql response: nested under data.searchDashClustersByAll.elements
+    if not top:
+        top = (data.get("data", {})
+                   .get("searchDashClustersByAll", {})
+                   .get("elements", []))
+    for cluster in top:
+        items = cluster.get("items", {})
+        if isinstance(items, dict):
+            items = items.get("elements", [])
+        for item in items:
+            entity = item.get("item", {}).get("entityResult", {})
+            if not entity:
+                entity = item.get("entityResult", {})
+            if not entity:
+                continue
+            urn = entity.get("entityUrn", "")
+            title = entity.get("title", {}).get("text", "") if isinstance(entity.get("title"), dict) else ""
+            subtitle = entity.get("primarySubtitle", {}).get("text", "") if isinstance(entity.get("primarySubtitle"), dict) else ""
+            nav = entity.get("navigationUrl", "")
+            pub_id = nav.split("/in/")[-1].strip("/") if "/in/" in nav else ""
+            parts = title.split(" ", 1)
+            uid = (urn.replace("urn:li:fsd_profile:", "")
+                      .replace("urn:li:fs_miniProfile:", ""))
+            if uid:
+                people.append({
+                    "id":         uid,
+                    "first_name": parts[0] if parts else title,
+                    "last_name":  parts[1] if len(parts) > 1 else "",
+                    "headline":   subtitle,
+                    "public_id":  pub_id,
+                })
+    return people
+
+
 def search_people(query: str, start: int = 0) -> list:
-    """Search LinkedIn for people matching query."""
-    # Try GraphQL-based endpoint first (current as of 2025)
+    """Search LinkedIn for people matching query using current Voyager endpoints."""
     endpoints = [
+        # Primary: dash/clusters REST endpoint (stable, no rotating queryId)
+        {
+            "url": "https://www.linkedin.com/voyager/api/search/dash/clusters",
+            "params": {
+                "decorationId": "com.linkedin.voyager.dash.deco.search.SearchClusterCollection-165",
+                "origin": "GLOBAL_SEARCH_HEADER",
+                "q": "all",
+                "query": f"(keywords:{query},flagshipSearchIntent:SEARCH_SRP,queryParameters:(resultType:List(PEOPLE)),includeFiltersInResponse:false)",
+                "start": start,
+                "count": 10,
+            },
+        },
+        # Fallback: graphql with current queryId
         {
             "url": "https://www.linkedin.com/voyager/api/graphql",
             "params": {
                 "variables": f"(start:{start},origin:GLOBAL_SEARCH_HEADER,query:(keywords:{query},flagshipSearchIntent:SEARCH_SRP,queryParameters:List((key:resultType,value:List(PEOPLE))),includeFiltersInResponse:false))",
-                "queryId": "voyagerSearchDashClusters.02af3bc5ca7e4fdd4d70b3f792d51313",
-            },
-        },
-        {
-            "url": "https://www.linkedin.com/voyager/api/search/blended",
-            "params": {
-                "keywords": query, "q": "blended", "origin": "GLOBAL_SEARCH_HEADER",
-                "start": start, "count": 10,
-                "filters": "List((key:resultType,value:List(PEOPLE)))",
+                "queryId": "voyagerSearchDashClusters.b0928897b71bd00a5a7291755dcd64f0",
             },
         },
     ]
     for ep in endpoints:
         try:
             r = requests.get(ep["url"], params=ep["params"], headers=get_headers(), timeout=15)
+            label = ep["url"].split("/")[-1]
             if r.status_code == 200:
-                data = r.json()
-                people = []
-                # GraphQL response structure
-                clusters = (data.get("data", {})
-                               .get("searchDashClustersByAll", {})
-                               .get("elements", []))
-                for cluster in clusters:
-                    for item in cluster.get("items", {}).get("elements", []):
-                        entity = item.get("item", {}).get("entityResult", {})
-                        if not entity:
-                            continue
-                        urn = entity.get("entityUrn", "")
-                        title = entity.get("title", {}).get("text", "")
-                        subtitle = entity.get("primarySubtitle", {}).get("text", "")
-                        nav = entity.get("navigationUrl", "")
-                        pub_id = nav.split("/in/")[-1].strip("/") if "/in/" in nav else ""
-                        parts = title.split(" ", 1)
-                        people.append({
-                            "id":         urn.replace("urn:li:fsd_profile:", "").replace("urn:li:fs_miniProfile:", ""),
-                            "first_name": parts[0] if parts else title,
-                            "last_name":  parts[1] if len(parts) > 1 else "",
-                            "headline":   subtitle,
-                            "public_id":  pub_id,
-                        })
-                # Legacy blended response structure
-                if not people:
-                    for el in data.get("elements", []):
-                        for item in el.get("elements", []):
-                            entity = item.get("hitInfo", {}).get("com.linkedin.voyager.search.SearchProfile", {})
-                            if not entity:
-                                continue
-                            member = entity.get("miniProfile", {})
-                            if not member:
-                                continue
-                            people.append({
-                                "id":         member.get("entityUrn", "").replace("urn:li:fs_miniProfile:", ""),
-                                "first_name": member.get("firstName", ""),
-                                "last_name":  member.get("lastName", ""),
-                                "headline":   member.get("occupation", ""),
-                                "public_id":  member.get("publicIdentifier", ""),
-                            })
+                people = _parse_clusters(r.json())
                 if people:
                     return people
+                print(f"[LI SEARCH] {label} → 200 but 0 results parsed")
             else:
-                print(f"[LI SEARCH] {ep['url'].split('/')[-1]} → {r.status_code}: {r.text[:80]}")
+                print(f"[LI SEARCH] {label} → {r.status_code}: {r.text[:120]}")
         except Exception as e:
-            print(f"[LI SEARCH] Error on {ep['url'].split('/')[-1]}: {e}")
+            print(f"[LI SEARCH] Error: {e}")
     return []
 
 
