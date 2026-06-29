@@ -336,7 +336,8 @@ NAV_LINKS = {
 
 @app.route("/")
 def index():
-    return render_template("index.html", nav=NAV_LINKS)
+    is_demo = flask_request.args.get("demo") == "1"
+    return render_template("index.html", nav=NAV_LINKS, is_demo=is_demo)
 
 @app.route("/health")
 def health():

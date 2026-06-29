@@ -442,15 +442,17 @@
 <div class="dash-nav">
   <span class="dash-nav-label">Dashboard</span>
   <a class="dash-btn active" href="#">Edge Engine</a>
-  {% if nav.outreach %}
-  <a class="dash-btn inactive" href="{{ nav.outreach }}" target="_blank">Outreach</a>
-  {% else %}
-  <span class="dash-btn disabled">Outreach</span>
-  {% endif %}
-  {% if nav.grants %}
-  <a class="dash-btn inactive" href="{{ nav.grants }}" target="_blank">Grant Agent</a>
-  {% else %}
-  <span class="dash-btn disabled">Grant Agent</span>
+  {% if not is_demo %}
+    {% if nav.outreach %}
+    <a class="dash-btn inactive" href="{{ nav.outreach }}" target="_blank">Outreach</a>
+    {% else %}
+    <span class="dash-btn disabled">Outreach</span>
+    {% endif %}
+    {% if nav.grants %}
+    <a class="dash-btn inactive" href="{{ nav.grants }}" target="_blank">Grant Agent</a>
+    {% else %}
+    <span class="dash-btn disabled">Grant Agent</span>
+    {% endif %}
   {% endif %}
 </div>
 
