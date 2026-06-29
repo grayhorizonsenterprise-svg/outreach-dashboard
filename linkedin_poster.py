@@ -288,6 +288,8 @@ You get the signal with the position size already calculated. You decide in unde
 {GUMROAD_TRADING}""",
 ]
 
+# LINKEDIN ONLY: GHL automation + AI services posts
+# NEVER add EDGE_ENGINE_POSTS or PRODUCT_POSTS here — trading content stays on Twitter/X only
 ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
