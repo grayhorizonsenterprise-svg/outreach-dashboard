@@ -4903,7 +4903,7 @@ iframe{{flex:1;border:none;width:100%;}}
   </div>
   <a href="{_STRIPE_LINK}" target="_blank" class="cta">Subscribe — $49/month →</a>
 </div>
-<iframe src="{_EE_URL}?tab=edge&demo=1" allowfullscreen></iframe>
+<iframe src="{_EE_URL}" allowfullscreen></iframe>
 </body></html>"""
 
 # =========================
