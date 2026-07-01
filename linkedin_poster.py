@@ -27,7 +27,7 @@ import json
 import random
 import webbrowser
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -38,9 +38,11 @@ CLIENT_SECRET = os.getenv("LINKEDIN_CLIENT_SECRET", "")
 ACCESS_TOKEN  = os.getenv("LINKEDIN_ACCESS_TOKEN", "")
 PERSON_ID     = os.getenv("LINKEDIN_PERSON_ID", "")
 
-DATA_DIR   = Path(os.path.dirname(os.path.abspath(__file__)))
-POSTED_LOG = DATA_DIR / "linkedin_posted.json"
-TOKEN_FILE = DATA_DIR / "linkedin_token.json"
+DATA_DIR      = Path(os.path.dirname(os.path.abspath(__file__)))
+POSTED_LOG    = DATA_DIR / "linkedin_posted.json"
+TOKEN_FILE    = DATA_DIR / "linkedin_token.json"
+COOLDOWN_FILE = DATA_DIR / "linkedin_last_post.json"
+MIN_HOURS_BETWEEN_POSTS = 20
 
 BOOK_CALL      = "https://calendly.com/grayhorizonsenterprise/30min"
 FIVERR_GHL     = BOOK_CALL
@@ -141,13 +143,13 @@ How long does it take your team to respond to a new lead that just came in?
 ]
 
 AI_SERVICES_POSTS = [
-    f"""A dental office was missing 22 calls a week and nobody had done the math on what that actually cost them.
+    f"""An HVAC company was missing 14 calls a week and nobody had done the math on what that actually cost them.
 
-New patient average value: $1,400. If 30% of those calls would have booked, that is $9,240 a week going to voicemail.
+Average job value: $1,200. If 30% of those calls would have booked, that is $5,040 a week going to voicemail.
 
-We put an AI voice agent on their inbound line. It answers every call, qualifies in 90 seconds, and books straight to the calendar.
+We put an AI voice agent on their inbound line. It answers every call, qualifies in 90 seconds, and texts a booking link automatically.
 
-Week one: 14 appointments booked that would have been missed calls.
+Week one: 11 jobs booked that would have been missed calls.
 
 Do you know how many calls your business misses in a week?
 
@@ -165,39 +167,39 @@ What happens when someone calls your business after hours tonight?
 
 {FIVERR_LEAD}""",
 
-    f"""34 people filled out a form on this med spa's website last month. 11 of them never heard back within 24 hours.
+    f"""A landscaping company had 41 form submissions last month. 14 of them never got a reply within 24 hours.
 
-Those 11 people were gone. They booked somewhere else.
+Those 14 people booked with someone else. No way to know how many were ready to buy.
 
-We built an instant SMS follow-up and AI qualifier that fires in under 60 seconds of form submission.
+We built an instant SMS follow-up that fires in under 60 seconds of every form submission.
 
-9 appointments booked from the backlog in the first week. Zero new ad spend.
+9 jobs recovered from that backlog in the first week. Zero new ad spend.
 
 How fast does your team follow up on a new form submission right now?
 
 {FIVERR_LEAD}""",
 
-    f"""A law firm with 3 receptionists was still losing 18% of their inbound calls every single day.
+    f"""A plumbing company was running 3 trucks and still managing their entire pipeline in a Notes app.
 
-Potential clients were hanging up during lunch hour and calling the next firm on Google.
+Leads called in. Someone wrote it down. Half the follow-ups never happened.
 
-We built an AI intake agent to handle overflow calls and qualify prospects automatically.
+We built a GHL setup that captures every inbound call, fires a text confirmation, and runs a 5-touch follow-up automatically.
 
-Consultation bookings up 40% in 30 days. No new hires. No bigger team. Same staff.
+They closed 14 jobs in the first 30 days from leads they would have previously lost track of.
 
-What does your business do when all your lines are busy?
+How are you managing follow-up right now?
 
 {FIVERR_GHL}""",
 
-    f"""200 people started a free trial at this gym last quarter. 80 of them disappeared after day 7 with no follow-up at all.
+    f"""A garage door repair company was calling back inbound leads 2 days after they came in.
 
-No check-in. No message. No reason to come back.
+By then the customer had already booked with whoever picked up the phone first.
 
-We built an automated sequence that fires at day 3, day 6, and day 10 with a personal check-in message.
+We set up an AI voice agent that answers every call, captures the job details, and fires a booking text in under 60 seconds.
 
-31 converted to paid memberships in 60 days. Same leads, no extra cost.
+First month: 8 warm leads that would have gone cold were recovered. No extra headcount. No bigger budget.
 
-What does your follow-up look like after someone goes quiet?
+How long does it take your team to respond when a new lead calls in?
 
 {FIVERR_LEAD}""",
 ]
@@ -423,6 +425,25 @@ def run_auth():
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
+def check_cooldown():
+    """Returns (ok_to_post, hours_since_last). Enforces MIN_HOURS_BETWEEN_POSTS."""
+    if not COOLDOWN_FILE.exists():
+        return True, None
+    try:
+        data = json.loads(COOLDOWN_FILE.read_text(encoding="utf-8"))
+        last = datetime.fromisoformat(data["last_post"])
+        elapsed = (datetime.now() - last).total_seconds() / 3600
+        if elapsed < MIN_HOURS_BETWEEN_POSTS:
+            return False, elapsed
+        return True, elapsed
+    except Exception:
+        return True, None
+
+def record_post_time():
+    COOLDOWN_FILE.write_text(
+        json.dumps({"last_post": datetime.now().isoformat()}), encoding="utf-8"
+    )
+
 def main():
     token, person_id = load_token()
 
@@ -435,6 +456,11 @@ def main():
         if not person_id:
             print("[SKIP] Could not get LinkedIn person ID. Re-run --auth.")
             return
+
+    ok, elapsed = check_cooldown()
+    if not ok:
+        print(f"[SKIP] Posted {elapsed:.1f}h ago — cooldown active ({MIN_HOURS_BETWEEN_POSTS}h minimum). No post sent.")
+        return
 
     posted = load_posted()
     available = [p for p in ALL_POSTS if p not in posted]
@@ -450,6 +476,7 @@ def main():
     if status in (200, 201):
         posted.append(post_text)
         save_posted(posted)
+        record_post_time()
         preview = post_text[:80].replace("\n", " ")
         print(f"[POSTED] {preview}...")
     else:
