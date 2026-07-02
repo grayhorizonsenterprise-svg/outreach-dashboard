@@ -38,6 +38,16 @@ SEARCH_TERMS = [
     "property management automation",
     "HVAC software automation",
     "contractor CRM setup",
+    "Vapi voice agent",
+    "AI voice agent setup",
+    "GoHighLevel setup",
+    "GoHighLevel expert",
+    "GHL workflow",
+    "AI receptionist",
+    "small business CRM setup",
+    "automation consultant",
+    "n8n automation",
+    "Make.com automation",
 ]
 
 RSS_BASE = "https://www.upwork.com/ab/feed/jobs/rss"
@@ -61,76 +71,65 @@ BLOCK_TERMS = [
 
 PROPOSAL_TEMPLATES = {
     "automation": """\
-Hey,
+I build this exact system for service businesses and I want to ask one question before pitching anything.
 
-I saw you're looking to automate [SPECIFIC PAIN FROM LISTING].
+When someone fills out your form or calls after hours right now, what actually happens to that inquiry?
 
-That's exactly what we do at Gray Horizons Enterprise. We've built automation systems for local service businesses — HVAC, HOA management, contractors, dental — that handle lead capture, follow-up, and appointment booking without manual effort.
+I ask because 88% of businesses have automation tools. Only 6% have them set up in a way that actually converts. The gap is almost always in what happens in the first 5 minutes after a lead comes in.
 
-Here's what I'd set up for you:
+I've built full intake and follow-up systems inside GoHighLevel for contractors, HVAC companies, and home services firms. Instant SMS response, 14-day automated follow-up, AI voice agent for after-hours calls, pipeline tracking. Deployed in under a week.
 
-- Missed call / after-hours lead capture with instant SMS response
-- Automated follow-up sequences (day 2, day 5, day 8 after inquiry)
-- Calendar booking integrated directly into your workflow
-- CRM pipeline tracking so nothing falls through
-
-Setup takes 5-7 days. You get a 7-day free trial before committing.
-
-Happy to jump on a 20-minute call to walk through exactly what this looks like for your business.
+Before I tell you what I'd build, I want to understand where yours is breaking down right now. What does your current follow-up process look like from the moment a lead comes in?
 
 Gray Horizons Enterprise
 https://calendly.com/grayhorizonsenterprise/30min""",
 
     "crm": """\
-Hey,
+I've built GHL from scratch for local service businesses and I want to understand your situation before suggesting anything.
 
-Saw your post about setting up a CRM / lead pipeline.
+Most owners I talk to have the same issue: GHL is paid for, some things are set up, but leads are still falling through because the follow-up sequence was never fully built or the pipeline stages don't match how they actually sell.
 
-I specialize in this for local service businesses. Most of the clients I work with had the same situation: leads coming in but no consistent system to track, follow up, or close them.
+One contractor I worked with had 60 inbound leads last month. Followed up on 38. The other 22 went to voicemail and were never contacted again. He had no idea. We fixed the follow-up system in 5 days and 4 of those 22 converted in week two.
 
-Here's how I typically set it up in 5-7 days:
-
-- Full pipeline build in Go High Level (or your preferred CRM)
-- Automated follow-up sequences tied to each stage
-- Lead source tracking so you know what's working
-- SMS and email touchpoints so no lead goes cold
-
-I offer a 7-day free trial so you can see it running before you pay anything.
-
-Would a 20-minute call work to go over the details?
+Before I walk you through what I'd build, what does your current GHL setup actually handle end to end without anyone touching it?
 
 Gray Horizons Enterprise
 https://calendly.com/grayhorizonsenterprise/30min""",
 
     "hoa": """\
-Hey,
+I've built violation tracking and homeowner communication automation specifically for HOA management firms and I want to ask one thing before anything else.
 
-Your post caught my eye — we've built automation systems specifically for HOA management companies.
+When a homeowner submits a violation or complaint right now, what does your team's process look like from that first report all the way to resolution? Is there a system tracking each step or is it mostly email threads?
 
-The two things I see constantly:
+I ask because that handoff is where most HOA teams lose time and create liability. We've built systems that lock the full violation lifecycle down automatically: intake, board notification, status tracking, homeowner updates, resolution logging. Deployed in about a week.
 
-1. Violation tracking going into spreadsheets and getting lost between report, board review, and resolution
-2. Homeowner communication done manually when it should be automated
+Worth a 10-minute call to see if it maps to what you're dealing with?
 
-We fix both. Automated violation lifecycle tracking, homeowner notifications, and follow-up sequences — all set up in about a week.
+Gray Horizons Enterprise
+https://calendly.com/grayhorizonsenterprise/30min""",
 
-Free 7-day trial. No upfront commitment.
+    "voice": """\
+I build AI voice agents for inbound call handling and I want to understand your situation before assuming anything.
 
-Happy to show you exactly what it looks like.
+Quick question: when someone calls your business after 5pm or on a weekend right now, what happens to that call?
+
+I've deployed voice agents for HVAC companies, roofing contractors, and service businesses that answer every call, qualify the lead in 90 seconds, and text a booking link automatically. One roofing client booked 11 emergency jobs overnight in the first storm season after launch. Owner woke up to a full calendar.
+
+The system runs 24/7 without anyone on staff. Before I walk through what I'd build for you, what does your current after-hours call handling look like?
 
 Gray Horizons Enterprise
 https://calendly.com/grayhorizonsenterprise/30min""",
 
     "general": """\
-Hey,
+I want to ask one question before telling you anything about what I do.
 
-Saw your post and wanted to reach out — this is exactly the kind of work we do.
+When your team gets a new inbound lead right now, what happens to it in the first 5 minutes? And when did you last manually verify that every automation you have running is actually working?
 
-We build automation systems for local service businesses that handle lead capture, follow-up, and workflow management so the team can focus on delivering the work, not chasing it.
+I ask because 88% of businesses have AI or automation tools. Only 6% have them set up in a way that's actually converting. The gap is almost always silent: tools running, leads falling through, nobody noticing.
 
-Setup time is typically 5-7 days. I offer a free 7-day trial so you can see it working before committing to anything.
+I've built full automation stacks for contractors, HVAC companies, HOA management firms, and service businesses. GoHighLevel, AI voice agents, 14-day follow-up sequences, pipeline tracking. Deployed in under a week.
 
-Can we jump on a quick call to go over your specific situation?
+What does your current setup actually handle without anyone touching it?
 
 Gray Horizons Enterprise
 https://calendly.com/grayhorizonsenterprise/30min""",
@@ -140,6 +139,8 @@ def _pick_template(title: str, description: str) -> str:
     text = (title + " " + description).lower()
     if any(k in text for k in ["hoa", "homeowner", "community association", "property manag"]):
         return PROPOSAL_TEMPLATES["hoa"]
+    if any(k in text for k in ["voice agent", "vapi", "ai receptionist", "answering", "inbound call", "phone"]):
+        return PROPOSAL_TEMPLATES["voice"]
     if any(k in text for k in ["crm", "pipeline", "go high level", "ghl", "contact manag"]):
         return PROPOSAL_TEMPLATES["crm"]
     if any(k in text for k in ["automat", "workflow", "zapier", "make.com", "n8n", "follow.?up"]):
