@@ -61,6 +61,52 @@ GUMROAD_LINK      = GUMROAD_SIGNALS
 # ── Content Pools ──────────────────────────────────────────────────────────────
 
 GHL_POSTS = [
+    f"""76% of CEOs now have a Chief AI Officer on staff.
+
+Two years ago that number was 26%.
+
+That shift happened in 24 months.
+
+Most local service businesses cannot afford to hire one. A full-time AI director runs $120,000 to $180,000 a year.
+
+I build and manage the same system for contractors, HVAC owners, roofers, and plumbers at $750 a month.
+
+One client. One month. 14 jobs closed from leads that would have been lost without the automation in place.
+
+Is your business running any AI systems right now, or is it still fully manual?
+
+{FIVERR_GHL}""",
+
+    f"""88% of businesses are using AI right now.
+
+Only 6% are actually doing it well.
+
+That gap is where most of the money is being lost.
+
+The other 82% have tools running. Automations set up. CRMs paid for. And none of it is working the way it should.
+
+Most owners do not know what is silently failing in their own system. Leads going cold. Follow-ups not firing. Calls going to voicemail and nobody noticing.
+
+When did you last manually verify that every automation in your business is actually working?
+
+{FIVERR_GHL}""",
+
+    f"""Remember when Excel became the baseline?
+
+The people who learned it early moved into better roles, ran tighter operations, and made more money.
+
+The ones who resisted got left behind. Not fired. Just outpaced.
+
+The same thing is happening right now with AI in local service businesses.
+
+The HVAC company with automated intake and follow-up is booking jobs at 2am while the competitor sleeps. The roofing contractor with an AI voice agent is recovering after-hours calls the other guy never knew he missed.
+
+This is the Excel moment for your industry.
+
+Are you on the early side of it or still watching from the outside?
+
+{FIVERR_GHL}""",
+
     f"""This HVAC owner was spending $4,000 a month on Google Ads and closing 9 out of 48 leads every month.
 
 Same leads for three years. He thought it was a traffic problem.
@@ -143,6 +189,53 @@ How long does it take your team to respond to a new lead that just came in?
 ]
 
 AI_SERVICES_POSTS = [
+    f"""I am not a software vendor.
+
+I am not selling you a tool or a subscription.
+
+What I do is come into a local service business, map every process that is bleeding time or revenue, and build the AI system that fixes it. Then I manage it every month so it keeps working.
+
+That is what a Head of AI does. Most companies that need one cannot afford to hire one full-time.
+
+I work with contractors, HVAC owners, roofers, and plumbers as a fractional partner at a fraction of what a full-time hire costs.
+
+If you run a service business and you have never had someone audit your intake, follow-up, and scheduling for gaps, that audit is free.
+
+Book 20 minutes and I will tell you exactly where you are losing revenue right now.
+
+{FIVERR_VOICE}""",
+
+    f"""A contractor called me last month after his GHL subscription renewing for the 8th time.
+
+He had never set up a single automation.
+
+$297 a month for 8 months. $2,376 spent. Zero workflows running.
+
+Leads were going to voicemail. Follow-ups were manual and inconsistent. Calendar was managed in a Notes app on his phone.
+
+We built the full system in 5 days. Instant SMS on every form. Missed call text-back in under 10 seconds. 7-touch follow-up over 14 days.
+
+First month: 14 jobs closed from leads he had no system to track before.
+
+Are you paying for tools that are not actually working for you?
+
+{FIVERR_GHL}""",
+
+    f"""The four questions I ask every service business owner before I build anything:
+
+What happens the second someone fills out your form?
+How many times does your team follow up before they stop?
+When did you last call a new lead back in under 5 minutes?
+Do you have any automations running right now that you have not manually checked in 30 days?
+
+The answers tell me where the revenue is leaking.
+
+Nine times out of ten it is not the leads. It is what happens after the lead comes in.
+
+What does your answer to question four look like right now?
+
+{FIVERR_LEAD}""",
+
     f"""An HVAC company was missing 14 calls a week and nobody had done the math on what that actually cost them.
 
 Average job value: $1,200. If 30% of those calls would have booked, that is $5,040 a week going to voicemail.

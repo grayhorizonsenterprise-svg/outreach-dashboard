@@ -903,51 +903,75 @@ When everything aligns, the next move is usually obvious.
 
 # GHL / AI automation posts — text ONLY, never paired with a trading chart image
 AUTOMATION_POSTS = [
-    f"""Automation workflow live inside GoHighLevel.
+    f"""88% of businesses use AI. 6% do it well.
 
-Lead submits form. Instant SMS fires. 7-touch sequence begins automatically.
+The other 82%: tools running, nothing working.
 
-No manual steps. Zero missed leads.
+Silent failures. Leads going cold. Follow-ups not firing.
 
-What's your current follow-up rate?
+When did you last verify your automations are actually working?
 
-{GUMROAD_LINK}""",
+{BOOK_CALL}""",
 
-    f"""AI voice agent confirmed the booking. No human involved.
+    f"""76% of enterprise CEOs now have a Chief AI Officer.
 
-Caller said they need HVAC repair. Agent collected name, address, issue, preferred time.
+Two years ago: 26%.
 
-Job booked. Calendar updated. Owner notified.
+Local service businesses can't afford the $150K hire.
 
-This runs 24/7.
+I do it for $750/month. GHL, AI voice agents, full intake automation.
 
-{GUMROAD_LINK}""",
+{BOOK_CALL}""",
 
-    f"""GHL dashboard — live pipeline data for a home services client.
+    f"""This is the Excel moment.
 
-Every lead tracked. Every stage visible. Revenue value by opportunity.
+Early movers built advantage. Late movers got outpaced.
 
-This is what running a business with a real CRM looks like.
+The HVAC company with AI intake is booking at 2am while the competitor sleeps.
+
+Which side are you on?
+
+{BOOK_CALL}""",
+
+    f"""Do you have automations running right now you haven't manually checked in 30 days?
+
+Most owners can't answer that confidently.
+
+That's where revenue leaks.
+
+Free 20-min audit. I'll tell you exactly what's broken.
+
+{BOOK_CALL}""",
+
+    f"""GHL dashboard live. Pipeline data for a home services client.
+
+Every lead tracked. Every stage visible. Revenue value per opportunity.
+
+This is what the system looks like when it's actually built right.
 
 What are you using to track your pipeline?
 
-{GUMROAD_LINK}""",
+{BOOK_CALL}""",
 
-    f"""Contractor intake system — both sides live.
+    f"""Contractor. 60 inbound leads last month. Followed up on 38.
 
-Client submits. Contractor gets notified instantly. No phone tag. No lost jobs.
+22 went to voicemail and were never contacted again. He had no idea.
 
-Built and deployed in under a week.
+GHL sequence auto-follows for 14 days. 4 of those 22 converted in week two.
 
-{GUMROAD_LINK}""",
+How many leads did your team write off last month?
 
-    f"""Dashboard screenshot — outreach system live and running.
+{BOOK_CALL}""",
 
-Lead status, pipeline value, outreach history — one screen.
+    f"""AI voice agent. No human involved.
 
-Built for scale. Runs automatically.
+Caller: needs HVAC repair. Agent: collects name, address, issue, preferred time. Books the job.
 
-{GUMROAD_LINK}""",
+This runs nights, weekends, holidays.
+
+24/7 intake at a fraction of the cost of a receptionist.
+
+{BOOK_CALL}""",
 ]
 
 ALL_POSTS = {
