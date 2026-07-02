@@ -259,6 +259,7 @@
     <button class="tab-btn" onclick="switchTab('applications')">📋 Applications</button>
     <button class="tab-btn" onclick="switchTab('profile')">⚙️ Profile</button>
     <button class="tab-btn" onclick="switchTab('alerts')" id="alertsTabBtn">🔔 Alerts <span id="alertBadge" style="display:none;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span></button>
+    <button class="tab-btn" onclick="switchTab('apply')" style="color:var(--green);font-weight:700;">✅ Apply Now</button>
   </div>
 
   <!-- ── GRANTS TAB ── -->
@@ -403,6 +404,78 @@
           <tbody id="twitterBody"><tr class="loading-row"><td colspan="2"><span class="spinner"></span>Loading…</td></tr></tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <!-- ── APPLY NOW TAB ── -->
+  <div class="tab-panel" id="tab-apply">
+    <div style="background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.25);border-radius:10px;padding:16px 20px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--green);margin-bottom:2px;">GHE Grant Application Portal</div>
+        <div style="font-size:12px;color:var(--muted);">Your personal portal — AI writes answers question by question. Copy and paste directly into each grant form.</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="https://distinguished-consideration-production-8467.up.railway.app/u/283cdf6935d7426a" target="_blank" class="btn-primary" style="padding:8px 16px;font-size:13px;font-weight:700;border-radius:6px;text-decoration:none;display:inline-block;">Open Full Portal ↗</a>
+        <button class="btn-secondary btn-sm" onclick="document.getElementById('portal-frame').src=document.getElementById('portal-frame').src">↻ Reload</button>
+      </div>
+    </div>
+
+    <!-- 8 Grant Quick Links -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px;">
+      <a href="https://helloalice.com/grants" target="_blank" style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-decoration:none;display:block;">
+        <div style="font-size:10px;color:var(--green);font-weight:700;margin-bottom:2px;">FASTEST — $500</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;">Hello Alice Micro-Grant</div>
+        <div style="font-size:11px;color:var(--muted);">2-4 weeks</div>
+      </a>
+      <a href="https://naacp.org/find-resources/grants/keep-it-local-business-fund" target="_blank" style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-decoration:none;display:block;">
+        <div style="font-size:10px;color:var(--green);font-weight:700;margin-bottom:2px;">FAST — $5,000</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;">NAACP Keep It Local</div>
+        <div style="font-size:11px;color:var(--muted);">3-6 weeks</div>
+      </a>
+      <a href="https://sogalventures.com/grants/" target="_blank" style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-decoration:none;display:block;">
+        <div style="font-size:10px;color:var(--green);font-weight:700;margin-bottom:2px;">FAST — $5K-$10K</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;">SoGal Black Founder</div>
+        <div style="font-size:11px;color:var(--muted);">4-8 weeks, rolling</div>
+      </a>
+      <a href="https://helloalice.com/grants" target="_blank" style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-decoration:none;display:block;">
+        <div style="font-size:10px;color:var(--green);font-weight:700;margin-bottom:2px;">FAST — $10,000</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;">Hello Alice Black Business</div>
+        <div style="font-size:11px;color:var(--muted);">4-8 weeks</div>
+      </a>
+      <a href="https://digitalreadysmallbusiness.verizon.com" target="_blank" style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-decoration:none;display:block;">
+        <div style="font-size:10px;color:var(--green);font-weight:700;margin-bottom:2px;">FAST — $10,000</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;">Verizon Digital Ready</div>
+        <div style="font-size:11px;color:var(--muted);">Complete courses first</div>
+      </a>
+      <a href="https://helloalice.com/grants" target="_blank" style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-decoration:none;display:block;">
+        <div style="font-size:10px;color:var(--yellow);font-weight:700;margin-bottom:2px;">MEDIUM — $25,000</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;">Hello Alice Growth Fund</div>
+        <div style="font-size:11px;color:var(--muted);">6-10 weeks</div>
+      </a>
+      <a href="https://calosba.ca.gov" target="_blank" style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-decoration:none;display:block;">
+        <div style="font-size:10px;color:var(--yellow);font-weight:700;margin-bottom:2px;">MEDIUM — $75,000</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;">CA CEDAP</div>
+        <div style="font-size:11px;color:var(--muted);">CA only, 6-12 weeks</div>
+      </a>
+      <a href="https://seedfund.nsf.gov" target="_blank" style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-decoration:none;display:block;">
+        <div style="font-size:10px;color:var(--purple);font-weight:700;margin-bottom:2px;">LONG — $275,000</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;">NSF SBIR Phase I</div>
+        <div style="font-size:11px;color:var(--muted);">Register sam.gov first</div>
+      </a>
+    </div>
+
+    <!-- Embedded portal iframe -->
+    <div style="background:var(--s1);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;font-weight:600;color:var(--muted);">MY GRANT PORTAL — AI-Written Applications</span>
+        <a href="https://distinguished-consideration-production-8467.up.railway.app/u/283cdf6935d7426a" target="_blank" style="font-size:11px;color:var(--blue);">Open in new tab ↗</a>
+      </div>
+      <iframe
+        id="portal-frame"
+        src="https://distinguished-consideration-production-8467.up.railway.app/u/283cdf6935d7426a"
+        style="width:100%;height:700px;border:none;display:block;"
+        allow="clipboard-write"
+      ></iframe>
     </div>
   </div>
 
@@ -565,7 +638,7 @@ function showToast(msg, type = 'success') {
 
 function switchTab(id) {
   document.querySelectorAll('.tab-btn').forEach((b,i) => {
-    const ids = ['grants','applications','profile','alerts'];
+    const ids = ['grants','applications','profile','alerts','apply'];
     b.classList.toggle('active', ids[i] === id);
   });
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
