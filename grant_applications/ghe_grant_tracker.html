@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GHE Grant Tracker</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;color:#e2e8f0;font-family:Arial,sans-serif;min-height:100vh}
+header{background:#1e293b;border-bottom:1px solid #334155;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+header h1{font-size:18px;color:#38bdf8}
+header span{color:#64748b;font-size:13px}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:20px 24px}
+.stat{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:16px;text-align:center}
+.stat .num{font-size:28px;font-weight:bold;color:#38bdf8}
+.stat .lbl{font-size:12px;color:#64748b;margin-top:4px}
+.grants{padding:0 24px 40px}
+.grant-card{background:#1e293b;border:1px solid #334155;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.grant-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:12px}
+.grant-header:hover{background:#263045}
+.grant-title{font-size:15px;font-weight:bold;color:#e2e8f0;flex:1}
+.amount{background:#7c3aed;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;white-space:nowrap}
+.amount.green{background:#16a34a}
+.amount.amber{background:#d97706}
+.status-row{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:bold;cursor:pointer;border:none;transition:all .15s}
+.badge.not-started{background:#1e293b;color:#64748b;border:1px solid #475569}
+.badge.applied{background:#1d4ed8;color:#fff}
+.badge.under-review{background:#d97706;color:#fff}
+.badge.awarded{background:#16a34a;color:#fff}
+.badge.rejected{background:#dc2626;color:#fff}
+.badge.active{box-shadow:0 0 0 2px #38bdf8}
+.grant-body{display:none;padding:20px;border-top:1px solid #334155}
+.grant-body.open{display:block}
+.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.meta-item{background:#0f172a;border-radius:6px;padding:12px}
+.meta-item .key{font-size:11px;color:#64748b;margin-bottom:4px}
+.meta-item .val{font-size:13px;color:#e2e8f0;font-weight:bold}
+.section-title{font-size:12px;color:#38bdf8;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;margin-top:16px}
+.narrative{background:#0f172a;border-radius:6px;padding:14px;font-size:13px;color:#cbd5e1;line-height:1.7;white-space:pre-wrap;position:relative}
+.copy-btn{position:absolute;top:8px;right:8px;background:#334155;border:none;color:#94a3b8;padding:4px 10px;border-radius:4px;font-size:11px;cursor:pointer;transition:all .15s}
+.copy-btn:hover{background:#38bdf8;color:#0f172a}
+.apply-btn{display:inline-block;background:#38bdf8;color:#0f172a;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:13px;margin-top:16px}
+.apply-btn:hover{background:#7dd3fc}
+.notes-area{width:100%;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#e2e8f0;padding:10px;font-size:13px;margin-top:8px;min-height:60px;resize:vertical}
+.save-note{background:#334155;border:none;color:#94a3b8;padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer;margin-top:6px}
+.save-note:hover{background:#475569}
+.chevron{color:#64748b;font-size:18px;transition:transform .2s}
+.chevron.open{transform:rotate(180deg)}
+.priority{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:bold}
+.priority.high{background:#fef3c7;color:#92400e}
+.priority.medium{background:#dbeafe;color:#1e40af}
+.priority.low{background:#f0fdf4;color:#166534}
+.today-actions{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:16px 20px;margin:0 24px 20px;font-size:13px}
+.today-actions h3{color:#93c5fd;margin-bottom:10px;font-size:14px}
+.today-actions ol{padding-left:18px;color:#bfdbfe;line-height:2}
+.today-actions a{color:#60a5fa}
+@media(max-width:600px){.summary{grid-template-columns:repeat(2,1fr)}.meta{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>GHE Grant Application Tracker</h1>
+  <span id="total-potential">Total potential: $0</span>
+</header>
+
+<div class="today-actions">
+  <h3>DO THESE TODAY</h3>
+  <ol>
+    <li>Complete 2-3 free courses at <a href="https://digitalreadysmallbusiness.verizon.com" target="_blank">Verizon Digital Ready</a> — unlocks $10K grant</li>
+    <li>Start Hello Alice application at <a href="https://helloalice.com/grants" target="_blank">helloalice.com/grants</a> — copy narratives below</li>
+    <li>Register at <a href="https://sam.gov" target="_blank">sam.gov</a> — required for NSF $275K (takes 2-4 weeks to process)</li>
+  </ol>
+</div>
+
+<div class="summary">
+  <div class="stat"><div class="num" id="s-total">5</div><div class="lbl">Total Grants</div></div>
+  <div class="stat"><div class="num" id="s-applied">0</div><div class="lbl">Applied</div></div>
+  <div class="stat"><div class="num" id="s-pending">0</div><div class="lbl">Under Review</div></div>
+  <div class="stat"><div class="num" id="s-awarded" style="color:#22c55e">$0</div><div class="lbl">Awarded</div></div>
+</div>
+
+<div class="grants" id="grants-list"></div>
+
+<script>
+const GRANTS = [
+  {
+    id: "hello-alice",
+    title: "Hello Alice — Black Business Owners Grant",
+    amount: "$10,000",
+    amountClass: "green",
+    priority: "HIGH",
+    priorityClass: "high",
+    url: "https://helloalice.com/grants",
+    timeline: "4-8 weeks",
+    ownerPay: "Unrestricted — pay yourself whatever the business needs",
+    ownerTitle: "Founder / CEO",
+    ownerMonthly: "~$2,000-$3,000/mo for 3-4 months",
+    difficulty: "LOW",
+    sam: false,
+    sections: [
+      {
+        title: "BUSINESS DESCRIPTION — paste this",
+        body: `Gray Horizons Enterprise is a California-based AI automation company founded to solve one of the most expensive and invisible problems facing local service businesses: the gap between a lead coming in and a business actually responding.
+
+The average contractor, HVAC company, or roofing firm loses 30 to 40 percent of their inbound leads to slow follow-up, missed calls, and manual processes that break down after hours. Most of these businesses know something is wrong. Almost none have the technical resources to fix it.
+
+Gray Horizons Enterprise builds and manages the full AI infrastructure that closes that gap: automated CRM workflows inside GoHighLevel, AI voice agents that answer and book inbound calls 24 hours a day, and intake systems that follow up with every lead for 14 days without any human intervention.
+
+We also operate the Edge Engine, a proprietary AI-powered market intelligence platform scoring market setups 0-100 using RSI divergence, volume anomaly detection, and congressional disclosure tracking.
+
+Both product lines exist for one reason: intelligent automation creates leverage that underserved business owners have been priced out of — until now.`
+      },
+      {
+        title: "HOW FUNDS WILL BE USED — paste this",
+        body: `$3,500 — Platform infrastructure (GoHighLevel, Railway hosting, AI API costs)
+$2,500 — Sales and marketing to close first three paying retainer clients at $750/month
+$2,000 — Founder living wage during the 60-day pre-revenue runway
+$1,500 — Legal and business formation (contracts, LLC, EIN)
+$500 — Professional development
+
+This funding covers the 60-day runway needed to close the first client contract, at which point the business becomes self-sustaining on recurring revenue.`
+      },
+      {
+        title: "COMMUNITY IMPACT — paste this",
+        body: `Gray Horizons Enterprise serves local service business owners — disproportionately minority-owned, working-class operations started from scratch without investment capital or enterprise tools.
+
+When a Black-owned plumbing company affords an AI voice agent that captures every after-hours call, they stop losing jobs to competitors who had the money to hire a full-time receptionist. When a minority-owned roofing contractor gets a CRM that follows up automatically, they compete on equal footing for the first time.
+
+Every client we serve creates a visible ripple: more jobs booked, more revenue generated, more stability for the owner and their family.`
+      },
+      {
+        title: "FOUNDER STORY — paste if asked",
+        body: `I started Gray Horizons Enterprise because I watched the technology divide play out in real time. Businesses that could afford enterprise tools scaled. The ones that could not, did not. The tools existed. The access did not.
+
+I spent years learning GoHighLevel, AI voice agents, market intelligence systems, and automation engineering — not to work for a tech company but to bring those capabilities to business owners who could not walk into a bank and get a loan to hire an AI team.
+
+This is a business built on the belief that intelligence and access to the right tools should not be reserved for people who already have capital.`
+      }
+    ]
+  },
+  {
+    id: "verizon",
+    title: "Verizon Small Business Digital Ready Grant",
+    amount: "$10,000",
+    amountClass: "green",
+    priority: "HIGH",
+    priorityClass: "high",
+    url: "https://digitalreadysmallbusiness.verizon.com",
+    timeline: "4-8 weeks after course completion",
+    ownerPay: "Unrestricted cash award",
+    ownerTitle: "Founder / Owner",
+    ownerMonthly: "~$2,000-$3,000/mo for 3-4 months",
+    difficulty: "LOW",
+    sam: false,
+    sections: [
+      {
+        title: "STEP 1 — COMPLETE FREE COURSES FIRST (required to unlock grant)",
+        body: `1. Go to digitalreadysmallbusiness.verizon.com
+2. Create a free account
+3. Complete at least 2-3 courses (Digital Marketing, Business Finance, or AI for Small Business)
+4. Screenshot your completion certificates
+5. Grant application unlocks after course completion
+6. Apply within 24 hours of completing courses — grant cycles fill fast`
+      },
+      {
+        title: "BUSINESS DESCRIPTION — paste this",
+        body: `Gray Horizons Enterprise is a California-based AI automation company serving local service businesses and individual investors. We build and manage AI voice agents, CRM automation workflows, and market intelligence systems for contractors, HVAC companies, roofers, and plumbers who need enterprise-grade technology at small business prices.
+
+Our flagship service is a fully managed automation stack built inside GoHighLevel CRM: instant SMS response to every inbound lead, AI voice agents that answer and book calls 24/7, and 14-day follow-up sequences that run without any human involvement.
+
+The business is founder-operated, Black-owned, and based in California. We serve businesses priced out of AI adoption — and prove that with the right system, a one-person operation can outperform a team.`
+      },
+      {
+        title: "HOW THE $10,000 WILL BE USED — paste this",
+        body: `$3,564 — GoHighLevel CRM platform (12 months at $297/month)
+$2,400 — AI API costs (Anthropic, Vapi voice agent, Twilio SMS)
+$1,200 — Railway hosting and deployment infrastructure
+$1,500 — Content and marketing for client acquisition
+$836 — Legal (contracts, service agreements)
+$500 — Contingency`
+      }
+    ]
+  },
+  {
+    id: "cedap",
+    title: "California CEDAP — Capital and Tech Access Grant",
+    amount: "Up to $75,000",
+    amountClass: "amber",
+    priority: "MEDIUM",
+    priorityClass: "medium",
+    url: "https://calosba.ca.gov",
+    timeline: "6-12 weeks",
+    ownerPay: "YES — as project labor. Budget $333/day for 90 days = $30,000",
+    ownerTitle: "Founder / Principal Operator",
+    ownerMonthly: "~$10,000/mo for 3 months (project labor rate)",
+    difficulty: "MEDIUM",
+    sam: false,
+    sections: [
+      {
+        title: "PROJECT DESCRIPTION — paste this",
+        body: `Gray Horizons Enterprise is requesting CEDAP funding to accelerate the deployment of AI automation systems for underserved local service businesses in California's Inland Empire region.
+
+The project has two components. First: client acquisition and service delivery infrastructure. GHE has built a complete AI automation stack including GoHighLevel CRM workflows, AI voice agents for inbound call handling, and automated lead nurture sequences. The CEDAP grant funds the critical 90-day window to close the first three paying retainer clients, document outcomes, and establish case studies needed to scale.
+
+Second: community impact. The businesses we serve are disproportionately minority-owned, working-class operations in trades industries — HVAC, roofing, plumbing, contracting, landscaping. These are the businesses keeping Inland Empire communities running that are being left behind by a technology shift assuming enterprise-level resources.
+
+GHE brings the same AI capabilities enterprise companies deploy at $150,000/year in salary costs, for $750/month. The CEDAP grant accelerates proving this model works — then replicating it across the Inland Empire small business ecosystem.`
+      },
+      {
+        title: "BUDGET NARRATIVE — paste this",
+        body: `Founder/operator labor:  $30,000  (90 days full-time at $333/day — building and managing AI systems for clients)
+Platform subscriptions:  $8,000   (GoHighLevel, Railway, Anthropic, Vapi, SendGrid — 12 months)
+Sales and marketing:     $12,000  (lead generation, demo production, outreach campaigns)
+Legal and compliance:    $5,000   (contracts, LLC formalization, business licensing)
+Equipment and software:  $5,000   (demo recording setup, design tools)
+Contingency:             $5,000
+TOTAL REQUESTED:         $65,000`
+      }
+    ]
+  },
+  {
+    id: "google-bff",
+    title: "Google for Startups — Black Founders Fund",
+    amount: "$50K-$100K",
+    amountClass: "amber",
+    priority: "MEDIUM",
+    priorityClass: "medium",
+    url: "https://startup.google.com/programs/black-founders-fund/",
+    timeline: "8-16 weeks (cohort-based — monitor for open dates)",
+    ownerPay: "YES — unrestricted cash, no reporting required",
+    ownerTitle: "Founder / CEO",
+    ownerMonthly: "$5,000-$8,000/mo for 12 months (from $100K award)",
+    difficulty: "MEDIUM-HIGH",
+    sam: false,
+    sections: [
+      {
+        title: "WHAT DOES YOUR COMPANY DO — paste this",
+        body: `Gray Horizons Enterprise builds AI automation infrastructure for two underserved markets simultaneously.
+
+The first is local service businesses — contractors, HVAC companies, roofers, plumbers, and landscapers — who are hemorrhaging revenue to slow response times, missed calls, and broken follow-up processes. We build the complete automation stack: GoHighLevel CRM workflows, AI voice agents answering and booking inbound calls 24/7, and 14-day lead nurture sequences with zero human intervention. These are enterprise-grade systems for businesses that could never afford an enterprise contract.
+
+The second is individual investors who want institutional-grade signal intelligence. The Edge Engine scores stock and crypto setups 0-100 using RSI divergence, volume anomaly detection, EMA crossover confirmation, and congressional disclosure tracking — with Kelly Criterion position sizing built in.
+
+The market opportunity: 88% of businesses have adopted AI tools. Only 6% are using them effectively. That gap is where Gray Horizons Enterprise operates.`
+      },
+      {
+        title: "WHY DO YOU NEED FUNDING — paste this",
+        body: `Gray Horizons Enterprise does not have a product problem. The systems are built, tested, and ready to deploy. The constraint is runway.
+
+Every dollar spent on platform subscriptions, hosting, and API costs comes directly from the founder. No investor. No safety net.
+
+The funding solves this three ways: eliminates financial pressure that compresses the sales cycle; funds production of assets that close deals (demo videos, case studies); and allows the founder to pay a living wage during the 90 days to reach the first milestone of 8 retainer clients at $750/month — $6,000 MRR and self-sustaining.
+
+This is a bridge, not a crutch. The business model works. The technology works. The market is real.`
+      },
+      {
+        title: "UNFAIR ADVANTAGE — paste this",
+        body: `The unfair advantage is integration. Most AI automation companies pick a lane: CRM, voice AI, trading tools, or content generation. Gray Horizons Enterprise built across all four because one founder, unencumbered by committee decisions or departmental budgets, iterated at the speed of the technology itself.
+
+The second unfair advantage is positioning. Most AI companies sell to venture-backed startups or enterprise buyers. Gray Horizons Enterprise targets the 30 million US small businesses that have been told AI is not for them. The beachhead is local service businesses — a market with massive, recurring, cash-generating contracts that no major AI company is focused on closing.
+
+We are building where the competition is not.`
+      }
+    ]
+  },
+  {
+    id: "nsf-sbir",
+    title: "NSF SBIR Phase I — America's Seed Fund",
+    amount: "$275,000",
+    amountClass: "amber",
+    priority: "HIGH",
+    priorityClass: "high",
+    url: "https://seedfund.nsf.gov",
+    timeline: "9-12 months (start SAM.gov registration TODAY)",
+    ownerPay: "YES — PI Salary is a REQUIRED budget line item: $85,000/year = $7,083/month",
+    ownerTitle: "Principal Investigator (PI)",
+    ownerMonthly: "$7,083/month for 12 months — built into the budget",
+    difficulty: "HIGH — worth every hour",
+    sam: true,
+    sections: [
+      {
+        title: "START HERE — REGISTER AT SAM.GOV TODAY (takes 2-4 weeks to process)",
+        body: `1. Go to sam.gov and click "Register / Get Started"
+2. You need: EIN, legal business name, NAICS code (541512 or 541519), bank account info
+3. Registration is FREE — takes 20 minutes to complete, 2-4 weeks for government to verify
+4. You CANNOT submit any federal grant without an active SAM.gov registration
+5. Start the clock today — this is the only blocker on the $275K`
+      },
+      {
+        title: "PROJECT PITCH — submit to NSF before full proposal",
+        body: `Gray Horizons Enterprise is developing an AI-powered operational intelligence platform that closes the gap between AI adoption and AI effectiveness for small and medium-sized service businesses.
+
+The core problem: 88% of US businesses have adopted AI tools. Only 6% are using them effectively. Small businesses lack the technical infrastructure to translate AI potential into operational outcomes.
+
+The innovation: a proprietary scoring and automation architecture combining conversational AI voice agents, CRM workflow automation, and real-time signal intelligence into a single managed system deployable for any service-sector business in under 7 days. The system includes a novel application of Kelly Criterion position-sizing logic to business lead scoring — ranking inbound leads by conversion probability and automating response priority accordingly.
+
+The market: 33 million US small businesses. Agentic AI market projected at $202 billion by 2026. No current platform delivers a full-stack managed AI OS to businesses under $5M annual revenue at accessible price points.
+
+The ask: NSF SBIR Phase I funding of $275,000 to validate core technical claims, formalize the lead-scoring algorithm, and deploy to a cohort of 25 service businesses with documented outcomes.`
+      },
+      {
+        title: "EMAIL TO NSF PROGRAM OFFICER — send before submitting",
+        body: `Subject: Project Pitch Inquiry — AI Operational Intelligence for Service-Sector SMBs
+
+I am preparing a Phase I SBIR submission for a project developing an AI-powered operational intelligence platform for small and medium-sized service businesses.
+
+The core innovation is a unified system combining probabilistic lead scoring (adapted from Kelly Criterion logic), autonomous AI voice intake, and real-time signal intelligence. The research question: does this system produce statistically measurable improvements in lead conversion rate, response time, and revenue per inbound contact versus manual operations?
+
+Gray Horizons Enterprise is a Black-owned California company with hands-on technical deployment of each component of the proposed system.
+
+I would welcome 20 minutes to discuss fit with current NSF SBIR topic areas before submitting a formal Project Pitch.
+
+Curtis Gray
+Gray Horizons Enterprise
+grayhorizonsenterprise@gmail.com
+grayhorizonsenterprise.com`
+      },
+      {
+        title: "BUDGET SUMMARY — $275,000 OVER 12 MONTHS",
+        body: `PI Salary — Curtis Gray (12 months, 100% effort):  $85,000
+Fringe benefits (15%):                             $12,750
+Subcontractors — ML engineer, data analyst:        $40,000
+Platform infrastructure (GHL, Railway, APIs):      $24,000
+Pilot business stipends (25 x $1,000):             $25,000
+Data collection and analysis:                      $15,000
+Travel (NSF meetings):                              $8,000
+Indirect costs (20%):                              $42,500
+Contingency:                                       $22,750
+TOTAL:                                            $275,000`
+      }
+    ]
+  }
+];
+
+const STATUS_OPTIONS = ["not-started","applied","under-review","awarded","rejected"];
+const STATUS_LABELS  = {"not-started":"Not Started","applied":"Applied","under-review":"Under Review","awarded":"Awarded","rejected":"Rejected"};
+
+function load(id, key, def) {
+  try { return localStorage.getItem(`ghe-grant-${id}-${key}`) || def; } catch(e){ return def; }
+}
+function save(id, key, val) {
+  try { localStorage.setItem(`ghe-grant-${id}-${key}`, val); } catch(e){}
+}
+
+function copyText(el, btn) {
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = "Copied!";
+    btn.style.background = "#22c55e";
+    btn.style.color = "#fff";
+    setTimeout(()=>{ btn.textContent = "Copy"; btn.style.background=""; btn.style.color=""; }, 1500);
+  });
+}
+
+function updateSummary() {
+  let applied=0, review=0, awarded=0, awardedAmt=0;
+  GRANTS.forEach(g => {
+    const s = load(g.id, "status", "not-started");
+    if(s==="applied") applied++;
+    if(s==="under-review") review++;
+    if(s==="awarded") { awarded++; awardedAmt += parseInt(g.amount.replace(/[^0-9]/g,""))||0; }
+  });
+  document.getElementById("s-applied").textContent = applied;
+  document.getElementById("s-pending").textContent = review;
+  document.getElementById("s-awarded").textContent = awarded>0 ? "$"+awardedAmt.toLocaleString() : "$0";
+
+  // total potential
+  let total = 0;
+  GRANTS.forEach(g => { total += parseInt(g.amount.replace(/[^0-9]/g,""))||0; });
+  document.getElementById("total-potential").textContent = "Total potential: $" + total.toLocaleString();
+}
+
+function render() {
+  const container = document.getElementById("grants-list");
+  container.innerHTML = "";
+
+  GRANTS.forEach(g => {
+    const status = load(g.id, "status", "not-started");
+    const notes  = load(g.id, "notes", "");
+    const open   = load(g.id, "open", "false") === "true";
+
+    const card = document.createElement("div");
+    card.className = "grant-card";
+
+    const statusBadges = STATUS_OPTIONS.map(s =>
+      `<button class="badge ${s} ${status===s?'active':''}" onclick="setStatus('${g.id}','${s}',this)" data-s="${s}">${STATUS_LABELS[s]}</button>`
+    ).join("");
+
+    card.innerHTML = `
+      <div class="grant-header" onclick="toggleCard('${g.id}')">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span class="grant-title">${g.title}</span>
+            <span class="amount ${g.amountClass}">${g.amount}</span>
+            <span class="priority ${g.priorityClass}">${g.priority} PRIORITY</span>
+            ${g.sam ? '<span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:bold;">SAM.gov required</span>' : ''}
+          </div>
+          <div class="status-row" onclick="event.stopPropagation()">${statusBadges}</div>
+        </div>
+        <div class="chevron ${open?'open':''}">&#x25BE;</div>
+      </div>
+      <div class="grant-body ${open?'open':''}" id="body-${g.id}">
+        <div class="meta">
+          <div class="meta-item"><div class="key">Timeline</div><div class="val">${g.timeline}</div></div>
+          <div class="meta-item"><div class="key">Your Title (for application)</div><div class="val">${g.ownerTitle}</div></div>
+          <div class="meta-item"><div class="key">Owner Pay Allowed</div><div class="val" style="color:#22c55e">${g.ownerMonthly}</div></div>
+        </div>
+        <div style="background:#0f172a;border-left:3px solid #22c55e;padding:10px 14px;border-radius:0 6px 6px 0;font-size:13px;color:#86efac;margin-bottom:8px">
+          <strong>Owner Pay Rule:</strong> ${g.ownerPay}
+        </div>
+        ${g.sections.map((sec,i) => `
+          <div class="section-title">${sec.title}</div>
+          <div style="position:relative">
+            <div class="narrative" id="narr-${g.id}-${i}">${sec.body}</div>
+            <button class="copy-btn" onclick="copyText(document.getElementById('narr-${g.id}-${i}'),this)">Copy</button>
+          </div>
+        `).join("")}
+        <div class="section-title" style="margin-top:20px">NOTES / TRACKING</div>
+        <textarea class="notes-area" id="notes-${g.id}" placeholder="Paste confirmation number, submission date, portal username...">${notes}</textarea>
+        <button class="save-note" onclick="saveNotes('${g.id}')">Save Notes</button>
+        <br>
+        <a class="apply-btn" href="${g.url}" target="_blank">Open Application Portal &rarr;</a>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+  updateSummary();
+}
+
+function toggleCard(id) {
+  const body = document.getElementById("body-"+id);
+  const isOpen = body.classList.contains("open");
+  body.classList.toggle("open", !isOpen);
+  save(id, "open", String(!isOpen));
+  body.previousElementSibling.querySelector(".chevron").classList.toggle("open", !isOpen);
+}
+
+function setStatus(id, status, btn) {
+  save(id, "status", status);
+  btn.closest(".status-row").querySelectorAll(".badge").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  updateSummary();
+}
+
+function saveNotes(id) {
+  const val = document.getElementById("notes-"+id).value;
+  save(id, "notes", val);
+  const btn = document.querySelector(`[onclick="saveNotes('${id}')"]`);
+  btn.textContent = "Saved!";
+  btn.style.background = "#16a34a";
+  btn.style.color = "#fff";
+  setTimeout(()=>{ btn.textContent = "Save Notes"; btn.style.background=""; btn.style.color=""; }, 1500);
+}
+
+render();
+</script>
+</body>
+</html>
