@@ -53,6 +53,7 @@ DATA_DIR   = Path(os.path.dirname(os.path.abspath(__file__)))
 POSTED_LOG = DATA_DIR / "twitter_posted.json"
 
 SIGNALS_LINK = os.getenv("SIGNALS_LINK", os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01"))
+BOOK_CALL    = "https://calendly.com/grayhorizonsenterprise/30min"
 GUMROAD_LINK = BOOK_CALL
 WHOP_LINK    = BOOK_CALL
 
