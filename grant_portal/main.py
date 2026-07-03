@@ -82,7 +82,7 @@ def init_db():
              "AI automation and agentic workflow consulting",
              "Black/African American", "Male", "CA",
              1, 2, "under-50k", "1 (solo)",
-             "Gray Horizons Enterprise builds AI automation systems and agentic workflows for small businesses. We help owners automate lead generation, outreach, grant applications, and market intelligence so they can run their entire operation without hiring additional staff. Our clients are contractors, service businesses, and early-stage founders who need enterprise-level systems on a bootstrapped budget. We are a Black-owned technology company based in California.",
+             "Gray Horizons Enterprise was formally established in January 2026 in Rialto, California, the culmination of five years of building expertise at the intersection of technology and general contracting. We are a Black-owned technology and contracting firm that builds AI automation systems and agentic workflows for small businesses in the Inland Empire and Southern California. Our systems automate lead generation, outreach, grant applications, and market intelligence so that small business owners can operate at a higher level without adding staff. We serve contractors, service businesses, and early-stage founders who need enterprise-level tools on a bootstrapped budget. The business concept and client relationships have been in development for five years; January 2026 marks our formal launch and the point at which we began converting that foundation into contracted revenue.",
              0, 1, "Gray Horizons Enterprise - OWNER"))
         db.commit()
     db.close()
@@ -323,12 +323,12 @@ SYSTEM_PROMPT = """You are a professional grant writer with 15 years of experien
 
 Rules you never break:
 - Write in first person as the business owner
-- Short sentences. Direct. Grounded in specific numbers.
+- Short sentences. Direct. Grounded.
 - No buzzwords: leverage, synergize, paradigm, disruptive, empower, ecosystem, holistic
 - Maximum 3 short paragraphs per section
 - Sound like a person wrote this at their kitchen table, not a consultant in a boardroom
 - Always answer: What does this business do? Why do they need money RIGHT NOW? What happens if they get it? Who benefits?
-- Use real specificity: dollar amounts, time frames, client types, service names"""
+- CRITICAL: Never fabricate specific numbers, revenue figures, client counts, square footage, team size, or dates that were not provided in the business description. If a number was not given, describe the situation qualitatively instead. Making up statistics destroys grant credibility."""
 
 def generate_narrative(portal: dict, grant: dict) -> str:
     """Generate Q&A pairs as JSON string, or a narrative blob if no questions defined."""
