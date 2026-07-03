@@ -346,72 +346,94 @@ Winning strategies you always apply:
 - Sound like a person wrote this at a kitchen table, not a consultant in a boardroom.
 - Never use double hyphens. Never use dashes as punctuation substitutes."""
 
+def build_fact_sheet(portal: dict) -> str:
+    """Build a locked fact sheet from only what the user actually provided. No inference."""
+    eth = portal.get("ethnicity", "")
+    minority_line = f"Black/African American owned business" if "black" in eth.lower() else (f"Minority-owned ({eth})" if eth and eth.lower() not in ["white/caucasian", ""] else "")
+    gender = portal.get("gender", "")
+    emp = portal.get("employees", "1 (solo)")
+    revenue = portal.get("revenue_range", "pre-revenue")
+    formation_map = {"0": "Sole proprietor (no LLC or DBA)", "1": "DBA filed", "2": "LLC or corporation"}
+    formation = formation_map.get(str(portal.get("has_dba", 0)), "Sole proprietor")
+
+    return f"""VERIFIED FACTS — USE ONLY THESE. DO NOT ADD ANYTHING ELSE.
+Business Name: {portal.get('business_name', '')}
+Owner Name: {portal.get('owner_name', '')}
+Business Type: {portal.get('business_type', '')}
+State: {portal.get('state', '')}
+Revenue Stage: {revenue} (do NOT state a specific dollar amount — this was not provided)
+Team Size: {emp} (do NOT say a specific number of employees or team members beyond what is listed here)
+{minority_line}
+Owner Gender: {gender}
+EIN: {"Yes" if portal.get('has_ein') else "No"}
+Formation: {formation}
+Founder Story (use this word for word as the factual basis — do not add to it):
+{portal.get('description', '')}
+
+PROHIBITED — never write these even if they sound good:
+- Any specific founding year before 2026 (company was founded January 2026)
+- Any revenue dollar amount (example: $250,000 — this was never provided)
+- Any client count or project count (example: 50 clients, 15,000 sq ft — never provided)
+- Any team member count beyond what is listed above
+- Any project name, contract value, or job description not in the founder story
+- Any statistic, date, or metric not explicitly listed in VERIFIED FACTS above"""
+
+
 def generate_narrative(portal: dict, grant: dict) -> str:
-    """Generate Q&A pairs as JSON string, or a narrative blob if no questions defined."""
+    """Generate Q&A pairs as JSON string using only verified facts from the user profile."""
     if not client:
         return json.dumps({"mode": "error", "text": "ANTHROPIC_API_KEY not set — contact GHE to activate."})
 
-    eth = portal.get("ethnicity", "")
-    minority_status = f"Minority-owned ({eth})" if eth and eth.lower() not in ["white/caucasian", ""] else ""
-    questions = grant.get("questions", [])
-
+    fact_sheet = build_fact_sheet(portal)
     funder_intel = grant.get("funder_values", "")
+    questions = grant.get("questions", [])
 
     if questions:
         q_list = "\n".join(f'{i+1}. "{q}"' for i, q in enumerate(questions))
-        prompt = f"""Answer each grant application question below for this business. Write in first person as the owner.
+        prompt = f"""{fact_sheet}
 
-BUSINESS PROFILE:
-- Name: {portal['business_name']}
-- Owner: {portal['owner_name']}
-- Type: {portal['business_type']}
-- State: {portal['state']}
-- Revenue: {portal['revenue_range']}
-- Employees: {portal.get('employees','1')}
-- {minority_status}
-- EIN: {"Yes" if portal.get('has_ein') else "No"}
-- Formation: {"DBA/LLC" if portal.get('has_dba') else "Sole proprietor"}
-- Founder Story: {portal['description']}
+GRANT YOU ARE APPLYING TO: {grant['name']} ({grant['amount']})
 
-GRANT: {grant['name']} ({grant['amount']})
-
-WHAT THIS FUNDER VALUES AND SCORES HIGHEST:
+WHAT THIS SPECIFIC FUNDER VALUES AND SCORES HIGHEST:
 {funder_intel}
 
 QUESTIONS TO ANSWER:
 {q_list}
 
-Tailor every answer specifically to what this funder values. Lead with the human story, then the business need.
-Write 2-3 tight paragraphs per answer. Direct, specific, no buzzwords, no double hyphens.
+Write each answer in first person as the owner. Tailor every answer to what this funder scores highest.
+Lead with the human story, then the business need. 2 to 3 tight paragraphs per answer.
+Direct, no buzzwords, no double hyphens, no invented facts.
 Respond ONLY with valid JSON in this exact format:
 {{"mode":"qa","answers":[{{"q":"exact question text","a":"your answer"}}]}}"""
     else:
-        prompt = f"""Write a complete grant application narrative for {portal['business_name']} applying to {grant['name']} ({grant['amount']}).
-Owner: {portal['owner_name']} | Type: {portal['business_type']} | State: {portal['state']}
-Revenue: {portal['revenue_range']} | {minority_status}
-Founder Story: {portal['description']}
+        prompt = f"""{fact_sheet}
 
-WHAT THIS FUNDER VALUES:
+GRANT YOU ARE APPLYING TO: {grant['name']} ({grant['amount']})
+
+WHAT THIS SPECIFIC FUNDER VALUES:
 {funder_intel}
 
-Tailor the narrative to what this specific funder scores highest. Lead with the human story.
-Include: founder story, why they need funding now, specific use of funds, community impact.
-Be specific, human, first person. No buzzwords. No double hyphens.
+Write a complete grant application narrative. Lead with the human story.
+Include: founder story, why funding is needed now, specific use of funds, community impact.
+First person, no buzzwords, no double hyphens, no invented facts.
 Respond as JSON: {{"mode":"narrative","text":"full narrative here"}}"""
 
     try:
         msg = client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=2000,
+            model="claude-sonnet-4-6",
+            max_tokens=2500,
             system=SYSTEM_PROMPT,
             messages=[{"role": "user", "content": prompt}]
         )
         raw = msg.content[0].text.strip()
-        # Validate it's parseable JSON
+        if raw.startswith("```"):
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+            raw = raw.strip()
         json.loads(raw)
         return raw
     except json.JSONDecodeError:
-        # Wrap plain text response as narrative mode
         return json.dumps({"mode": "narrative", "text": msg.content[0].text if 'msg' in dir() else "[Generation failed]"})
     except Exception as e:
         return json.dumps({"mode": "error", "text": f"Generation error: {str(e)[:100]}"})
@@ -678,6 +700,9 @@ def dashboard_html(token: str, portal: dict, grants: list, apps: list, locked: b
         <select name=status class=status-sel onchange="this.form.submit()">{opts}</select>
       </form>
       <a href="/u/{token}/apply/{a['grant_id']}" class="btn btn-green btn-sm">Open Apply View ↗</a>
+      <form method=POST action="/u/{token}/delete/{a['id']}" onsubmit="return confirm('Delete and regenerate this application?')">
+        <button class="btn btn-outline btn-sm" type=submit style="color:#ef4444;border-color:#ef4444">Regenerate</button>
+      </form>
     </div>
   </div>
   {narrative_html}
@@ -974,6 +999,15 @@ async def generate_app(token: str, grant_id: str):
         (token, grant_id, grant["name"], grant["amount"], narrative,
          datetime.now(timezone.utc).isoformat(), grant["url"]))
     db.execute("UPDATE portals SET apps_used=apps_used+1 WHERE token=?", (token,))
+    db.commit()
+    db.close()
+    return RedirectResponse(f"/u/{token}", status_code=302)
+
+@app.post("/u/{token}/delete/{app_id}")
+async def delete_app(token: str, app_id: int):
+    db = get_db()
+    db.execute("DELETE FROM applications WHERE id=? AND token=?", (app_id, token))
+    db.execute("UPDATE portals SET apps_used=MAX(0,apps_used-1) WHERE token=?", (token,))
     db.commit()
     db.close()
     return RedirectResponse(f"/u/{token}", status_code=302)
