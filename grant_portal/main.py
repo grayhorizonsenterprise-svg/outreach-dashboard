@@ -92,8 +92,53 @@ def init_db():
 init_db()
 
 # ─── Grant Database ───────────────────────────────────────────────────────────
+# status: "OPEN" = accepting applications now | "MONITOR" = closed/seasonal/unconfirmed
 GRANTS = {
-    # ── Micro ($500-$5K fastest wins) ─────────────────────────────────────────
+    # ── OPEN NOW ──────────────────────────────────────────────────────────────
+    "verizon-digital": {
+        "name": "Verizon Small Business Digital Ready Grant",
+        "amount": "$10,000",
+        "min_amount": 10000,
+        "timeline": "4-8 weeks",
+        "speed": "FAST",
+        "difficulty": "EASY",
+        "color": "green",
+        "status": "OPEN",
+        "status_note": "Rolling. Complete 2-3 free Verizon Digital Ready courses first to unlock the grant application. Ten winners selected per month.",
+        "url": "https://digitalreadysmallbusiness.verizon.com",
+        "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
+        "desc": "Any small business. Complete 2-3 free courses first to unlock eligibility. Rolling, 10 winners per month.",
+        "funder_values": "The applicant must complete Verizon Digital Ready courses before applying. Reviewers want three things: how digital tools have already changed your business, what specific skills you plan to learn next, and a concrete plan for the $10,000. Technology adoption is the core of this application. Since we build AI automation systems, this application should highlight the technology angle heavily and connect it to the courses completed. Lead with the digital transformation story.",
+        "questions": [
+            "Describe your business, what do you do and who do you serve?",
+            "How have digital tools impacted your business?",
+            "How will you use the $10,000 grant funds?",
+            "What digital skills or tools do you plan to learn or improve?",
+        ],
+    },
+    "nsf-sbir": {
+        "name": "NSF SBIR Phase I — America's Seed Fund",
+        "amount": "$275,000",
+        "min_amount": 275000,
+        "timeline": "9-12 months",
+        "speed": "LONG",
+        "difficulty": "HARD",
+        "color": "purple",
+        "status": "OPEN",
+        "status_note": "Rolling submissions year-round. Requires SAM.gov registration before applying. Plan 2-3 months to prepare a competitive application.",
+        "url": "https://seedfund.nsf.gov",
+        "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": True,
+        "desc": "Any US small business with R&D innovation. Rolling deadlines. Requires SAM.gov registration. Founder salary built into the award.",
+        "funder_values": "Reviewed by scientists and commercial evaluators. Technical merit and market potential must both score high. Reviewers evaluate whether the proposed innovation is genuinely novel, whether the team can execute the research, and whether there is a real commercial market for the result. The AI automation focus could qualify under human-centered computing or advanced manufacturing research tracks.",
+        "questions": [
+            "What is the core innovation or technical advancement your project proposes?",
+            "What is the broader commercial and societal impact of this technology?",
+            "What research and development work needs to be done in Phase I?",
+            "Why is your team uniquely positioned to execute this research?",
+            "Provide a budget justification for the requested Phase I funding.",
+        ],
+    },
+    # ── MONITOR — not currently open ──────────────────────────────────────────
     "hello-alice-micro": {
         "name": "Hello Alice Monthly Micro-Grant",
         "amount": "$500",
@@ -102,6 +147,8 @@ GRANTS = {
         "speed": "FASTEST",
         "difficulty": "EASY",
         "color": "green",
+        "status": "MONITOR",
+        "status_note": "Currently closed. Set an alert at helloalice.com to be notified when the next round opens.",
         "url": "https://helloalice.com/grants",
         "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
         "desc": "Monthly $500 rolling grant. Any small business owner. Low competition. Fastest decision available.",
@@ -120,6 +167,8 @@ GRANTS = {
         "speed": "FAST",
         "difficulty": "EASY",
         "color": "green",
+        "status": "MONITOR",
+        "status_note": "Administered through Hello Alice. Opens when Hello Alice launches a new grant round. Your Hello Alice account is already set up.",
         "url": "https://naacp.org/find-resources/grants/keep-it-local-business-fund",
         "req_minority": True, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
         "desc": "Entrepreneurs of color. 20 winners per round, administered by Hello Alice. Includes Nextdoor ad credit and business coaching.",
@@ -139,6 +188,8 @@ GRANTS = {
         "speed": "FAST",
         "difficulty": "EASY",
         "color": "green",
+        "status": "MONITOR",
+        "status_note": "Black women and nonbinary founders only. Rolling applications.",
         "url": "https://sogalventures.com/grants/",
         "req_minority": True, "req_woman": False, "req_female": True, "req_california": False, "req_sam": False,
         "desc": "Black women and Black nonbinary founders only. Rolling applications. Cash plus mentorship network.",
@@ -158,6 +209,8 @@ GRANTS = {
         "speed": "FASTEST",
         "difficulty": "EASY",
         "color": "green",
+        "status": "OPEN",
+        "status_note": "Women entrepreneurs only. Monthly awards, rolling applications.",
         "url": "https://ambergrant.com",
         "req_minority": False, "req_woman": True, "req_female": True, "req_california": False, "req_sam": False,
         "desc": "Women entrepreneurs only. Monthly awards. One of the highest-volume small business grants available.",
@@ -177,6 +230,8 @@ GRANTS = {
         "speed": "FAST",
         "difficulty": "EASY",
         "color": "green",
+        "status": "MONITOR",
+        "status_note": "Currently closed between rounds. Your Hello Alice account is set up and ready. You will be first to apply when the next round opens.",
         "url": "https://helloalice.com/grants",
         "req_minority": True, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
         "desc": "Black-owned small businesses. Unrestricted cash. Rolling rounds. Apply in same session as other Hello Alice grants.",
@@ -188,36 +243,19 @@ GRANTS = {
             "Tell us your founder story. Why did you start this business?",
         ],
     },
-    "verizon-digital": {
-        "name": "Verizon Small Business Digital Ready Grant",
-        "amount": "$10,000",
-        "min_amount": 10000,
-        "timeline": "4-8 weeks",
-        "speed": "FAST",
-        "difficulty": "EASY",
-        "color": "green",
-        "url": "https://digitalreadysmallbusiness.verizon.com",
-        "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
-        "desc": "Any small business. Complete 2-3 free Verizon Digital Ready courses first to unlock eligibility. 10 winners per month.",
-        "funder_values": "The applicant must complete Verizon Digital Ready courses before applying. Reviewers want three things: how digital tools have already changed your business, what specific skills you plan to learn next, and a concrete plan for the $10,000. Technology adoption is the core of this application. Since we build AI automation systems, this application should highlight the technology angle heavily and connect it to the courses completed. Lead with the digital transformation story.",
-        "questions": [
-            "Describe your business, what do you do and who do you serve?",
-            "How have digital tools impacted your business?",
-            "How will you use the $10,000 grant funds?",
-            "What digital skills or tools do you plan to learn or improve?",
-        ],
-    },
     "comcast-rise": {
         "name": "Comcast RISE Investment Fund",
-        "amount": "$10,000",
-        "min_amount": 10000,
+        "amount": "$5,000 + marketing package",
+        "min_amount": 5000,
         "timeline": "6-10 weeks",
         "speed": "MEDIUM",
         "difficulty": "MEDIUM",
-        "color": "green",
+        "color": "amber",
+        "status": "MONITOR",
+        "status_note": "2026 application window not yet announced. California was NOT included in the 2025 round. Monitor comcastrise.com for the next cycle and eligible cities.",
         "url": "https://www.comcastrise.com",
         "req_minority": True, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
-        "desc": "Minority, women, or veteran-owned businesses. Quarterly awards. Includes marketing and tech resources in addition to cash.",
+        "desc": "BIPOC-owned businesses. Quarterly awards by city. California eligibility not confirmed for 2026. Monitor for open dates.",
         "funder_values": "Comcast RISE reviewers want to understand your business in one sentence before they read anything else. After that: what is specifically limiting your growth right now (capacity, visibility, or access to technology), and evidence that the business is active and credible. Community connection and local presence are tie-breakers between applicants. The fact that Comcast offers marketing and tech resources in addition to cash means answers should show awareness of those tools and how they would be used.",
         "questions": [
             "Tell us about your business, what you do, who you serve, and how long you have been operating.",
@@ -234,6 +272,8 @@ GRANTS = {
         "speed": "MEDIUM",
         "difficulty": "MEDIUM",
         "color": "amber",
+        "status": "MONITOR",
+        "status_note": "Currently closed. Opens with Hello Alice grant rounds. Apply alongside the $500 and $10K grants in the same session.",
         "url": "https://helloalice.com/grants",
         "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
         "desc": "Growth-stage small businesses. Apply simultaneously with other Hello Alice grants in one login session.",
@@ -253,6 +293,8 @@ GRANTS = {
         "speed": "MEDIUM",
         "difficulty": "MEDIUM",
         "color": "amber",
+        "status": "MONITOR",
+        "status_note": "Annual contest. Typically opens January through March. Monitor smallbusiness.fedex.com for the 2027 window.",
         "url": "https://smallbusiness.fedex.com",
         "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
         "desc": "Annual contest. Up to $30K. Story-driven. A strong narrative about business impact wins over financials.",
@@ -273,9 +315,11 @@ GRANTS = {
         "speed": "MEDIUM",
         "difficulty": "MEDIUM",
         "color": "amber",
+        "status": "MONITOR",
+        "status_note": "California businesses only. Applications open periodically. Request an advisor call at calosba.ca.gov before applying to confirm the current window.",
         "url": "https://calosba.ca.gov",
         "req_minority": False, "req_woman": False, "req_female": False, "req_california": True, "req_sam": False,
-        "desc": "California businesses only. Founder labor costs are eligible expenses. Request an advisor call first before submitting.",
+        "desc": "California businesses only. Up to $75K. Founder labor costs are eligible. Request advisor call first.",
         "funder_values": "California program focused on underserved community benefit. Reviewers want measurable outcomes tied to specific communities and a detailed project budget. Founder labor costs are eligible, which is a major advantage for solo founders. Request an advisor call before applying. Answers should lead with the Inland Empire community angle and the gap in technology access that this business fills. Be specific about what gets built, who it serves, and what the measurable outcome is.",
         "questions": [
             "Describe your project and what you plan to accomplish with CEDAP funding.",
@@ -292,6 +336,8 @@ GRANTS = {
         "speed": "SLOWER",
         "difficulty": "HARD",
         "color": "purple",
+        "status": "MONITOR",
+        "status_note": "Cohort-based program. Applications open once or twice per year. Monitor startup.google.com for the next cohort announcement.",
         "url": "https://startup.google.com/programs/black-founders-fund/",
         "req_minority": True, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
         "desc": "Black founders. Cohort-based. Monitor for open dates. Cash plus Google Cloud credits worth significant value.",
@@ -304,17 +350,13 @@ GRANTS = {
             "Why are you the right person to build this company?",
         ],
     },
-    "nsf-sbir": {
-        "name": "NSF SBIR Phase I — America's Seed Fund",
-        "amount": "$275,000",
-        "min_amount": 275000,
-        "timeline": "9-12 months",
-        "speed": "LONG",
-        "difficulty": "HARD",
-        "color": "purple",
-        "url": "https://seedfund.nsf.gov",
-        "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": True,
-        "desc": "Any US small business with R&D innovation. Requires SAM.gov registration. Founder salary built into the award budget.",
+    "nsf-sbir-dup": {
+        "name": "duplicate",
+        "amount": "$0", "min_amount": 0, "timeline": "", "speed": "LONG",
+        "difficulty": "HARD", "color": "purple", "status": "MONITOR", "status_note": "",
+        "hidden": True,
+        "url": "", "req_minority": False, "req_woman": False, "req_female": False,
+        "req_california": False, "req_sam": False, "desc": "",
         "funder_values": "Reviewed by scientists and commercial evaluators. Technical merit and market potential must both score high. Reviewers evaluate whether the proposed innovation is genuinely novel, whether the team can execute the research, and whether there is a real commercial market for the result. This is best applied for after other grants are secured and the business has initial revenue. The AI automation focus could qualify under human-centered computing or advanced manufacturing research tracks.",
         "questions": [
             "What is the core innovation or technical advancement your project proposes?",
@@ -479,6 +521,10 @@ def match_grants(portal: dict) -> list:
     is_ca       = portal.get("state", "").upper() in ["CA", "CALIFORNIA"]
     results = []
     for gid, g in GRANTS.items():
+        if g.get("hidden"):
+            continue
+        if not g.get("desc"):
+            continue
         if g["req_minority"] and not is_minority:
             continue
         if g["req_woman"] and not is_woman:
@@ -490,7 +536,11 @@ def match_grants(portal: dict) -> list:
         entry = g.copy()
         entry["id"] = gid
         results.append(entry)
-    return sorted(results, key=lambda x: SPEED_ORDER.get(x["speed"], 99))
+    # OPEN grants first, then MONITOR — within each group sort by speed
+    return sorted(results, key=lambda x: (
+        0 if x.get("status") == "OPEN" else 1,
+        SPEED_ORDER.get(x["speed"], 99)
+    ))
 
 # ─── Shared CSS ───────────────────────────────────────────────────────────────
 CSS = """<style>
@@ -721,27 +771,63 @@ def dashboard_html(token: str, portal: dict, grants: list, apps: list, locked: b
         apps_html = f'<div class=card><h2>Your Applications</h2>{items}</div>'
 
     # Grant list
-    grants_html = ""
-    for g in grants:
-        already = g["id"] in applied_ids
-        color = f"bg-{g['color']}"
-        speed = g["speed"]
-        if already:
-            action = '<span class="badge bg-blue">Applied</span>'
-        elif locked:
-            action = f'<a href="/u/{token}/upgrade" class="btn btn-outline btn-sm">Upgrade</a>'
-        else:
-            action = f'''<form method=POST action="/u/{token}/generate/{g['id']}">
+    open_grants    = [g for g in grants if g.get("status") == "OPEN"]
+    monitor_grants = [g for g in grants if g.get("status") != "OPEN"]
+
+    def render_grant_rows(grant_list):
+        html = ""
+        for g in grant_list:
+            already  = g["id"] in applied_ids
+            color    = f"bg-{g['color']}"
+            speed    = g["speed"]
+            status   = g.get("status", "MONITOR")
+            snote    = g.get("status_note", "")
+            is_open  = status == "OPEN"
+
+            if already:
+                action = '<span class="badge bg-blue">Applied</span>'
+            elif not is_open:
+                action = f'<a href="{g["url"]}" target=_blank class="btn btn-outline btn-sm">Set Alert ↗</a>'
+            elif locked:
+                action = f'<a href="/u/{token}/upgrade" class="btn btn-outline btn-sm">Upgrade</a>'
+            else:
+                action = f'''<form method=POST action="/u/{token}/generate/{g['id']}">
 <button class="btn btn-green btn-sm" type=submit>Generate Application</button></form>'''
 
-        grants_html += f"""
-<div class=grant-row>
+            status_badge = (
+                '<span style="background:#14532d;color:#86efac;font-size:10px;font-weight:bold;padding:2px 8px;border-radius:8px;margin-left:6px">OPEN NOW</span>'
+                if is_open else
+                '<span style="background:#1e293b;color:#64748b;font-size:10px;font-weight:bold;padding:2px 8px;border-radius:8px;margin-left:6px">MONITOR</span>'
+            )
+            note_html = f'<div style="font-size:11px;color:#f59e0b;margin-top:4px">{snote}</div>' if snote and not is_open else (
+                f'<div style="font-size:11px;color:#86efac;margin-top:4px">{snote}</div>' if snote else ""
+            )
+
+            html += f"""
+<div class=grant-row style="{'border-color:#22c55e;' if is_open else ''}">
   <div class=grant-info>
-    <div class=grant-name>{g['name']} <span class="speed-tag speed-{speed}">{speed}</span></div>
+    <div class=grant-name>{g['name']}{status_badge}</div>
     <div class=grant-meta><span class="badge {color}">{g['amount']}</span> &nbsp; {g['timeline']} &nbsp;&middot;&nbsp; {g['difficulty']}</div>
     <div class=grant-desc>{g['desc']}</div>
+    {note_html}
   </div>
   <div style="flex-shrink:0">{action}</div>
+</div>"""
+        return html
+
+    open_html    = render_grant_rows(open_grants)
+    monitor_html = render_grant_rows(monitor_grants)
+
+    grants_section = f"""
+<div class=card>
+  <h2 style="color:#22c55e">Apply Now — {len(open_grants)} Open</h2>
+  <p style="font-size:13px;color:#64748b;margin-bottom:14px">These grants are actively accepting applications right now.</p>
+  {open_html if open_html else '<p style="color:#64748b;font-size:13px">No open applications found for your profile right now.</p>'}
+</div>
+<div class=card>
+  <h2>Monitor — {len(monitor_grants)} Coming Soon</h2>
+  <p style="font-size:13px;color:#64748b;margin-bottom:14px">These are closed or seasonal. Generate your answers now so you are ready the moment they open. Click Set Alert to get notified.</p>
+  {monitor_html}
 </div>"""
 
     total_available = sum(g["min_amount"] for g in grants)
@@ -752,11 +838,7 @@ def dashboard_html(token: str, portal: dict, grants: list, apps: list, locked: b
 {trial_bar}
 {lock_html}
 {apps_html}
-<div class=card>
-<h2>Matched Grants — {len(grants)} available &nbsp;<span style="font-size:12px;color:#64748b;font-weight:normal">Up to ${total_available:,} total potential</span></h2>
-<p style="font-size:13px;color:#64748b;margin-bottom:14px">Sorted fastest to slowest. Click Generate to get your AI-written narrative ready to paste into the application form.</p>
-{grants_html}
-</div>""",
+{grants_section}""",
         subtitle=portal["business_name"]
     )
 
