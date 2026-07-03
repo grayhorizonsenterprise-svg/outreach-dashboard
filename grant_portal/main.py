@@ -25,6 +25,7 @@ DB_PATH       = Path(os.getenv("DATA_DIR", ".")) / "grant_portal.db"
 TRIAL_APPS    = int(os.getenv("TRIAL_APPS", "3"))
 TRIAL_DAYS    = int(os.getenv("TRIAL_DAYS", "14"))
 PORT          = int(os.getenv("PORT", 8080))
+OWNER_TOKEN   = os.getenv("OWNER_TOKEN", "283cdf6935d7426a")
 
 app    = FastAPI(title="GHE Grant Portal", docs_url=None, redoc_url=None)
 client = Anthropic(api_key=ANTHROPIC_KEY) if ANTHROPIC_KEY else None
@@ -68,6 +69,22 @@ def init_db():
         notes        TEXT DEFAULT ''
     )""")
     db.commit()
+
+    # Always ensure owner account exists (survives Railway restarts)
+    existing = db.execute("SELECT token FROM portals WHERE token=?", (OWNER_TOKEN,)).fetchone()
+    if not existing:
+        db.execute("""INSERT INTO portals
+            (token,created_at,business_name,owner_name,business_type,ethnicity,gender,
+             state,has_ein,has_dba,revenue_range,employees,description,apps_used,profile_done,label)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+            (OWNER_TOKEN, datetime.now(timezone.utc).isoformat(),
+             "Gray Horizons Enterprise", "Curtis Gray",
+             "AI automation and agentic workflow consulting",
+             "Black/African American", "Male", "CA",
+             1, 2, "under-50k", "1 (solo)",
+             "Gray Horizons Enterprise builds AI automation systems and agentic workflows for small businesses. We help owners automate lead generation, outreach, grant applications, and market intelligence so they can run their entire operation without hiring additional staff. Our clients are contractors, service businesses, and early-stage founders who need enterprise-level systems on a bootstrapped budget. We are a Black-owned technology company based in California.",
+             0, 1, "Gray Horizons Enterprise - OWNER"))
+        db.commit()
     db.close()
 
 init_db()
@@ -395,6 +412,8 @@ def get_all_portals():
     return [dict(r) for r in rows]
 
 def is_locked(portal: dict) -> tuple[bool, str]:
+    if portal["token"] == OWNER_TOKEN:
+        return False, ""
     created = datetime.fromisoformat(portal["created_at"])
     days = (datetime.now(timezone.utc) - created).days
     if days >= TRIAL_DAYS:
