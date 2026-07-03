@@ -7,7 +7,7 @@ Deploy to Railway as its own service.
 Admin generates unique URLs → users fill profile → AI writes narratives → copy & submit.
 """
 
-import sqlite3, uuid, os, json
+import sqlite3, uuid, os, json, requests as http_requests
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from fastapi import FastAPI, HTTPException, Request, Form
@@ -26,6 +26,8 @@ TRIAL_APPS    = int(os.getenv("TRIAL_APPS", "3"))
 TRIAL_DAYS    = int(os.getenv("TRIAL_DAYS", "14"))
 PORT          = int(os.getenv("PORT", 8080))
 OWNER_TOKEN   = os.getenv("OWNER_TOKEN", "283cdf6935d7426a")
+SENDGRID_KEY  = os.getenv("SENDGRID_API_KEY", "")
+OWNER_EMAIL   = os.getenv("OWNER_EMAIL", "grayhorizonsenterprise@gmail.com")
 
 app    = FastAPI(title="GHE Grant Portal", docs_url=None, redoc_url=None)
 client = Anthropic(api_key=ANTHROPIC_KEY) if ANTHROPIC_KEY else None
@@ -646,7 +648,13 @@ def profile_html(token: str, error: str = "") -> str:
 </form>
 </div>""")
 
-def dashboard_html(token: str, portal: dict, grants: list, apps: list, locked: bool, reason: str) -> str:
+def dashboard_html(token: str, portal: dict, grants: list, apps: list, locked: bool, reason: str, email_status: str = "") -> str:
+    email_banner = ""
+    if email_status == "sent":
+        email_banner = '<div class="alert" style="background:#14532d;border-color:#22c55e;color:#86efac;margin-bottom:16px">Answers sent to your email. Open the email and the grant form side by side to copy and paste.</div>'
+    elif email_status == "error":
+        email_banner = '<div class="alert alert-warn">Email failed to send. Use the Apply View button or copy directly from this page.</div>'
+
     created = datetime.fromisoformat(portal["created_at"])
     days_left = max(0, TRIAL_DAYS - (datetime.now(timezone.utc) - created).days)
     apps_left = max(0, TRIAL_APPS - portal["apps_used"])
@@ -699,7 +707,10 @@ def dashboard_html(token: str, portal: dict, grants: list, apps: list, locked: b
       <form method=POST action="/u/{token}/status/{a['id']}">
         <select name=status class=status-sel onchange="this.form.submit()">{opts}</select>
       </form>
-      <a href="/u/{token}/apply/{a['grant_id']}" class="btn btn-green btn-sm">Open Apply View ↗</a>
+      <form method=POST action="/u/{token}/email/{a['id']}">
+        <button class="btn btn-sm" type=submit style="background:#7c3aed;color:#fff;font-size:13px">Send to My Email</button>
+      </form>
+      <a href="/u/{token}/apply/{a['grant_id']}" class="btn btn-green btn-sm">Apply View ↗</a>
       <form method=POST action="/u/{token}/delete/{a['id']}" onsubmit="return confirm('Delete and regenerate this application?')">
         <button class="btn btn-outline btn-sm" type=submit style="color:#ef4444;border-color:#ef4444">Regenerate</button>
       </form>
@@ -737,6 +748,7 @@ def dashboard_html(token: str, portal: dict, grants: list, apps: list, locked: b
     return page(
         f"Grant Portal — {portal['business_name']}",
         f"""
+{email_banner}
 {trial_bar}
 {lock_html}
 {apps_html}
@@ -896,6 +908,86 @@ def admin_html(portals: list, base_url: str) -> str:
 {"<div class=card><h2>Active Portals</h2><table style='width:100%;border-collapse:collapse'><thead><tr style='border-bottom:1px solid #334155'><th style='padding:8px 12px;text-align:left;color:#64748b;font-size:12px'>Client</th><th style='padding:8px 12px;text-align:left;color:#64748b;font-size:12px'>Created</th><th style='padding:8px 12px;text-align:left;color:#64748b;font-size:12px'>Status</th><th style='padding:8px 12px;text-align:left;color:#64748b;font-size:12px'>Link</th></tr></thead><tbody>"+rows+"</tbody></table></div>" if portals else ""}
 """, subtitle="Admin Dashboard")
 
+def send_answers_email(to_email: str, portal: dict, grant: dict, app_record: dict) -> bool:
+    """Email the full Q&A answers for a grant application to the owner."""
+    if not SENDGRID_KEY:
+        return False
+
+    try:
+        data = json.loads(app_record["narrative"])
+    except Exception:
+        data = {"mode": "narrative", "text": app_record["narrative"]}
+
+    grant_name = app_record["grant_name"]
+    grant_amount = app_record["grant_amount"]
+    apply_url = grant.get("url", "")
+
+    if data.get("mode") == "qa":
+        qa_blocks = ""
+        plain_blocks = ""
+        for pair in data.get("answers", []):
+            qa_blocks += f"""
+<div style="margin-bottom:28px;border-bottom:1px solid #334155;padding-bottom:24px">
+  <div style="font-size:13px;font-weight:bold;color:#38bdf8;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">
+    {pair['q']}
+  </div>
+  <div style="font-size:15px;color:#e2e8f0;line-height:1.8;white-space:pre-wrap;background:#0f172a;padding:16px;border-radius:6px;border-left:3px solid #22c55e">
+    {pair['a']}
+  </div>
+</div>"""
+            plain_blocks += f"QUESTION: {pair['q']}\n\nANSWER:\n{pair['a']}\n\n{'='*60}\n\n"
+    else:
+        text = data.get("text", "")
+        qa_blocks = f'<div style="font-size:15px;color:#e2e8f0;line-height:1.8;white-space:pre-wrap;background:#0f172a;padding:16px;border-radius:6px">{text}</div>'
+        plain_blocks = text
+
+    html = f"""<!DOCTYPE html>
+<html><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"></head>
+<body style="background:#0f172a;font-family:Arial,sans-serif;margin:0;padding:20px;color:#e2e8f0">
+<div style="max-width:680px;margin:0 auto">
+
+<div style="background:#1e293b;border:2px solid #22c55e;border-radius:10px;padding:24px;margin-bottom:24px">
+  <div style="font-size:11px;color:#22c55e;font-weight:bold;letter-spacing:.1em;margin-bottom:6px">YOUR AI-WRITTEN ANSWERS</div>
+  <div style="font-size:20px;font-weight:bold;color:#e2e8f0;margin-bottom:4px">{grant_name}</div>
+  <div style="font-size:14px;color:#64748b;margin-bottom:16px">{grant_amount} grant application for {portal['business_name']}</div>
+  <a href="{apply_url}" style="background:#22c55e;color:#000;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:14px;display:inline-block">
+    Open Official Grant Form
+  </a>
+</div>
+
+<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:24px;margin-bottom:24px">
+  <p style="font-size:13px;color:#94a3b8;margin-bottom:20px;line-height:1.7">
+    <strong style="color:#38bdf8">How to apply from your phone:</strong><br>
+    1. Open the Official Grant Form link above in a new tab<br>
+    2. Come back to this email<br>
+    3. Press and hold any answer block to select and copy the text<br>
+    4. Switch back to the grant form tab and paste
+  </p>
+  {qa_blocks}
+</div>
+
+<p style="color:#475569;font-size:12px;text-align:center;padding-top:16px;border-top:1px solid #1e293b">
+  Gray Horizons Enterprise | grayhorizonsenterprise@gmail.com
+</p>
+</div>
+</body></html>"""
+
+    payload = {
+        "personalizations": [{"to": [{"email": to_email, "name": portal.get("owner_name", "Owner")}]}],
+        "from": {"email": "grayhorizonsenterprise@gmail.com", "name": "GHE Grant Portal"},
+        "subject": f"Your Grant Answers: {grant_name} ({grant_amount})",
+        "content": [{"type": "text/html", "value": html}],
+    }
+    try:
+        r = http_requests.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            headers={"Authorization": f"Bearer {SENDGRID_KEY}", "Content-Type": "application/json"},
+            json=payload, timeout=15
+        )
+        return r.status_code in (200, 202)
+    except Exception:
+        return False
+
 # ─── Routes ───────────────────────────────────────────────────────────────────
 
 @app.get("/admin", response_class=HTMLResponse)
@@ -939,7 +1031,7 @@ async def admin_generate(request: Request):
 </div>"""))
 
 @app.get("/u/{token}", response_class=HTMLResponse)
-async def portal_get(token: str):
+async def portal_get(token: str, request: Request):
     portal = get_portal(token)
     if not portal:
         raise HTTPException(status_code=404, detail="This portal link is invalid or expired.")
@@ -948,7 +1040,8 @@ async def portal_get(token: str):
     locked, reason = is_locked(portal)
     grants = match_grants(portal)
     apps = get_apps(token)
-    return HTMLResponse(dashboard_html(token, portal, grants, apps, locked, reason))
+    email_status = request.query_params.get("email", "")
+    return HTMLResponse(dashboard_html(token, portal, grants, apps, locked, reason, email_status))
 
 @app.post("/u/{token}/profile", response_class=HTMLResponse)
 async def save_profile(token: str, request: Request):
@@ -1002,6 +1095,23 @@ async def generate_app(token: str, grant_id: str):
     db.commit()
     db.close()
     return RedirectResponse(f"/u/{token}", status_code=302)
+
+@app.post("/u/{token}/email/{app_id}")
+async def email_app(token: str, app_id: int):
+    portal = get_portal(token)
+    if not portal:
+        raise HTTPException(status_code=404)
+    db = get_db()
+    row = db.execute("SELECT * FROM applications WHERE id=? AND token=?", (app_id, token)).fetchone()
+    db.close()
+    if not row:
+        return RedirectResponse(f"/u/{token}", status_code=302)
+    app_record = dict(row)
+    grant = GRANTS.get(app_record["grant_id"], {})
+    to_email = OWNER_EMAIL if token == OWNER_TOKEN else portal.get("owner_email", OWNER_EMAIL)
+    ok = send_answers_email(to_email, portal, grant, app_record)
+    status = "sent" if ok else "error"
+    return RedirectResponse(f"/u/{token}?email={status}", status_code=302)
 
 @app.post("/u/{token}/delete/{app_id}")
 async def delete_app(token: str, app_id: int):
