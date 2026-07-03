@@ -101,8 +101,9 @@ GRANTS = {
         "difficulty": "EASY",
         "color": "green",
         "url": "https://helloalice.com/grants",
-        "req_minority": False, "req_woman": False, "req_california": False, "req_sam": False,
+        "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
         "desc": "Monthly $500 rolling grant. Any small business owner. Low competition. Fastest decision available.",
+        "funder_values": "Monthly decision cycle. Reviewers want: one specific use for the $500, the single biggest problem you are solving right now, and a founder voice that sounds authentic and real. Keep answers short. One tight paragraph per question wins over a long essay. They are looking for someone they can believe in, not someone who sounds like a grant writer.",
         "questions": [
             "Describe your business in 2-3 sentences.",
             "How will you use this $500 grant?",
@@ -118,8 +119,9 @@ GRANTS = {
         "difficulty": "EASY",
         "color": "green",
         "url": "https://naacp.org/find-resources/grants/keep-it-local-business-fund",
-        "req_minority": True, "req_woman": False, "req_california": False, "req_sam": False,
-        "desc": "Entrepreneurs of color. 20 winners per round. Includes Nextdoor ad credit + business coaching.",
+        "req_minority": True, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
+        "desc": "Entrepreneurs of color. 20 winners per round, administered by Hello Alice. Includes Nextdoor ad credit and business coaching.",
+        "funder_values": "Twenty winners per round. Reviewers score on community rootedness above everything else. Your business must read as a neighborhood asset, not just a revenue source. The Nextdoor partnership means local visibility and hyper-local community connection are the deciding factors. A personal founder story tied to a specific place and specific people wins this grant. Show how the community is different because your business exists.",
         "questions": [
             "Tell us about your business and its role in the local community.",
             "How will this $5,000 grant help your business grow?",
@@ -136,8 +138,9 @@ GRANTS = {
         "difficulty": "EASY",
         "color": "green",
         "url": "https://sogalventures.com/grants/",
-        "req_minority": True, "req_woman": False, "req_california": False, "req_sam": False,
-        "desc": "Early-stage Black founders. Rolling applications — no deadline pressure. Cash plus mentorship network.",
+        "req_minority": True, "req_woman": False, "req_female": True, "req_california": False, "req_sam": False,
+        "desc": "Black women and Black nonbinary founders only. Rolling applications. Cash plus mentorship network.",
+        "funder_values": "Requires Black women or nonbinary founders. Reviewers are looking for scalability, growth potential, and investor readiness. Community story matters less here than traction and unfair advantage as a founder.",
         "questions": [
             "What is your company and what problem does it solve?",
             "Why do you need this funding right now?",
@@ -154,10 +157,11 @@ GRANTS = {
         "difficulty": "EASY",
         "color": "green",
         "url": "https://ambergrant.com",
-        "req_minority": False, "req_woman": True, "req_california": False, "req_sam": False,
+        "req_minority": False, "req_woman": True, "req_female": True, "req_california": False, "req_sam": False,
         "desc": "Women entrepreneurs only. Monthly awards. One of the highest-volume small business grants available.",
+        "funder_values": "Women entrepreneurs only. Monthly awards so decisions are fast. Reviewers want an authentic personal founder story above all else, a specific use of funds tied to a real business goal, and a clear picture of what success looks like in 12 months. Personal voice beats formal writing. This is a mission-driven grant, not a business plan competition.",
         "questions": [
-            "Tell us about your business — what you do, who you serve, and why you started it.",
+            "Tell us about your business, what you do, who you serve, and why you started it.",
             "What will you do with the Amber Grant money?",
             "What does success look like for your business in the next 12 months?",
         ],
@@ -172,13 +176,14 @@ GRANTS = {
         "difficulty": "EASY",
         "color": "green",
         "url": "https://helloalice.com/grants",
-        "req_minority": True, "req_woman": False, "req_california": False, "req_sam": False,
-        "desc": "Black-owned small businesses. Unrestricted cash. Rolling rounds — one of the most accessible $10K grants.",
+        "req_minority": True, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
+        "desc": "Black-owned small businesses. Unrestricted cash. Rolling rounds. Apply in same session as other Hello Alice grants.",
+        "funder_values": "Hello Alice prioritizes emotional founder stories, specific community benefit, and a clear one-year plan for the money. Because this is a Black business owners grant, cultural context and community impact carry significant weight with reviewers. They want to understand who you are as a person before they evaluate your business. The founder story must come first and must be specific. Apply in the same login session as the Hello Alice $500 micro-grant and $25K growth fund to triple your applications in one sitting.",
         "questions": [
-            "Describe your business — what it does, who it serves, and what problem it solves.",
+            "Describe your business, what it does, who it serves, and what problem it solves.",
             "How will you use the $10,000 grant funds?",
             "How does your business impact your community?",
-            "Tell us your founder story — why did you start this business?",
+            "Tell us your founder story. Why did you start this business?",
         ],
     },
     "verizon-digital": {
@@ -190,10 +195,11 @@ GRANTS = {
         "difficulty": "EASY",
         "color": "green",
         "url": "https://digitalreadysmallbusiness.verizon.com",
-        "req_minority": False, "req_woman": False, "req_california": False, "req_sam": False,
-        "desc": "Any small business. Complete 2-3 free courses first to unlock eligibility. 10 winners per month.",
+        "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
+        "desc": "Any small business. Complete 2-3 free Verizon Digital Ready courses first to unlock eligibility. 10 winners per month.",
+        "funder_values": "The applicant must complete Verizon Digital Ready courses before applying. Reviewers want three things: how digital tools have already changed your business, what specific skills you plan to learn next, and a concrete plan for the $10,000. Technology adoption is the core of this application. Since we build AI automation systems, this application should highlight the technology angle heavily and connect it to the courses completed. Lead with the digital transformation story.",
         "questions": [
-            "Describe your business — what do you do and who do you serve?",
+            "Describe your business, what do you do and who do you serve?",
             "How have digital tools impacted your business?",
             "How will you use the $10,000 grant funds?",
             "What digital skills or tools do you plan to learn or improve?",
@@ -208,10 +214,11 @@ GRANTS = {
         "difficulty": "MEDIUM",
         "color": "green",
         "url": "https://www.comcastrise.com",
-        "req_minority": True, "req_woman": False, "req_california": False, "req_sam": False,
-        "desc": "Minority, women, or veteran-owned businesses. Quarterly awards. Also includes marketing + tech resources.",
+        "req_minority": True, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
+        "desc": "Minority, women, or veteran-owned businesses. Quarterly awards. Includes marketing and tech resources in addition to cash.",
+        "funder_values": "Comcast RISE reviewers want to understand your business in one sentence before they read anything else. After that: what is specifically limiting your growth right now (capacity, visibility, or access to technology), and evidence that the business is active and credible. Community connection and local presence are tie-breakers between applicants. The fact that Comcast offers marketing and tech resources in addition to cash means answers should show awareness of those tools and how they would be used.",
         "questions": [
-            "Tell us about your business — what you do, who you serve, and how long you've been operating.",
+            "Tell us about your business, what you do, who you serve, and how long you have been operating.",
             "How has your business been affected by economic challenges?",
             "How would the Comcast RISE grant and resources help your business grow?",
             "Describe your connection to your local community.",
@@ -226,11 +233,12 @@ GRANTS = {
         "difficulty": "MEDIUM",
         "color": "amber",
         "url": "https://helloalice.com/grants",
-        "req_minority": False, "req_woman": False, "req_california": False, "req_sam": False,
+        "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
         "desc": "Growth-stage small businesses. Apply simultaneously with other Hello Alice grants in one login session.",
+        "funder_values": "This is a growth-stage grant, not a startup grant. Reviewers want proof of traction (customers, contracts, or revenue in progress), specific barriers to scaling that money will remove, and a believable 12-month growth plan. The story must show momentum, not just potential. Show that the business is already moving and this funding accelerates what is already working, not that you need money to start.",
         "questions": [
             "Describe your business and its current stage of growth.",
-            "What are the biggest barriers to growth you're facing right now?",
+            "What are the biggest barriers to growth you are facing right now?",
             "How will you use the $25,000 to scale your business?",
             "What does your business look like in 12 months if you receive this funding?",
         ],
@@ -244,10 +252,11 @@ GRANTS = {
         "difficulty": "MEDIUM",
         "color": "amber",
         "url": "https://smallbusiness.fedex.com",
-        "req_minority": False, "req_woman": False, "req_california": False, "req_sam": False,
-        "desc": "Annual contest. Up to $30K. Story-driven — strong narrative about business impact wins.",
+        "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
+        "desc": "Annual contest. Up to $30K. Story-driven. A strong narrative about business impact wins over financials.",
+        "funder_values": "This is a story competition first. The WHY behind starting this business wins over numbers and financial projections. Reviewers want a compelling founder origin story, what makes this business genuinely unique in its market, and the human impact on employees, customers, and community. Emotion combined with specificity is the winning formula here. The application that makes a reviewer stop and say 'I want this person to win' is the one that gets funded.",
         "questions": [
-            "Tell us your business story — how did you get started and what drives you?",
+            "Tell us your business story. How did you get started and what drives you?",
             "What makes your business unique in your market?",
             "How will the FedEx grant help your business achieve its next milestone?",
             "What impact does your business have on your employees, customers, and community?",
@@ -263,8 +272,9 @@ GRANTS = {
         "difficulty": "MEDIUM",
         "color": "amber",
         "url": "https://calosba.ca.gov",
-        "req_minority": False, "req_woman": False, "req_california": True, "req_sam": False,
-        "desc": "California businesses only. Founder labor costs are eligible expenses. Request an advisor call first.",
+        "req_minority": False, "req_woman": False, "req_female": False, "req_california": True, "req_sam": False,
+        "desc": "California businesses only. Founder labor costs are eligible expenses. Request an advisor call first before submitting.",
+        "funder_values": "California program focused on underserved community benefit. Reviewers want measurable outcomes tied to specific communities and a detailed project budget. Founder labor costs are eligible, which is a major advantage for solo founders. Request an advisor call before applying. Answers should lead with the Inland Empire community angle and the gap in technology access that this business fills. Be specific about what gets built, who it serves, and what the measurable outcome is.",
         "questions": [
             "Describe your project and what you plan to accomplish with CEDAP funding.",
             "How will this project benefit underserved communities in California?",
@@ -281,8 +291,9 @@ GRANTS = {
         "difficulty": "HARD",
         "color": "purple",
         "url": "https://startup.google.com/programs/black-founders-fund/",
-        "req_minority": True, "req_woman": False, "req_california": False, "req_sam": False,
-        "desc": "Black founders. Cohort-based — monitor for open dates. Cash plus Google Cloud credits.",
+        "req_minority": True, "req_woman": False, "req_female": False, "req_california": False, "req_sam": False,
+        "desc": "Black founders. Cohort-based. Monitor for open dates. Cash plus Google Cloud credits worth significant value.",
+        "funder_values": "This is reviewed by investors, not grant committees. Traction and unfair advantage matter more than community narrative. Reviewers want to see scalability, a defensible market position, and evidence that this specific founder has the ability to execute at scale. The AI automation angle is strong here because Google values tech-forward businesses. Lead with the market opportunity and why the business is positioned to capture it, then support with the founder story.",
         "questions": [
             "What does your company do and what problem does it solve?",
             "Why do you need this funding and what will you use it for?",
@@ -300,8 +311,9 @@ GRANTS = {
         "difficulty": "HARD",
         "color": "purple",
         "url": "https://seedfund.nsf.gov",
-        "req_minority": False, "req_woman": False, "req_california": False, "req_sam": True,
-        "desc": "Any US small business with R&D innovation. Requires SAM.gov registration. PI salary ~$85K/yr built in.",
+        "req_minority": False, "req_woman": False, "req_female": False, "req_california": False, "req_sam": True,
+        "desc": "Any US small business with R&D innovation. Requires SAM.gov registration. Founder salary built into the award budget.",
+        "funder_values": "Reviewed by scientists and commercial evaluators. Technical merit and market potential must both score high. Reviewers evaluate whether the proposed innovation is genuinely novel, whether the team can execute the research, and whether there is a real commercial market for the result. This is best applied for after other grants are secured and the business has initial revenue. The AI automation focus could qualify under human-centered computing or advanced manufacturing research tracks.",
         "questions": [
             "What is the core innovation or technical advancement your project proposes?",
             "What is the broader commercial and societal impact of this technology?",
@@ -319,16 +331,20 @@ STATUS_COLORS = {
 }
 
 # ─── Narrative generation ─────────────────────────────────────────────────────
-SYSTEM_PROMPT = """You are a professional grant writer with 15 years of experience winning grants for minority-owned small businesses. You write narratives that sound real, personal, and human — never corporate or AI-generated.
+SYSTEM_PROMPT = """You are a professional grant writer with 15 years of experience winning grants for minority-owned small businesses. You write narratives that sound real, personal, and human.
 
-Rules you never break:
-- Write in first person as the business owner
-- Short sentences. Direct. Grounded.
-- No buzzwords: leverage, synergize, paradigm, disruptive, empower, ecosystem, holistic
-- Maximum 3 short paragraphs per section
-- Sound like a person wrote this at their kitchen table, not a consultant in a boardroom
-- Always answer: What does this business do? Why do they need money RIGHT NOW? What happens if they get it? Who benefits?
-- CRITICAL: Never fabricate specific numbers, revenue figures, client counts, square footage, team size, or dates that were not provided in the business description. If a number was not given, describe the situation qualitatively instead. Making up statistics destroys grant credibility."""
+Winning strategies you always apply:
+- Lead with the human story first, then the business need. Grant reviewers fund people they believe in.
+- Every answer must be scannable in 10 seconds. The point must land in the first sentence or you lose the reviewer.
+- Mirror the funder's exact language and priorities. Write to what THEY care about, not just what you want to say.
+- Specificity beats volume. One concrete detail beats three vague paragraphs.
+- Use before/after framing: show what the business looks like WITHOUT this grant, then what changes WITH it.
+- Community impact must be named, not implied. Who benefits? Where? What changes for them?
+- CRITICAL: Never fabricate numbers, revenue figures, client counts, square footage, team size, or dates not provided in the business profile. If a number was not given, describe the situation qualitatively. Invented statistics destroy grant credibility.
+- No buzzwords: leverage, synergize, paradigm, disruptive, empower, ecosystem, holistic, innovative
+- Short sentences. Direct. First person. Maximum 3 paragraphs per answer.
+- Sound like a person wrote this at a kitchen table, not a consultant in a boardroom.
+- Never use double hyphens. Never use dashes as punctuation substitutes."""
 
 def generate_narrative(portal: dict, grant: dict) -> str:
     """Generate Q&A pairs as JSON string, or a narrative blob if no questions defined."""
@@ -339,11 +355,13 @@ def generate_narrative(portal: dict, grant: dict) -> str:
     minority_status = f"Minority-owned ({eth})" if eth and eth.lower() not in ["white/caucasian", ""] else ""
     questions = grant.get("questions", [])
 
+    funder_intel = grant.get("funder_values", "")
+
     if questions:
         q_list = "\n".join(f'{i+1}. "{q}"' for i, q in enumerate(questions))
         prompt = f"""Answer each grant application question below for this business. Write in first person as the owner.
 
-BUSINESS:
+BUSINESS PROFILE:
 - Name: {portal['business_name']}
 - Owner: {portal['owner_name']}
 - Type: {portal['business_type']}
@@ -353,24 +371,32 @@ BUSINESS:
 - {minority_status}
 - EIN: {"Yes" if portal.get('has_ein') else "No"}
 - Formation: {"DBA/LLC" if portal.get('has_dba') else "Sole proprietor"}
-- Description: {portal['description']}
+- Founder Story: {portal['description']}
 
-GRANT: {grant['name']} — {grant['amount']}
+GRANT: {grant['name']} ({grant['amount']})
 
-QUESTIONS:
+WHAT THIS FUNDER VALUES AND SCORES HIGHEST:
+{funder_intel}
+
+QUESTIONS TO ANSWER:
 {q_list}
 
-Write 2-3 paragraphs per answer. Sound like a real person — specific, direct, no buzzwords.
+Tailor every answer specifically to what this funder values. Lead with the human story, then the business need.
+Write 2-3 tight paragraphs per answer. Direct, specific, no buzzwords, no double hyphens.
 Respond ONLY with valid JSON in this exact format:
 {{"mode":"qa","answers":[{{"q":"exact question text","a":"your answer"}}]}}"""
     else:
-        prompt = f"""Write a complete grant application for {portal['business_name']} applying to {grant['name']} ({grant['amount']}).
+        prompt = f"""Write a complete grant application narrative for {portal['business_name']} applying to {grant['name']} ({grant['amount']}).
 Owner: {portal['owner_name']} | Type: {portal['business_type']} | State: {portal['state']}
 Revenue: {portal['revenue_range']} | {minority_status}
-Description: {portal['description']}
+Founder Story: {portal['description']}
 
-Include: business description, why they need funding, how funds will be used, community impact, why they will win.
-Be specific, human, first person. No buzzwords.
+WHAT THIS FUNDER VALUES:
+{funder_intel}
+
+Tailor the narrative to what this specific funder scores highest. Lead with the human story.
+Include: founder story, why they need funding now, specific use of funds, community impact.
+Be specific, human, first person. No buzzwords. No double hyphens.
 Respond as JSON: {{"mode":"narrative","text":"full narrative here"}}"""
 
     try:
@@ -425,12 +451,15 @@ def is_locked(portal: dict) -> tuple[bool, str]:
 def match_grants(portal: dict) -> list:
     is_minority = portal.get("ethnicity", "").lower() not in ["white/caucasian", ""]
     is_woman    = portal.get("gender", "").lower() in ["female", "woman"]
+    is_female   = portal.get("gender", "").lower() in ["female", "woman", "non-binary"]
     is_ca       = portal.get("state", "").upper() in ["CA", "CALIFORNIA"]
     results = []
     for gid, g in GRANTS.items():
         if g["req_minority"] and not is_minority:
             continue
         if g["req_woman"] and not is_woman:
+            continue
+        if g.get("req_female") and not is_female:
             continue
         if g["req_california"] and not is_ca:
             continue
