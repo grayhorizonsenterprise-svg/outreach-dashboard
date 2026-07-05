@@ -7,7 +7,7 @@ Deploy to Railway as its own service.
 Admin generates unique URLs → users fill profile → AI writes narratives → copy & submit.
 """
 
-import sqlite3, uuid, os, json, requests as http_requests
+import sqlite3, uuid, os, json, threading, requests as http_requests
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from fastapi import FastAPI, HTTPException, Request, Form
@@ -68,9 +68,16 @@ def init_db():
         status       TEXT DEFAULT 'Not Started',
         created_at   TEXT NOT NULL,
         apply_url    TEXT DEFAULT '',
-        notes        TEXT DEFAULT ''
+        notes        TEXT DEFAULT '',
+        submitted_at TEXT DEFAULT ''
     )""")
     db.commit()
+    # Migration: add submitted_at to existing tables
+    try:
+        db.execute("ALTER TABLE applications ADD COLUMN submitted_at TEXT DEFAULT ''")
+        db.commit()
+    except Exception:
+        pass
 
     # Always ensure owner account exists (survives Railway restarts)
     existing = db.execute("SELECT token FROM portals WHERE token=?", (OWNER_TOKEN,)).fetchone()
@@ -370,9 +377,10 @@ GRANTS = {
 
 SPEED_ORDER = {"FASTEST": 0, "FAST": 1, "MEDIUM": 2, "SLOWER": 3, "LONG": 4}
 STATUS_COLORS = {
-    "Not Started": "gray", "Applied": "blue",
+    "Not Started": "gray", "Applied": "blue", "Submitted": "amber",
     "Under Review": "amber", "Awarded": "green", "Rejected": "red"
 }
+SUBMITTED_STATUSES = {"Submitted", "Under Review", "Awarded", "Rejected"}
 
 # ─── Narrative generation ─────────────────────────────────────────────────────
 SYSTEM_PROMPT = """You are a professional grant writer with 15 years of experience winning grants for minority-owned small businesses. You write narratives that sound real, personal, and human.
@@ -733,30 +741,45 @@ def dashboard_html(token: str, portal: dict, grants: list, apps: list, locked: b
   <a href="/u/{token}/upgrade" class=btn>Upgrade to Full Access →</a>
 </div>"""
 
-    # Existing applications
+    # Existing applications — split into submitted vs active
     apps_html = ""
     if apps:
         status_options = list(STATUS_COLORS.keys())
-        items = ""
+        submitted_items = ""
+        active_items    = ""
         for a in apps:
-            sc = STATUS_COLORS.get(a["status"], "gray")
+            sc   = STATUS_COLORS.get(a["status"], "gray")
             opts = "".join(
                 f'<option value="{s}"{"selected" if s==a["status"] else ""}>{s}</option>'
                 for s in status_options
             )
-            gdata = GRANTS.get(a["grant_id"], {})
+            gdata         = GRANTS.get(a["grant_id"], {})
             narrative_html = render_narrative_blocks(a["narrative"], a["id"])
-            items += f"""
-<div class=card style="padding:16px;margin-bottom:12px">
+            is_submitted  = a["status"] in SUBMITTED_STATUSES
+
+            submit_btn = "" if is_submitted else f"""
+      <form method=POST action="/u/{token}/submit/{a['id']}" onsubmit="return confirm('Mark this grant as submitted? This records today as your submission date and emails you a confirmation.')">
+        <button class="btn btn-sm" type=submit style="background:#f59e0b;color:#000;font-weight:bold;font-size:13px">Mark Submitted</button>
+      </form>"""
+
+            sub_date_line = ""
+            if is_submitted and a.get("submitted_at"):
+                timeline     = gdata.get("timeline", "")
+                sub_date_line = f'<div style="font-size:12px;color:#f59e0b;margin-top:2px">Submitted {a["submitted_at"][:10]} &middot; Decision expected in {timeline}</div>'
+
+            card = f"""
+<div class=card style="padding:16px;margin-bottom:12px;border-color:{'#f59e0b' if is_submitted else '#1e293b'}">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">
     <div>
       <div style="font-weight:bold;color:#e2e8f0;font-size:14px">{a['grant_name']}</div>
       <div style="font-size:12px;color:#64748b">{a['grant_amount']} &middot; Generated {a['created_at'][:10]}</div>
+      {sub_date_line}
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <form method=POST action="/u/{token}/status/{a['id']}">
         <select name=status class=status-sel onchange="this.form.submit()">{opts}</select>
       </form>
+      {submit_btn}
       <form method=POST action="/u/{token}/email/{a['id']}">
         <button class="btn btn-sm" type=submit style="background:#7c3aed;color:#fff;font-size:13px">Send to My Email</button>
       </form>
@@ -768,7 +791,20 @@ def dashboard_html(token: str, portal: dict, grants: list, apps: list, locked: b
   </div>
   {narrative_html}
 </div>"""
-        apps_html = f'<div class=card><h2>Your Applications</h2>{items}</div>'
+            if is_submitted:
+                submitted_items += card
+            else:
+                active_items += card
+
+        submitted_section = f"""
+<div class=card style="border:2px solid #f59e0b;margin-bottom:16px">
+  <h2 style="color:#f59e0b">Submitted - Awaiting Decision</h2>
+  <p style="font-size:13px;color:#64748b;margin-bottom:12px">You will receive an automatic email when your decision window opens. No action needed.</p>
+  {submitted_items}
+</div>""" if submitted_items else ""
+
+        active_section = f'<div class=card><h2>Your Applications</h2>{active_items}</div>' if active_items else ""
+        apps_html = submitted_section + active_section
 
     # Grant list
     open_grants    = [g for g in grants if g.get("status") == "OPEN"]
@@ -1070,6 +1106,128 @@ def send_answers_email(to_email: str, portal: dict, grant: dict, app_record: dic
     except Exception:
         return False
 
+def send_submission_confirmation_email(to_email: str, portal: dict, grant: dict, submitted_at: str) -> bool:
+    """Email a submission confirmation with expected decision window."""
+    if not SENDGRID_KEY:
+        return False
+    grant_name   = grant.get("name", "Grant")
+    grant_amount = grant.get("amount", "")
+    timeline     = grant.get("timeline", "4-8 weeks")
+    apply_url    = grant.get("url", "")
+    sub_date     = submitted_at[:10]
+    html = f"""<!DOCTYPE html>
+<html><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"></head>
+<body style="background:#0f172a;font-family:Arial,sans-serif;margin:0;padding:20px;color:#e2e8f0">
+<div style="max-width:600px;margin:0 auto">
+<div style="background:#1e293b;border:3px solid #f59e0b;border-radius:10px;padding:24px;margin-bottom:20px">
+  <div style="font-size:11px;color:#f59e0b;font-weight:bold;letter-spacing:.1em;margin-bottom:6px">APPLICATION SUBMITTED</div>
+  <div style="font-size:22px;font-weight:bold;color:#e2e8f0;margin-bottom:4px">{grant_name}</div>
+  <div style="font-size:15px;color:#94a3b8;margin-bottom:16px">{grant_amount} &middot; Submitted {sub_date}</div>
+  <div style="background:#0f172a;border-radius:8px;padding:16px;font-size:14px;color:#94a3b8;line-height:2">
+    <strong style="color:#f59e0b">Expected Decision Window:</strong> {timeline} from submission<br>
+    <strong style="color:#f59e0b">What to do now:</strong> Do nothing. They will contact you by email if selected.<br>
+    <strong style="color:#f59e0b">Check your portal for status updates:</strong> Your grant tracker has been updated.
+  </div>
+</div>
+<div style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:16px;font-size:13px;color:#64748b">
+  You will receive an automatic reminder email when your decision window opens. In the meantime, keep applying to other open grants in your portal.
+</div>
+<p style="color:#475569;font-size:12px;text-align:center;margin-top:20px">
+  Gray Horizons Enterprise | grayhorizonsenterprise@gmail.com
+</p>
+</div></body></html>"""
+    payload = {
+        "personalizations": [{"to": [{"email": to_email, "name": portal.get("owner_name", "Owner")}]}],
+        "from": {"email": "grayhorizonsenterprise@gmail.com", "name": "GHE Grant Portal"},
+        "subject": f"Submitted: {grant_name} ({grant_amount}) - Decision in {timeline}",
+        "content": [{"type": "text/html", "value": html}],
+    }
+    try:
+        r = http_requests.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            headers={"Authorization": f"Bearer {SENDGRID_KEY}", "Content-Type": "application/json"},
+            json=payload, timeout=15
+        )
+        return r.status_code in (200, 202)
+    except Exception:
+        return False
+
+def send_decision_reminder_email(to_email: str, grant_name: str, grant_amount: str, portal_url: str) -> bool:
+    """Email a reminder that the decision window for a submitted grant is now open."""
+    if not SENDGRID_KEY:
+        return False
+    html = f"""<!DOCTYPE html>
+<html><head><meta charset=UTF-8></head>
+<body style="background:#0f172a;font-family:Arial,sans-serif;padding:20px;color:#e2e8f0">
+<div style="max-width:580px;margin:0 auto">
+<div style="background:#1e293b;border:3px solid #22c55e;border-radius:10px;padding:24px">
+  <div style="font-size:11px;color:#22c55e;font-weight:bold;letter-spacing:.1em;margin-bottom:6px">DECISION WINDOW NOW OPEN</div>
+  <div style="font-size:20px;font-weight:bold;color:#e2e8f0;margin-bottom:8px">{grant_name}</div>
+  <div style="font-size:14px;color:#94a3b8;margin-bottom:16px">{grant_amount} - Check your email and spam folder for a decision notice.</div>
+  <a href="{portal_url}" style="background:#22c55e;color:#000;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:14px;display:inline-block">
+    Update Grant Status in Portal
+  </a>
+</div>
+<p style="color:#475569;font-size:12px;text-align:center;margin-top:16px">Gray Horizons Enterprise | grayhorizonsenterprise@gmail.com</p>
+</div></body></html>"""
+    payload = {
+        "personalizations": [{"to": [{"email": to_email}]}],
+        "from": {"email": "grayhorizonsenterprise@gmail.com", "name": "GHE Grant Monitor"},
+        "subject": f"Decision Window Open: {grant_name} - Check Your Email",
+        "content": [{"type": "text/html", "value": html}],
+    }
+    try:
+        r = http_requests.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            headers={"Authorization": f"Bearer {SENDGRID_KEY}", "Content-Type": "application/json"},
+            json=payload, timeout=15
+        )
+        return r.status_code in (200, 202)
+    except Exception:
+        return False
+
+def parse_timeline_days(timeline: str) -> int:
+    """Convert timeline string like '4-8 weeks' to max days."""
+    import re
+    nums = re.findall(r'\d+', timeline)
+    weeks = int(nums[-1]) if nums else 8
+    if "month" in timeline:
+        weeks = weeks * 4
+    return weeks * 7
+
+def run_grant_monitor():
+    """Check submitted grants daily, email when decision window is open."""
+    try:
+        db = get_db()
+        rows = db.execute(
+            "SELECT * FROM applications WHERE status='Submitted' AND submitted_at != ''"
+        ).fetchall()
+        db.close()
+        now = datetime.now(timezone.utc)
+        for row in rows:
+            app_rec = dict(row)
+            grant   = GRANTS.get(app_rec["grant_id"], {})
+            try:
+                sub_dt = datetime.fromisoformat(app_rec["submitted_at"])
+            except Exception:
+                continue
+            days_elapsed  = (now - sub_dt).days
+            decision_days = parse_timeline_days(grant.get("timeline", "8 weeks"))
+            # Alert when we hit the minimum decision window
+            if days_elapsed >= (decision_days // 2) and days_elapsed < decision_days:
+                portal_url = f"https://distinguished-consideration-production-8467.up.railway.app/u/{OWNER_TOKEN}"
+                send_decision_reminder_email(
+                    OWNER_EMAIL, app_rec["grant_name"],
+                    app_rec["grant_amount"], portal_url
+                )
+    except Exception as e:
+        print(f"[Grant Monitor] Error: {e}")
+    finally:
+        threading.Timer(86400, run_grant_monitor).start()
+
+# Start monitoring 1 hour after startup to avoid cold-start noise
+threading.Timer(3600, run_grant_monitor).start()
+
 # ─── Routes ───────────────────────────────────────────────────────────────────
 
 @app.get("/admin", response_class=HTMLResponse)
@@ -1212,6 +1370,27 @@ async def update_status(token: str, app_id: int, request: Request):
     db.execute("UPDATE applications SET status=? WHERE id=? AND token=?", (status, app_id, token))
     db.commit()
     db.close()
+    return RedirectResponse(f"/u/{token}", status_code=302)
+
+@app.post("/u/{token}/submit/{app_id}")
+async def mark_submitted(token: str, app_id: int):
+    portal = get_portal(token)
+    if not portal:
+        raise HTTPException(status_code=404)
+    now = datetime.now(timezone.utc).isoformat()
+    db  = get_db()
+    db.execute(
+        "UPDATE applications SET status='Submitted', submitted_at=? WHERE id=? AND token=?",
+        (now, app_id, token)
+    )
+    db.commit()
+    row = db.execute("SELECT * FROM applications WHERE id=? AND token=?", (app_id, token)).fetchone()
+    db.close()
+    if row:
+        app_rec = dict(row)
+        grant   = GRANTS.get(app_rec["grant_id"], {})
+        to_email = OWNER_EMAIL if token == OWNER_TOKEN else portal.get("owner_email", OWNER_EMAIL)
+        send_submission_confirmation_email(to_email, dict(portal), grant, now)
     return RedirectResponse(f"/u/{token}", status_code=302)
 
 @app.get("/u/{token}/apply/{grant_id}", response_class=HTMLResponse)
