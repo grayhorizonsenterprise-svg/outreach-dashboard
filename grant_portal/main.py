@@ -87,7 +87,7 @@ def init_db():
              state,has_ein,has_dba,revenue_range,employees,description,apps_used,profile_done,label)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (OWNER_TOKEN, datetime.now(timezone.utc).isoformat(),
-             "Gray Horizons Enterprise", "Curtis Gray",
+             "Gray Horizons Enterprise", "Curtis Gardner",
              "AI automation and agentic workflow consulting",
              "Black/African American", "Male", "CA",
              1, 2, "under-50k", "1 (solo)",
