@@ -506,6 +506,50 @@ Then he asked how fast we could get it set up.
 Call {DEMO_LINE} to hear exactly what his callers hear now.""",
 ]
 
+DEMO_POSTS = [
+    f"""I set up an AI receptionist for a Riverside roofer.
+
+Before he signed anything, I told him to call one number.
+
+{DEMO_LINE}
+
+He called at 8:43pm on a Wednesday.
+
+It answered in 2 seconds. Greeted him as a potential customer. Asked what the job was. Offered to book an appointment.
+
+He texted me after: "That's wild. How fast can we get this on my line?"
+
+90 seconds is all it takes to hear what your business should sound like after hours.
+
+Call it yourself. No login. No sales call. Just the demo.
+
+Full system walkthrough at grayhorizonsenterprise.com""",
+
+    f"""Most contractors have never heard what happens when someone calls their business at 11pm.
+
+I built a system that answers that call in under 3 seconds, 24 hours a day.
+
+Call {DEMO_LINE} right now and hear it yourself.
+
+It answers like a real receptionist. Takes a job request. Offers to book.
+
+The whole thing runs without a single staff member.
+
+If you want to see how it works for your business: grayhorizonsenterprise.com""",
+
+    f"""I called 11 HVAC companies last Tuesday at 8:47pm.
+
+1 answered.
+
+That company booked a $2,200 job that night.
+
+The other 10 lost it to voicemail.
+
+Call {DEMO_LINE} to hear what that one company sounds like now.
+
+Then go to grayhorizonsenterprise.com to see the full system.""",
+]
+
 AUDIT_POSTS = [
     f"""Want to know exactly how many calls your business missed last week?
 
@@ -560,7 +604,7 @@ Call {DEMO_LINE} to hear what the solution sounds like while you wait.""",
 
 # LINKEDIN ONLY: GHL automation + AI services posts
 # NEVER add EDGE_ENGINE_POSTS or PRODUCT_POSTS here — trading content stays on Twitter/X only
-ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS + TEACHING_POSTS + AUDIT_POSTS
+ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS + TEACHING_POSTS + DEMO_POSTS + AUDIT_POSTS
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
