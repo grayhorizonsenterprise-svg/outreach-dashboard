@@ -62,6 +62,7 @@ run("Local biz: Bark",                               "bark_scraper.py",         
 run("Local biz: Yelp",                               "yelp_scraper.py",          600)
 run("Nonprofits: grant writing leads",               "nonprofit_scraper.py",     600)
 run("Continuous multi-source scan",                  "lead_scanner.py",          600)
+run("CA contractor lead scraper (web)",              "scrape_contractor_leads.py", 900)
 
 # ── PHASE 2: ENRICH + QUALIFY ─────────────────────────────────────────────────
 
@@ -100,6 +101,9 @@ print("  PHASE 5 — FOLLOW-UPS")
 print("=" * 60)
 
 run("Follow-up engine",          "followup_engine.py",       300)
+run("HOA 2-week follow-up",      "send_hoa_followup.py",      300)
+run("Contractor outreach send",  "send_contractor_outreach.py", 300)
+run("Contractor 7-day follow-up","send_followup_outreach.py",  300)
 
 # ── PHASE 6: CONTENT ──────────────────────────────────────────────────────────
 
