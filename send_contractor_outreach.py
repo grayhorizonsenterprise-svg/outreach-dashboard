@@ -46,11 +46,11 @@ I built a system that gets your response time down to 15 seconds. It answers eve
 
 One recovered emergency job pays for the entire system twice over.
 
-Call this number right now to hear exactly what it sounds like when someone calls your business after hours: {demo_line}
+Call this number right now — it answers in under 3 seconds, 24 hours a day: {demo_line}
 
-That's a live demo. Takes 90 seconds. It will answer like a real receptionist.
+Takes 90 seconds. It answers like a real receptionist for a home services business. That is exactly what your callers would hear.
 
-If you want to know how to get yours set up, here is a link to book 20 minutes with me: {calendly}
+If you want yours set up after you call, reply to this email with the word SETUP and I will send you the details.
 
 Curtis Gardner
 Gray Horizons Enterprise
@@ -96,9 +96,9 @@ I built an automated front desk that responds to every lead in under 15 seconds,
 
 Call this number right now and hear exactly what callers will experience: {demo_line}
 
-That's a working demo. 90 seconds. It answers like a real receptionist.
+90 seconds. It answers like a real receptionist. That is what your storm callers would hear instead of voicemail.
 
-To see how we'd set this up for your business in 5 days: {calendly}
+If you want yours set up after you call, reply to this email with the word SETUP.
 
 Curtis Gardner
 Gray Horizons Enterprise
@@ -123,7 +123,7 @@ Call this number right now to hear it in action: {demo_line}
 
 Real demo, 90 seconds. It will greet you like a real receptionist.
 
-To talk through building this for your team: {calendly}
+If you want yours set up after you call, reply to this email with the word SETUP.
 
 Curtis Gardner
 Gray Horizons Enterprise
@@ -148,7 +148,7 @@ Takes 90 seconds. It answers like a real receptionist.
 
 One recovered new patient per week pays for the system. Most offices see 3 to 5 in the first month.
 
-To see how we'd set this up for your practice: {calendly}
+If you want yours set up after you call, reply to this email with the word SETUP.
 
 Curtis Gardner
 Gray Horizons Enterprise
@@ -169,7 +169,7 @@ Call this number right now to hear what a 24/7 automated front desk sounds like:
 
 Takes 90 seconds. It will answer like a real receptionist.
 
-To see how this gets set up for your business: {calendly}
+If you want yours set up after you call, reply to this email with the word SETUP.
 
 Curtis Gardner
 Gray Horizons Enterprise
@@ -192,7 +192,7 @@ Call this number right now to hear what a 24/7 automated front desk sounds like:
 
 Real demo. 90 seconds.
 
-To talk through how this would work for your jobs: {calendly}
+If you want yours set up after you call, reply to this email with the word SETUP.
 
 Curtis Gardner
 Gray Horizons Enterprise
@@ -213,7 +213,7 @@ Call this number right now to hear a live demo of what automated intake sounds l
 
 Takes 90 seconds. It answers like a real receptionist.
 
-To see how this would work for your team: {calendly}
+If you want yours set up after you call, reply to this email with the word SETUP.
 
 Curtis Gardner
 Gray Horizons Enterprise
@@ -236,7 +236,7 @@ Call this number right now to hear a live demo: {demo_line}
 
 Takes 90 seconds. It answers like a real receptionist.
 
-To schedule 20 minutes to talk about your business: {calendly}
+If you want yours set up after you call, reply to this email with the word SETUP.
 
 Curtis Gardner
 Gray Horizons Enterprise
