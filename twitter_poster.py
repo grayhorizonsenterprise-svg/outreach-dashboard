@@ -1,10 +1,12 @@
 """
 twitter_poster.py — Gray Horizons Enterprise
-Auto-posts to Twitter/X daily. Four content streams:
+Auto-posts to Twitter/X daily. EDGE ENGINE ONLY — three content streams:
   1. Edge Engine signal previews (drives $29/mo membership)
   2. TradingView indicator posts (drives $67 + $79 Gumroad sales)
-  3. Business tip hooks (drives AI automation service leads)
-  4. Engagement questions (builds audience, drives replies)
+  3. Engagement questions (builds trader audience, drives replies)
+
+STRICT RULE: Zero business/GHL/AI automation content on this account.
+X audience = traders only. Business content goes to LinkedIn exclusively.
 
 Setup (one-time, 10 minutes):
   1. Go to developer.twitter.com → Sign in → Create Project → Create App
@@ -53,9 +55,10 @@ DATA_DIR   = Path(os.path.dirname(os.path.abspath(__file__)))
 POSTED_LOG = DATA_DIR / "twitter_posted.json"
 
 SIGNALS_LINK = os.getenv("SIGNALS_LINK", os.getenv("STRIPE_SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01"))
+WHOP_LINK    = os.getenv("WHOP_INDICATORS_LINK", "https://whop.com/gray-horizons-enterprise/ghe-indicator-suite/")
+GUMROAD_LINK = os.getenv("GUMROAD_SIGNALS_LINK", "https://horizons56.gumroad.com/l/ghe-signals")
+# BOOK_CALL is for LinkedIn/email only — never appears in X posts
 BOOK_CALL    = "https://calendly.com/grayhorizonsenterprise/30min"
-GUMROAD_LINK = BOOK_CALL
-WHOP_LINK    = BOOK_CALL
 
 # ─── Content Pools ────────────────────────────────────────────────────────────
 
@@ -322,97 +325,6 @@ All 3 answered automatically. $79 once.
 {WHOP_LINK}""",
 ]
 
-BUSINESS_TIP_POSTS = [
-    """Most local service businesses lose 30% of inbound leads to voicemail.
-
-The customer doesn't leave a message. They call the next Google result.
-
-Not a lead problem. A response time problem.
-
-What's your missed call rate?""",
-
-    """SMS gets a 98% open rate. Email gets 20%.
-
-If you're a local business and you're not texting within 5 minutes of an inquiry, you're losing to whoever does.
-
-What's your average response time?""",
-
-    """Dead leads aren't dead.
-
-They're waiting for the right message at the right time.
-
-5-15% convert when followed up correctly. Most businesses stop after 1 touch.
-
-How many times do you follow up before stopping?""",
-
-    """The first business to respond to an inbound lead wins 78% of the time.
-
-Not the best price. Not the best reviews.
-
-The fastest response.
-
-What's your average time from inquiry to first contact?""",
-
-    """What's actually working in 2026:
-
-AI answering calls 24/7
-Automated follow-up for 30 days
-Systems that run while you sleep
-
-What's not: hoping referrals keep coming in.
-
-What's your biggest growth bottleneck?""",
-
-    """HVAC company. $4k/month on ads. 48 leads. Closing 9.
-
-Not a lead problem. A follow-up problem.
-
-Instant SMS on every form. Missed call text-back. 7 touches over 2 weeks.
-
-Same budget. 23 closes the next month.
-
-Does your follow-up run automatically?""",
-
-    """One closed deal from automation pays for a full year of the system.
-
-Most business owners wait until they're desperate to build it.
-
-The ones growing built it before they needed it.
-
-What's the thing in your business that should already be automated?""",
-
-    """AI doesn't replace your front desk.
-
-It answers when your front desk can't.
-
-Every missed call after 5pm is revenue you didn't capture.
-
-How much is one missed call worth to your business?""",
-
-    """Most contractors lose their best leads in the gap between the estimate and the follow-up.
-
-The homeowner makes a decision within 5 days. Most contractors follow up on day 12.
-
-That's a system problem. Not a sales problem.
-
-What's your estimate-to-follow-up time?""",
-
-    """Your Google Business Profile is either making you money or losing you money.
-
-No neutral.
-
-Businesses posting weekly to GBP are showing up above competitors who post zero times.
-
-When did you last post to yours?""",
-
-    """The window to close an inbound lead is 5 minutes.
-
-After that, conversion drops by 80%.
-
-Most local businesses respond in 4-6 hours.
-
-That gap is exactly where your competitors are stealing your customers.""",
-]
 
 ENGAGEMENT_POSTS = [
     """Traders: what's the one setup you refuse to trade without?
@@ -554,159 +466,7 @@ That's it.
 {SIGNALS_LINK}""",
 ]
 
-CASE_STUDY_POSTS = [
-    """Roofing company. Answering 60% of inbound calls. The other 40% moved to the next Google result.
 
-Set up automated missed-call text-back. Same day.
-
-3 months later: 94% response rate. 3 new jobs per week from leads they used to lose.
-
-What's your current answer rate?""",
-
-    """HOA management firm. 3 employees. 12 communities. Violation tracking in a shared spreadsheet.
-
-Things got lost. Homeowners complained. Board meetings got ugly.
-
-We built automated tracking from report to resolution. 6 days to implement.
-
-No more lost violations. No more spreadsheet.""",
-
-    """HVAC company. Owner spending 2 hours a day calling back leads.
-
-After the system went live:
-- Every lead gets text response in under 90 seconds
-- Estimates followed up automatically
-- Owner spends 0 hours on lead chasing
-
-First month: 4 additional booked jobs.""",
-
-    """Dental practice. 40% of new patient calls came in after hours. All 40% went to voicemail. Most didn't leave a message.
-
-Built an after-hours system that captures name, callback number, and reason for calling.
-
-Front desk arrives with a sorted list every morning.""",
-
-    """Contractor. 12-day average estimate-to-follow-up time.
-
-Homeowners make a decision in 5 days.
-
-He was following up 7 days too late. Every time.
-
-Automated follow-up at day 3, 5, and 8 after every estimate.
-
-Close rate: 22% to 39% in 60 days.""",
-
-    """What $2,500 in automation actually looks like:
-
-Before:
-- 1 person chasing 40 leads manually
-- 60% follow-up rate
-- 18% close rate
-
-After:
-- System handles all follow-up
-- 100% follow-up rate
-- 31% close rate
-
-That's math, not a pitch.""",
-
-    """Landscaping company. Lost 30% of recurring clients between seasons because nobody reached out.
-
-Built a win-back sequence. Fires automatically 45 days before their usual start date.
-
-Last season: 76% of lapsed clients rebooked. Owner made zero calls.""",
-
-    """Plumbing company. Missed calls during peak hours meant lost jobs.
-
-Emergency plumbing: customer calls 2-3 companies. Books whoever responds first.
-
-Set up immediate SMS acknowledgment + calendar booking for all inbound calls.
-
-Missed call rate: down 90%.""",
-]
-
-# Portfolio showcase posts — paired with real screenshots from indicators/ folder
-_PORTFOLIO_ITEMS = [
-    ("""Built a full lead automation workflow inside GoHighLevel for a home services client.
-
-New lead comes in from a web form. Immediate SMS fires. System waits for reply. No response in 30 min triggers an email. 24 hours later a second SMS goes out. Task created for manual outreach.
-
-Zero manual steps. Zero missed leads.
-
-This is what I build for clients: """ + GUMROAD_LINK + """
-
-#GoHighLevel #CRM #Automation #HomeServices""",
-     "indicators/ghl-automation-full.png"),
-
-    ("""GHL pipeline dashboard for a home services client.
-
-Opportunity status, conversion rates, revenue value, stage distribution — live and updating automatically.
-
-Clients stop guessing where their leads are. The system tells them.
-
-Need this built for your business: """ + GUMROAD_LINK + """
-
-#GoHighLevel #CRM #LeadManagement #Automation""",
-     "indicators/ghl-dashboard-demo.png"),
-
-    ("""Built a Vapi AI voice agent that books HVAC appointments on inbound calls.
-
-Caller says they need AC repair. Agent collects name, address, issue, and preferred time. Books the job. No human needed.
-
-Live transcript from a real test call shown here.
-
-Build yours: """ + GUMROAD_LINK + """
-
-#VoiceAI #Vapi #HVAC #AIAutomation""",
-     "indicators/vapi-live-transcript.png"),
-
-    ("""AI voice agent dashboard — real inbound call data.
-
-Call duration, transcript, booking status, caller info — all logged automatically after every call.
-
-This is what an AI receptionist looks like in production.
-
-""" + GUMROAD_LINK + """
-
-#VoiceAI #Vapi #AIAgent #Automation""",
-     "indicators/vapi-agent-dashboard.png"),
-
-    ("""Booking confirmed. No human involved.
-
-AI voice agent took the call, qualified the lead, and completed the appointment booking start to finish.
-
-This runs 24/7. Nights, weekends, holidays.
-
-""" + GUMROAD_LINK + """
-
-#VoiceAI #AIAutomation #Vapi #SmallBusiness""",
-     "indicators/vapi-booking-complete.png"),
-
-    ("""Built a contractor intake system that handles both sides of the operation.
-
-Client submits a job request. Gets an immediate confirmation. Request routes automatically to the right contractor.
-
-Contractor gets notified instantly. No phone tag. No lost jobs.
-
-""" + GUMROAD_LINK + """
-
-#Contractors #Automation #HomeServices #SmallBusiness""",
-     "indicators/contractor intake dashboard client side.png"),
-
-    ("""Automated outreach dashboard pulling live data from multiple sources.
-
-Lead status, pipeline value, outreach history — one view, no manual data entry.
-
-Built for lead generation at scale. Same system can be built for any service business in under a week.
-
-""" + GUMROAD_LINK + """
-
-#Automation #LeadGeneration #AITools #BusinessIntelligence""",
-     "dashboard_populated.png"),
-]
-
-PORTFOLIO_POSTS    = [item[0] for item in _PORTFOLIO_ITEMS]
-PORTFOLIO_IMAGE_MAP = {item[0]: item[1] for item in _PORTFOLIO_ITEMS}
 
 CHART_POSTS = [
     """TradingView screenshot — this is what a 70+ signal looks like on the chart.
@@ -902,78 +662,6 @@ When everything aligns, the next move is usually obvious.
 {SIGNALS_LINK}""",
 ]
 
-# GHL / AI automation posts — text ONLY, never paired with a trading chart image
-AUTOMATION_POSTS = [
-    f"""88% of businesses use AI. 6% do it well.
-
-The other 82%: tools running, nothing working.
-
-Silent failures. Leads going cold. Follow-ups not firing.
-
-When did you last verify your automations are actually working?
-
-{BOOK_CALL}""",
-
-    f"""76% of enterprise CEOs now have a Chief AI Officer.
-
-Two years ago: 26%.
-
-Local service businesses can't afford the $150K hire.
-
-I do it for $750/month. GHL, AI voice agents, full intake automation.
-
-{BOOK_CALL}""",
-
-    f"""This is the Excel moment.
-
-Early movers built advantage. Late movers got outpaced.
-
-The HVAC company with AI intake is booking at 2am while the competitor sleeps.
-
-Which side are you on?
-
-{BOOK_CALL}""",
-
-    f"""Do you have automations running right now you haven't manually checked in 30 days?
-
-Most owners can't answer that confidently.
-
-That's where revenue leaks.
-
-Free 20-min audit. I'll tell you exactly what's broken.
-
-{BOOK_CALL}""",
-
-    f"""GHL dashboard live. Pipeline data for a home services client.
-
-Every lead tracked. Every stage visible. Revenue value per opportunity.
-
-This is what the system looks like when it's actually built right.
-
-What are you using to track your pipeline?
-
-{BOOK_CALL}""",
-
-    f"""Contractor. 60 inbound leads last month. Followed up on 38.
-
-22 went to voicemail and were never contacted again. He had no idea.
-
-GHL sequence auto-follows for 14 days. 4 of those 22 converted in week two.
-
-How many leads did your team write off last month?
-
-{BOOK_CALL}""",
-
-    f"""AI voice agent. No human involved.
-
-Caller: needs HVAC repair. Agent: collects name, address, issue, preferred time. Books the job.
-
-This runs nights, weekends, holidays.
-
-24/7 intake at a fraction of the cost of a receptionist.
-
-{BOOK_CALL}""",
-]
 
 ALL_POSTS = {
     "signals":      SIGNALS_POSTS,
@@ -983,7 +671,8 @@ ALL_POSTS = {
     "chart":        CHART_POSTS,
     "wins":         WINS_POSTS,
     "visual":       VISUAL_POSTS,
-    "automation":   AUTOMATION_POSTS,
+    # "automation" removed — GHL/AI business content does NOT belong on X/Twitter.
+    # X is Edge Engine / trading ONLY. Business content goes to LinkedIn exclusively.
 }
 
 # Image-attached categories — auto-generate or attach a card PNG
@@ -995,8 +684,8 @@ CHART_CARD_CATEGORIES = {"chart", "wins", "visual"}
 
 DAILY_SCHEDULE = [
     ("chart",      "13:00"),   # 8am ET   — trading chart/signal post
-    ("automation", "18:30"),   # 1:30pm ET — GHL/AI automation text post (NO image)
-    ("engagement", "23:00"),   # 6pm ET   — engagement question
+    ("signals",    "18:30"),   # 1:30pm ET — Edge Engine signal post
+    ("engagement", "23:00"),   # 6pm ET   — trader engagement question
 ]
 
 # Target audience accounts — trading AND local business/automation
@@ -1086,6 +775,10 @@ AUTOMATION_SEARCH_TERMS = [
 
 
 def auto_engage_niche(max_comments: int = 5) -> int:
+    """Disabled — GHL/automation engagement from a trading account splits the algorithm audience."""
+    return 0
+    # Original implementation below — do not re-enable without explicit approval
+def _auto_engage_niche_disabled(max_comments: int = 5) -> int:
     """Auto-reply to high-engagement GHL/automation tweets with value-add comments."""
     if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
         return 0
@@ -1276,8 +969,28 @@ def pick_post(category: str, posted: dict) -> str:
 
 # ─── Twitter API ──────────────────────────────────────────────────────────────
 
+_BLOCKED_KEYWORDS = [
+    "ghl", "gohighlevel", "go high level",
+    "ai voice agent", "vapi", "front desk",
+    "hvac company", "roofing company", "contractor",
+    "missed call", "follow-up", "follow up", "calendly",
+    "automation", "automations", "automate",
+    "$750/month", "$997", "$297",
+    "audit", "free 20-min",
+]
+
+def _is_business_content(text: str) -> bool:
+    low = text.lower()
+    return any(kw in low for kw in _BLOCKED_KEYWORDS)
+
+
 def post_tweet(text: str, media_id: str | None = None) -> bool:
     """Post a tweet using Twitter API v2 with direct OAuth1 signing."""
+    if _is_business_content(text):
+        print(f"[TWITTER BLOCKED] Business/automation content detected — refusing to post.")
+        print(f"  First 80 chars: {text[:80]!r}")
+        return False
+
     if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
         print("[TWITTER] Missing API credentials — set all 4 env vars")
         return False

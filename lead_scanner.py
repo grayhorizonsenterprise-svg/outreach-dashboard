@@ -17,7 +17,10 @@ import json
 import pandas as pd
 from datetime import datetime
 from pathlib import Path
-from duckduckgo_search import DDGS
+try:
+    from ddgs import DDGS
+except ImportError:
+    from duckduckgo_search import DDGS
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 

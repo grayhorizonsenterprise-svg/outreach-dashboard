@@ -179,11 +179,23 @@ if __name__ == "__main__":
         _re.I
     )
 
+    # NICHE FILTER — only send to contractor target niches. Everything else skipped.
+    _TARGET_NICHES = {"hvac", "roofing", "plumbing", "solar", "contractor"}
+    _GARBAGE_EMAILS = {"myname@website.com", "r@gmail.com", "test@test.com", "you@email.com"}
+    _GARBAGE_DOMAINS = {"example.com", "test.com", "website.com", "coj.net", "bpl.org",
+                        "archive.org", "acpl.info", "secretmedianetwork.com"}
+
     _pending = [r for r in _rows if r.get("status", "").strip().lower() not in ("sent", "skipped")]
 
-    # Auto-skip garbage addresses before counting
+    # Auto-skip garbage addresses and wrong niches before counting
     for _r in _pending:
-        if _SKIP_RE.search(_r.get("email", "")):
+        _em = _r.get("email", "").strip().lower()
+        _niche = _r.get("niche", "").strip().lower()
+        _domain = _em.split("@")[-1] if "@" in _em else ""
+        if (_SKIP_RE.search(_em)
+                or _em in _GARBAGE_EMAILS
+                or _domain in _GARBAGE_DOMAINS
+                or _niche not in _TARGET_NICHES):
             _r["status"] = "skipped"
     _pending = [r for r in _pending if r.get("status", "").strip().lower() == "pending"]
 

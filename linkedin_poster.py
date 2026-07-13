@@ -42,7 +42,7 @@ DATA_DIR      = Path(os.path.dirname(os.path.abspath(__file__)))
 POSTED_LOG    = DATA_DIR / "linkedin_posted.json"
 TOKEN_FILE    = DATA_DIR / "linkedin_token.json"
 COOLDOWN_FILE = DATA_DIR / "linkedin_last_post.json"
-MIN_HOURS_BETWEEN_POSTS = 20
+MIN_HOURS_BETWEEN_POSTS = 4
 
 BOOK_CALL      = "https://calendly.com/grayhorizonsenterprise/30min"
 DEMO_LINE      = "+1 (903) 627-8040"
@@ -550,6 +550,162 @@ Call {DEMO_LINE} to hear what that one company sounds like now.
 Then go to grayhorizonsenterprise.com to see the full system.""",
 ]
 
+STATS_POSTS = [
+    f"""85% of callers who reach voicemail never call back.
+
+Not "some." Not "most."
+
+85%.
+
+And yet most contractors are still running their business with voicemail as the backup plan.
+
+If your phone rings 20 times a week after hours and you miss 12 of them, 10 of those people are already gone before 9am the next morning.
+
+They did not leave a message. They called the next company on Google.
+
+The first voice wins. The voicemail loses.
+
+Call {DEMO_LINE} and hear what the first voice sounds like.""",
+
+    f"""62% of calls to contractors go unanswered.
+
+More than half.
+
+The industry loses $26 billion a year to missed calls. Not bad marketing. Not bad pricing. Missed calls.
+
+If you are in HVAC, roofing, plumbing, or solar and you are spending money on ads, 62 cents of every dollar you spend is funding leads that nobody picks up.
+
+The fix is not more ads. It is a system that answers every call in under 15 seconds regardless of whether you are on a job site, in a truck, or asleep.
+
+$997 to set up. $297 a month to run. One recovered job covers the cost.
+
+Call {DEMO_LINE} now. Hear it before you decide.""",
+
+    f"""The AI receptionist space has a pricing problem and I am going to name it.
+
+Ruby Receptionists: $500 to $800 a month. For 100 calls.
+AnswerConnect: Similar.
+Smith.ai: $300 to $600 a month minimum.
+
+All of them charge per call or per minute. Busy season hits and your bill doubles.
+
+We charge $297 a month. Flat. Unlimited calls. The AI handles every single one.
+
+One recovered emergency job in HVAC covers 4 months of that fee.
+
+Call {DEMO_LINE} to hear the system that costs less than what Ruby charges for 100 calls.""",
+
+    f"""Only 11% of HVAC companies respond to a new lead within an hour.
+
+11%.
+
+That means 89% of your market is handing leads to whoever answers fastest.
+
+A Harvard Business Review study found that responding within 5 minutes makes you 100 times more likely to connect with that lead versus responding in 30 minutes.
+
+The average HVAC company responds in 47 hours.
+
+The math on this is brutal. 89% of your competitors are losing every speed-sensitive lead in the market. If you can answer in under 60 seconds, you capture all of it.
+
+Our system answers in under 15 seconds. Every call. 24 hours a day.
+
+Call {DEMO_LINE} to hear exactly what that sounds like.""",
+
+    f"""Responding within 60 seconds increases lead conversion by 391%.
+
+Not 39%. Not 91%. 391%.
+
+Most contractors respond within 47 hours.
+
+The difference between 60 seconds and 47 hours is not just speed. It is the difference between booking the job and losing it to whoever answered first.
+
+Roofing leads cost $250 to $328 each to generate. At a 47-hour response time, you are buying leads and handing them to your competition.
+
+One change. One system. 391% better odds.
+
+Call {DEMO_LINE} and hear what 15-second response sounds like on your line.""",
+
+    f"""I called 3 HVAC companies at 9pm last week to get a quote on a new system.
+
+Company 1: Voicemail.
+Company 2: Voicemail.
+Company 3: Answered in 2 seconds, took my info, said a tech would follow up in the morning.
+
+Company 3 got the job. I never called back the other two.
+
+That job was worth approximately $6,800.
+
+Companies 1 and 2 each spent real money getting my attention. Google Ads, SEO, reviews. All of it to end up at a voicemail.
+
+This is happening to your business every single day.
+
+Call {DEMO_LINE} and hear what company 3 sounds like.""",
+
+    f"""A roofing company in Fresno had 62 documented after-hours missed calls last year.
+
+They did not know until I asked them to pull the log.
+
+Average roofing job: $9,200.
+Conservative booking rate at 30%: 18 jobs.
+Revenue left on the table: $165,600.
+
+From voicemail.
+
+Not bad leads. Not a bad market. Just a phone that did not answer after 6pm.
+
+We turned on the Autonomous Front Desk. It has answered 147 calls in the first 90 days without a single miss.
+
+What is your voicemail log going to show when you pull it?
+
+Call {DEMO_LINE} and hear what the fix sounds like.""",
+
+    f"""The objection I hear most from contractors:
+
+"My customers want to talk to a real person."
+
+Here is the data on that:
+
+78% of callers who reach voicemail hang up and call the next company.
+85% of people who leave a voicemail never call back.
+Only 20% of home service companies respond within an hour.
+
+Your customers do not want a human. They want someone to answer.
+
+When the option is "AI that answers in 3 seconds" versus "voicemail nobody checks until morning," 100% of customers prefer the AI.
+
+Call {DEMO_LINE} and hear what your customers would hear instead of voicemail.
+
+grayhorizonsenterprise.com""",
+
+    f"""Unpopular opinion for contractors running Google Ads:
+
+Your ad budget is not the problem.
+
+The average cost per lead for HVAC is $60 to $229. For roofing it is $250 to $328.
+
+You are spending real money to generate that lead. And then 62% of the time nobody answers the phone.
+
+You are not losing to competitors with better ads. You are losing to competitors who pick up faster.
+
+Speed is the entire game in home services. The first voice wins 78% of the time.
+
+Fix the response speed first. Then worry about the ad budget.
+
+Call {DEMO_LINE} to hear 15-second response in action.""",
+
+    f"""Here is what $297 a month buys you in contractor tools:
+
+Option A: A part-time answering service for roughly 30 hours of coverage
+Option B: One lead from Google Ads (roofing average: $250 per lead)
+Option C: The Autonomous Front Desk — answers every call 24/7, qualifies the lead, books the appointment, texts you a summary, unlimited calls, no per-minute billing
+
+Option C recovers an average of 3 to 6 missed jobs per month for HVAC and roofing operators running it.
+
+One of those jobs pays for the system 4 to 12 months in advance.
+
+Call {DEMO_LINE} to hear the system that outperforms all three of those options.""",
+]
+
 AUDIT_POSTS = [
     f"""Want to know exactly how many calls your business missed last week?
 
@@ -602,9 +758,79 @@ The number is almost always shocking.
 Call {DEMO_LINE} to hear what the solution sounds like while you wait.""",
 ]
 
+# Image posts — screenshot proof drives 3-5x more reach than text alone
+# Each entry: {"text": "...", "image": "absolute path to local image"}
+IMAGE_POSTS = [
+    {
+        "text": (
+            "This is a real conversation from our AI front desk.\n\n"
+            "HVAC caller. After hours. The AI picked up in under 3 seconds.\n\n"
+            "It asked what they needed. Got the service type. Got the day and time. Got a name and a phone number.\n\n"
+            "The owner never touched it.\n\n"
+            "That call at 10pm turned into a booked appointment before midnight.\n\n"
+            "This is exactly what your inbound calls would look like.\n\n"
+            f"Call {DEMO_LINE} to hear it live right now.\n\n"
+            "Full system setup at grayhorizonsenterprise.com"
+        ),
+        "image": r"C:\Users\curti\Downloads\First Agentic Workflows\indicators\portfolio\vapi-live-transcript.png"
+    },
+    {
+        "text": (
+            "This is the HVAC Autonomous Front Desk live.\n\n"
+            "Every call captured. Every lead routed. Every missed call texted back in under 10 seconds.\n\n"
+            "The owner is on a job site. His phone is in his truck. None of that matters.\n\n"
+            "The system is answering. The leads are booking.\n\n"
+            "$997 to set up. $297 a month to run. One recovered job pays for the first year.\n\n"
+            f"Call {DEMO_LINE} right now. Hear it before you decide.\n\n"
+            "grayhorizonsenterprise.com"
+        ),
+        "image": r"C:\Users\curti\Downloads\HVAC Automation System section.png"
+    },
+    {
+        "text": (
+            "This is the Dental Autonomous Front Desk in production.\n\n"
+            "Every inbound call answered. New patient intake automated. Appointment confirmations sent automatically.\n\n"
+            "A dental office in Orange County was missing 22 calls a week before this was live.\n\n"
+            "At 30 percent booking rate and $1,400 average new patient value, that was $9,240 walking out every week.\n\n"
+            "We turned it on. Week one: 14 calls handled after hours that would have gone to voicemail.\n\n"
+            f"Call {DEMO_LINE} to hear what a dental front desk AI sounds like.\n\n"
+            "Setup and pricing at grayhorizonsenterprise.com"
+        ),
+        "image": r"C:\Users\curti\Downloads\Dental Appointment Automation System Real.png"
+    },
+]
+
+NEWSLETTER_POSTS = [
+    f"""Every Monday I send one email to contractors running home service businesses in California.
+
+It covers one thing: the specific dollar amount your business is losing from a problem most owners do not know they have.
+
+No pitch in the first email. Just the number.
+
+This week: how many calls your business misses per week and what each one is worth.
+
+If you run HVAC, roofing, plumbing, solar, or a dental practice and want the breakdown for your specific niche, reply "NEWSLETTER" and I will add you to the list.
+
+Free. One email a week. Unsubscribe any time.""",
+
+    f"""I send a free weekly newsletter to contractor and service business owners.
+
+Each issue covers one specific revenue leak most businesses are running right now and do not know about.
+
+Recent issues:
+- 85% of callers who reach voicemail never call back
+- Responding in 60 seconds increases conversion by 391%
+- What $297 a month actually buys you compared to a live answering service
+- Why HVAC companies close 89% fewer leads than they generate
+
+The demo line for the Autonomous Front Desk is at the bottom of every issue: {DEMO_LINE}
+
+Reply "ADD ME" if you want in. One email. Monday mornings.""",
+]
+
 # LINKEDIN ONLY: GHL automation + AI services posts
 # NEVER add EDGE_ENGINE_POSTS or PRODUCT_POSTS here — trading content stays on Twitter/X only
-ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS + TEACHING_POSTS + DEMO_POSTS + AUDIT_POSTS
+ALL_POSTS = GHL_POSTS + AI_SERVICES_POSTS + TEACHING_POSTS + DEMO_POSTS + AUDIT_POSTS + STATS_POSTS + NEWSLETTER_POSTS
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -637,19 +863,82 @@ def get_person_id(token):
         return r2.json().get("id", "")
     return ""
 
-def post_to_linkedin(token, person_id, text):
+def upload_image_to_linkedin(token, person_id, image_path):
+    """Upload a local image to LinkedIn and return the asset URN, or '' on failure."""
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+        "X-Restli-Protocol-Version": "2.0.0"
+    }
+    # Step 1: register upload
+    reg_payload = {
+        "registerUploadRequest": {
+            "recipes": ["urn:li:digitalmediaRecipe:feedshare-image"],
+            "owner": f"urn:li:person:{person_id}",
+            "serviceRelationships": [{
+                "relationshipType": "OWNER",
+                "identifier": "urn:li:userGeneratedContent"
+            }]
+        }
+    }
+    r = requests.post(
+        "https://api.linkedin.com/v2/assets?action=registerUpload",
+        json=reg_payload, headers=headers, timeout=20
+    )
+    if r.status_code != 200:
+        print(f"  [IMG] Register upload failed: {r.status_code} {r.text[:200]}")
+        return ""
+    data = r.json()
+    upload_url = (data.get("value", {})
+                     .get("uploadMechanism", {})
+                     .get("com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest", {})
+                     .get("uploadUrl", ""))
+    asset_urn = data.get("value", {}).get("asset", "")
+    if not upload_url or not asset_urn:
+        print("  [IMG] Could not extract upload URL or asset URN")
+        return ""
+    # Step 2: upload the binary
+    with open(image_path, "rb") as f:
+        img_bytes = f.read()
+    ext = image_path.lower().rsplit(".", 1)[-1]
+    ct = "image/png" if ext == "png" else "image/jpeg"
+    r2 = requests.put(upload_url, data=img_bytes,
+                      headers={"Authorization": f"Bearer {token}", "Content-Type": ct},
+                      timeout=60)
+    if r2.status_code not in (200, 201):
+        print(f"  [IMG] Binary upload failed: {r2.status_code}")
+        return ""
+    print(f"  [IMG] Uploaded: {asset_urn}")
+    return asset_urn
+
+
+def post_to_linkedin(token, person_id, text, image_path=None):
+    asset_urn = ""
+    if image_path and os.path.exists(image_path):
+        asset_urn = upload_image_to_linkedin(token, person_id, image_path)
+
+    if asset_urn:
+        media_content = {
+            "shareCommentary": {"text": text},
+            "shareMediaCategory": "IMAGE",
+            "media": [{
+                "status": "READY",
+                "description": {"text": ""},
+                "media": asset_urn,
+                "title": {"text": ""}
+            }]
+        }
+    else:
+        media_content = {
+            "shareCommentary": {"text": text},
+            "shareMediaCategory": "NONE"
+        }
+
     payload = {
         "author": f"urn:li:person:{person_id}",
         "lifecycleState": "PUBLISHED",
-        "specificContent": {
-            "com.linkedin.ugc.ShareContent": {
-                "shareCommentary": {"text": text},
-                "shareMediaCategory": "NONE"
-            }
-        },
-        "visibility": {
-            "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
-        }
+        "specificContent": {"com.linkedin.ugc.ShareContent": media_content},
+        "visibility": {"com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"}
     }
     headers = {
         "Authorization": f"Bearer {token}",
@@ -775,22 +1064,44 @@ def main():
         return
 
     posted = load_posted()
-    available = [p for p in ALL_POSTS if p not in posted]
+
+    # Build unified pool: (text, image_path_or_None)
+    text_entries = [(p, None) for p in ALL_POSTS]
+    image_entries = [(p["text"], p["image"]) for p in IMAGE_POSTS]
+    all_entries = text_entries + image_entries
+
+    available = [(text, img) for text, img in all_entries if text not in posted]
 
     if not available:
         print("[RESET] All posts cycled. Starting over.")
         posted = []
-        available = ALL_POSTS[:]
+        available = all_entries[:]
 
-    post_text = random.choice(available)
-    status, response = post_to_linkedin(token, person_id, post_text)
+    post_text, post_image = random.choice(available)
+    status, response = post_to_linkedin(token, person_id, post_text, image_path=post_image)
 
     if status in (200, 201):
         posted.append(post_text)
         save_posted(posted)
         record_post_time()
+        prefix = "[IMG POST]" if post_image else "[POSTED]"
         preview = post_text[:80].replace("\n", " ")
-        print(f"[POSTED] {preview}...")
+        print(f"{prefix} {preview}...")
+        # Save post URN so linkedin_engage.py can query comments
+        try:
+            import json as _json
+            urn_file = DATA_DIR / "linkedin_post_urns.json"
+            urns = _json.loads(urn_file.read_text()) if urn_file.exists() else []
+            resp_data = _json.loads(response) if response else {}
+            post_urn = resp_data.get("id", "")
+            if post_urn and post_urn not in [u["urn"] for u in urns]:
+                urns.append({"urn": post_urn, "posted_at": datetime.now().isoformat(),
+                              "preview": preview})
+                urns = urns[-30:]  # keep last 30
+                urn_file.write_text(_json.dumps(urns, indent=2))
+                print(f"  [URN SAVED] {post_urn}")
+        except Exception as _e:
+            print(f"  [URN SAVE FAIL] {_e}")
     else:
         print(f"[ERROR] Status {status}: {response}")
 
