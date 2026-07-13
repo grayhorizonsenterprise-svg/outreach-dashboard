@@ -491,15 +491,12 @@ def _vapi_followup_scheduler():
             print(f"[VAPI FOLLOWUP] Error: {e}", flush=True)
 
 
-# Start only essential schedulers — others disabled until fixed
-for _fn in [
-    _twitter_scheduler,
-    _shadow_clans_nightly,
-    _signals_engine_daily,
-]:
-    threading.Thread(target=_fn, daemon=True).start()
+# ALL engines run locally via Task Scheduler (run_all_engines.py + individual .bat files).
+# Railway is dashboard-only — no background threads here.
+# Running engines on Railway burns ~$45/month in network + memory costs.
+# _twitter_scheduler, _shadow_clans_nightly, _signals_engine_daily are all LOCAL now.
 
-print("[ENGINES] Essential schedulers started (Twitter, Shadow Clans, LinkedIn)", flush=True)
+print("[ENGINES] Railway in dashboard-only mode. All engines run locally.", flush=True)
 
 CSV_FILE      = os.path.join(DATA_DIR, "outreach_queue.csv")
 SOCIAL_FILE   = os.path.join(DATA_DIR, "social_pipeline.csv")
