@@ -431,7 +431,8 @@ def make_flow_card(ticker_data, hook, out_path):
     inst_pct = rng.randint(62, 78)
     draw.text((30, 175), f"{inst_pct}%", fill=BLUE, font=fonts["hero"])
     draw.text((30, 265), "of float accumulated", fill=DIM, font=fonts["bold"])
-    draw.text((30, 305), f"Before  +{chg}  move", fill=GREEN, font=fonts["bold"])
+    chg_clean = chg.lstrip("+")
+    draw.text((30, 305), f"Before  +{chg_clean}  move", fill=GREEN, font=fonts["bold"])
 
     draw.text((W//2 + 30, 90), "RETAIL", fill=RED, font=fonts["head"])
     draw.text((W//2 + 30, 130), "Bought the breakout.", fill=TEXT, font=fonts["bold"])
