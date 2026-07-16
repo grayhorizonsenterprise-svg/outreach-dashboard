@@ -140,9 +140,10 @@ else:
 
 print("\n[PHASE 4] SOCIAL CONTENT")
 
-run("LinkedIn auto-post (1/day, 20h cooldown)",  "linkedin_poster.py",  120)
+run("Generate fresh Edge Engine chart cards (8/day)",    "generate_chart_cards.py", 120, args=["8"])
+run("LinkedIn auto-post (1/day, 20h cooldown)",          "linkedin_poster.py",  120)
 run("LinkedIn engage — reply comments, like niche posts", "linkedin_engage.py", 120)
-run("Twitter/X auto-post (signals/trading only)", "twitter_poster.py",   120)
+run("Twitter/X auto-post (signals/trading only)",        "twitter_poster.py",   120)
 run("Twitter/X engage — reply mentions, like trending",   "twitter_engage.py",  120)
 
 

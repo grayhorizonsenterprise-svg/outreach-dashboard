@@ -36,13 +36,31 @@ from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
 
-try:
-    from chart_card_generator import next_card as _next_card
-    _CARD_GEN = True
-except ImportError:
-    _CARD_GEN = False
-    def _next_card(category_filter=None):
+def _next_card(category_filter=None):
+    """Return (label, path) for the next unused card in indicators/cards/. Edge Engine only."""
+    cards_dir = Path(os.path.dirname(os.path.abspath(__file__))) / "indicators" / "cards"
+    used_log  = Path(os.path.dirname(os.path.abspath(__file__))) / "twitter_cards_used.json"
+    try:
+        used = set(json.loads(used_log.read_text())) if used_log.exists() else set()
+    except Exception:
+        used = set()
+    cards = sorted(cards_dir.glob("*.png")) if cards_dir.exists() else []
+    unused = [c for c in cards if c.name not in used]
+    if not unused:
+        # All cards used — reset the cycle
+        used = set()
+        unused = cards
+    if not unused:
         return ("none", None)
+    card = random.choice(unused)
+    used.add(card.name)
+    try:
+        used_log.write_text(json.dumps(list(used)))
+    except Exception:
+        pass
+    return (card.stem.split("_")[0], str(card))
+
+_CARD_GEN = True
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -683,9 +701,9 @@ CHART_CARD_CATEGORIES = {"chart", "wins", "visual"}
 # NOTE: "automation" is intentionally excluded — text-only, no image attached
 
 DAILY_SCHEDULE = [
-    ("chart",      "13:00"),   # 8am ET   — trading chart/signal post
-    ("signals",    "18:30"),   # 1:30pm ET — Edge Engine signal post
-    ("engagement", "23:00"),   # 6pm ET   — trader engagement question
+    ("chart",      "15:00"),   # 8am PT  / 11am ET — chart card post (hourly task starts 14:00 UTC)
+    ("signals",    "18:30"),   # 11:30am PT / 2:30pm ET — Edge Engine signal post
+    ("engagement", "23:00"),   # 4pm PT  / 7pm ET — trader engagement question
 ]
 
 # Target audience accounts — trading AND local business/automation
