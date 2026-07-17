@@ -82,602 +82,668 @@ BOOK_CALL    = "https://calendly.com/grayhorizonsenterprise/30min"
 
 
 SIGNALS_POSTS = [
-    f"""Congress bought $87M in defense stocks 3 weeks before the contract dropped.
+    # No link — builds trust, drives replies, algo-friendly
+    """NVDA showed 2.4x average volume on a Tuesday.
+No news. No catalyst. Price barely moved.
+6 days later: +8.2%.
 
-45 days to report. Volume pattern shows up in week 1.
-
-Most traders see the move after it's already over.
-
-What ticker are you watching this week?
-
-{SIGNALS_LINK}""",
-
-    f"""Unpopular truth: your entry matters less than your position size.
-
-97% of blown accounts died from overleveraging a loss. Not a bad pick.
-
-Kelly math sizes each trade to your actual edge.
-
-Sizing by math or feeling?
-
-{SIGNALS_LINK}""",
-
-    f"""I got tired of checking 30 tickers before the open.
-
-Built a scoring system. RSI + volume anomaly + EMA cross = 0 to 100.
-
-Score 70 or above I look closer. Below 70 I skip it.
-
-How many tickers are you scanning each morning?
-
-{SIGNALS_LINK}""",
-
-    f"""NVDA showed a 2.3x volume anomaly 6 hours before the 8% move.
-
-Volume tells you what's about to happen.
+Volume tells you what is about to happen.
 Price tells you what already happened.
 
-Most retail traders watch the wrong thing.
+Most retail traders are watching the wrong thing.
 
-{SIGNALS_LINK}""",
+What are you tracking pre-move? #stocks #trading #NVDA""",
 
-    f"""Most traders have an entry strategy.
+    # No link
+    """Congress has 45 days to disclose their trades.
+The volume pattern shows up on the chart within the first week.
 
-Almost nobody has a position sizing strategy.
+Every time. Without exception.
 
-That's why someone nails 7 trades in a row and blows their account on trade 8.
+Most traders wait for the news article on day 45.
+By then the move already ran.
 
-What's your position sizing rule?
+Do you track congressional timing? #CongressTrades #stocks""",
 
-{SIGNALS_LINK}""",
+    # No link
+    """Retail traders average 3.7% annual return.
+The S&P 500 averages 10.4% over 30 years.
 
-    f"""The market doesn't care about your analysis.
+Most active traders underperform doing nothing.
 
-It cares about order flow, institutional positioning, and congressional timing.
+The problem is not the picks.
+It is impulsive entries, no position sizing rule, and no signal filter.
 
-Three things most retail traders have zero visibility into.
+Which one is costing you the most? #trading #investing""",
 
-Which one do you actually track?
+    # No link
+    """5% risk per trade.
+5 losing trades in a row: account down 22%.
+10 losers: down 40%.
 
-{SIGNALS_LINK}""",
+Most traders think they are managing risk.
+They are not running the math.
 
-    f"""6:45am. Signal sheet in your inbox.
+Kelly Criterion based on your actual win rate is the only correct way to size.
 
-3 setups scored 70+. 1 congressional flag. 1 crypto alert.
+What is your current risk per trade? #trading #riskmanagement""",
 
-7:30am. Positions sized. Orders placed.
-8am. Market opens. No scrambling.
+    # No link
+    """6:45am. Signal sheet hits.
+Top 3 scored setups. 1 congressional flag. 1 crypto alert.
 
-What does your pre-market routine look like?
+7:15am. Orders placed.
+8am open. No scrambling.
 
-{SIGNALS_LINK}""",
+Pre-market is where most trades are won or lost.
+Not during market hours.
 
-    f"""Retail traders lose because they react.
+What does your pre-market look like? #trading #stocks #premarket""",
 
-Institutional traders win because they position ahead of the move.
+    # With link — 1 in 6 posts
+    f"""Congress beat the S&P by an average of 6% per year from 2019 to 2023.
 
-Congressional disclosures + volume anomalies + momentum scoring = stop reacting.
+They have 45 days to disclose.
+The volume spike shows up on charts within the first week.
 
-Are you tracking any of these three?
+Every quarter. Without fail.
 
-{SIGNALS_LINK}""",
+Are you tracking this or finding out 45 days too late?
 
-    f"""The math most traders ignore:
+{SIGNALS_LINK}
 
-Risk 5% per trade:
-- 5 losers in a row = down 22.6%
-- 10 losers = down 40%
+#CongressTrades #stocks #investing""",
 
-Use Kelly with a real edge:
-- Worst 10-trade stretch = down 8-12%
+    # No link
+    """Adding more indicators does not make you a better trader.
+It gives you more reasons to hesitate.
 
-Position sizing is the edge. Not the picks.
+RSI. Volume anomaly. EMA cross.
+All 3 on the same bar.
 
-{SIGNALS_LINK}""",
+That is the only signal that matters.
 
-    f"""Retail traders average 3.7% annual returns.
+How many indicators are on your chart right now? #trading #TradingView""",
 
-The S&P 500 averages 10%.
+    # No link
+    """Your entry is not the problem.
+Your position size is.
 
-Most retail traders underperform doing nothing.
+A 60% win rate trader who risks 10% per trade will eventually blow up.
+A 50% win rate trader who uses Kelly sizing will compound for years.
 
-Impulsive entries. No position sizing rule. No signal filter.
+Same account. Same win rate. Completely different outcome.
 
-Which one is costing you the most?
+Are you sizing by math or by feeling? #trading #riskmanagement""",
 
-{SIGNALS_LINK}""",
+    # No link
+    """Sen. Tuberville bought AMD calls.
+AMD ran 12% over the next 11 days.
+The disclosure came 34 days after the trade.
 
-    f"""A congressional disclosure filed Monday.
+He had every right to make that trade. All legal. All documented.
+The chart told the story on day 3.
 
-Volume anomaly visible by Thursday.
+Do you track congressional timing? #CongressTrades #AMD #stocks""",
 
-Retail traders see it the following Monday after the news cycle.
+    # No link
+    """7 winning trades in a row.
+Trade 8: overconfident, doubled the position.
+Account down 30% on a normal loss.
 
-By then the move is over.
+Not blown by a bad pick.
+Blown by bad position sizing on a loss that was supposed to happen.
 
-Are you tracking the 45-day disclosure window?
+Happens every single day.
 
-{SIGNALS_LINK}""",
+What is your rule when you are on a streak? #trading #psychology""",
 
-    f"""Most retail traders watch price.
+    # With link
+    f"""Three things most retail traders have zero visibility into:
 
-We watch volume, congressional disclosures, and momentum scoring.
+1. Institutional order flow
+2. Congressional timing
+3. Volume anomalies before price moves
 
-Price is what already happened.
-Volume is what's about to happen.
+We track all three before the open. Every day.
 
-Which do you prioritize?
+{SIGNALS_LINK}
 
-{SIGNALS_LINK}""",
+#stocks #trading #investing""",
+
+    # No link
+    """The pattern before every big congressional-flagged move:
+
+Day 1-4: Volume spike. Price quiet.
+Day 5-12: Score builds. EMA aligns.
+Day 13-25: Price moves.
+Day 45: Disclosure hits the news. Retail buys the top.
+
+You can be at day 4 or day 45.
+
+Which day do you want to be on? #CongressTrades #trading #stocks""",
 ]
 
 INDICATOR_POSTS = [
-    f"""Most traders use 14 indicators.
-
+    # No link
+    """Most traders use 14 indicators.
 We use 3.
 
-Edge Scanner + Kelly Sizer + Congressional Tracker.
+Edge Scanner: when to enter.
+Kelly Sizer: how much to risk.
+Congressional Tracker: who moved first.
 
-All 3 on TradingView. $79 once.
+Three questions. One answer. On every bar, on any chart.
 
-What's the indicator you can't trade without?
+What is your current setup? #TradingView #trading #stocks""",
 
-{WHOP_LINK}""",
+    # No link
+    """Repainted signals are not signals.
+They are a story told in hindsight.
 
-    f"""RSI alone is noise. Volume alone is noise. EMA alone is noise.
+A real indicator locks its score on bar close.
+What it showed at 4pm Friday is what it showed at 4pm Friday.
+Not revised Monday when the move already ran.
 
-All 3 at the same time = signal.
+Does your indicator repaint? #TradingView #trading""",
 
-The GHE Edge Scanner scores this 0-100 on every bar automatically.
+    # No link
+    """Congress disclosed 847 individual stock trades in Q1 this year.
 
-What's your go-to setup?
+Almost every one showed a volume pattern before the disclosure date.
 
-{WHOP_LINK}""",
+The pattern is not random.
+It shows up 3 to 7 days after the trade, every quarter.
 
-    f"""Congress disclosed $315M in trades last year.
+Are you tracking this or finding out 45 days too late? #CongressTrades #stocks""",
 
-Volume pattern shows on the chart BEFORE the disclosure goes public.
+    # No link
+    """Alert fatigue is a real account killer.
 
-We built an indicator that flags it automatically.
+200 signals a day means you act on garbage.
+3 high-confidence setups means you act on edges.
 
-Are you tracking congressional flow?
+Score above 70: look closely.
+Score above 80: this is your setup.
+Below 70: skip it. No exceptions.
 
-{WHOP_LINK}""",
+How many alerts are you filtering daily? #trading #TradingView""",
 
-    f"""The number 1 reason traders blow up:
+    # No link
+    """RSI alone: noise.
+Volume alone: noise.
+EMA alone: noise.
 
-Not bad entries. Bad position sizing.
+All 3 on the same bar at the same time: signal.
 
-Kelly Criterion with Quarter-Kelly fractional sizing. Built into TradingView.
+That is not complexity. That is confluence.
+Scored 0 to 100 on every bar automatically.
 
-Do you have a written position sizing rule?
+What is your confluence rule before entering? #trading #TradingView #stocks""",
 
-{WHOP_LINK}""",
+    # No link
+    """The single biggest retail trading mistake I see:
 
-    f"""High-confidence signal checklist:
+Risking the same dollar amount on every trade.
 
-RSI 45-70
-Volume 2x avg
-EMA crossover
+A $500 loss on a $10k account is 5%.
+A $500 loss on a $50k account is 1%.
 
-All 3 on the same bar. Score 70+.
+These are completely different trades with completely different consequences.
 
-GHE Edge Scanner marks these automatically.
+Do you size by dollar amount or by percentage? #trading #riskmanagement""",
 
-Missing any of the 3?
+    # With link
+    f"""The Kelly Criterion in plain math:
 
-{WHOP_LINK}""",
+Edge = (win rate x avg win) - (loss rate x avg loss)
+Optimal size = Edge / Odds
+Quarter-Kelly for conservative compounding.
 
+Most traders have never run this on their own results.
+
+We built it into TradingView so it runs automatically.
+
+What is your actual edge? {WHOP_LINK} #trading #TradingView""",
+
+    # No link
+    """Volume is institutional.
+Price is retail.
+
+When volume moves without price: someone knows something.
+When price moves without volume: it will not hold.
+
+Volume weighting in the signal score: 40%.
+Everything else comes second.
+
+What is your volume threshold before entering? #trading #stocks #TradingView""",
+
+    # No link
+    """Before you enter a trade you should be able to answer 3 questions:
+
+1. Why is this a signal and not noise?
+2. How much of my account am I risking?
+3. Is there institutional evidence behind this move?
+
+If you cannot answer all 3, do not enter.
+
+Can you answer all 3 on your last trade? #trading #discipline""",
+
+    # No link
+    """Congressional Tracker logic:
+
+Day 1: Senator makes the trade.
+Day 3-7: Volume pattern appears on chart.
+Day 10-25: Price confirms the move.
+Day 45: Disclosure hits. Retail reads the article.
+
+The indicator flags day 3 to 7.
+The news cycle flags day 45.
+
+Which one do you want? #CongressTrades #TradingView #stocks""",
+
+    # With link
     f"""3 TradingView indicators. One decision framework.
 
-1. When to enter (Edge Scanner)
-2. How much to risk (Kelly Sizer)
-3. Congressional activity (Tracker)
+1. When to enter (Edge Scanner - momentum score 0-100)
+2. How much to risk (Kelly Sizer - based on your actual win rate)
+3. Who moved first (Congressional Tracker - volume flag before disclosure)
 
-$79 once. What's your current setup cost?
+$79 one-time. Everything runs automatically.
 
-{WHOP_LINK}""",
+{WHOP_LINK}
 
-    f"""Most indicators repaint.
+#TradingView #trading #stocks""",
 
-The GHE Edge Scanner doesn't. Scores lock on bar close. No hindsight.
+    # No link
+    """High-confidence signal checklist:
 
-That's the difference between a signal system and a fantasy.
+RSI between 45 and 70
+Volume above 2x average
+EMA crossover on same bar
+Score above 70
 
-Does your indicator repaint?
+All 4 at once. That is the only time we enter.
 
-{WHOP_LINK}""",
-
-    f"""Alert fatigue kills accounts.
-
-200 signals a day = you act on garbage.
-3-5 high-confidence setups = you act on edges.
-
-GHE Edge Scanner scores 0-100. Only look at 70+.
-
-How many alerts are you filtering daily?
-
-{WHOP_LINK}""",
-
-    f"""Insider volume shows up on the chart before disclosure goes public.
-
-Congress has 45 days to report. Pattern appears in week 1.
-
-We built an indicator that flags it.
-
-Are you using it?
-
-{WHOP_LINK}""",
-
-    f"""Works on stocks. Works on crypto. Works on forex.
-
-Anything tradeable on TradingView.
-
-3 indicators. Pine Script v5. Real-time scoring. $79 once.
-
-What platform are you on?
-
-{WHOP_LINK}""",
-
-    f"""Edge Scanner scores this week above 70:
-
-NVDA: 78
-MSFT: 74
-COIN: 81
-ETH: 76
-
-4 setups. All above threshold. Pre-move identification.
-
-How many setups did you take this week?
-
-{WHOP_LINK}""",
-
-    f"""The 3 questions before every trade:
-
-1. What's the momentum score? (Edge Scanner)
-2. How much do I risk? (Kelly Sizer)
-3. Congressional activity in this ticker? (Tracker)
-
-All 3 answered automatically. $79 once.
-
-{WHOP_LINK}""",
+Missing any of the 4 on your last trade? #trading #TradingView #stocks""",
 ]
 
 
 ENGAGEMENT_POSTS = [
-    """Traders: what's the one setup you refuse to trade without?
+    # Short, punchy, drives replies — no hashtags on shortest posts
+    """What is the single biggest mistake you made in your last 10 trades?
 
-Be specific.""",
+Entry, sizing, or holding too long.
 
-    """Do you have a written position sizing rule or do you size in the moment?
+Be specific. #trading""",
 
-If you wing it, your account isn't broken. Your system is.""",
+    """RSI or MACD. Pick one and tell me why you actually use it.
 
-    """Serious question: what's your rule for cutting a losing trade?
+No generic answers. #trading #TradingView""",
 
-Most people don't have one written down. That's usually the problem.""",
+    """Do you track congressional stock disclosures?
 
-    """Trade is up 15%. Do you have a rule for taking profit or do you make it up as you go?
+Yes or no. If yes, how do you find them?
 
-Be honest.""",
+#CongressTrades #stocks""",
 
-    """Pre-market or wait for the open?
+    """What ticker are you watching most closely right now and why?
 
-Why?""",
+#stocks #trading""",
 
-    """What's your max loss per day before you stop trading?
+    """Unpopular opinion: most retail traders would make more money if they traded half as often.
 
-Most people don't have a hard number. The ones who do stay in the game longer.""",
+Agree or disagree? #trading #investing""",
 
-    """Congressional stock disclosures. Do you track them or ignore them?
+    """What broke your longest winning streak?
 
-The volume pattern shows up before the disclosure goes public. Most retail traders miss the entire window.""",
+Entry problem, sizing problem, or held too long.
 
-    """What's the biggest trading mistake you've made in the last 6 months?
+Be honest. #trading #psychology""",
 
-Be honest. We all have one.""",
+    """Best trading advice you ever received. One sentence.
 
-    """RSI, MACD, or volume. If you could only watch one, which is it and why?""",
+Mine: volume confirms what price only suspects.
 
-    """Crypto or stocks?
+#trading #stocks""",
 
-Which one are you actually consistent with and why.""",
+    """Does your current indicator repaint?
 
-    """What's the cleanest trade setup you've ever taken? Describe what lined up.""",
+Most retail traders have never checked.
 
-    """Do you backtest or just trade live and learn?""",
+#TradingView #trading""",
 
-    """Biggest myth in trading I've seen blown up: you need to be glued to the screen to make money.
+    """You have a 60% win rate.
+You risk 10% per trade.
 
-The best traders I know place orders before 8am and walk away.
+Are you growing your account or slowly going broke?
 
-What trading myth have you seen disproven?""",
+Show your math. #trading #riskmanagement""",
+
+    """Pre-market checklist. What is on yours?
+
+Mine: score check, volume scan, congressional flags.
+3 items. Under 5 minutes.
+
+#trading #premarket #stocks""",
+
+    """Which is more dangerous: a bad entry or bad position sizing?
+
+Explain your answer. #trading""",
+
+    """If you could only use 3 indicators for the rest of your trading career, what are they?
+
+No duplicates allowed. #TradingView #trading""",
+
+    """Congressional trades are public record.
+45 days delayed but fully documented.
+
+How many traders actually use this data and why do most ignore it?
+
+#CongressTrades #stocks #investing""",
 ]
 
 RESULTS_POSTS = [
-    f"""Signal recap — this week:
+    # No link — pure proof builds more trust than a link
+    """NVDA setup logged Tuesday at close.
+Score: 81.
+Volume: 2.4x average.
+Congressional flag: active.
 
-NVDA: flagged Mon premarket / +9.2% by Fri close
-TSLA: volume anomaly Tue / +6.8% 48hrs later
-SPY: congressional flag active / followed institutional
+By Friday: +7.2%.
 
-That's 3 scored setups. 3 clean entries.
+The score was locked at Tuesday close.
+Not adjusted Monday after the move ran.
 
-{SIGNALS_LINK}""",
+This is not hindsight. This is the system. #NVDA #stocks #trading""",
 
-    f"""Weekly signal scorecard:
+    # No link
+    """Congressional disclosure filed Monday.
+Volume spike was flagged 4 days earlier.
+Price move: +11.3% over the next 17 trading days.
 
-Setup score: 74/100
-Volume anomaly: 2.1x avg
-Congressional activity: 2 active disclosures
-Momentum: building in the 55-70 RSI zone
+We do not predict moves.
+We track the pattern that repeats every single quarter.
 
-None of this is random. We track it every morning.
+When did you start tracking congressional flow? #CongressTrades #trading""",
 
-{SIGNALS_LINK}""",
+    # No link
+    """BTC momentum score hit 74 at the weekly close.
+RSI: 58. Volume: 2.1x average. EMA: aligned.
+Entry zone: 101K to 103K.
 
-    f"""Position sizing check — real numbers:
+That was the setup logged before the open Monday.
 
-Win rate: 58%
-Avg win: 1.8R
-Avg loss: 1.0R
-Kelly fraction: 14.4%
+No prediction. Just the score. #Bitcoin #BTC #crypto #trading""",
 
-At $10k account that's $1,440 max risk per setup.
-Not a guess. Math.
+    # No link
+    """APP scored 78 Wednesday premarket.
+Conservative Kelly position: 4.2% of account.
+Target: +8.1% from entry.
+Stop: 4.8% below entry.
+Risk/reward: 1.7 to 1.
 
-{SIGNALS_LINK}""",
+This is what a scored setup looks like before it runs.
 
-    f"""Results from following congressional flow:
+What is your minimum R/R before entering? #APP #stocks #trading""",
 
-Disclosure filed: 3 weeks ago
-Volume spike: week 1 of holding period
-Price move: +12.3% by disclosure date
+    # No link
+    """META posted the highest score across 15 tracked tickers last week: 83.
+Volume running 2.6x average for 3 consecutive sessions.
+Congressional flag active.
 
-The pattern repeats. Every quarter. Predictably.
+Score above 80 means full Quarter-Kelly position.
+Score above 75 means half position.
+Below 70: watchlist only.
 
-{SIGNALS_LINK}""",
+What was your highest conviction trade last week? #META #stocks""",
 
-    f"""What a 70+ signal score has looked like this year:
+    # No link
+    """Volume anomaly flagged: TSLA at 3x average. No news catalyst.
+4 days later: +9.4%.
 
-Q1: 7 setups flagged / avg return +7.4%
-Q2: 5 setups flagged / avg return +9.1%
-YTD win rate: 81%
+Same pattern seen on NVDA, AMD, and COIN in the last 90 days.
 
-We only trade high-conviction. We skip everything else.
+Volume does not lie. Price confirms.
 
-{SIGNALS_LINK}""",
+What was your best trade in the last 30 days? #TSLA #stocks #trading""",
 
-    f"""This morning's signal sheet:
+    # No link
+    """Retail traders bought the COIN breakout at $248.
+Institutional volume entered at $232 to $238 the previous week.
+Score at the entry zone: 71.
+Score at the breakout: 62 and declining.
 
-SPY: momentum score 71 — watching
-NVDA: volume 1.9x — building
-AAPL: congressional disclosure 12 days old — active
-BTC: above 20-day EMA — confirmed
+Two completely different trades. Same ticker. Same week.
 
-These hit your inbox by 6:45am ET.
+When do you typically enter? #COIN #crypto #trading""",
 
-{SIGNALS_LINK}""",
+    # With link
+    f"""Win rate alone tells you nothing.
 
-    f"""3-5 clean setups per week if you know where to look.
+55% win rate, risk 10% per trade: ruin probability over 40%.
+55% win rate, risk 2% per trade: ruin probability under 1%.
+55% win rate, Kelly sizing: maximum theoretical compounding.
 
-Most retail traders take 20-30 trades chasing noise.
+Same win rate. Three completely different outcomes.
 
-System scores 0-100. We only show the 70+.
+What is your current risk per trade?
 
-This week: 4 setups. All scored 70+. Avg move: +8.2%.
+{SIGNALS_LINK}
 
-{SIGNALS_LINK}""",
-
-    f"""What "boring" trading looks like:
-
-Mon: 1 setup. Size to 14% Kelly. Place order.
-Tue: Hold.
-Wed: Hold.
-Thu: +11.3%.
-Fri: Close. Log it.
-
-Next week: same process.
-
-That's it.
-
-{SIGNALS_LINK}""",
+#trading #riskmanagement""",
 ]
 
 
 
 CHART_POSTS = [
-    """TradingView screenshot — this is what a 70+ signal looks like on the chart.
+    # These go out with the card images — short text, let the image carry
+    """Score locked at close. No revisions. No hindsight.
 
-RSI in range. Volume anomaly confirmed. EMA alignment clean.
+This is what a 78 setup looks like on the chart before the move.
 
-Score 78. Entry zone active.
+What is your score threshold before entering? #trading #TradingView #stocks""",
 
-How often do all 3 line up at the same time for you?""",
+    """Volume spike. EMA alignment. RSI in range.
+All 3 confirmed on the same bar.
+Score: 81.
 
-    """This is the GHE Edge Scanner live on a daily chart.
+This is not a prediction. This is a setup.
 
-Green bar = momentum score 70+. Volume confirmation. EMA cross.
+Do you wait for all 3 to confirm or do you jump early? #trading #stocks""",
 
-Most traders look at price. We look at score.
+    """Congressional flag active. Volume running 2.3x.
+Score building from 68 to 74 over 4 sessions.
 
-What does your TradingView setup look like?""",
+This is what institutional accumulation looks like on a chart.
 
-    """Congressional buy flagged. Volume spike confirmed. Score building.
+Most retail traders look at this and see a boring consolidation.
 
-This is what the institutional flow indicator looks like before the move.
+#stocks #trading #CongressTrades""",
 
-Retail sees this 3 weeks after it already ran.
+    """Green bar = score 70 or above. Volume confirmed. EMA aligned.
 
-Are you tracking congressional timing?""",
+Not every bar is green. Most are not.
+The ones that are have a specific, measurable reason.
 
-    """Real chart. Real signal. Real entry zone.
+That reason is the edge. #TradingView #trading #stocks""",
 
-GHE Edge Scanner + Institutional Flow running simultaneously on APP.
+    """7 setups on the matrix right now.
+Top score: META at 83.
+Volume anomaly: BTC at 2.1x.
+Congressional flag: AAPL, 12 days active.
 
-Score 78. Congressional flag active. Pre-move identification.""",
+Three different reasons. One framework.
 
-    """3 indicators. 1 decision framework.
+What is your watchlist looking like? #stocks #crypto #trading""",
 
-When to enter. How much to risk. Congressional activity.
+    """Before the move: score 74, volume 2.2x, EMA clean.
+After the move: everyone on X says it was obvious.
 
-Most traders have zero of these systematized. All three run automatically.""",
+It was not obvious. It was scored.
 
-    """What retail traders don't see until it's too late:
+That is the difference between reacting and positioning.
 
-This chart. This volume pattern. This momentum build.
+#stocks #trading #TradingView""",
 
-7 days before the disclosure hit the news.
+    """This is what the chart looked like at 4pm Tuesday.
+Not at 4pm the following Monday when the move already ran.
 
-The pattern shows up. Most people miss it.""",
+Score locked at close.
 
-    """GHE Institutional Flow indicator — live on NASDAQ.
-
-Blue zone = institutional accumulation. Red zone = distribution.
-
-You don't need to guess which side of the trade is active.
-
-The chart tells you.""",
+What your indicators show after a move is history.
+What they showed before the move is the edge. #trading #TradingView""",
 ]
 
 WINS_POSTS = [
-    f"""Weekly recap — what the model called correctly:
+    # No link — proof posts convert better without a link, build credibility first
+    """The scanner flagged NVDA Tuesday premarket.
+Score: 81. Volume: 2.4x. Congressional activity noted.
 
-NVDA: flagged Monday premarket / +9.2% by Friday close
-APP: EMA breakout score 78 / +6.8% in 48 hours
-BTC: breakout above $104k confirmed / +4.1% overnight
+By Friday close: +7.2%.
 
-3 setups. 3 clean entries.
+Subscribers saw the flag Tuesday morning.
+The news article came out the following week.
 
-Signal sheet drops every morning at 6:45am ET.
+That gap between day 4 and day 45 is the entire edge. #NVDA #stocks #trading""",
 
-{SIGNALS_LINK}""",
+    # No link
+    """Congressional disclosure: AMD calls purchased.
+Volume pattern visible: day 4.
+Price confirmation: day 11.
+Public news article: day 45.
 
-    f"""This week's scorecard:
+Which day do you want to know about it?
 
-Win rate: 80%
-Average win: +6.7%
-Average loss: -2.3%
-Kelly fraction used: 14%
+#AMD #CongressTrades #trading""",
 
-Not luck. Not gut. Scored entries. Sized correctly.
+    # No link
+    """Run Kelly Criterion on your last 20 trades.
 
-{SIGNALS_LINK}""",
+Win rate 60%, avg win 1.5R, avg loss 1R:
+Optimal Kelly: 20%.
+Quarter-Kelly (conservative): 5%.
 
-    f"""Congressional flow result — filed 3 weeks ago, move confirmed this week.
+Most traders are either over-risking or sizing randomly.
 
-Disclosure filed: day 0
-Volume spike: day 4
-Price move: +12.3% by day 21
+What does your data show? #trading #riskmanagement""",
 
-The pattern repeats. Every quarter. We track it so you don't have to.
+    # No link
+    """Three tickers scored above 75 this week.
+All three showed volume anomalies before price moved.
+One had an active congressional flag.
 
-{SIGNALS_LINK}""",
+The pattern does not change.
+Only the ticker changes.
 
-    f"""Position sizing check — real numbers this week:
+What is your highest conviction setup this week? #stocks #trading""",
 
-Win rate: 75%
-Avg win: 1.8R
-Avg loss: 1.0R
-Kelly fraction: 14.4%
+    # No link
+    """Institutional flow entered BTC at 101K to 103K.
+Retail bought the breakout at 108K.
 
-At $10k account: $1,440 risk per setup. Math, not guessing.
+Both profitable if the move continued.
+Completely different risk profiles and entries.
 
-{SIGNALS_LINK}""",
+Entry timing is not everything but it is most of it.
 
-    f"""What 4 clean setups looks like:
+What was your BTC entry zone? #Bitcoin #BTC #crypto #trading""",
 
-SPY: momentum 71 — held the level
-NVDA: congressional flag + volume anomaly — +9.2%
-COIN: score 74, EMA breakout — +5.1%
-ETH: above 20d EMA, confirmed — +4.1%
+    # No link
+    """The score that matters most is not the score at entry.
 
-All scored 70+. All sized with Kelly.
+It is the score 3 days before entry.
 
-{SIGNALS_LINK}""",
+Building from 62 to 68 to 74 over 3 sessions:
+That is accumulation happening in real time.
 
-    f"""Boring week. Best kind.
+Are you tracking score progression or just the number on entry day? #trading #TradingView""",
 
-Mon: 1 setup. Scored 81. Sized 14% Kelly.
-Tue-Thu: hold.
-Fri: +11.3%. Close. Log it.
+    # With link — 1 in 8 wins posts gets the link
+    f"""Q2 congressional tracking result:
 
-That's it. No drama. No overtrading.
+Flags that showed a volume pattern within 7 days: 11 of 14.
+Flags that preceded a 5%+ move within 30 days: 8 of 14.
 
-{SIGNALS_LINK}""",
+This is not stock picking.
+This is pattern tracking on public data.
 
-    f"""YTD scorecard update:
+{SIGNALS_LINK}
 
-Q1: 7 setups flagged / avg return +7.4%
-Q2: 5 setups flagged / avg return +9.1%
-Win rate YTD: 80%
+#CongressTrades #stocks #investing""",
 
-We skip everything below 70. That's the system.
+    # No link
+    """Boring week this week. Best kind.
 
-{SIGNALS_LINK}""",
+Monday: 1 setup. Score 81. Quarter-Kelly position.
+Tuesday through Thursday: hold.
+Friday: +11.3%. Close. Log it.
 
-    f"""What happened when we followed the congressional volume signal:
+No drama. No overtrading. No checking charts every 20 minutes.
 
-Week 1: Volume spike. Score building.
-Week 2: Momentum confirming. RSI 58.
-Week 3: +14.2%. News hits. Retail buys the top.
-
-We were already in.
-
-{SIGNALS_LINK}""",
+That is what a system looks like. #trading #discipline #stocks""",
 ]
 
 VISUAL_POSTS = [
-    f"""6 setups. Scored, ranked, sized. Full matrix below.
+    # These go with the matrix/dashboard card images
+    """Dashboard right now:
+META: 83 - STRONG BUY
+TSLA: 77 - BUY
+BTC: 74 - BUY
+COIN: 71 - WATCH
+SPY: 68 - HOLD
 
-Score above 70 = signal.
-Score above 75 = full Kelly.
-Everything else = skip.
+Score above 70 means the setup is live.
+Below 70 means keep watching.
 
-{SIGNALS_LINK}""",
+What is your watchlist looking like? #stocks #crypto #trading""",
 
-    f"""This is what our market heatmap looks like when conditions align.
+    """Market composite this week:
+Breadth: confirming.
+VIX: below 18.
+Congressional flow: elevated.
+Volume anomalies: 4 active across tracked tickers.
 
-Green = momentum confirmed.
-Red = stay flat.
+When all four line up the next move is usually not subtle.
 
-Nothing ambiguous about it.
+What is your macro read this week? #stocks #trading #investing""",
 
-{SIGNALS_LINK}""",
+    """6 active setups. Scored, ranked, sized.
 
-    f"""Live dashboard. 5 active setups. All metrics in one place.
+Above 80: full Quarter-Kelly.
+70 to 80: half position, confirm with volume.
+Below 70: watchlist only.
 
-RSI, score, price, volume multiplier, trend arrow.
+Simple rules. Consistent execution.
 
-No guessing. No scrolling through charts.
+Do you have a written entry rule or do you decide in the moment? #trading #discipline""",
 
-{SIGNALS_LINK}""",
+    """Live matrix: score, volume multiplier, trend, and congressional flag.
 
-    f"""When 4 tickers go green on the matrix at the same time, that's a regime shift.
+Not 14 indicators stacked on a chart.
+Four data points per ticker.
 
-SPY above 20d. NVDA breaking out. Crypto confirming. Congressional flow spiking.
+Everything that matters. Nothing that does not.
 
-This week was one of those weeks.
+How many data points do you track before entering a trade? #trading #stocks #TradingView""",
 
-{SIGNALS_LINK}""",
+    """Green means score above 70, volume above 1.5x average, and EMA aligned.
+Red means sit on your hands.
 
-    f"""Everything the scanner flagged this morning:
+Most weeks there are 2 to 4 green tickers.
+Most retail traders enter on any ticker regardless of color.
 
-Momentum score, RSI level, volume anomaly, congressional overlap.
+That is the entire difference. #stocks #trading""",
 
-All on one card. All updated pre-market.
+    """This week's top setups by score:
+NVDA: volume 2.4x, score building to 79.
+META: congressional flag active, score 83.
+BTC: weekly close above EMA, score 74.
+PLTR: RSI 55, momentum confirmed, score 76.
 
-{SIGNALS_LINK}""",
+Three different catalysts. Same framework to score them all.
 
-    f"""Market overview. How the composite looks today.
-
-Most setups: 70+
-VIX: below 18
-Breadth: confirming
-
-When everything aligns, the next move is usually obvious.
-
-{SIGNALS_LINK}""",
+What is your highest conviction trade this week? #stocks #crypto #NVDA #META""",
 ]
 
 
@@ -700,10 +766,18 @@ IMAGE_CATEGORIES = {"results", "signals", "chart", "wins", "visual"}
 CHART_CARD_CATEGORIES = {"chart", "wins", "visual"}
 # NOTE: "automation" is intentionally excluded — text-only, no image attached
 
+# PLATFORM LOCK — printed every run so there is never any ambiguity
+PLATFORM_RULE = (
+    "X/TWITTER: Edge Engine trading content ONLY. "
+    "No business posts. No GHL. No AI services. No Calendly. No contractor content. "
+    "Business content goes to LinkedIn exclusively. NEVER mix platforms."
+)
+
 DAILY_SCHEDULE = [
-    ("chart",      "15:00"),   # 8am PT  / 11am ET — chart card post (hourly task starts 14:00 UTC)
-    ("signals",    "18:30"),   # 11:30am PT / 2:30pm ET — Edge Engine signal post
-    ("engagement", "23:00"),   # 4pm PT  / 7pm ET — trader engagement question
+    ("chart",      "15:00"),   # 8am PT  — pre-market visual with chart card
+    ("signals",    "18:30"),   # 11:30am PT — mid-session signal post
+    ("results",    "21:30"),   # 2:30pm PT — market close proof post
+    ("engagement", "23:00"),   # 4pm PT  — afternoon engagement question
 ]
 
 # Target audience accounts — trading AND local business/automation
@@ -1277,6 +1351,7 @@ def get_due_categories() -> list[str]:
 def run(force: bool = False):
     now_utc = datetime.utcnow().strftime("%H:%M UTC")
     print(f"[TWITTER] Checking schedule at {now_utc}...")
+    print(f"[TWITTER] PLATFORM RULE: {PLATFORM_RULE}")
 
     if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
         print("[TWITTER] Not configured — missing API credentials")
