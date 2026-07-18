@@ -42,12 +42,70 @@ TWITTER_API_SECRET    = os.getenv("TWITTER_API_SECRET", "")
 TWITTER_ACCESS_TOKEN  = os.getenv("TWITTER_ACCESS_TOKEN", "")
 TWITTER_ACCESS_SECRET = os.getenv("TWITTER_ACCESS_SECRET", "")
 
-DATA_DIR    = Path(os.path.dirname(os.path.abspath(__file__)))
-ENGAGE_LOG  = DATA_DIR / "twitter_engage_log.json"
+DATA_DIR     = Path(os.path.dirname(os.path.abspath(__file__)))
+ENGAGE_LOG   = DATA_DIR / "twitter_engage_log.json"
+CREDITS_LOG  = DATA_DIR / "twitter_credits.json"   # shared with twitter_poster.py
 
 GHE_HANDLE   = "GEnterprise6470"
 SIGNALS_LINK = os.getenv("SIGNALS_LINK", "https://buy.stripe.com/cNidR99V6cOfcGv1G86Zy01")
 WHOP_LINK    = os.getenv("WHOP_INDICATORS_LINK", "https://whop.com/gray-horizons-enterprise/ghe-indicator-suite/")
+
+# ── Write budget ───────────────────────────────────────────────────────────────
+# Every posted tweet / reply costs 1 write credit.
+# Liking and following are GET/POST to different endpoints — they do NOT count
+# against the tweet write quota. Only actual tweet creation burns credits.
+#
+# Budget split:
+#   twitter_poster.py:  4 posts/day (chart, signals, results, engagement)
+#   twitter_engage.py:  DAILY_ENGAGE_BUDGET replies/day max
+#
+# Total across both scripts must stay under MONTHLY_WRITE_BUDGET / 30 per day.
+# X Basic plan: 3,000 writes/month = 100/day max.
+# We stay at 10/day total (4 poster + 6 engage) to leave headroom.
+
+MONTHLY_WRITE_BUDGET = int(os.getenv("TWITTER_MONTHLY_BUDGET", "3000"))
+DAILY_POSTER_RESERVE = 4    # reserved for twitter_poster.py scheduled posts
+DAILY_ENGAGE_BUDGET  = 6    # engage script gets 6 write credits per day max
+
+
+def _credits_used_today() -> int:
+    """Return total write credits used today across poster + engage."""
+    try:
+        data = json.loads(CREDITS_LOG.read_text()) if CREDITS_LOG.exists() else {}
+        day_key = datetime.utcnow().strftime("%Y-%m-%d")
+        return data.get(day_key, 0)
+    except Exception:
+        return 0
+
+
+def _credits_used_month() -> int:
+    try:
+        data = json.loads(CREDITS_LOG.read_text()) if CREDITS_LOG.exists() else {}
+        month_key = datetime.utcnow().strftime("%Y-%m")
+        return data.get(month_key, 0)
+    except Exception:
+        return 0
+
+
+def _log_credit(n: int = 1):
+    """Record n write credits used by the engage script."""
+    try:
+        data = json.loads(CREDITS_LOG.read_text()) if CREDITS_LOG.exists() else {}
+        day_key   = datetime.utcnow().strftime("%Y-%m-%d")
+        month_key = datetime.utcnow().strftime("%Y-%m")
+        data[day_key]   = data.get(day_key, 0) + n
+        data[month_key] = data.get(month_key, 0) + n
+        CREDITS_LOG.write_text(json.dumps(data, indent=2))
+    except Exception:
+        pass
+
+
+def _engage_budget_remaining() -> int:
+    """How many reply credits the engage script can still use today."""
+    used_today = _credits_used_today()
+    # Poster reserves DAILY_POSTER_RESERVE; engage gets DAILY_ENGAGE_BUDGET on top
+    engage_used = max(0, used_today - DAILY_POSTER_RESERVE)
+    return max(0, DAILY_ENGAGE_BUDGET - engage_used)
 
 # ── High-value target accounts to reply to ────────────────────────────────────
 # These are the accounts whose reply sections = free exposure to ideal audience.
@@ -339,7 +397,14 @@ def reply_to_target_accounts(user_id: str, log: dict, max_replies: int = 4) -> i
     The #1 growth driver: reply to recent posts from high-follower accounts.
     Our reply shows in their thread = free exposure to their audience (100K-2M+).
     Only reply to posts within the last 3 hours for maximum visibility.
+    Budget-gated: each reply costs 1 write credit.
     """
+    budget = _engage_budget_remaining()
+    if budget <= 0:
+        print(f"  [X TARGET] Daily engage budget exhausted — skipping replies")
+        return 0
+    max_replies = min(max_replies, budget)
+
     replied = 0
     replied_set = set(log.get("replied_to", []))
 
@@ -383,6 +448,7 @@ def reply_to_target_accounts(user_id: str, log: dict, max_replies: int = 4) -> i
         if ok:
             replied_set.add(tid)
             replied += 1
+            _log_credit(1)
             print(f"  [X TARGET REPLY] @{handle} tweet {tid}: {reply_text[:70]}...")
             time.sleep(random.uniform(20, 40))
         else:
@@ -477,8 +543,14 @@ def search_and_like_trending(user_id: str, log: dict, max_likes: int = 12) -> in
     return liked
 
 
-def process_mentions(user_id: str, log: dict, max_replies: int = 5) -> int:
-    """Reply to recent @mentions of our account."""
+def process_mentions(user_id: str, log: dict, max_replies: int = 3) -> int:
+    """Reply to recent @mentions of our account. Budget-gated."""
+    budget = _engage_budget_remaining()
+    if budget <= 0:
+        print("  [X MENTIONS] Budget exhausted — skipping")
+        return 0
+    max_replies = min(max_replies, budget)
+
     replied = 0
     replied_set = set(log.get("replied_to", []))
     mentions = get_mentions(user_id, since_hours=12)
@@ -503,6 +575,7 @@ def process_mentions(user_id: str, log: dict, max_replies: int = 5) -> int:
         if ok:
             replied_set.add(tid)
             replied += 1
+            _log_credit(1)
             print(f"  [X REPLIED] mention {tid}: {reply_text[:60]}...")
             time.sleep(random.uniform(15, 25))
 
@@ -510,8 +583,14 @@ def process_mentions(user_id: str, log: dict, max_replies: int = 5) -> int:
     return replied
 
 
-def process_post_replies(user_id: str, log: dict, max_replies: int = 3) -> int:
-    """Reply to comments/replies on our own tweets — nurture engagement."""
+def process_post_replies(user_id: str, log: dict, max_replies: int = 2) -> int:
+    """Reply to comments on own tweets — nurture engagement. Budget-gated."""
+    budget = _engage_budget_remaining()
+    if budget <= 0:
+        print("  [X POST REPLIES] Budget exhausted — skipping")
+        return 0
+    max_replies = min(max_replies, budget)
+
     replied = 0
     replied_set = set(log.get("replied_to", []))
     my_tweets = get_my_recent_tweets(user_id, max_results=5)
@@ -534,6 +613,7 @@ def process_post_replies(user_id: str, log: dict, max_replies: int = 3) -> int:
             if ok:
                 replied_set.add(rid)
                 replied += 1
+                _log_credit(1)
                 print(f"  [X REPLIED TO REPLY] {rid}: {response[:60]}...")
                 time.sleep(random.uniform(15, 25))
 
@@ -557,10 +637,18 @@ def run(max_replies: int = 5, max_likes: int = 12, max_follows: int = 3):
         save_log(log)
         return
 
-    replied_count = len(log.get("replied_to", []))
-    liked_count   = len(log.get("liked", []))
+    replied_count  = len(log.get("replied_to", []))
+    liked_count    = len(log.get("liked", []))
     followed_count = len(log.get("followed", []))
+    used_today     = _credits_used_today()
+    used_month     = _credits_used_month()
+    engage_left    = _engage_budget_remaining()
     print(f"[X ENGAGE] @{GHE_HANDLE} | Replied: {replied_count} | Liked: {liked_count} | Followed: {followed_count}")
+    print(f"[X ENGAGE] BUDGET: {used_today} used today | {used_month}/{MONTHLY_WRITE_BUDGET} this month | {engage_left} engage credits left today")
+    if engage_left == 0:
+        print("[X ENGAGE] Daily engage budget exhausted. Likes and follows only (free). No replies.")
+    elif engage_left <= 2:
+        print(f"[X ENGAGE] WARNING: Only {engage_left} reply credit(s) left today — being conservative.")
 
     # 1. HIGHEST PRIORITY: reply to posts from big FinTwit accounts
     #    This is the #1 growth driver — gets GHE visible to 100K-2M+ audiences

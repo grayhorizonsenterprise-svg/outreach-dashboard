@@ -1388,14 +1388,17 @@ def run(force: bool = False):
 
     save_posted(posted)
 
-    # Track monthly credit usage — 1 credit per text post
+    # Track write credits — shared with twitter_engage.py
+    # Both scripts write to the same file so the daily/monthly totals are accurate.
     _credit_log = DATA_DIR / "twitter_credits.json"
     try:
+        day_key   = datetime.utcnow().strftime("%Y-%m-%d")
         month_key = datetime.utcnow().strftime("%Y-%m")
         data = json.loads(_credit_log.read_text()) if _credit_log.exists() else {}
+        data[day_key]   = data.get(day_key, 0) + sent
         data[month_key] = data.get(month_key, 0) + sent
         _credit_log.write_text(json.dumps(data, indent=2))
-        print(f"[TWITTER] Credits used this month: {data[month_key]}")
+        print(f"[TWITTER] Credits used today: {data[day_key]} | month: {data[month_key]}")
     except Exception:
         pass
 
