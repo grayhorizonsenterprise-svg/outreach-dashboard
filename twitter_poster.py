@@ -774,10 +774,10 @@ PLATFORM_RULE = (
 )
 
 # BUDGET MODE: $0.94 remaining this cycle, 24 days left, auto-recharge OFF.
-# 1 post/day only — highest engagement window (11:30am PT, active traders).
-# Re-enable additional slots ONLY after topping up credits.
+# 2 posts/day — pre-market hook + mid-session signal.
 DAILY_SCHEDULE = [
-    ("signals", "18:30"),   # 11:30am PT — 1 post/day, best engagement window
+    ("chart",   "15:00"),   # 8am PT  — pre-market, catches early traders
+    ("signals", "18:30"),   # 11:30am PT — active market hours
 ]
 
 # Target audience accounts — trading AND local business/automation

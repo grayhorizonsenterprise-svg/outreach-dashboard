@@ -64,7 +64,7 @@ WHOP_LINK    = os.getenv("WHOP_INDICATORS_LINK", "https://whop.com/gray-horizons
 # We stay at 10/day total (4 poster + 6 engage) to leave headroom.
 
 MONTHLY_WRITE_BUDGET = int(os.getenv("TWITTER_MONTHLY_BUDGET", "3000"))
-DAILY_POSTER_RESERVE = 1    # 1 post/day — BUDGET MODE ($0.94 remaining this cycle)
+DAILY_POSTER_RESERVE = 2    # 2 posts/day — BUDGET MODE ($0.94 remaining this cycle)
 DAILY_ENGAGE_BUDGET  = 0    # replies DISABLED — likes/follows only (free API calls)
 
 
