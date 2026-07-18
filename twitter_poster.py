@@ -773,11 +773,11 @@ PLATFORM_RULE = (
     "Business content goes to LinkedIn exclusively. NEVER mix platforms."
 )
 
+# BUDGET MODE: $0.94 remaining this cycle, 24 days left, auto-recharge OFF.
+# 1 post/day only — highest engagement window (11:30am PT, active traders).
+# Re-enable additional slots ONLY after topping up credits.
 DAILY_SCHEDULE = [
-    ("chart",      "15:00"),   # 8am PT  — pre-market visual with chart card
-    ("signals",    "18:30"),   # 11:30am PT — mid-session signal post
-    ("results",    "21:30"),   # 2:30pm PT — market close proof post
-    ("engagement", "23:00"),   # 4pm PT  — afternoon engagement question
+    ("signals", "18:30"),   # 11:30am PT — 1 post/day, best engagement window
 ]
 
 # Target audience accounts — trading AND local business/automation
