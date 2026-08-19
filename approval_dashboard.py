@@ -178,7 +178,12 @@ def run_pipeline_loop():
             print(f"[ENGINE] Queue healthy ({pending} pending) — next cycle in 4 hours.", flush=True)
             time.sleep(14400)
 
-threading.Thread(target=run_pipeline_loop, daemon=True).start()
+# Pipeline loop runs LOCAL only — Railway is dashboard-only (no subprocesses = no memory overages)
+IS_RAILWAY = bool(os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("RAILWAY_PROJECT_ID"))
+if not IS_RAILWAY:
+    threading.Thread(target=run_pipeline_loop, daemon=True).start()
+else:
+    print("[ENGINE] Railway detected — pipeline loop DISABLED. Run locally via Task Scheduler.", flush=True)
 
 # =========================
 # KEEP-ALIVE (prevents Render free tier from sleeping)
@@ -186,9 +191,8 @@ threading.Thread(target=run_pipeline_loop, daemon=True).start()
 def keep_alive():
     time.sleep(60)
     port = os.getenv("PORT", "8080")
-    # Always ping self — use external URL if available, otherwise localhost
     render_url = os.getenv("RENDER_EXTERNAL_URL", "")
-    self_url = os.getenv("SELF_URL", "")  # set SELF_URL=https://outreach-dashboard-production-6894.up.railway.app
+    self_url = os.getenv("SELF_URL", "")
     if self_url:
         target = self_url.rstrip("/")
     elif render_url:
